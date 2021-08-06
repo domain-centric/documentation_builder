@@ -14,7 +14,7 @@ targets:
 builders:
   documentation_pre_builder:
     import: 'package:documentation_builder/builders/builder_factory.dart'
-    builder_factories: ['documentationPreBuilder']
+    builder_factories: ['documentationBuilderExample']
     build_extensions:
       .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
         - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method

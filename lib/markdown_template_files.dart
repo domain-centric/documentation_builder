@@ -1,4 +1,4 @@
-import 'builders.dart';
+import 'builders/documentation_builder.dart';
 
 /// Markdown template files are files with a .mdt extension that contain markdown text and [Tag]s.
 ///

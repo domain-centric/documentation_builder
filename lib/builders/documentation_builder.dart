@@ -3,24 +3,11 @@ library documentation_builder;
 
 import 'dart:async';
 
-import 'markdown_template_files.dart';
+import '../markdown_template_files.dart';
 import 'package:build/build.dart';
 
-//TODO (in order of execution)
-//TODO: PathBuilder: finds gitHubProjectUri and pubDevProjectUri and puts them in the ModelResource
-//TODO: TemplateBuilder: finds .mdt files, parses them into models and puts them in the ModelResource
-//TODO: ImportBuilder: scans the ModelResource and finds all the file(parts) that need to be imported and puts them in the ModelResource
-//TODO: LinkBuilder: scans the ModelResource and updates all links
-//TODO: DocumentBuilder: generates and (over)writes the markdown files using the ModelResource
-
-/// Collects all the information needed to build the documentation:
-/// - Reading and parsing the pubspec.yaml file
-/// - Reading and parsing all the [MarkdownTemplateFile]s
-/// - putting all information into a Resource file that can be used by (is shared with) other builders
-
-class DocumentationPreBuilder extends Builder {
-
-
+/// TODO for testing only: replace with DocumentationBuilder
+class DocumentationBuilderExample extends Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => {'pubspec.yaml':['.d1'], '.dart':['.d2'], '.mdt':['.d3']};

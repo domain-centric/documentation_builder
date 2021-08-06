@@ -1,5 +1,5 @@
 import 'package:build/build.dart';
-import 'package:documentation_builder/builders.dart';
+import 'package:documentation_builder/builders/documentation_builder.dart';
 
 /// The [build_runner] package will call its configured builder classes (see build.yaml) for each file it finds.
 ///
@@ -9,8 +9,8 @@ import 'package:documentation_builder/builders.dart';
 /// You’d better clean up before you re-execute run builder_runner
 /// $ flutter packages pub run build_runner clean
 
-Builder documentationPreBuilder(BuilderOptions builderOptions) =>
-    DocumentationPreBuilder();
+Builder documentationBuilderExample(BuilderOptions builderOptions) =>
+    DocumentationBuilderExample();
 
 Builder documentationBuilder(BuilderOptions builderOptions) =>
     DocumentationBuilder();

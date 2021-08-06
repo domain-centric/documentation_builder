@@ -1,4 +1,4 @@
-import 'builders.dart';
+import 'builders/documentation_builder.dart';
 
 /// You can refer to other parts of the documentation using [Link]s.
 /// [Link]s are references between [] brackets in [MarkdownTemplateFile]s, e.g.: [MyClass]

@@ -1,6 +1,6 @@
 import 'package:documentation_builder/markdown_template_files.dart';
 
-import 'builders.dart';
+import 'builders/documentation_builder.dart';
 
 /// [MarkdownTemplateFile]s can contain [Tag]s that are replaced by the [DocumentationBuilder].
 ///
