@@ -1,0 +1,7 @@
+{ImportDoc documentation_builder/MarkdownTemplateFile}
+
+{ImportDoc documentation_builder/ReadMeMarkdownTemplateFile title:'### README template file'}
+
+{ImportDoc documentation_builder/ChangeLogMarkdownTemplateFile title:'### CHANGELOG template file'}
+
+{ImportDoc documentation_builder/WikiMarkdownTemplateFile title:'### Wiki template files'}

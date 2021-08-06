@@ -1,0 +1,31 @@
+targets:
+  $default:
+    sources:
+      - doc/**
+      - lib/**
+    builders:
+      documentation_builder|documentation_pre_builder:
+        enabled: True
+#      documentation_builder|documentation_builder:
+#        generate_for:
+#          - /**.*
+#        enabled: True
+
+builders:
+  documentation_pre_builder:
+    import: 'package:documentation_builder/builders/builder_factory.dart'
+    builder_factories: ['documentationPreBuilder']
+    build_extensions:
+      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+    build_to: cache
+    auto_apply: root_package
+    runs_before: [reflect_framework|documentation_builder]
+#  documentation_builder:
+#    import: 'package:documentation_builder/builders/builder_factory.dart'
+#    builder_factories: ['documentationBuilder']
+#    build_extensions:
+#      $lib$:
+#        - .combined.json
+#    build_to: cache
+#    auto_apply: root_package
