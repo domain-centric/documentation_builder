@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:build/src/builder/build_step.dart';
+
 /// Provides information on the local project such as:
 /// - name
 /// - relevant local [Directory]s and [File]s
@@ -19,8 +21,18 @@ class LocalProject {
 
   static String get _name => _directory.path.split(Platform.pathSeparator).last;
 
-//TODO readMeFile
-//TODO ChangeLogFile
+  // File get readMeFile =>
+  //     File("${_directory.path}${Platform.pathSeparator}README.md");
+  //
+  // get changeLogFile =>
+  //     File("${_directory.path}${Platform.pathSeparator}CHANGELOG.md");
+  //
+  // get exampleFile => File(
+  //     "${_directory.path}${Platform.pathSeparator}example${Platform.pathSeparator}example.md");
+  //
+  // File wikiFile(String wikiFileName) => File(
+  //     "${_directory.path}${Platform.pathSeparator}doc${Platform.pathSeparator}wiki${Platform.pathSeparator}$wikiFileName");
+
 //TODO exampleFile
 //TODO wikiDirectory
 

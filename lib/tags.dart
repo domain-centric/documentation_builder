@@ -1,4 +1,4 @@
-import 'package:documentation_builder/markdown_template_files.dart';
+import 'package:documentation_builder/builders/markdown_template_files.dart';
 
 import 'builders/documentation_builder.dart';
 
@@ -8,7 +8,7 @@ import 'builders/documentation_builder.dart';
 /// - are surrounded by curly brackets: {}
 /// - have a name: e.g.  {ImportFile}
 /// - may have attributes: e.g. {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'}
-abstract class Tag extends MarkDownText {}
+abstract class Tag extends MarkdownText {}
 
 /// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'}
 /// - It imports another file.

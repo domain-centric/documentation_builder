@@ -3,7 +3,7 @@ library documentation_builder;
 
 import 'dart:async';
 
-import '../markdown_template_files.dart';
+import 'markdown_template_files.dart';
 import 'package:build/build.dart';
 
 /// TODO for testing only: replace with DocumentationBuilder
@@ -44,27 +44,3 @@ class DocumentationBuilder extends Builder {
   // TODO: implement buildExtensions
   Map<String, List<String>> get buildExtensions => throw UnimplementedError();
 }
-
-/// The [DocumentationBuilder] parsed the [MarkdownTemplateFile]'s text into a list of [MarkDownText] objects
-/// A class that implements [MarkDownText] is something that contains documentation text.
-/// Its [toMarkDownText] method returns the documentation as generated [MarkDownText]
-///
-/// /// For more information on markdown See https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links
-abstract class MarkDownText {
-  String toMarkDownText();
-}
-
-/// The [DocumentationBuilder] parsed the [MarkdownTemplateFile]'s text into a list of objects
-/// Any text in a [MarkdownTemplateFile] that is not recognized as a [Tag] or [Link] is put into a [PlainText] object
-class PlainText extends MarkDownText {
-  final String text;
-
-  PlainText(this.text);
-
-  @override
-  String toMarkDownText() =>
-      text;
-}
-
-
-

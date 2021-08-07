@@ -2,6 +2,7 @@ import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 
 import 'builders/documentation_builder.dart';
+import 'builders/markdown_template_files.dart';
 
 /// You can refer to other parts of the documentation using [Link]s.
 /// [Link]s are references between [] brackets in [MarkdownTemplateFile]s, e.g.: [MyClass]
@@ -12,7 +13,7 @@ import 'builders/documentation_builder.dart';
 /// You can specify the title attribute when you would like the title to customize the title of the [Link], e.g.:
 /// - Default title: [MyClass] can be converted to [MyClass](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
 /// - Custom title:  [MyClass title='Custom Title'] can be converted to [Custom Title](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
-abstract class Link extends MarkDownText {}
+abstract class Link extends MarkdownText {}
 
 /// Library can have members such as a:
 /// - constant

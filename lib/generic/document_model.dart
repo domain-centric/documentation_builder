@@ -1,5 +1,5 @@
 import 'package:build/build.dart';
-import 'package:documentation_builder/markdown_template_files.dart';
+import 'package:documentation_builder/builders/markdown_template_files.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';

@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   collection: ^1.15.0
-  fluent_regex: ^0.0.2
+  fluent_regex: ^0.0.3
   flutter:
     sdk: flutter
 
