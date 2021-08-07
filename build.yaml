@@ -3,8 +3,9 @@ targets:
     sources:
       - doc/**
       - lib/**
+      - test/**
     builders:
-      documentation_builder|documentation_pre_builder:
+      documentation_builder|markdown_template_builder:
         enabled: True
 #      documentation_builder|documentation_builder:
 #        generate_for:
@@ -12,9 +13,9 @@ targets:
 #        enabled: True
 
 builders:
-  documentation_pre_builder:
+  markdown_template_builder:
     import: 'package:documentation_builder/builders/builder_factory.dart'
-    builder_factories: ['documentationBuilderExample']
+    builder_factories: ['markdownTemplateBuilder']
     build_extensions:
       .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
         - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method

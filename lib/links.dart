@@ -1,3 +1,6 @@
+import 'package:documentation_builder/project/github_project.dart';
+import 'package:documentation_builder/project/pub_dev_project.dart';
+
 import 'builders/documentation_builder.dart';
 
 /// You can refer to other parts of the documentation using [Link]s.
@@ -58,16 +61,7 @@ class MarkDownFileLink extends Link {
     throw UnimplementedError();
   }
 }
-/// [PubDevLink]s can be obtained by testing if the following URL exists:
-/// https://pub.dev/packages/<project name> e.g: https://pub.dev/packages/fluent_regex
-///
-/// If so, extended links can append to this link e.g.
-/// - https://pub.dev/packages/fluent_regex/changelog
-/// - https://pub.dev/packages/fluent_regex/example
-/// - https://pub.dev/packages/fluent_regex/install
-/// - https://pub.dev/packages/fluent_regex/versions
-/// - https://pub.dev/packages/fluent_regex/score
-/// - https://pub.dev/packages/fluent_regex/license
+/// TODO see [PubDevProject]
 abstract class PubDevLink extends Link {
 
 }
@@ -89,20 +83,7 @@ class PubDevInstallExample extends PubDevLink {
   }
 }
 
-/// [GitHubLink]s can be obtained by reading the <project folder>/.git/config file
-///
-/// e.g.:
-/// [remote "origin"]
-/// 	url = https://github.com/efficientyboosters/fluent_regex.git
-///
-/// (remove .git suffix)
-///
-/// extended [GitHubLink]s can append to this. e.g.:
-/// - https://github.com/efficientyboosters/fluent_regex/milestones
-/// - https://github.com/efficientyboosters/fluent_regex/milestones?state=closed
-/// - https://github.com/efficientyboosters/fluent_regex/pulls
-/// - https://github.com/efficientyboosters/fluent_regex/wiki
-/// - https://github.com/efficientyboosters/fluent_regex/search?q=<ThingToFind>
+/// TODO see [GitHubProject]
 abstract class GitHubLink extends Link {}
 
 class GitHubProjectLink extends GitHubLink {

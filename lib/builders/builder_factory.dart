@@ -1,5 +1,6 @@
 import 'package:build/build.dart';
 import 'package:documentation_builder/builders/documentation_builder.dart';
+import 'package:documentation_builder/builders/markdown_template_builder.dart';
 
 /// The [build_runner] package will call its configured builder classes (see build.yaml) for each file it finds.
 ///
@@ -9,8 +10,8 @@ import 'package:documentation_builder/builders/documentation_builder.dart';
 /// You’d better clean up before you re-execute run builder_runner
 /// $ flutter packages pub run build_runner clean
 
-Builder documentationBuilderExample(BuilderOptions builderOptions) =>
-    DocumentationBuilderExample();
+Builder markdownTemplateBuilder(BuilderOptions builderOptions) =>
+    MarkdownTemplateBuilder();
 
 Builder documentationBuilder(BuilderOptions builderOptions) =>
     DocumentationBuilder();
