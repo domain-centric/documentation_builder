@@ -1,46 +1,54 @@
-library documentation_builder;
+import 'dart:io';
 
-
-import 'dart:async';
-
-import 'markdown_template_files.dart';
-import 'package:build/build.dart';
-
-/// TODO for testing only: replace with DocumentationBuilder
-class DocumentationBuilderExample extends Builder {
-
-  @override
-  Map<String, List<String>> get buildExtensions => {'pubspec.yaml':['.d1'], '.dart':['.d2'], '.mdt':['.d3']};
-
-  @override
-  FutureOr<void> build(BuildStep buildStep) {
-    print ('DocumentationPreBuilder.build');
-  }
-
-
-}
+import 'package:documentation_builder/builders/markdown_template_builder.dart';
+import 'package:documentation_builder/builders/markdown_template_files.dart';
+import 'package:documentation_builder/builders/output_builder.dart';
 
 /// Generates markdown documentation files from markdown template files.
 /// It is useful when you write documentation for a dart or flutter project and want to reuse/import dart code or dart documentation comments.
 /// It is not intended to generate API documentation. Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
 ///
+/// TODO: use [MarkdownTemplateFileFactories]
 /// It can generate the following files:
 /// - README.md file
-/// - CHANGELOG.md file
+/// - CHANGELOG.mdt file
 /// - example.md file
 /// - Github Wiki pages (also markdown files)
-///
-/// The first line of the generated file will contain some kind of comment stating that the file was generated:
-/// - How (using the [DocumentationBuilder])
-/// - With what template file
-/// - At what date and time
-class DocumentationBuilder extends Builder {
-  @override
-  FutureOr<void> build(BuildStep buildStep) {
-    print ('>>> DocumentationBuilder.build');
-  }
 
-  @override
-  // TODO: implement buildExtensions
-  Map<String, List<String>> get buildExtensions => throw UnimplementedError();
+// [DocumentationBuilder] isn't actually a builder. Its purpose:
+// - for documentation
+// - a convenient way to run the shell commands to start the builders,
+//   using the build_runner package
+class DocumentationBuilder {
+
+  /// The [build_runner] uses several builders that are run with the [build_runner] package.
+  ///
+  /// The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):
+  /// $ flutter packages pub run build_runner build --delete-conflicting-outputs
+  ///
+  /// You’d better clean up before you re-execute run builder_runner
+  /// $ flutter packages pub run build_runner clean
+  run() async {
+    // TODO create shell class, e.g.:
+    // e.g. Shell.run('''
+    // flutter packages pub run build_runner clean
+    // flutter packages pub run build_runner build --delete-conflicting-outputs
+    // ''', StopMode.onErrorOrWarning);
+    //  or maybe there is an existing shell package?
+
+    var result=await Process.run(
+      'flutter',
+      ['pub', 'run', 'build_runner', 'clean'],
+      runInShell: true,
+    );
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+    result=await Process.run(
+      'flutter',
+      ['pub', 'run', 'build_runner', 'build', '--delete-conflicting-outputs'],
+      runInShell: true,
+    );
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+  }
 }
