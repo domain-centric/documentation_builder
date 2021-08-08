@@ -7,10 +7,8 @@ targets:
     builders:
       documentation_builder|markdown_template_builder:
         enabled: True
-#      documentation_builder|documentation_builder:
-#        generate_for:
-#          - /**.*
-#        enabled: True
+      documentation_builder|output_builder:
+        enabled: True
 
 builders:
   markdown_template_builder:
@@ -21,12 +19,12 @@ builders:
         - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: cache
     auto_apply: root_package
-    runs_before: [reflect_framework|documentation_builder]
-#  documentation_builder:
-#    import: 'package:documentation_builder/builders/builder_factory.dart'
-#    builder_factories: ['documentationBuilder']
-#    build_extensions:
-#      $lib$:
-#        - .combined.json
-#    build_to: cache
-#    auto_apply: root_package
+    runs_before: [documentation_builder|documentation_builder]
+  output_builder:
+    import: 'package:documentation_builder/builders/builder_factory.dart'
+    builder_factories: ['outputBuilder']
+    build_extensions:
+      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+    build_to: source
+    auto_apply: root_package

@@ -19,7 +19,7 @@ class GitHubProject {
 
   static Uri? _createUri() {
     File projectGitConfigFile = File(
-        '${LocalProject().directory.path}${Platform.pathSeparator}.git${Platform.pathSeparator}config');
+        '${LocalProject.directory.path}${Platform.pathSeparator}.git${Platform.pathSeparator}config');
     if (!projectGitConfigFile.existsSync()) {
       return null;
     }

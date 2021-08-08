@@ -1,8 +1,8 @@
 import 'package:documentation_builder/builders/markdown_template_files.dart';
 
-import 'builders/documentation_builder.dart';
+import 'builders/output_builder.dart';
 
-/// [MarkdownTemplateFile]s can contain [Tag]s that are replaced by the [DocumentationBuilder].
+/// [MarkdownTemplateFile]s can contain [Tag]s that are replaced by the [OutputBuilder].
 ///
 /// [Tag]s:
 /// - are surrounded by curly brackets: {}

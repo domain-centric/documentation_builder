@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/builders/documentation_builder.dart';
 import 'package:documentation_builder/builders/markdown_template_files.dart';
 import 'package:documentation_builder/generic/document_model.dart';
 
@@ -23,12 +22,12 @@ class MarkdownTemplateBuilder implements Builder {
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     var factories = MarkdownTemplateFileFactories();
     try {
+      String markdownTemplatePath = buildStep.inputId.path;
       MarkdownTemplateFileFactory factory =
-          factories.firstWhere((f) => f.canCreateFor(buildStep));
+          factories.firstWhere((f) => f.canCreateFor(markdownTemplatePath));
       var markdownTemplateFile = factory.create(buildStep);
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
-      print('>>>YES');
       model.markdownTemplateFiles.add(markdownTemplateFile);
     } on Error  {
       print('Unknown mark down template file: ${buildStep.inputId.path}');

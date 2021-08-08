@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:fluent_regex/fluent_regex.dart';
-
 import 'local_project.dart';
 
 /// Provides uri's of the project on https://github.com
@@ -17,8 +13,10 @@ class PubDevProject {
   /// returns a [Uri] to a project (package) on https://pub.dev
   /// or null when it could not be found on https://pub.dev
   static Uri? _createUri() {
-    Uri uri =
-    Uri(scheme: 'https', host: 'pub.dev', path: '/packages/${LocalProject().name}');
+    Uri uri = Uri(
+        scheme: 'https',
+        host: 'pub.dev',
+        path: '/packages/${LocalProject.name}');
     //TODO test if uri exists, if not return null
     return uri;
   }
@@ -34,7 +32,6 @@ class PubDevProject {
   Uri? get scoreUri => _createUriWithSuffix('score');
 
   Uri? get licenseUri => _createUriWithSuffix('license');
-
 
   _createUriWithSuffix(String suffix) {
     if (uri == null) {

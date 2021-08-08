@@ -1,7 +1,7 @@
+import 'package:documentation_builder/builders/documentation_builder.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 
-import 'builders/documentation_builder.dart';
 import 'builders/markdown_template_files.dart';
 
 /// You can refer to other parts of the documentation using [Link]s.
@@ -15,7 +15,7 @@ import 'builders/markdown_template_files.dart';
 /// - Custom title:  [MyClass title='Custom Title'] can be converted to [Custom Title](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
 abstract class Link extends MarkdownText {}
 
-/// Library can have members such as a:
+/// A library can have members such as a:
 /// - constant
 /// - function
 /// - enum (an enum can have value members)

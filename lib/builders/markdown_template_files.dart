@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
+import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
-import 'documentation_builder.dart';
+import 'output_builder.dart';
 
-/// The [DocumentationBuilder] parsed the [MarkdownTemplateFile]'s text into a list of [MarkdownText] objects
+/// The [OutputBuilder] parsed the [MarkdownTemplateFile]'s text into a list of [MarkdownText] objects
 /// A class that implements [MarkdownText] is something that contains documentation text.
 /// Its [toMarkDownText] method returns the documentation as generated [MarkdownText]
 ///
@@ -13,7 +16,7 @@ abstract class MarkdownText {
   String toMarkDownText();
 }
 
-/// The [DocumentationBuilder] parsed the [MarkdownTemplateFile]'s text into a list of objects
+/// The [OutputBuilder] parsed the [MarkdownTemplateFile]'s text into a list of objects
 /// Any text in a [MarkdownTemplateFile] that is not recognized as a [Tag] or [Link] is put into a [PlainText] object
 class PlainText extends MarkdownText {
   final String text;
@@ -26,7 +29,7 @@ class PlainText extends MarkdownText {
 
 /// Markdown template files are files with a .mdt extension that contain markdown text and [Tag]s.
 ///
-/// The [DocumentationBuilder] will read the [MarkdownTemplateFile] and parse them into [MarkdownText] objects.
+/// The [OutputBuilder] will read the [MarkdownTemplateFile] and parse them into [MarkdownText] objects.
 /// These can than be converted using the [toMarkDownText] method.
 class MarkdownTemplateFile extends MarkdownText {
   final BuildStep buildStep;
@@ -37,35 +40,54 @@ class MarkdownTemplateFile extends MarkdownText {
   /// - The path will always be within their package, that is they will never contain "../".
   /// e.g. /doc/wiki/Home.md
   final String destinationPath;
-  late List<MarkdownText> markDownTexts;
+  final List<MarkdownText> markdownTexts;
 
   MarkdownTemplateFile({
     required this.buildStep,
     required this.destinationPath,
-  }) {
-    _parse(buildStep);
-  }
+  }) : markdownTexts = _parse(buildStep);
 
   String toMarkDownText() =>
-      markDownTexts.map((e) => e.toMarkDownText()).join();
+      markdownTexts.map((e) => e.toMarkDownText()).join();
 
-  _parse(BuildStep buildStep) async {
-    await buildStep.readAsString(buildStep.inputId).then((text) {
-      //TODO find all tags and make [markDownTexts]
-      markDownTexts = [PlainText(text)];
-    });
+  static List<MarkdownText> _parse(BuildStep buildStep) {
+    String filePath = LocalProject.directory.path +
+        Platform.pathSeparator +
+        (buildStep.inputId.path.replaceAll('/', Platform.pathSeparator));
+
+    String text = File(filePath).readAsStringSync();
+
+    // buildStep.readAsString(buildStep.inputId).then((text) => {
+    //       markdownTexts = [PlainText(text)]
+    //     });
+
+    /// TODO find all tags and make [markDownTexts]
+
+    /// TODO: The first line of the generated file will contain some kind of comment stating that the file was generated:
+    /// - How (using the [DocumentationBuilder])
+    /// - With what template file
+    /// - At what date and time
+
+    return [PlainText(text)];
   }
 }
 
 abstract class MarkdownTemplateFileFactory {
   FluentRegex get fileNameExpression;
 
-  bool canCreateFor(BuildStep buildStep) {
-    String markdownTemplatePath = buildStep.inputId.path;
+  String createDestinationPath(String sourcePath);
+
+  bool canCreateFor(String markdownTemplatePath) {
     return fileNameExpression.hasMatch(markdownTemplatePath);
   }
 
-  MarkdownTemplateFile create(BuildStep buildStep);
+  MarkdownTemplateFile create(BuildStep buildStep) {
+    String sourcePath = buildStep.inputId.path;
+    return MarkdownTemplateFile(
+      buildStep: buildStep,
+      destinationPath: createDestinationPath(sourcePath),
+    );
+  }
 }
 
 class MarkdownTemplateFileFactories
@@ -80,23 +102,18 @@ class MarkdownTemplateFileFactories
 }
 
 /// README.md files are .....TODO explain what a README file is and what it should contain.
-/// A README.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder] to create or override! the README.md file in the root of your dart project.
+/// A README.mdt is a [MarkdownTemplateFile] that is used by the [OutputBuilder] to create or override! the README.md file in the root of your dart project.
 class ReadMeFactory extends MarkdownTemplateFileFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('readme.mdt').endOfLine().ignoreCase();
 
   @override
-  MarkdownTemplateFile create(BuildStep buildStep) {
-    return MarkdownTemplateFile(
-      buildStep: buildStep,
-      destinationPath: 'README.md',
-    );
-  }
+  String createDestinationPath(String sourcePath) => 'README.md';
 }
 
-/// CHANGELOG.md files are .....TODO explain what a CHANGELOG file is and what it should contain.
-/// A CHANGELOG.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder] to create or override! the CHANGELOG.md file in the root of your dart project.
+/// CHANGELOG.mdt files are .....TODO explain what a CHANGELOG file is and what it should contain.
+/// A CHANGELOG.mdt is a [MarkdownTemplateFile] that is used by the [OutputBuilder] to create or override! the CHANGELOG.mdt file in the root of your dart project.
 /// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG]
 /// which will generate the versions assuming you are using GitHub and mark very version as a milestone
 class ChangeLogFactory extends MarkdownTemplateFileFactory {
@@ -105,28 +122,18 @@ class ChangeLogFactory extends MarkdownTemplateFileFactory {
       FluentRegex().literal('changelog.mdt').endOfLine().ignoreCase();
 
   @override
-  MarkdownTemplateFile create(BuildStep buildStep) {
-    return MarkdownTemplateFile(
-      buildStep: buildStep,
-      destinationPath: 'CHANGELOG.md',
-    );
-  }
+  String createDestinationPath(String sourcePath) => 'CHANGELOG.md';
 }
 
 /// Your Dart/Flutter project can have an example.md file
-/// A example.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder] to create or override! the example.md file in the example folder of your dart project.
+/// A example.mdt is a [MarkdownTemplateFile] that is used by the [OutputBuilder] to create or override! the example.md file in the example folder of your dart project.
 class ExampleFactory extends MarkdownTemplateFileFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('example.mdt').endOfLine().ignoreCase();
 
   @override
-  MarkdownTemplateFile create(BuildStep buildStep) {
-    return MarkdownTemplateFile(
-      buildStep: buildStep,
-      destinationPath: 'example/example.md',
-    );
-  }
+  String createDestinationPath(String sourcePath) => 'example/example.md';
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
@@ -157,19 +164,15 @@ class WikiFactory extends MarkdownTemplateFileFactory {
       .ignoreCase();
 
   @override
-  MarkdownTemplateFile create(BuildStep buildStep) {
-    var sourcePath = buildStep.inputId.path;
+  String createDestinationPath(String sourcePath) {
     String? wikiFileName = fileNameExpression
         .findCapturedGroups(sourcePath)
         .values
         .firstWhere((v) => v != null);
     if (wikiFileName == null) {
-      print('Could not find the file name of: $sourcePath');
+      throw Exception('Could not find the file name of: $sourcePath');
     }
-    return MarkdownTemplateFile(
-      buildStep: buildStep,
-      destinationPath: 'doc/wiki/$wikiFileName.md',
-    );
+    return 'doc/wiki/$wikiFileName.md';
   }
 }
 
