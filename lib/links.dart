@@ -3,9 +3,10 @@ import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 
 import 'builders/markdown_template_files.dart';
+import 'generic/markdown_model.dart';
 
 /// You can refer to other parts of the documentation using [Link]s.
-/// [Link]s are references between [] brackets in [MarkdownTemplateFile]s, e.g.: [MyClass]
+/// [Link]s are references between [] brackets in [MarkdownPage]s, e.g.: [MyClass]
 /// The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing document on the internet.
 /// The [Link] will not be replaced to a hyperlink when the [Link] can not be resolved
 ///
@@ -13,7 +14,7 @@ import 'builders/markdown_template_files.dart';
 /// You can specify the title attribute when you would like the title to customize the title of the [Link], e.g.:
 /// - Default title: [MyClass] can be converted to [MyClass](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
 /// - Custom title:  [MyClass title='Custom Title'] can be converted to [Custom Title](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
-abstract class Link extends MarkdownText {}
+abstract class Link extends MarkdownNode {}
 
 /// A library can have members such as a:
 /// - constant
@@ -22,7 +23,7 @@ abstract class Link extends MarkdownText {}
 /// - class (a class can have members such as methods, fields, and field access methods)
 /// - extension (an extension can have members such as methods, fields, and field access methods)
 ///
-/// These library members can be referred to in [MarkdownTemplateFile]'s using brackets. e.g.
+/// These library members can be referred to in [MarkdownPage]'s using brackets. e.g.
 /// - [myConstant]
 /// - [myFunction]
 /// - [MyEnum]
@@ -43,7 +44,7 @@ abstract class Link extends MarkdownText {}
 /// - etc.
 ///
 /// The [DocumentationBuilder] will try to resolve these [MemberLink]s in the following order:
-/// - Within the [MarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
+/// - Within the [MarkdownPage], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved

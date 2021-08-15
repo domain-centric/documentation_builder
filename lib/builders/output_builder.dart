@@ -5,10 +5,12 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:documentation_builder/builders/markdown_template_files.dart';
-import 'package:documentation_builder/generic/document_model.dart';
+import 'package:documentation_builder/generic/documentation_model.dart';
+import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
+///  The [OutputBuilder] converts each [MarkdownPage] in the [DocumentationModel] into a [GeneratedMarkdownFile]
 class OutputBuilder extends Builder {
   final List<String> outputPaths = _createOutputPathsRelativeToLib();
 
@@ -20,21 +22,18 @@ class OutputBuilder extends Builder {
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     DocumentationModel model =
         await buildStep.fetchResource<DocumentationModel>(resource);
-    for (var markdownTemplateFile in model.markdownTemplateFiles) {
+    for (var markdownPage in model.markdownPages) {
       try {
-        AssetId assetId = createAssetId(markdownTemplateFile);
-        FutureOr<String> contents = markdownTemplateFile.toMarkDownText();
+        AssetId assetId = markdownPage.destinationPath.toAssetId();
+        FutureOr<String> contents = markdownPage.toMarkDownText();
         buildStep.writeAsString(assetId, contents);
         print('Wrote: ${assetId.path}');
       } on Exception catch (e) {
         print(
-            'Could not write file: ${markdownTemplateFile.destinationPath}, $e');
+            'Could not write file: ${markdownPage.destinationPath}, $e');
       }
     }
   }
-
-  AssetId createAssetId(MarkdownTemplateFile markdownTemplateFile) =>
-      AssetId(LocalProject.name, markdownTemplateFile.destinationPath);
 
   static List<String> _createOutputPathsRelativeToLib() {
     Directory directory = LocalProject.directory;
@@ -54,8 +53,7 @@ class OutputBuilder extends Builder {
     templateFilePaths.forEach((String sourcePath) {
       try {
         var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-        String destinationPath = factory.createDestinationPath(sourcePath);
-        String outputPathRelativeToLib = '../$destinationPath';
+        String outputPathRelativeToLib = factory.createDestinationPath(sourcePath).relativeToLibDirectory;
         outputPathsRelativeToLib.add(outputPathRelativeToLib);
       } on Error {
         // Continue

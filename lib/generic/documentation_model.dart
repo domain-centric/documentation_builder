@@ -9,7 +9,7 @@ class DocumentationModel {
   final LocalProject localProject = LocalProject();
   final GitHubProject gitHubProject = GitHubProject();
   final PubDevProject pubDevProject = PubDevProject();
-  final List<MarkdownTemplateFile> markdownTemplateFiles = [];
+  final List<MarkdownPage> markdownPages = [];
 }
 
 /// A [Resource] containing the [DocumentationModel] so that it can be shared between builders.
