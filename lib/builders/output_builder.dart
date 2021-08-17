@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:build/build.dart';
 import 'package:documentation_builder/builders/markdown_template_files.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
