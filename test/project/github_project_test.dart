@@ -1,41 +1,49 @@
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 
 main() {
   group('class: GitHubProject', () {
-    test('get method: uri', () {
+    test('get method: uri', () async {
       expect(GitHubProject().uri.toString(),
           'https://github.com/efficientyboosters/documentation_builder');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
 
-    test('get method: roadMapUri', () {
+    test('get method: roadMapUri', () async {
       expect(GitHubProject().roadMapUri.toString(),
           'https://github.com/efficientyboosters/documentation_builder/milestones');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
 
-    test('get method: versionsUri', () {
+    test('get method: versionsUri', () async {
       expect(GitHubProject().versionsUri.toString(),
           'https://github.com/efficientyboosters/documentation_builder/milestones%3Fstate=closed');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
 
-    test('get method: pullRequestsUri', () {
+    test('get method: pullRequestsUri', () async {
       expect(GitHubProject().pullRequestsUri.toString(),
           'https://github.com/efficientyboosters/documentation_builder/pulls');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
 
-    test('get method: wikiUri', () {
+    test('get method: wikiUri', () async {
       expect(GitHubProject().wikiUri.toString(),
           'https://github.com/efficientyboosters/documentation_builder/wiki');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
-    test('method: searchUri', () {
+    test('method: searchUri', () async {
       expect(GitHubProject().searchUri('Test').toString(),
           'https://github.com/efficientyboosters/documentation_builder/search%3Fq=Test');
-      //TODO test if uri exists
+      expect(await uriExists(GitHubProject().uri), true);
     });
   });
+}
+
+Future<bool> uriExists(Uri? uri) async {
+  if (uri == null) return false;
+  var response = await http.get(uri);
+  var success = response.statusCode >= 200 && response.statusCode < 300;
+  return success;
 }
