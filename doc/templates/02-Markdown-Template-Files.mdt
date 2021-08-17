@@ -1,9 +1,11 @@
-{ImportDoc markdown_template_files/MarkdownTemplateFile}
+{ImportDartDoc path:='lib/builders/markdown_template_files.dart|MarkdownTemplateFile'}
 
-{ImportDoc markdown_template_files/ReadMeFactory title:'### README template file'}
+{ImportDartDoc path:='lib/builders/markdown_template_files.dart|ReadMeFactory title:'### README template file'}
 
-{ImportDoc markdown_template_files/ChangeLogFactory title:'### CHANGELOG template file'}
+{ImportDartDoc path:='lib/builders/markdown_template_files.dart|ChangeLogFactory title:'### CHANGELOG template file'}
 
-{ImportDoc markdown_template_files/WikiFactory title:'### Wiki template files'}
+{ImportDartDoc path:='lib/builders/markdown_template_files.dart|WikiFactory title:'### Wiki template files'}
 
-{ImportDoc markdown_template_files/ExampleFactory title:'### example template file'}
+{ImportDartDoc path:='lib/builders/markdown_template_files.dart|ExampleFactory title:'### example template file'}
+
+[PreviousHomeNext]

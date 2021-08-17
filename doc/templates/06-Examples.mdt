@@ -1,1 +1,3 @@
-{ImportFile file:'example.mdt'}
+{ImportFile path:'doc\templates\example.mdt'}
+
+[PreviousHomeNext]

@@ -1,5 +1,5 @@
-{ImportDartDoc member:'documentation_builder/DocumentationBuilder' title:'# documentation_builder'}
+{ImportDartDoc path:'builders/documentation_builder.dart|DocumentationBuilder' title:'# documentation_builder'}
 
-{ImportFile file:'05-Examples.mdt' title:'## Examples'}
+{ImportFile path:'doc/templates/06-Examples.mdt' title:'## Examples'}
 
-{ImportFile file:'06-Getting-Started.mdt' title:'## Getting Started'}
+{ImportFile path:'doc/templates/07-Getting-Started.mdt' title:'## Getting Started'}

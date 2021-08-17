@@ -1,1 +1,3 @@
-{ImportDoc file:'documentation_builder/DocumentationBuilder'}
+{ImportDartDoc path:'lib/builders/documentation_builder.dart|DocumentationBuilder'}
+
+[PreviousHomeNext]
