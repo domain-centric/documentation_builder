@@ -1,48 +1,56 @@
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 
 main() {
   group('class: PubDevProject', () {
-    test('field: uri', () {
+    test('field: uri', () async {
       var uri = PubDevProject().uri;
       expect(uri.toString(), 'https://pub.dev/packages/documentation_builder');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: changeLogUri', () {
+    test('getter method: changeLogUri', () async {
       var uri = PubDevProject().changeLogUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/changelog');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: exampleUri', () {
+    test('getter method: exampleUri', () async {
       var uri = PubDevProject().exampleUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/example');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: installUri', () {
+    test('getter method: installUri', () async {
       var uri = PubDevProject().installUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/install');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: versionsUri', () {
+    test('getter method: versionsUri', () async {
       var uri = PubDevProject().versionsUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/versions');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: scoreUri', () {
+    test('getter method: scoreUri', () async {
       var uri = PubDevProject().scoreUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/score');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
-    test('getter method: licenseUri', () {
+    test('getter method: licenseUri', () async {
       var uri = PubDevProject().licenseUri;
       expect(uri.toString(),
           'https://pub.dev/packages/documentation_builder/license');
-      //TODO test if uri exists
+      expect(await uriExists(PubDevProject().uri), true);
     });
   });
+}
+
+Future<bool> uriExists(Uri? uri) async {
+  if (uri == null) return false;
+  var response = await http.get(uri);
+  var success = response.statusCode >= 200 && response.statusCode < 300;
+  return success;
 }
