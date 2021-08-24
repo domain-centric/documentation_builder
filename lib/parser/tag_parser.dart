@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -41,7 +43,7 @@ abstract class TagRule extends TextParserRule {
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributeNamesAndValues =
           tagAttributeParser.parseToNameAndValues(attributesText);
-        return createTagNode(parent, attributeNamesAndValues);
+      return createTagNode(parent, attributeNamesAndValues);
     } on ParserWarning catch (warning) {
       // Wrap warning with tag information, so it can be found easily
       throw ParserWarning("$warning in tag: '$tagText'.");
@@ -58,8 +60,10 @@ abstract class TagRule extends TextParserRule {
 /// - are surrounded by curly brackets: {}
 /// - start with a name: e.g.  {ImportFile}
 /// - may have [Attribute]s after the name: e.g. {ImportFile path:'OtherTemplateFile.mdt' title:'## Other Template File'}
-abstract class Tag extends Node {
-  Tag(ParentNode? parent) : super(parent);
+abstract class Tag extends ParentNode {
+  final Map<String, dynamic> attributeNamesAndValues;
+
+  Tag(ParentNode? parent, this.attributeNamesAndValues) : super(parent);
 }
 
 /// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'}
@@ -70,8 +74,26 @@ abstract class Tag extends Node {
 class ImportFileTag extends Tag {
   ImportFileTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent) {
-    //TODO create children
+      : super(parent, attributeNamesAndValues) {
+    children.addAll(_createChildren());
+  }
+
+  List<Node> _createChildren() {
+    ProjectFilePath path = attributeNamesAndValues['path'];
+    String? title = attributeNamesAndValues['title'];
+    try {
+      File file = path.toFile();
+      String text = file.readAsStringSync();
+      return [
+        if (title != null) TextNode(this, title+'\n'),
+        //TODO BookMark??? a uri that can referred to by a Link. See https://stackoverflow.com/questions/5319754/cross-reference-named-anchor-in-markdown
+        // TODO what if title does not have a # prefix?
+        TextNode(this, text),
+      ];
+    } on Exception catch (e) {
+      throw ParserWarning(
+          'Could not read file: $path.', ParserWarning(e.toString()));
+    }
   }
 }
 
@@ -97,7 +119,7 @@ class ImportFileTagRule extends TagRule {
 class ImportCodeTag extends Tag {
   ImportCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent) {
+      : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
 }
@@ -124,7 +146,7 @@ class ImportCodeTagRule extends TagRule {
 class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent) {
+      : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
 }
@@ -151,7 +173,7 @@ class ImportDartCodeTagRule extends TagRule {
 class ImportDartDocTag extends Tag {
   ImportDartDocTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent) {
+      : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
 }

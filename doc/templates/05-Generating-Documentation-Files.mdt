@@ -6,5 +6,3 @@ You can therefore also create a tools folder in the root of your project and add
 You can now run these commands by running the 'generate_markdown_files.dart' file from your favourite IDE.
 
 {importDartCode path='tools/generate_markdown_files.dart'}
-
-[PreviousHomeNext]

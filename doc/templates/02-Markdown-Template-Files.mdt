@@ -7,5 +7,3 @@
 {ImportDartDoc path='lib/builders/markdown_template_files.dart|WikiFactory' title='### Wiki template files'}
 
 {ImportDartDoc path='lib/builders/markdown_template_files.dart|ExampleFactory' title='### example template file'}
-
-[PreviousHomeNext]

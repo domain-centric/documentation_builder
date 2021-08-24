@@ -177,5 +177,5 @@ class TestTagRule extends TagRule {
 class TestTag extends Tag {
   final Map<String, dynamic> attributeNamesAndValues;
 
-  TestTag(ParentNode? parent, this.attributeNamesAndValues) : super(parent);
+  TestTag(ParentNode? parent, this.attributeNamesAndValues) : super(parent, attributeNamesAndValues);
 }
