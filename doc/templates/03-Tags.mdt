@@ -1,8 +1,8 @@
-{ImportDartDoc path:='lib/builders/tags.dart|Tag'}
+{ImportDartDoc path='lib/builders/tags.dart|Tag'}
 
-{ImportDartDoc path:='lib/builders/tags.dart|ImportFileTag' title:'### Import File Tag'}
+{ImportDartDoc path='lib/builders/tags.dart|ImportFileTag' title='### Import File Tag'}
 
-{ImportDartDoc path:='lib/builders/tags.dart|ImportCodeTag' title:'### Import Code Tag'}
+{ImportDartDoc path='lib/builders/tags.dart|ImportCodeTag' title='### Import Code Tag'}
 
 TODO other tags
 

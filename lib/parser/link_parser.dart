@@ -1,9 +1,20 @@
 import 'package:documentation_builder/builders/documentation_builder.dart';
+import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 
-import 'builders/markdown_template_files.dart';
-import 'generic/markdown_model.dart';
+
+
+/// The [LinkParser] searches for [TextNode]'s that contain texts that represent a [Link]
+/// It then replaces these [TextNode]'s into a [Link] and additional [TextNode]'s for the remaining text.
+class LinkParser extends Parser {
+  LinkParser()
+      : super([
+    //TODO
+  ]);
+}
+
+//TODO create a abstract LinkRule
 
 /// You can refer to other parts of the documentation using [Link]s.
 /// [Link]s are references between [] brackets in [MarkdownPage]s, e.g.: [MyClass]
@@ -14,7 +25,9 @@ import 'generic/markdown_model.dart';
 /// You can specify the title attribute when you would like the title to customize the title of the [Link], e.g.:
 /// - Default title: [MyClass] can be converted to [MyClass](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
 /// - Custom title:  [MyClass title='Custom Title'] can be converted to [Custom Title](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
-abstract class Link extends MarkdownNode {}
+abstract class Link extends ParentNode {
+  Link(ParentNode? parent) : super(parent);
+}
 
 /// A library can have members such as a:
 /// - constant
@@ -49,81 +62,78 @@ abstract class Link extends MarkdownNode {}
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
 class MemberLink extends Link {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  MemberLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class MarkDownFileLink extends Link {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  MarkDownFileLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 /// TODO see [PubDevProject]
 abstract class PubDevLink extends Link {
-
+  PubDevLink(ParentNode? parent) : super(parent) {
+    //TODO create children
+  }
 }
 
 
 class PubDevInstallLink extends PubDevLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  PubDevInstallLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class PubDevInstallExample extends PubDevLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  PubDevInstallExample(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 /// TODO see [GitHubProject]
-abstract class GitHubLink extends Link {}
+abstract class GitHubLink extends Link {
+  GitHubLink(ParentNode? parent) : super(parent) {
+    //TODO create children
+  }
+}
 
 class GitHubProjectLink extends GitHubLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  GitHubProjectLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class GitHubProjectCodeLink extends GitHubLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  GitHubProjectCodeLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class GitHubProjectMileStonesLink extends GitHubLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  GitHubProjectMileStonesLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class GitHubProjectWikiLink extends GitHubLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  GitHubProjectWikiLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }
 
 class GitHubProjectPullRequestLink extends GitHubLink {
-  @override
-  String toMarkDownText() {
-    // TODO: implement toMarkDownText
-    throw UnimplementedError();
+  GitHubProjectPullRequestLink(ParentNode? parent,
+      Map<String, dynamic> attributeNamesAndValues) : super(parent) {
+    //TODO create children
   }
 }

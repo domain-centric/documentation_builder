@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:documentation_builder/project/local_project.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 main() {
   group('class: LocalProject', () {

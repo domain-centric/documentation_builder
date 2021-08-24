@@ -1,6 +1,6 @@
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/project/local_project.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 const String dartFilePath = 'lib/builders/documentation_builder.dart';
 
@@ -246,7 +246,7 @@ main() {
     });
     group('method: toAssetId', () {
       test("must return a valid AssetId", () {
-        String path = 'lib/builders/documentation_builder.dart';
+        String path = 'lib/parsers/documentation_builder.dart';
         expect(DartFilePath(path).toAssetId().package, LocalProject.name);
         expect(DartFilePath(path).toAssetId().path, path);
       });
@@ -437,13 +437,14 @@ main() {
             DartCodePath(dartCodePath).dartFilePath.toString(), dartFilePath);
       });
       test("returns an existing path", () {
+        print(DartCodePath(dartFilePath).dartFilePath.toFile().toString());
         expect(DartCodePath(dartFilePath).dartFilePath.toFile().existsSync(),
             true);
       });
     });
     group('field: dartMemberPath', () {
       test("returns null when only file is specified", () {
-        String path = 'lib/builders/documentation_builder.dart';
+        String path = 'lib/parsers/documentation_builder.dart';
         expect(DartCodePath(path).dartMemberPath, null);
       });
       test("returns correct path when file and member is specified", () {

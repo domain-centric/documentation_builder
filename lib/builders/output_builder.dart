@@ -4,12 +4,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/builders/markdown_template_files.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
-///  The [OutputBuilder] converts each [MarkdownPage] in the [DocumentationModel] into a [GeneratedMarkdownFile]
+import 'template_builder.dart';
+
+///  The [OutputBuilder] converts each [MarkdownTemplate] in the [DocumentationModel] into a [GeneratedMarkdownFile]
 class OutputBuilder extends Builder {
   final List<String> outputPaths = _createOutputPathsRelativeToLib();
 
@@ -24,7 +25,7 @@ class OutputBuilder extends Builder {
     for (var markdownPage in model.markdownPages) {
       try {
         AssetId assetId = markdownPage.destinationPath.toAssetId();
-        FutureOr<String> contents = markdownPage.toMarkDownText();
+        FutureOr<String> contents = markdownPage.toString();
         buildStep.writeAsString(assetId, contents);
         print('Wrote: ${assetId.path}');
       } on Exception catch (e) {
@@ -47,7 +48,7 @@ class OutputBuilder extends Builder {
             e.path.replaceAll(directorPattern, '').replaceAll('\\', '/'))
         .toList();
 
-    var factories = MarkdownTemplateFileFactories();
+    var factories = MarkdownTemplateFactories();
     List<String> outputPathsRelativeToLib = [];
     templateFilePaths.forEach((String sourcePath) {
       try {

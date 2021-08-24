@@ -1,5 +1,5 @@
 import 'package:documentation_builder/project/github_project.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
 
 main() {

@@ -1,10 +1,10 @@
-{importDartDoc path:'lib/builders/documentation_builder.dart|DocumentationBuilder.run'}
+{importDartDoc path='lib/builders/documentation_builder.dart|DocumentationBuilder.run'}
 
 These commands are cumbersome.
 
 You can therefore also create a tools folder in the root of your project and add the following 'generate_markdown_files.dart' file in this folder.
 You can now run these commands by running the 'generate_markdown_files.dart' file from your favourite IDE.
 
-{importDartCode path:'tools/generate_markdown_files.dart'}
+{importDartCode path='tools/generate_markdown_files.dart'}
 
 [PreviousHomeNext]
