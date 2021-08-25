@@ -4,7 +4,7 @@ You can view the templates and the output on https://github.com and https://pub.
 
 - README
   - [GitHubProject path='/glob/main/doc/templates/README.mdt' title='Markdown Template File']
-  - [GitHubProject path='/glob/main/README.md' title='Generated Markdown File']
+  - [GitHubProject path='/glob/README.md' title='Generated Markdown File']
   - [PubDevProject title='Generated Markdown Page']
 - CHANGELOG
   - [GitHubProject path='/glob/main/doc/templates/CHANGELOG.mdt' title='Markdown Template File']
