@@ -220,9 +220,8 @@ class Title extends ParentNode {
 
   Title(ParentNode parent, String title) : super(parent) {
     anchor = Anchor(this, title);
-    children.add(TextNode(this, dashesBeforeTitle(title)));
     children.add(anchor);
-    children.add(TextNode(this, titleWithoutDashes(title)+'\n'));
+    children.add(TextNode(this, '$title\n')); //TODO new line before?, test in github.
   }
 
   /// Gets the dashes before the title.
