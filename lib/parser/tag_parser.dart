@@ -264,7 +264,7 @@ class Anchor extends Node {
     uriToAnchor = createUriToAnchor(name);
   }
 
-  static String createHtml(String name) => "<a name='$name'></a>";
+  static String createHtml(String name) => "<a id='$name'></a>";
 
   /// Converts a text to a name that can be referred to in a uri.
   static String createName(String textToChangeToName) =>
