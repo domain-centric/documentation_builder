@@ -211,7 +211,7 @@ class DartCodePath {
 }
 
 extension UriExtension on Uri {
-  withPathSuffix(String pathSuffix) {
-    this.replace(path: path+pathSuffix);
+  Uri withPathSuffix(String pathSuffix) {
+    return this.replace(path: path+pathSuffix);
   }
 }

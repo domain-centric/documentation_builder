@@ -109,8 +109,7 @@ main() {
             throwsA(isA<ParserWarning>().having(
                 (e) => e.toString(),
                 'toString()',
-                equals(
-                    "Title may not be empty in tag: '$text'."))));
+                equals("Title may not be empty in tag: '$text'."))));
       });
       test('parse all template files in this project successfully', () {
         TagParser().parse(createModelFromTemplateFiles());
@@ -118,6 +117,58 @@ main() {
       });
     });
   });
+  group('class: Anchor', () {
+    group('constructor:', () {
+      test('title with special characters', () {
+        var title = 'a1@#\$\\/%^&*()_z';
+        expect(createTestAnchor(title).name, 'a1z');
+        expect(createTestAnchor(title).html, "<a id='a1z'></a>");
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.https('pub.dev', 'packages/documentation_builder#a1z'));
+      });
+      test('title with hyphens', () {
+        var title = 'A-sentence-with-hyphens';
+        var expectedName=title.toLowerCase();
+        expect(createTestAnchor(title).name, expectedName);
+        expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+      });
+      test('title with double hyphens', () {
+        var title = 'A------sentence-with--multiple---hyphens';
+        var expectedName='a-sentence-with-multiple-hyphens';
+        expect(createTestAnchor(title).name, expectedName);
+        expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+      });
+      test('title starting with hyphen', () {
+        var title = '-A sentence starting with a hyphen';
+        var expectedName='a-sentence-starting-with-a-hyphen';
+        expect(createTestAnchor(title).name, expectedName);
+        expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+      });
+      test('title starting with hyphens', () {
+        var title = '---A sentence starting with hyphens';
+        var expectedName='a-sentence-starting-with-hyphens';
+        expect(createTestAnchor(title).name, expectedName);
+        expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+      });
+    });
+  });
+}
+
+Anchor createTestAnchor(String title) {
+  RootNode rootNode = RootNode();
+  var markdownPage =
+      ReadMeFactory().createMarkdownPage(rootNode, 'doc/templates/README.mdt');
+  var anchor = Anchor(markdownPage, title);
+  markdownPage.children.add(anchor);
+  return anchor;
 }
 
 DocumentationModel createModelFromTemplateFiles() {
@@ -177,5 +228,6 @@ class TestTagRule extends TagRule {
 class TestTag extends Tag {
   final Map<String, dynamic> attributeNamesAndValues;
 
-  TestTag(ParentNode? parent, this.attributeNamesAndValues) : super(parent, attributeNamesAndValues);
+  TestTag(ParentNode? parent, this.attributeNamesAndValues)
+      : super(parent, attributeNamesAndValues);
 }

@@ -244,9 +244,9 @@ class Title extends ParentNode {
 /// Represents a HTML anchor point to which you can refer to with a [uriToAnchor]
 /// https://stackoverflow.com/questions/5319754/cross-reference-named-anchor-in-markdown
 class Anchor extends Node {
-  late String html;
-  late String name;
-  late Uri? uriToAnchor;
+  late final String html;
+  late final String name;
+  late final Uri? uriToAnchor;
   static final firstHyphen = FluentRegex().startOfLine().literal('-');
   static final multipleHyphen = FluentRegex().literal('-', Quantity.atLeast(2));
   static final whiteSpace = FluentRegex().whiteSpace();
@@ -276,7 +276,7 @@ class Anchor extends Node {
     if (markdownTemplate == null) return null;
     Uri? uri = markdownTemplate.destinationWebUri;
     if (uri == null) return null;
-    uri.withPathSuffix('#$name');
+    uri=uri.withPathSuffix('#$name');
     return uri;
   }
 
