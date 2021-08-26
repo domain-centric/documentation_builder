@@ -31,7 +31,7 @@ You can view the templates and the output on https://github.com and https://pub.
   - [GitHubProject path='/glob/main/example/example.md' title='Generated Markdown File']
   - [GitHubProjectExample title='Generated Markdown Page']
 
-<a name='my-test'></a>
+<a id='my-test'></a>
 ## Getting Started
 - Read the [GitHubProjectWiki title='Wiki documentation']
 - [PubDevInstall title='Install the documentation_builder package'] in your project
