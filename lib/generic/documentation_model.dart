@@ -6,7 +6,7 @@ import 'package:documentation_builder/parser/parser.dart';
 class DocumentationModel extends RootNode {
 
   /// adds a [MarkdownTemplate] while verifying that each [MarkdownTemplate]
-  /// has a unique [MarkdownTemplate.destinationPath] to prevent overriding generated files
+  /// has a unique [MarkdownTemplate.destinationFilePath] to prevent overriding generated files
   void add(MarkdownTemplate markdownPage) {
     verifyUniqueDestinationPath(markdownPage);
     children.add(markdownPage);
@@ -21,10 +21,10 @@ class DocumentationModel extends RootNode {
     try {
       MarkdownTemplate existingMarkDownPageWithSameDestination =
           markdownPages.firstWhere((existingMarkDownPage) =>
-              newMarkdownPage.destinationPath ==
-              existingMarkDownPage.destinationPath);
+              newMarkdownPage.destinationFilePath ==
+              existingMarkDownPage.destinationFilePath);
       throw Exception(
-          '${newMarkdownPage.sourcePath} and ${existingMarkDownPageWithSameDestination.sourcePath} both have the same destination path: ${newMarkdownPage.destinationPath}');
+          '${newMarkdownPage.sourceFilePath} and ${existingMarkDownPageWithSameDestination.sourceFilePath} both have the same destination path: ${newMarkdownPage.destinationFilePath}');
     } on StateError {
       // No double destination paths found. Perfect!
     }

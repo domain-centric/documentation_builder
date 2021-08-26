@@ -69,7 +69,7 @@ abstract class Parser {
       warnings.add(newWarning);
     } else {
       warnings.add(
-          ParserWarning('Parse warning for: ${markDownPage.sourcePath}', newWarning));
+          ParserWarning('Parse warning for: ${markDownPage.sourceFilePath}', newWarning));
     }
   }
 
@@ -208,7 +208,7 @@ class Node {
 class TextNode extends Node {
   final String text;
 
-  TextNode(ParentNode parent, this.text) : super(parent);
+  TextNode(ParentNode? parent, this.text) : super(parent);
 
   @override
   String toString() => text;

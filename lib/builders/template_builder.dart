@@ -5,6 +5,8 @@ import 'package:collection/collection.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
+import 'package:documentation_builder/project/github_project.dart';
+import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// Finds .mdt files, and puts them in the [DocumentationModel]
@@ -59,18 +61,23 @@ class GeneratedMarkdownFile {}
 class MarkdownTemplate extends ParentNode {
 
   /// The [MarkdownTemplateFile]
-  final ProjectFilePath sourcePath;
+  final ProjectFilePath sourceFilePath;
 
   /// The path to where the generated [MarkdownTemplateFile] needs to be stored
-  final ProjectFilePath destinationPath;
+  final ProjectFilePath destinationFilePath;
+
+  /// A uri to the web presentation
+  /// null if it does not exits of is unknown
+  final Uri? destinationWebUri;
 
   MarkdownTemplate({
     required ParentNode parent,
-    required String sourceFilePath,
-    required this.destinationPath,
-  })  : sourcePath= ProjectFilePath(sourceFilePath),
+    required String sourcePath,
+    required this.destinationFilePath,
+    required this.destinationWebUri,
+  })  : sourceFilePath= ProjectFilePath(sourcePath),
         super(parent) {
-    children.addAll(_createChildren(sourcePath));
+    children.addAll(_createChildren());
   }
 
   /// Creates 2 [MarkdownNode]s:
@@ -81,9 +88,9 @@ class MarkdownTemplate extends ParentNode {
   /// - split up in other [TextNode]s
   /// - [Tag] texts will be converted to [Tag] objects by the [TagParser]
   /// - [Link] texts will be converted to [LinkNode] objects by the [LinkParser]
-  List<Node> _createChildren(ProjectFilePath sourcePath) => [
-    TextNode(this, thisFileWasGeneratedComment(sourcePath)),
-    TextNode(this, readSourceFileText(sourcePath)),
+  List<Node> _createChildren() => [
+    TextNode(this, thisFileWasGeneratedComment(sourceFilePath)),
+    TextNode(this, readSourceFileText(sourceFilePath)),
   ];
 
   String readSourceFileText(ProjectFilePath sourcePath) =>
@@ -91,12 +98,15 @@ class MarkdownTemplate extends ParentNode {
 
   String thisFileWasGeneratedComment(ProjectFilePath sourcePath) =>
       '[//]: # (This file was generated from: ${sourcePath.toString()} using the documentation_builder package on: ${DateTime.now()}.)\n';
+
 }
 
 abstract class MarkdownTemplateFactory {
   FluentRegex get fileNameExpression;
 
   ProjectFilePath createDestinationPath(String sourcePath);
+
+  Uri? createDestinationWebUri(String sourceFilePath);
 
   bool canCreateFor(String markdownTemplatePath) {
     return fileNameExpression.hasMatch(markdownTemplatePath);
@@ -105,10 +115,13 @@ abstract class MarkdownTemplateFactory {
   MarkdownTemplate createMarkdownPage(ParentNode parent, String sourceFilePath) {
     return MarkdownTemplate(
       parent: parent,
-      sourceFilePath: sourceFilePath,
-      destinationPath: createDestinationPath(sourceFilePath),
+      sourcePath: sourceFilePath,
+      destinationFilePath: createDestinationPath(sourceFilePath),
+      destinationWebUri: createDestinationWebUri(sourceFilePath),
     );
   }
+
+
 }
 
 class MarkdownTemplateFactories
@@ -132,6 +145,10 @@ class ReadMeFactory extends MarkdownTemplateFactory {
   @override
   ProjectFilePath createDestinationPath(String sourcePath) =>
       ProjectFilePath('README.md');
+
+  @override
+  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().uri;
+
 }
 
 /// CHANGELOG.mdt files are .....TODO explain what a CHANGELOG file is and what it should contain.
@@ -146,6 +163,9 @@ class ChangeLogFactory extends MarkdownTemplateFactory {
   @override
   ProjectFilePath createDestinationPath(String sourcePath) =>
       ProjectFilePath('CHANGELOG.md');
+
+  @override
+  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().changeLogUri;
 }
 
 /// Your Dart/Flutter project can have an example.md file
@@ -158,6 +178,9 @@ class ExampleFactory extends MarkdownTemplateFactory {
   @override
   ProjectFilePath createDestinationPath(String sourcePath) =>
       ProjectFilePath('example/example.md');
+
+  @override
+  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().exampleUri;
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
@@ -189,15 +212,31 @@ class WikiFactory extends MarkdownTemplateFactory {
 
   @override
   ProjectFilePath createDestinationPath(String sourcePath) {
-    String? wikiFileName = fileNameExpression
+    String wikiFileName = createFileName(sourcePath);
+    return ProjectFilePath('doc/wiki/$wikiFileName.md');
+  }
+
+  String createFileName(String sourcePath) {
+     String? wikiFileName = fileNameExpression
         .findCapturedGroups(sourcePath)
         .values
         .firstWhere((v) => v != null);
     if (wikiFileName == null) {
-      throw Exception('Could not find the file name of: $sourcePath');
+      throw ParserWarning('Could not find the file name of: $sourcePath');
     }
-    return ProjectFilePath('doc/wiki/$wikiFileName.md');
+    return wikiFileName;
   }
+
+  @override
+  Uri? createDestinationWebUri(String sourceFilePath) {
+    Uri? wikiUri=GitHubProject().wikiUri;
+    if (wikiUri==null) return null;
+    return wikiUri.withPathSuffix(createPathSuffix(sourceFilePath));
+  }
+
+  String createPathSuffix(String sourceFilePath) => '/'+createFileName(sourceFilePath);
+
+
 }
 
 //TODO LicenseFactory + LicenseTags + Year tag

@@ -24,13 +24,13 @@ class OutputBuilder extends Builder {
         await buildStep.fetchResource<DocumentationModel>(resource);
     for (var markdownPage in model.markdownPages) {
       try {
-        AssetId assetId = markdownPage.destinationPath.toAssetId();
+        AssetId assetId = markdownPage.destinationFilePath.toAssetId();
         FutureOr<String> contents = markdownPage.toString();
         buildStep.writeAsString(assetId, contents);
         print('Wrote: ${assetId.path}');
       } on Exception catch (e) {
         print(
-            'Could not write file: ${markdownPage.destinationPath}, $e');
+            'Could not write file: ${markdownPage.destinationFilePath}, $e');
       }
     }
   }

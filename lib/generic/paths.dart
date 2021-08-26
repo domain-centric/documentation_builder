@@ -209,3 +209,9 @@ class DartCodePath {
   @override
   String toString() => path;
 }
+
+extension UriExtension on Uri {
+  withPathSuffix(String pathSuffix) {
+    this.replace(path: path+pathSuffix);
+  }
+}
