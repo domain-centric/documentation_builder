@@ -12,11 +12,11 @@ import 'parser.dart';
 class TagParser extends Parser {
   TagParser()
       : super([
-    ImportFileTagRule(),
-    ImportCodeTagRule(),
-    ImportDartCodeTagRule(),
-    ImportDartDocTagRule(),
-  ]);
+          ImportFileTagRule(),
+          ImportCodeTagRule(),
+          ImportDartCodeTagRule(),
+          ImportDartDocTagRule(),
+        ]);
 }
 
 abstract class TagRule extends TextParserRule {
@@ -24,29 +24,26 @@ abstract class TagRule extends TextParserRule {
 
   TagRule(String name, this.attributeRules) : super(createExpression(name));
 
-  static FluentRegex createExpression(String name) =>
-      FluentRegex()
-          .literal('{')
-          .whiteSpace(Quantity.zeroOrMoreTimes())
-          .literal(name)
-          .group(FluentRegex().anyCharacter(Quantity
-          .zeroOrMoreTimes()
-          .reluctant),
+  static FluentRegex createExpression(String name) => FluentRegex()
+      .literal('{')
+      .whiteSpace(Quantity.zeroOrMoreTimes())
+      .literal(name)
+      .group(FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant),
           type: GroupType.captureUnNamed())
-          .literal('}')
-          .ignoreCase();
+      .literal('}')
+      .ignoreCase();
 
   @override
   Node createReplacementNode(ParentNode parent, String tagText) {
     try {
       String attributesText = expression
-          .findCapturedGroups(tagText)
-          .values
-          .firstWhere((value) => value != null) ??
+              .findCapturedGroups(tagText)
+              .values
+              .firstWhere((value) => value != null) ??
           '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributeNamesAndValues =
-      tagAttributeParser.parseToNameAndValues(attributesText);
+          tagAttributeParser.parseToNameAndValues(attributesText);
       return createTagNode(parent, attributeNamesAndValues);
     } on ParserWarning catch (warning) {
       // Wrap warning with tag information, so it can be found easily
@@ -54,8 +51,8 @@ abstract class TagRule extends TextParserRule {
     }
   }
 
-  Tag createTagNode(ParentNode parent,
-      Map<String, dynamic> attributeNamesAndValues);
+  Tag createTagNode(
+      ParentNode parent, Map<String, dynamic> attributeNamesAndValues);
 }
 
 /// [Tag] objects use [Tag] [Attribute] values to create it's children e.g. by importing some text. Dart code or Dart comments
@@ -77,8 +74,8 @@ abstract class Tag extends ParentNode {
 ///   - path: (required) A [ProjectFilePath] to a file name inside the markdown directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportFileTag extends Tag {
-  ImportFileTag(ParentNode? parent,
-      Map<String, dynamic> attributeNamesAndValues)
+  ImportFileTag(
+      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
     ProjectFilePath path = attributeNamesAndValues['path'];
     String? title = attributeNamesAndValues['title'];
@@ -103,13 +100,13 @@ class ImportFileTag extends Tag {
 class ImportFileTagRule extends TagRule {
   ImportFileTagRule()
       : super('ImportFile', [
-    ProjectFilePathAttributeRule(),
-    TitleAttributeRule(),
-  ]);
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
+        ]);
 
   @override
-  Tag createTagNode(ParentNode parent,
-      Map<String, dynamic> attributeNamesAndValues) =>
+  Tag createTagNode(
+          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
       ImportFileTag(parent, attributeNamesAndValues);
 }
 
@@ -119,8 +116,8 @@ class ImportFileTagRule extends TagRule {
 ///   - path: (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportCodeTag extends Tag {
-  ImportCodeTag(ParentNode? parent,
-      Map<String, dynamic> attributeNamesAndValues)
+  ImportCodeTag(
+      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
@@ -130,13 +127,13 @@ class ImportCodeTag extends Tag {
 class ImportCodeTagRule extends TagRule {
   ImportCodeTagRule()
       : super('ImportCode', [
-    ProjectFilePathAttributeRule(),
-    TitleAttributeRule(),
-  ]);
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
+        ]);
 
   @override
-  Tag createTagNode(ParentNode parent,
-      Map<String, dynamic> attributeNamesAndValues) =>
+  Tag createTagNode(
+          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
       ImportCodeTag(parent, attributeNamesAndValues);
 }
 
@@ -146,8 +143,8 @@ class ImportCodeTagRule extends TagRule {
 ///   - path: (required) A [DartCodePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportDartCodeTag extends Tag {
-  ImportDartCodeTag(ParentNode? parent,
-      Map<String, dynamic> attributeNamesAndValues)
+  ImportDartCodeTag(
+      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
@@ -157,13 +154,13 @@ class ImportDartCodeTag extends Tag {
 class ImportDartCodeTagRule extends TagRule {
   ImportDartCodeTagRule()
       : super('ImportDartCode', [
-    DartCodePathAttributeRule(),
-    TitleAttributeRule(),
-  ]);
+          DartCodePathAttributeRule(),
+          TitleAttributeRule(),
+        ]);
 
   @override
-  Tag createTagNode(ParentNode parent,
-      Map<String, dynamic> attributeNamesAndValues) =>
+  Tag createTagNode(
+          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
       ImportDartCodeTag(parent, attributeNamesAndValues);
 }
 
@@ -173,8 +170,8 @@ class ImportDartCodeTagRule extends TagRule {
 ///   - path: (required) A [DartCodePath] to be imported Dart comments.
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportDartDocTag extends Tag {
-  ImportDartDocTag(ParentNode? parent,
-      Map<String, dynamic> attributeNamesAndValues)
+  ImportDartDocTag(
+      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
     //TODO create children
   }
@@ -184,13 +181,13 @@ class ImportDartDocTag extends Tag {
 class ImportDartDocTagRule extends TagRule {
   ImportDartDocTagRule()
       : super('ImportDartDoc', [
-    DartCodePathAttributeRule(),
-    TitleAttributeRule(),
-  ]);
+          DartCodePathAttributeRule(),
+          TitleAttributeRule(),
+        ]);
 
   @override
-  Tag createTagNode(ParentNode parent,
-      Map<String, dynamic> attributeNamesAndValues) =>
+  Tag createTagNode(
+          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
       ImportDartDocTag(parent, attributeNamesAndValues);
 }
 
@@ -216,7 +213,7 @@ class Title extends ParentNode {
       .startOfLine()
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .group(FluentRegex().literal('#', Quantity.between(0, 6)),
-      type: GroupType.captureUnNamed());
+          type: GroupType.captureUnNamed());
 
   Title(ParentNode parent, String title) : super(parent) {
     anchor = Anchor(this, title);
@@ -234,10 +231,7 @@ class Title extends ParentNode {
   /// The title gets 6 dashes (lowest level in MarkDown) if no dashes where specified.
   static String dashesBeforeTitle(String title) {
     String dashesBeforeTitle =
-    dashPrefixExpression
-        .findCapturedGroups(title)
-        .values
-        .first!;
+        dashPrefixExpression.findCapturedGroups(title).values.first!;
     if (dashesBeforeTitle.isEmpty) dashesBeforeTitle = '######';
     return dashesBeforeTitle;
   }
@@ -253,10 +247,11 @@ class Anchor extends Node {
   late String html;
   late String name;
   late Uri? uriToAnchor;
-  static final firstDash = FluentRegex().startOfLine().literal('-');
+  static final firstHyphen = FluentRegex().startOfLine().literal('-');
+  static final multipleHyphen = FluentRegex().literal('-', Quantity.atLeast(2));
   static final whiteSpace = FluentRegex().whiteSpace();
-  static final otherThanLettersAndNumbers = FluentRegex()
-      .characterSet(CharacterSet.exclude().addLetters().addDigits());
+  static final otherThanLettersNumbersAndHyphens = FluentRegex()
+      .characterSet(CharacterSet.exclude().addLetters().addDigits().addLiterals('-'));
 
   Anchor(ParentNode? parent, String textToChangeToName) : super(parent) {
     name = createName(textToChangeToName);
@@ -267,15 +262,13 @@ class Anchor extends Node {
   static String createHtml(String name) => "<a id='$name'></a>";
 
   /// Converts a text to a name that can be referred to in a uri.
-  static String createName(String textToChangeToName) =>
-      textToChangeToName
-          .trim()
-          .replaceAll(whiteSpace, '-')
-          .replaceAll(otherThanLettersAndNumbers, '-')
-          .replaceAll('--', '-')
-          .replaceAll(firstDash, '')
-          .replaceAll(firstDash, '')//TODO loop?
-          .toLowerCase();
+  static String createName(String textToChangeToName) => textToChangeToName
+      .trim()
+      .replaceAll(whiteSpace, '-')
+      .replaceAll(otherThanLettersNumbersAndHyphens, '')
+      .replaceAll(multipleHyphen, '-')
+      .replaceAll(firstHyphen, '')
+      .toLowerCase();
 
   Uri? createUriToAnchor(String name) {
     if (parent == null) return null;

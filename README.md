@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/README.mdt using the documentation_builder package on: 2021-08-26 22:04:12.255177.)
+[//]: # (This file was generated from: doc/templates/README.mdt using the documentation_builder package on: 2021-08-26 22:24:59.433339.)
 [![Pub Package](https://img.shields.io/pub/v/fluent_regex)](https://pub.dev/packages/fluent_regex)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
