@@ -32,7 +32,7 @@ You can view the templates and the output on https://github.com and https://pub.
   - [GitHubProjectExample title='Generated Markdown Page']
 
 <a name='getting-started'></a>
-## Getting Started[](#test)
+## Getting Started {my-test}
 - Read the [GitHubProjectWiki title='Wiki documentation']
 - [PubDevInstall title='Install the documentation_builder package'] in your project
 - Create 'doc/templates' directories in the root of your project
