@@ -121,10 +121,13 @@ main() {
     group('constructor:', () {
       test('title with special characters', () {
         var title = 'a1@#\$\\/%^&*()_z';
-        expect(createTestAnchor(title).name, 'a1z');
-        expect(createTestAnchor(title).html, "<a id='a1z'></a>");
-        expect(createTestAnchor(title).uriToAnchor,
-            Uri.https('pub.dev', 'packages/documentation_builder#a1z'));
+        var expectedName = 'a1-z';
+        expect(createTestAnchor(title).name, expectedName);
+        expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
+        expect(
+            createTestAnchor(title).uriToAnchor,
+            Uri.https(
+                'pub.dev', 'packages/documentation_builder#$expectedName'));
       });
       test('title with hyphens', () {
         var title = 'A-sentence-with-hyphens';
@@ -170,11 +173,26 @@ main() {
   });
   group('class: Title', () {
     group('constructor:', () {
-      test('title with special characters', () {
+      test('Creating a title', () {
         expect(
             Title(TestRootNode(''), '## Paragraph Title').toString(),
             '<a id=\'paragraph-title\'></a>\n'
             '## Paragraph Title\n');
+      });
+    });
+  });
+  group('class: TitleAndOrAnchor', () {
+    group('constructor:', () {
+      test('Creating a title', () {
+        expect(
+            TitleAndOrAnchor(TestRootNode(''), '## Paragraph Title','test').toString(),
+            '<a id=\'paragraph-title\'></a>\n'
+                '## Paragraph Title\n');
+      });
+      test('Creating a title', () {
+        expect(
+            TitleAndOrAnchor(TestRootNode(''), null,'builders/documentation_builder|DocumentationBuilder').toString(),
+            "<a id='builders-documentation-builder-documentationbuilder'></a>");
       });
     });
   });

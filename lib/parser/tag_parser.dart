@@ -252,7 +252,7 @@ class Anchor extends Node {
   static String createName(String textToChangeToName) => textToChangeToName
       .trim()
       .replaceAll(whiteSpace, '-')
-      .replaceAll(otherThanLettersNumbersAndHyphens, '')
+      .replaceAll(otherThanLettersNumbersAndHyphens, '-')
       .replaceAll(multipleHyphen, '-')
       .replaceAll(firstHyphen, '')
       .toLowerCase();
