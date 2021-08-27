@@ -128,35 +128,53 @@ main() {
       });
       test('title with hyphens', () {
         var title = 'A-sentence-with-hyphens';
-        var expectedName=title.toLowerCase();
+        var expectedName = title.toLowerCase();
         expect(createTestAnchor(title).name, expectedName);
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
-        expect(createTestAnchor(title).uriToAnchor,
-            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+        expect(
+            createTestAnchor(title).uriToAnchor,
+            Uri.https(
+                'pub.dev', 'packages/documentation_builder#$expectedName'));
       });
       test('title with double hyphens', () {
         var title = 'A------sentence-with--multiple---hyphens';
-        var expectedName='a-sentence-with-multiple-hyphens';
+        var expectedName = 'a-sentence-with-multiple-hyphens';
         expect(createTestAnchor(title).name, expectedName);
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
-        expect(createTestAnchor(title).uriToAnchor,
-            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+        expect(
+            createTestAnchor(title).uriToAnchor,
+            Uri.https(
+                'pub.dev', 'packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphen', () {
         var title = '-A sentence starting with a hyphen';
-        var expectedName='a-sentence-starting-with-a-hyphen';
+        var expectedName = 'a-sentence-starting-with-a-hyphen';
         expect(createTestAnchor(title).name, expectedName);
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
-        expect(createTestAnchor(title).uriToAnchor,
-            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+        expect(
+            createTestAnchor(title).uriToAnchor,
+            Uri.https(
+                'pub.dev', 'packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphens', () {
         var title = '---A sentence starting with hyphens';
-        var expectedName='a-sentence-starting-with-hyphens';
+        var expectedName = 'a-sentence-starting-with-hyphens';
         expect(createTestAnchor(title).name, expectedName);
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
-        expect(createTestAnchor(title).uriToAnchor,
-            Uri.https('pub.dev', 'packages/documentation_builder#$expectedName'));
+        expect(
+            createTestAnchor(title).uriToAnchor,
+            Uri.https(
+                'pub.dev', 'packages/documentation_builder#$expectedName'));
+      });
+    });
+  });
+  group('class: Title', () {
+    group('constructor:', () {
+      test('title with special characters', () {
+        expect(
+            Title(TestRootNode(''), '## Paragraph Title').toString(),
+            '<a id=\'paragraph-title\'></a>\n'
+            '## Paragraph Title\n');
       });
     });
   });

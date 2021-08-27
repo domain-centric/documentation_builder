@@ -207,38 +207,25 @@ class TitleAndOrAnchor extends ParentNode {
   }
 }
 
+/// Represents a markdown title with a custom Anchor id that can be navigated to using [anchor.uriToAnchor]
+///
+/// Output example:
+/// <a id='paragraph-titile'></a>
+/// ## Paragraph Title
 class Title extends ParentNode {
   late final Anchor anchor;
-  static final dashPrefixExpression = FluentRegex()
-      .startOfLine()
-      .whiteSpace(Quantity.zeroOrMoreTimes())
-      .group(FluentRegex().literal('#', Quantity.between(0, 6)),
-          type: GroupType.captureUnNamed());
 
+  /// The title can have leading hashtags to indicate the title level, e.g.:
+  /// # = Chapter
+  /// ## = Paragraph
+  /// ### = Sub paragraph
+  /// etc... up to 6 levels.
   Title(ParentNode parent, String title) : super(parent) {
     anchor = Anchor(this, title);
     children.add(anchor);
     children.add(TextNode(this, '\n$title\n'));
   }
 
-  /// Gets the dashes before the title.
-  /// This is an indication for the level, e.g.:
-  /// # = Chapter
-  /// ## = Paragraph
-  /// ### = Sub paragraph
-  /// etc...
-  ///
-  /// The title gets 6 dashes (lowest level in MarkDown) if no dashes where specified.
-  static String dashesBeforeTitle(String title) {
-    String dashesBeforeTitle =
-        dashPrefixExpression.findCapturedGroups(title).values.first!;
-    if (dashesBeforeTitle.isEmpty) dashesBeforeTitle = '######';
-    return dashesBeforeTitle;
-  }
-
-  /// Gets the title without the title prefix
-  static String titleWithoutDashes(String title) =>
-      dashPrefixExpression.removeFirst(title);
 }
 
 /// Represents a HTML anchor point to which you can refer to with a [uriToAnchor]
