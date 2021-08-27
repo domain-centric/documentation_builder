@@ -173,26 +173,64 @@ main() {
   });
   group('class: Title', () {
     group('constructor:', () {
-      test('Creating a title', () {
+      test('Creating a Title ', () {
+        var string = Title(TestRootNode(''), '## Paragraph Title').toString();
         expect(
-            Title(TestRootNode(''), '## Paragraph Title').toString(),
-            '<a id=\'paragraph-title\'></a>\n'
-            '## Paragraph Title\n');
+            string,
+            "<a id=\'paragraph-title\'></a>\n"
+            "## Paragraph Title\n");
       });
     });
   });
   group('class: TitleAndOrAnchor', () {
     group('constructor:', () {
-      test('Creating a title', () {
+      test(
+          'Creating a TitleAndOrAnchor object containing children with a anchor and title',
+          () {
         expect(
-            TitleAndOrAnchor(TestRootNode(''), '## Paragraph Title','test').toString(),
+            TitleAndOrAnchor(TestRootNode(''), '## Paragraph Title', 'test')
+                .toString(),
             '<a id=\'paragraph-title\'></a>\n'
-                '## Paragraph Title\n');
+            '## Paragraph Title\n');
       });
-      test('Creating a title', () {
+      test(
+          'Creating a TitleAndOrAnchor object containing children with a anchor',
+          () {
         expect(
-            TitleAndOrAnchor(TestRootNode(''), null,'builders/documentation_builder|DocumentationBuilder').toString(),
+            TitleAndOrAnchor(TestRootNode(''), null,
+                    'builders/documentation_builder|DocumentationBuilder')
+                .toString(),
             "<a id='builders-documentation-builder-documentationbuilder'></a>");
+      });
+    });
+  });
+
+  group('class: ImportFileTag', () {
+    group('constructor:', () {
+      test(
+          'Creating a ImportFileTag results in an object containing children with a anchor, title and markdown text',
+          () {
+        ProjectFilePath filePath = ProjectFilePath('doc/templates/README.mdt');
+        Map<String, dynamic> attributes = {
+          'path': filePath,
+          'title': '## Paragraph Title'
+        };
+        var expectedPreFix = "<a id=\'paragraph-title\'></a>\n"
+            "## Paragraph Title\n";
+        var output = ImportFileTag(TestRootNode(''), attributes).toString();
+        expect(output, startsWith(expectedPreFix));
+        expect(output.length, greaterThan(expectedPreFix.length));
+      });
+      test('Creating a ImportFileTag results in an object containing children with a anchor and markdown text',
+        () {
+        ProjectFilePath filePath = ProjectFilePath('doc/templates/README.mdt');
+        Map<String, dynamic> attributes = {
+        'path': filePath,
+        };
+        var expectedPreFix = "<a id=\'doc-templates-readme-mdt\'></a>";
+        var output = ImportFileTag(TestRootNode(''), attributes).toString();
+        expect(output, startsWith(expectedPreFix));
+        expect(output.length, greaterThan(expectedPreFix.length));
       });
     });
   });
