@@ -84,16 +84,6 @@ class ImportFileTag extends Tag {
     var fileText = (TextNode(this, _readFile(path)));
     children.addAll([titleAndOrAnchor, fileText]);
   }
-
-  String _readFile(ProjectFilePath path) {
-    try {
-      File file = path.toFile();
-      return file.readAsStringSync();
-    } on Exception catch (e) {
-      throw ParserWarning(
-          'Could not read file: $path.', ParserWarning(e.toString()));
-    }
-  }
 }
 
 /// Recognizes and creates an [ImportFileTag]
@@ -119,7 +109,19 @@ class ImportCodeTag extends Tag {
   ImportCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
-    //TODO create children
+    ProjectFilePath path = attributeNamesAndValues['path'];
+    String? title = attributeNamesAndValues['title'];
+    var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
+    anchor = titleAndOrAnchor.anchor;
+    var codePrefix = TextNode(parent, "\n```\n");
+    var fileText = TextNode(this, _readCodeFile(path));
+    var codeSuffix = TextNode(parent, "\n```\n");
+    children.addAll([
+      titleAndOrAnchor,
+      codePrefix,
+      fileText,
+      codeSuffix,
+    ]);
   }
 }
 
@@ -225,7 +227,6 @@ class Title extends ParentNode {
     children.add(anchor);
     children.add(TextNode(this, '\n$title\n'));
   }
-
 }
 
 /// Represents a HTML anchor point to which you can refer to with a [uriToAnchor]
@@ -237,8 +238,8 @@ class Anchor extends Node {
   static final firstHyphen = FluentRegex().startOfLine().literal('-');
   static final multipleHyphen = FluentRegex().literal('-', Quantity.atLeast(2));
   static final whiteSpace = FluentRegex().whiteSpace();
-  static final otherThanLettersNumbersAndHyphens = FluentRegex()
-      .characterSet(CharacterSet.exclude().addLetters().addDigits().addLiterals('-'));
+  static final otherThanLettersNumbersAndHyphens = FluentRegex().characterSet(
+      CharacterSet.exclude().addLetters().addDigits().addLiterals('-'));
 
   Anchor(ParentNode? parent, String textToChangeToName) : super(parent) {
     name = createName(textToChangeToName);
@@ -263,10 +264,40 @@ class Anchor extends Node {
     if (markdownTemplate == null) return null;
     Uri? uri = markdownTemplate.destinationWebUri;
     if (uri == null) return null;
-    uri=uri.withPathSuffix('#$name');
+    uri = uri.withPathSuffix('#$name');
     return uri;
   }
 
   @override
   String toString() => html;
 }
+
+String _readFile(ProjectFilePath path) {
+  try {
+    File file = path.toFile();
+    return file.readAsStringSync();
+  } on Exception catch (e) {
+    throw ParserWarning(
+        'Could not read file: $path.', ParserWarning(e.toString()));
+  }
+}
+
+final _leadingWhiteSpace =
+    FluentRegex().startOfLine().whiteSpace(Quantity.oneOrMoreTimes());
+final _trailingWhiteSpace =
+    FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).endOfLine();
+
+String _trimWhiteSpace(String text) {
+  text = _leadingWhiteSpace.removeFirst(text);
+  var matches = _trailingWhiteSpace.allMatches(text);
+  if (matches.isNotEmpty) {
+    var lastMatch = matches.last;
+    var endPos = lastMatch.end;
+    if (endPos == text.length) {
+      text = text.substring(0, lastMatch.start);
+    }
+  }
+  return text;
+}
+
+String _readCodeFile(ProjectFilePath path) => _trimWhiteSpace(_readFile(path));

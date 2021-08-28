@@ -221,16 +221,59 @@ main() {
         expect(output, startsWith(expectedPreFix));
         expect(output.length, greaterThan(expectedPreFix.length));
       });
-      test('Creating a ImportFileTag results in an object containing children with a anchor and markdown text',
-        () {
+      test(
+          'Creating a ImportFileTag results in an object containing children with a anchor and markdown text',
+          () {
         ProjectFilePath filePath = ProjectFilePath('doc/templates/README.mdt');
         Map<String, dynamic> attributes = {
-        'path': filePath,
+          'path': filePath,
         };
         var expectedPreFix = "<a id=\'doc-templates-readme-mdt\'></a>";
         var output = ImportFileTag(TestRootNode(''), attributes).toString();
         expect(output, startsWith(expectedPreFix));
         expect(output.length, greaterThan(expectedPreFix.length));
+      });
+    });
+  });
+  group('class: ImportCodeTag', () {
+    group('constructor:', () {
+      test(
+          'Creating a ImportCodeTag results in an object containing children with a anchor, title and markdown text',
+          () {
+        ProjectFilePath filePath =
+            ProjectFilePath('test/parsers/import_test_code_file.dart');
+        Map<String, dynamic> attributes = {
+          'path': filePath,
+          'title': '## Paragraph Title'
+        };
+        var expected = '<a id=\'paragraph-title\'></a>\n'
+            '## Paragraph Title\n'
+            '\n'
+            '```\n'
+            'main() {\r\n'
+            '  print(\'test\');\r\n'
+            '}\n'
+            '```\n';
+        var output = ImportCodeTag(TestRootNode(''), attributes).toString();
+        expect(output, expected);
+      });
+      test(
+          'Creating a ImportCodeTag results in an object containing children with a anchor and markdown text',
+          () {
+        ProjectFilePath filePath =
+            ProjectFilePath('test/parsers/import_test_code_file.dart');
+        Map<String, dynamic> attributes = {
+          'path': filePath,
+        };
+        var expected =
+            '<a id=\'test-parsers-import-test-code-file-dart\'></a>\n'
+            '```\n'
+            'main() {\r\n'
+            '  print(\'test\');\r\n'
+            '}\n'
+            '```\n';
+        var output = ImportCodeTag(TestRootNode(''), attributes).toString();
+        expect(output, expected);
       });
     });
   });

@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-08-28 12:21:32.225015.)
+[//]: # (This file was generated from: doc/templates/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-08-28 12:47:16.895160.)
 
 
 These commands are cumbersome.
@@ -8,11 +8,8 @@ You can now run these commands by running the 'generate_markdown_files.dart' fil
 
 <a id='tools-generate-markdown-files-dart'></a>
 ```
-import 'package:documentation_builder/builders/documentation_builder.dart';
-
-main() {
+import 'package:documentation_builder/builders/documentation_builder.dart';main() {
   DocumentationBuilder().run();
 }
-
 ```
   TODO change to ImportDartCode
