@@ -277,6 +277,30 @@ main() {
       });
     });
   });
+  group('class: ImportDartCodeTag', () {
+    group('constructor:', () {
+      test(
+          'Creating a ImportDartCodeTag results in an object containing children with a anchor, title and markdown text',
+          () {
+        ProjectFilePath filePath =
+            ProjectFilePath('test/parsers/import_test_code_file.dart');
+        Map<String, dynamic> attributes = {
+          'path': filePath,
+          'title': '## Paragraph Title'
+        };
+        var expected = '<a id=\'paragraph-title\'></a>\n'
+            '## Paragraph Title\n'
+            '\n'
+            '```\n'
+            'main() {\r\n'
+            '  print(\'test\');\r\n'
+            '}\n'
+            '```\n';
+        var output = ImportDartCodeTag(TestRootNode(''), attributes).toString();
+        expect(output, expected);
+      });
+    });
+  });
 }
 
 Anchor createTestAnchor(String title) {

@@ -1,1 +1,4 @@
 {ImportDartDoc path='lib/builders/documentation_builder.dart|DocumentationBuilder'}
+
+TODO remove after test
+{ImportDartCode path='lib/builders/documentation_builder.dart|DocumentationBuilder'}

@@ -1,8 +1,13 @@
+import 'dart:async';
 import 'dart:io';
-
+import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
 import 'package:documentation_builder/builders/template_builder.dart';
+import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
+import 'package:documentation_builder/generic/wait_for.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import 'parser.dart';
@@ -34,7 +39,7 @@ abstract class TagRule extends TextParserRule {
       .ignoreCase();
 
   @override
-  Node createReplacementNode(ParentNode parent, String tagText) {
+  Node createReplacementNode( ParentNode parent, String tagText) {
     try {
       String attributesText = expression
               .findCapturedGroups(tagText)
@@ -81,7 +86,8 @@ class ImportFileTag extends Tag {
     String? title = attributeNamesAndValues['title'];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
-    var fileText = (TextNode(this, _readFile(path)));
+    var file = path.toFile();
+    var fileText = (TextNode(this, _readFile(file)));
     children.addAll([titleAndOrAnchor, fileText]);
   }
 }
@@ -114,7 +120,8 @@ class ImportCodeTag extends Tag {
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var codePrefix = TextNode(parent, "\n```\n");
-    var fileText = TextNode(this, _readCodeFile(path));
+    var file = path.toFile();
+    var fileText = TextNode(this, _readCodeFile(file));
     var codeSuffix = TextNode(parent, "\n```\n");
     children.addAll([
       titleAndOrAnchor,
@@ -148,7 +155,48 @@ class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
       : super(parent, attributeNamesAndValues) {
-    //TODO create children
+    DartCodePath path = attributeNamesAndValues['path'];
+    String? title = attributeNamesAndValues['title'];
+    print (">>> ImportDartCodeTag $path    ${path.dartMemberPath}");
+    var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
+    anchor = titleAndOrAnchor.anchor;
+    var codePrefix = TextNode(parent, "\n```dart\n");
+    var code = TextNode(parent,_readCode(parent!,path));
+    var codeSuffix = TextNode(parent, "\n```\n");
+    children.addAll([
+      titleAndOrAnchor,
+      codePrefix,
+      code,
+      codeSuffix,
+    ]);
+  }
+
+  String _readCode(ParentNode parent,DartCodePath path)  {
+    File dartFile=path.dartFilePath.toFile();
+
+    if (path.dartMemberPath==null) {
+      //return whole file if there is no dartMemberPath
+      return _readCodeFile(dartFile);
+    } else {
+      //get path.dartMemberPath from code
+      print (">>> parse lib");
+      /// https://stackoverflow.com/questions/38933801/calling-an-async-method-from-component-constructor-in-dart
+      /// LibraryElement library = waitFor(parseLibrary(parent, dartFile), timeout: Duration(seconds: 10)) ;
+      print (">>> Passed");
+      // library.units.forEach((unit) {
+      //   print(unit.source .toString());
+      // });
+      return 'TODO only get source code of: $path';//TODO only return part of the code
+    }
+
+  }
+
+  Future<LibraryElement> parseLibrary(ParentNode parent, File dartFile) async {
+    var documentationModel = parent.findParent<DocumentationModel>();
+    var resolver = documentationModel!.buildStep!.resolver;
+    var assetId = AssetId(LocalProject.name, dartFile.path);
+    var library =  await resolver.libraryFor(assetId);
+    return library;
   }
 }
 
@@ -272,13 +320,12 @@ class Anchor extends Node {
   String toString() => html;
 }
 
-String _readFile(ProjectFilePath path) {
+String _readFile(File file) {
   try {
-    File file = path.toFile();
     return file.readAsStringSync();
   } on Exception catch (e) {
     throw ParserWarning(
-        'Could not read file: $path.', ParserWarning(e.toString()));
+        'Could not read file: ${file.path}.', ParserWarning(e.toString()));
   }
 }
 
@@ -300,4 +347,4 @@ String _trimWhiteSpace(String text) {
   return text;
 }
 
-String _readCodeFile(ProjectFilePath path) => _trimWhiteSpace(_readFile(path));
+String _readCodeFile(File file) => _trimWhiteSpace(_readFile(file));

@@ -4,6 +4,8 @@ import 'package:documentation_builder/parser/parser.dart';
 
 /// All information needed to generate the markdown documentation files.
 class DocumentationModel extends RootNode {
+  //admittedly yuki: adding the buildStep so we can assess the resolver if need to.
+  BuildStep? buildStep;
 
   /// adds a [MarkdownTemplate] while verifying that each [MarkdownTemplate]
   /// has a unique [MarkdownTemplate.destinationFilePath] to prevent overriding generated files

@@ -19,10 +19,11 @@ class ParseBuilder implements Builder {
 
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
-    DocumentationModel model =
     await buildStep.fetchResource<DocumentationModel>(resource);
-    print('>>>${model.markdownPages.length}');
     try {
+      DocumentationModel model =
+      await buildStep.fetchResource<DocumentationModel>(resource);
+      model.buildStep=buildStep;
       DocumentationParser().parse(model);
     } on ParserWarning catch (parseWarning) {
       showWarningsInConsole(parseWarning);
