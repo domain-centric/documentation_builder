@@ -1,10 +1,20 @@
-[//]: # (This file was generated from: doc/templates/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-08-30 14:54:07.276026.)
+[//]: # (This file was generated from: doc/templates/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-08-31 21:24:05.879317.)
+<a id='lib-builders-documentation-builder-dart-documentationbuilder-run'></a>The [documentation_builder] uses several builders that are run with the [build_runner] package.
+
+The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):
+```
+flutter packages pub run build_runner build --delete-conflicting-outputs
+```
+
+You’d better clean up before you re-execute [builder_runner]:
+```
+flutter packages pub run build_runner clean
+```
 
 
 These commands are cumbersome.
 
 You can therefore also create a tools folder in the root of your project and add the following 'generate_markdown_files.dart' file in this folder.
-You can now run these commands by running the 'generate_markdown_files.dart' file from your favourite IDE.
 
 <a id='tools-generate-markdown-files-dart'></a>
 ```dart
@@ -12,3 +22,6 @@ import 'package:documentation_builder/builders/documentation_builder.dart';main
   DocumentationBuilder().run();
 }
 ```
+
+
+You can now run these commands by running the 'generate_markdown_files.dart' file from your favourite IDE.

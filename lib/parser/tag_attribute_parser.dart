@@ -7,9 +7,9 @@ class TagAttributeParser extends Parser {
   TagAttributeParser(List<AttributeRule> rules) : super(rules);
 
   /// attributeNamesAndValues are the inside of a [Tag] string
-  Map<String, dynamic> parseToNameAndValues(String attributeNamesAndValues) {
+  Future<Map<String, dynamic>> parseToNameAndValues(String attributeNamesAndValues) async {
     var rootNode = createRootNode(attributeNamesAndValues);
-    parse(rootNode);
+    await parse(rootNode);
     validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
     validateIfAllRequiredAttributesAreFound(rootNode);
     return createNameAndValueMap(rootNode);
@@ -109,15 +109,15 @@ class ProjectFilePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Node createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return AttributeNode<ProjectFilePath>(
+      return Future.value(AttributeNode<ProjectFilePath>(
         parent: parent,
         name: name,
         value: ProjectFilePath(stringValueFor(nameAndValue)),
-      );
+      ));
     } on Exception catch (e) {
-      _throwParserWarning(e);// TODO ProjectFilePath that throws an exception does not throw a ParserException
+      _throwParserWarning(e);
     }
   }
 }
@@ -130,15 +130,15 @@ class DartCodePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Node createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return AttributeNode<DartCodePath>(
+      return Future.value(AttributeNode<DartCodePath>(
         parent: parent,
         name: name,
         value: DartCodePath(stringValueFor(nameAndValue)),
-      );
+      ));
     } on Exception catch (e) {
-     _throwParserWarning(e);
+      _throwParserWarning(e);
     }
   }
 }
@@ -148,34 +148,31 @@ class StringAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Node createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return AttributeNode<String>(
+      return Future.value(AttributeNode<String>(
         parent: parent,
         name: name,
         value: stringValueFor(nameAndValue),
-      );
+      ));
     } on Exception catch (e) {
       _throwParserWarning(e);
     }
   }
-
-
 }
 
 class TitleAttributeRule extends StringAttributeRule {
   TitleAttributeRule({String name = 'title', bool required = false})
       : super(name, required: required);
 
-
   @override
-  Node createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return AttributeNode<String>(
+      return Future.value(AttributeNode<String>(
         parent: parent,
         name: name,
         value: validate(stringValueFor(nameAndValue)),
-      );
+      ));
     } on Exception catch (e) {
       _throwParserWarning(e);
     }

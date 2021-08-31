@@ -1,7 +1,9 @@
-{ImportDartDoc path='lib/builders/tags.dart|Tag'}
+{ImportDartDoc path='lib/parser/tag_parser.dart|Tag'}
 
-{ImportDartDoc path='lib/builders/tags.dart|ImportFileTag' title='### Import File Tag'}
+{ImportDartDoc path='lib/parser/tag_parser.dart|ImportFileTag' title='### Import File Tag'}
 
-{ImportDartDoc path='lib/builders/tags.dart|ImportCodeTag' title='### Import Code Tag'}
+{ImportDartDoc path='lib/parser/tag_parser.dart|ImportCodeTag' title='### Import Code Tag'}
 
-TODO other tags
+{ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartCodeTag' title='### Import Dart Code Tag'}
+
+{ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartDocTag' title='### Import Dart Documentation Comments Tag'}

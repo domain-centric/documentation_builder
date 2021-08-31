@@ -43,10 +43,10 @@ class MarkdownTemplateBuilder implements Builder {
 
 
 /// [MarkdownTemplateFile]s are files with a .mdt extension that can contain:
-/// - markdown text
+/// - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 /// - [Tag]s
 /// - [Link]s
-///
+/// - [Badge]s
 /// [MarkdownTemplateFile]s are converted to [GeneratedMarkdownFile]s
 class MarkdownTemplateFile {}
 
@@ -56,7 +56,7 @@ class GeneratedMarkdownFile {}
 
 /// The [MarkdownTemplateBuilder] will create the [MarkdownTemplate] for each [MarkdownTemplateFile]
 /// The [MarkdownTemplate] will put the contents of the [MarkdownTemplateFile] as [TextNode] in its [children]
-/// The [DocumentationParser] will replace this [TextNode] into multiple [Node]s if needed.
+/// The [DocumentationParser] will replace this [TextNode] with multiple [Node]s if needed.
 /// The [OutputBuilder] converts each [MarkdownTemplate] into a [GeneratedMarkdownFile]
 class MarkdownTemplate extends ParentNode {
 
@@ -136,7 +136,7 @@ class MarkdownTemplateFactories
 }
 
 /// README.md files are .....TODO explain what a README file is and what it should contain.
-/// A README.mdt is a [MarkdownTemplate] that is used by the [OutputBuilder] to create or override! the README.md file in the root of your dart project.
+/// A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the README.md file in the root of your dart project.
 class ReadMeFactory extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
@@ -152,7 +152,7 @@ class ReadMeFactory extends MarkdownTemplateFactory {
 }
 
 /// CHANGELOG.mdt files are .....TODO explain what a CHANGELOG file is and what it should contain.
-/// A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [OutputBuilder] to create or override! the CHANGELOG.mdt file in the root of your dart project.
+/// A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the CHANGELOG.md file in the root of your dart project.
 /// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG]
 /// which will generate the versions assuming you are using GitHub and mark very version as a milestone
 class ChangeLogFactory extends MarkdownTemplateFactory {
@@ -169,7 +169,7 @@ class ChangeLogFactory extends MarkdownTemplateFactory {
 }
 
 /// Your Dart/Flutter project can have an example.md file
-/// A example.mdt is a [MarkdownTemplate] that is used by the [OutputBuilder] to create or override! the example.md file in the example folder of your dart project.
+/// A example.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the example.md file in the example folder of your dart project.
 class ExampleFactory extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression =>

@@ -437,7 +437,6 @@ main() {
             DartCodePath(dartCodePath).dartFilePath.toString(), dartFilePath);
       });
       test("returns an existing path", () {
-        print(DartCodePath(dartFilePath).dartFilePath.toFile().toString());
         expect(DartCodePath(dartFilePath).dartFilePath.toFile().existsSync(),
             true);
       });

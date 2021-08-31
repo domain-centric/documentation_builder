@@ -9,42 +9,47 @@ const suffixSymbol='%';
 
 main() {
   group('class: Parser', () {
-    test('letter', () {
+    test('letter', () async {
       var rootNode = RootNodeWithTextNode('a');
       var parser = LetterDigitParser();
-      expect(parser.parse(rootNode).children, [
+      var parsedNodes = await parser.parse(rootNode);
+      expect(parsedNodes.children, [
         TextNode(rootNode, letterSymbol),
       ]);
     });
-    test('prefix, letter', () {
+    test('prefix, letter', () async {
       var rootNode = RootNodeWithTextNode('${prefixSymbol}a');
       var parser = LetterDigitParser();
-      expect(parser.parse(rootNode).children, [
+      var parsedNode = await parser.parse(rootNode);
+      expect(parsedNode.children, [
         TextNode(rootNode, prefixSymbol),
         TextNode(rootNode, letterSymbol),
       ]);
     });
-    test('letter, suffix', () {
+    test('letter, suffix', () async {
       var rootNode = RootNodeWithTextNode('a$suffixSymbol');
       var parser = LetterDigitParser();
-      expect(parser.parse(rootNode).children, [
+      var parsedNode = await parser.parse(rootNode);
+      expect(parsedNode.children, [
         TextNode(rootNode, letterSymbol),
         TextNode(rootNode, '%'),
       ]);
     });
-    test('prefix, letter, suffix node', () {
+    test('prefix, letter, suffix node', () async {
       var rootNode = RootNodeWithTextNode('${prefixSymbol}a$suffixSymbol');
       var parser = LetterDigitParser();
-      expect(parser.parse(rootNode).children, [
+      var parsedNode = await parser.parse(rootNode);
+      expect(parsedNode.children, [
         TextNode(rootNode, prefixSymbol),
         TextNode(rootNode, letterSymbol),
         TextNode(rootNode, suffixSymbol),
       ]);
     });
-    test('prefix, digit, letter, digit, suffix', () {
+    test('prefix, digit, letter, digit, suffix', () async {
       var rootNode = RootNodeWithTextNode('${prefixSymbol}1a3$suffixSymbol');
       var parser = LetterDigitParser();
-      expect(parser.parse(rootNode).children, [
+      var parsedNode = await parser.parse(rootNode);
+      expect(parsedNode.children, [
         TextNode(rootNode, prefixSymbol),
         TextNode(rootNode, digitSymbol),
         TextNode(rootNode, letterSymbol),
@@ -60,16 +65,16 @@ class LetterParserRule extends TextParserRule {
   LetterParserRule() : super(FluentRegex().letter());
 
   @override
-  Node createReplacementNode(ParentNode parent, String textToReplace) =>
-      TextNode(parent, letterSymbol);
+  Future<Node>   createReplacementNode(ParentNode parent, String textToReplace) => Future.value(
+      TextNode(parent, letterSymbol));
 }
 
 class DigitParserRule extends TextParserRule {
   DigitParserRule() : super(FluentRegex().digit());
 
   @override
-  Node createReplacementNode(ParentNode parent, String textToReplace) =>
-      TextNode(parent, digitSymbol);
+  Future<Node>  createReplacementNode(ParentNode parent, String textToReplace) => Future.value(
+      TextNode(parent, digitSymbol));
 }
 
 class LetterDigitParser extends Parser {

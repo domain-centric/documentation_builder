@@ -12,23 +12,24 @@ abstract class Parser {
   /// replaces all child [Node]s in the [RootNode] according to the [rules]
   /// Note that this starts all over at the first rule when nodes where found and replaced.
   /// Throws a ParseWarning when there where warnings
-  RootNode parse(RootNode rootNode) {
+  Future<RootNode> parse(RootNode rootNode) async {
     List<ParserWarning> warnings = [];
     bool replacedNodes;
     do {
-      replacedNodes = _findAndReplaceNodes(rootNode, warnings);
+      replacedNodes = await _findAndReplaceNodes(rootNode, warnings);
     } while (replacedNodes);
     if (warnings.isNotEmpty) throw new ParserWarning(warnings.join('\n'));
     return rootNode;
   }
 
   /// returns true if nodes where found and replaced
-  bool _findAndReplaceNodes(ParentNode model, List<ParserWarning> warnings) {
+  Future<bool> _findAndReplaceNodes(
+      ParentNode model, List<ParserWarning> warnings) async {
     for (ParserRule rule in rules) {
       try {
         var childrenNodesToReplace = rule.findChildNodesToReplace(model);
         if (childrenNodesToReplace.isNotEmpty) {
-          _replaceChildNodes(rule, childrenNodesToReplace, warnings);
+          await _replaceChildNodes(rule, childrenNodesToReplace, warnings);
           return true;
         }
       } on ParserWarning catch (warning) {
@@ -38,38 +39,46 @@ abstract class Parser {
     return false;
   }
 
-  void _replaceChildNodes(
-      ParserRule rule, ChildNodesToReplace childNodesToReplace, List<ParserWarning> warnings) {
+  Future<void> _replaceChildNodes(
+      ParserRule rule,
+      ChildNodesToReplace childNodesToReplace,
+      List<ParserWarning> warnings) async {
     Node firstChild = childNodesToReplace.first;
     ParentNode parent = firstChild.parent!;
     int startIndex = parent.children.indexOf(firstChild);
-    if (startIndex == -1)
-      throw new ParserError('First child to replace not found: $firstChild from rule: $rule');
+    if (startIndex == -1) {
+      throw new ParserError(
+          'First child to replace not found from rule: $rule');
+      //It is likely that one or more children have an invalid parent (use this as parent in parser rules!)
+    }
     _removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
-    _addReplacementNodes(rule, childNodesToReplace, parent, startIndex, warnings);
+    await _addReplacementNodes(
+        rule, childNodesToReplace, parent, startIndex, warnings);
   }
 
-  void _addReplacementNodes(
+  Future<void> _addReplacementNodes(
       ParserRule rule,
       ChildNodesToReplace childNodesToReplace,
       ParentNode parent,
-      int startIndex, List<ParserWarning> warnings) {
+      int startIndex,
+      List<ParserWarning> warnings) async {
     try {
       List<Node> replacementNodes =
-          rule.createReplacementNodes(childNodesToReplace);
+          await rule.createReplacementNodes(childNodesToReplace);
       parent.children.insertAll(startIndex, replacementNodes);
     } on ParserWarning catch (warning) {
       logWarning(warnings, parent, warning);
     }
   }
 
-  void logWarning(List<ParserWarning> warnings, ParentNode parent, ParserWarning newWarning) {
+  void logWarning(List<ParserWarning> warnings, ParentNode parent,
+      ParserWarning newWarning) {
     var markDownPage = parent.findParent<MarkdownTemplate>();
     if (markDownPage == null) {
       warnings.add(newWarning);
     } else {
-      warnings.add(
-          ParserWarning('Parse warning for: ${markDownPage.sourceFilePath}', newWarning));
+      warnings.add(ParserWarning(
+          'Parse warning for: ${markDownPage.sourceFilePath}', newWarning));
     }
   }
 
@@ -88,7 +97,8 @@ abstract class ParserRule {
   /// - [Result.notFound()] when no nodes could be replaced.
   ChildNodesToReplace findChildNodesToReplace(ParentNode model);
 
-  List<Node> createReplacementNodes(ChildNodesToReplace childNodesToReplace);
+  Future<List<Node>> createReplacementNodes(
+      ChildNodesToReplace childNodesToReplace);
 }
 
 /// Looks for a [TextNode] and then matches [TextNode.text] with a [RegExp].
@@ -116,7 +126,8 @@ abstract class TextParserRule extends ParserRule {
   /// - A new [TextNode] containing the text before the regular expression (if there is any)
   /// - A new node that represents the text found by the [RegExp]
   /// - A new [TextNode] containing the text after the regular expression (if there is any)
-  List<Node> createReplacementNodes(ChildNodesToReplace childNodesToReplace) {
+  Future<List<Node>> createReplacementNodes(
+      ChildNodesToReplace childNodesToReplace) async {
     TextNode textNode = childNodesToReplace.first as TextNode;
     String text = textNode.text;
     RegExpMatch firstMatch = expression.firstMatch(text)!;
@@ -125,9 +136,11 @@ abstract class TextParserRule extends ParserRule {
 
     TextNode? textBeforeNode = createTextBeforeNode(textNode, start);
     TextNode? textAfterNode = createTextAfterNode(textNode, end);
+    var replacementNode = await createReplacementNode(
+        textNode.parent!, text.substring(start, end));
     return [
       if (textBeforeNode != null) textBeforeNode,
-      createReplacementNode(textNode.parent!, text.substring(start, end)),
+      replacementNode,
       if (textAfterNode != null) textAfterNode,
     ];
   }
@@ -155,7 +168,7 @@ abstract class TextParserRule extends ParserRule {
 
   /// Note that the parentNode parameter should only be used to get information from the tree to create replacement nodes.
   /// The [Parser] will add the created replacement node's to the parent.
-  Node createReplacementNode(ParentNode parent, String textToReplace);
+  Future<Node> createReplacementNode(ParentNode parent, String textToReplace);
 }
 
 class ChildNodesToReplace extends DelegatingList<Node> {

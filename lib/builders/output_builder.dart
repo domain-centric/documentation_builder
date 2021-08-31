@@ -55,7 +55,7 @@ class OutputBuilder extends Builder {
         var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
         String outputPathRelativeToLib = factory.createDestinationPath(sourcePath).relativeToLibDirectory;
         outputPathsRelativeToLib.add(outputPathRelativeToLib);
-      } on Error catch(e){
+      } on Error {
         // Continue
       }
     });

@@ -10,7 +10,6 @@ import 'package:documentation_builder/builders/template_builder.dart';
 /// In order of execution:
 /// - [MarkdownTemplateBuilder]
 /// - [ParseBuilder]
-/// - TODO [LinkBuilder]
 /// - [OutputBuilder]
 
 Builder markdownTemplateBuilder(BuilderOptions builderOptions) =>

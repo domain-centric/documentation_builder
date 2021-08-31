@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:analyzer/dart/element/element.dart';
+
+import 'package:analyzer/dart/element/element.dart' as analyzer;
 import 'package:build/build.dart';
 import 'package:documentation_builder/builders/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/generic/wait_for.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -39,7 +39,7 @@ abstract class TagRule extends TextParserRule {
       .ignoreCase();
 
   @override
-  Node createReplacementNode( ParentNode parent, String tagText) {
+  Future<Node> createReplacementNode(ParentNode parent, String tagText) async {
     try {
       String attributesText = expression
               .findCapturedGroups(tagText)
@@ -48,8 +48,11 @@ abstract class TagRule extends TextParserRule {
           '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributeNamesAndValues =
-          tagAttributeParser.parseToNameAndValues(attributesText);
-      return createTagNode(parent, attributeNamesAndValues);
+          await tagAttributeParser.parseToNameAndValues(attributesText);
+      var tagNode = createTagNode(parent, attributeNamesAndValues);
+      var newChildren = await tagNode.createChildren();
+      tagNode.children.addAll(newChildren);
+      return tagNode;
     } on ParserWarning catch (warning) {
       // Wrap warning with tag information, so it can be found easily
       throw ParserWarning("$warning in tag: '$tagText'.");
@@ -71,6 +74,8 @@ abstract class Tag extends ParentNode {
   late final Anchor anchor;
 
   Tag(ParentNode? parent, this.attributeNamesAndValues) : super(parent);
+
+  Future<List<Node>> createChildren();
 }
 
 /// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'}
@@ -81,14 +86,17 @@ abstract class Tag extends ParentNode {
 class ImportFileTag extends Tag {
   ImportFileTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues) {
+      : super(parent, attributeNamesAndValues);
+
+  @override
+  Future<List<Node>> createChildren() {
     ProjectFilePath path = attributeNamesAndValues['path'];
     String? title = attributeNamesAndValues['title'];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var file = path.toFile();
     var fileText = (TextNode(this, _readFile(file)));
-    children.addAll([titleAndOrAnchor, fileText]);
+    return Future.value([titleAndOrAnchor, fileText]);
   }
 }
 
@@ -114,16 +122,19 @@ class ImportFileTagRule extends TagRule {
 class ImportCodeTag extends Tag {
   ImportCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues) {
+      : super(parent, attributeNamesAndValues);
+
+  @override
+  Future<List<Node>> createChildren() {
     ProjectFilePath path = attributeNamesAndValues['path'];
     String? title = attributeNamesAndValues['title'];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
-    var codePrefix = TextNode(parent, "\n```\n");
+    var codePrefix = TextNode(this, "\n```\n");
     var file = path.toFile();
     var fileText = TextNode(this, _readCodeFile(file));
-    var codeSuffix = TextNode(parent, "\n```\n");
-    children.addAll([
+    var codeSuffix = TextNode(this, "\n```\n");
+    return Future.value([
       titleAndOrAnchor,
       codePrefix,
       fileText,
@@ -154,49 +165,50 @@ class ImportCodeTagRule extends TagRule {
 class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues) {
+      : super(parent, attributeNamesAndValues);
+
+  @override
+  Future<List<Node>> createChildren() async {
     DartCodePath path = attributeNamesAndValues['path'];
     String? title = attributeNamesAndValues['title'];
-    print (">>> ImportDartCodeTag $path    ${path.dartMemberPath}");
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
-    var codePrefix = TextNode(parent, "\n```dart\n");
-    var code = TextNode(parent,_readCode(parent!,path));
-    var codeSuffix = TextNode(parent, "\n```\n");
-    children.addAll([
+    var codePrefix = TextNode(this, "\n```dart\n");
+    var code = await _readCode(this, path);
+    var codeNode = TextNode(this, code);
+    var codeSuffix = TextNode(this, "\n```\n");
+    return [
       titleAndOrAnchor,
       codePrefix,
-      code,
+      codeNode,
       codeSuffix,
-    ]);
+    ];
   }
 
-  String _readCode(ParentNode parent,DartCodePath path)  {
-    File dartFile=path.dartFilePath.toFile();
+  Future<String> _readCode(ParentNode parent, DartCodePath path) async {
+    var dartFilePath = path.dartFilePath;
 
-    if (path.dartMemberPath==null) {
+    if (path.dartMemberPath == null) {
       //return whole file if there is no dartMemberPath
-      return _readCodeFile(dartFile);
+      return _readCodeFile(dartFilePath.toFile());
     } else {
+      //TODO this might be too difficult since a parsed library
+      // seems to have no reference to the location in the source file.
+      // e.g.
+      // - it will be tricky to find the code in the source file using Regex.
+      //   - When does a class or function end?
+      //     - strings and comments can also contain single parentheses?
+      //   - how to distinguish between a function and a function call?
+
       //get path.dartMemberPath from code
-      print (">>> parse lib");
-      /// https://stackoverflow.com/questions/38933801/calling-an-async-method-from-component-constructor-in-dart
-      /// LibraryElement library = waitFor(parseLibrary(parent, dartFile), timeout: Duration(seconds: 10)) ;
-      print (">>> Passed");
-      // library.units.forEach((unit) {
-      //   print(unit.source .toString());
-      // });
-      return 'TODO only get source code of: $path';//TODO only return part of the code
+      analyzer.LibraryElement library = await parseLibrary(parent, dartFilePath);
+      String code = '';
+      var elements = library.topLevelElements;
+      elements.forEach((element) {
+        code += element.kind.name;
+      });
+      return code; //TODO only return part of the code
     }
-
-  }
-
-  Future<LibraryElement> parseLibrary(ParentNode parent, File dartFile) async {
-    var documentationModel = parent.findParent<DocumentationModel>();
-    var resolver = documentationModel!.buildStep!.resolver;
-    var assetId = AssetId(LocalProject.name, dartFile.path);
-    var library =  await resolver.libraryFor(assetId);
-    return library;
   }
 }
 
@@ -222,8 +234,248 @@ class ImportDartCodeTagRule extends TagRule {
 class ImportDartDocTag extends Tag {
   ImportDartDocTag(
       ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues) {
-    //TODO create children
+      : super(parent, attributeNamesAndValues);
+
+  @override
+  Future<List<Node>> createChildren() async {
+    DartCodePath path = attributeNamesAndValues['path'];
+    String? title = attributeNamesAndValues['title'];
+    var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
+    anchor = titleAndOrAnchor.anchor;
+    var documentation = await _readDocumentationComments(parent!, path);
+   // var documentation = _removeLeadingTripleSlashes(documentationComments);
+    var codeNode = TextNode(this, documentation);
+    return [
+      titleAndOrAnchor,
+      codeNode,
+    ];
+  }
+
+  Future<String> _readDocumentationComments(
+      ParentNode parent, DartCodePath path) async {
+    validate(path);
+
+    analyzer.LibraryElement library = await parseLibrary(parent, path.dartFilePath);
+
+    analyzer.Element foundElement = findAnalyzerElement(library, path);
+
+    String docComments =
+        _removeLeadingTripleSlashes(foundElement.documentationComment!);
+    validateIfNotEmpty(docComments, path);
+
+    return docComments;
+  }
+
+  static final leadingTripleSlashesExpression = FluentRegex()
+      .startOfLine()
+      .whiteSpace(Quantity.zeroOrMoreTimes())
+      .literal('///')
+      .whiteSpace(Quantity.atMost(1));
+  static final lineBreakExpression = FluentRegex().lineBreak();
+
+  _removeLeadingTripleSlashes(String documentationComments) {
+    var lines = documentationComments.split(lineBreakExpression);
+    String doc = '';
+    lines.forEach((line) {
+      doc += leadingTripleSlashesExpression.removeFirst(line) + '\n';
+    });
+    return doc;
+  }
+
+  void validate(DartCodePath path) {
+    validateIfDartFilePathExists(path);
+    validateIfMemberPathExists(path);
+  }
+
+  void validateIfDartFilePathExists(DartCodePath path) {
+    if (!path.dartFilePath.toFile().existsSync()) {
+      throw ParserWarning(
+          'The Dart file could not be found in path attribute value: $path');
+    }
+  }
+
+  void validateIfMemberPathExists(DartCodePath path) {
+    if (path.dartMemberPath == null) {
+      throw ParserWarning('No DartMemberPath in path attribute value: $path');
+    }
+  }
+
+  analyzer.Element findAnalyzerElement(analyzer.Element element, DartCodePath path) {
+    var visitor = ElementFinder(path.dartMemberPath!);
+    element.visitChildren(visitor);
+
+    analyzer.Element? foundElement = visitor.foundElement;
+    if (foundElement == null) {
+      throw ParserWarning(
+          'Dart member: ${path.dartMemberPath} not found in: ${path.dartFilePath}');
+    }
+    return foundElement;
+  }
+
+  void validateIfMemberFound(analyzer.Element? foundElement, DartCodePath path) {
+    if (foundElement == null) {}
+  }
+
+  void validateIfNotEmpty(String docComments, DartCodePath path) {
+    if (docComments.trim().isEmpty) {
+      throw ParserWarning(
+          'Dart member: ${path.dartMemberPath} has no Dart documentation comments in: ${path.dartFilePath}');
+    }
+  }
+}
+
+class ElementFinder implements analyzer.ElementVisitor {
+  final String memberPathToFind;
+
+  analyzer.Element? foundElement;
+
+  ElementFinder(DartMemberPath dartMemberPath) : memberPathToFind=dartMemberPath.toString();
+
+  @override
+  visitClassElement(analyzer.ClassElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitCompilationUnitElement(analyzer.CompilationUnitElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitConstructorElement(analyzer.ConstructorElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitExportElement(analyzer.ExportElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitExtensionElement(analyzer.ExtensionElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitFieldElement(analyzer.FieldElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitFieldFormalParameterElement(
+      analyzer.FieldFormalParameterElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitFunctionElement(analyzer.FunctionElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitFunctionTypeAliasElement(analyzer.FunctionTypeAliasElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitGenericFunctionTypeElement(analyzer.GenericFunctionTypeElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitImportElement(analyzer.ImportElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitLabelElement(analyzer.LabelElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitLibraryElement(analyzer.LibraryElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitLocalVariableElement(analyzer.LocalVariableElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitMethodElement(analyzer.MethodElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitMultiplyDefinedElement(analyzer.MultiplyDefinedElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitParameterElement(analyzer.ParameterElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitPrefixElement(analyzer.PrefixElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitPropertyAccessorElement(analyzer.PropertyAccessorElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitTopLevelVariableElement(analyzer.TopLevelVariableElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitTypeAliasElement(analyzer.TypeAliasElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitTypeParameterElement(analyzer.TypeParameterElement element) {
+    checkElementRecursively(element);
+  }
+
+  checkElementRecursively(analyzer.Element element) {
+    if (foundElement == null) {
+      var memberPath = _memberPath(element, []);
+      if (memberPath == memberPathToFind) {
+        foundElement = element;
+      } else if (memberPathToFind.startsWith(memberPath)) {
+        //search recursively;
+        element.visitChildren(this);
+      }
+    }
+  }
+
+  String _memberPath(analyzer.Element element, List<String> path) {
+    String pathSegment=element.displayName;
+    if (pathSegment.trim().isNotEmpty)
+      path.insert(0, pathSegment);
+    var parent = element.enclosingElement;
+    if (parent!=null) _memberPath(parent, path);
+    return path.join('.');
+  }
+}
+
+
+Future<analyzer.LibraryElement> parseLibrary(
+    ParentNode parent, ProjectFilePath dartFile) async {
+  try {
+    var documentationModel = parent.findParent<DocumentationModel>();
+    var resolver = documentationModel!.buildStep!.resolver;
+    var assetId = AssetId(LocalProject.name, dartFile.path);
+    var library = await resolver.libraryFor(assetId);
+    return library;
+  } on Exception catch (e) {
+    throw ParserWarning('Could not parse library file: ${dartFile.path}',
+        ParserWarning(e.toString()));
   }
 }
 

@@ -9,10 +9,10 @@ import 'package:documentation_builder/parser/tag_parser.dart';
 /// - [LinkParser]
 class DocumentationParser {
 
-  DocumentationModel parse(DocumentationModel model) {
+  Future<DocumentationModel> parse(DocumentationModel model) async {
     String warnings='';
     try {
-      TagParser().parse(model);
+      await TagParser().parse(model);
     } on ParserWarning catch (parseWarning) {
       warnings+=parseWarning.toString();
     }

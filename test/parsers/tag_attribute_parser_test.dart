@@ -82,31 +82,32 @@ main() {
 
   group('class: TagAttributeParser', () {
     group('method: parseToNameAndValues', () {
-      test('2 valid attributes', () {
+      test('2 valid attributes', () async {
         TagAttributeParser parser = TagAttributeParser([
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
         String path = 'doc/templates/README.mtd';
         String title = '# Title';
-        Map<String, dynamic> expectedMap = {
+        Map<String, dynamic> expectedAttributes = {
           'path': ProjectFilePath(path),
           'title': '# Title'
         };
-        expect(parser.parseToNameAndValues("  path = '$path'  title:'$title'"),
-            expectedMap);
+        var attributes = await parser
+            .parseToNameAndValues("  path = '$path'  title:'$title'");
+        expect(attributes, expectedAttributes);
       });
-      test('missing optional attribute', () {
+      test('missing optional attribute', () async {
         TagAttributeParser parser = TagAttributeParser([
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
         String path = 'doc/templates/README.mtd';
-        Map<String, dynamic> expectedMap = {
+        Map<String, dynamic> expectedAttributes = {
           'path': ProjectFilePath(path),
         };
-        expect(parser.parseToNameAndValues("  path = '$path'  "),
-            expectedMap);
+        var attributes = await parser.parseToNameAndValues("  path = '$path'  ");
+        expect(attributes, expectedAttributes);
       });
 
       test('missing required attribute', () {
@@ -115,24 +116,21 @@ main() {
           TitleAttributeRule(),
         ]);
         String title = '# Title';
-        expect(() => parser.parseToNameAndValues("  title = '$title'  "),
+        expect(
+            () => parser.parseToNameAndValues("  title = '$title'  "),
             throwsA(isA<ParserWarning>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
-              equals("Required path attribute is missing"
-              ),
+              equals("Required path attribute is missing"),
             )));
       });
 
-      test('no attributes', () {
-        TagAttributeParser parser = TagAttributeParser([
-        ]);
-        Map<String, dynamic> expectedMap = {
-        };
-        expect(parser.parseToNameAndValues(""),
-            expectedMap);
+      test('no attributes', () async {
+        TagAttributeParser parser = TagAttributeParser([]);
+        Map<String, dynamic> expectedAttributes = {};
+        var attributes = await parser.parseToNameAndValues("");
+        expect(attributes, expectedAttributes);
       });
-
 
       test('invalid text', () {
         TagAttributeParser parser = TagAttributeParser([
@@ -142,14 +140,14 @@ main() {
         String path = 'doc/templates/README.mtd';
         String title = '# Title';
 
-        expect(() => parser.parseToNameAndValues("  path = '$path' 123 title:'$title'"),
+        expect(
+            () => parser
+                .parseToNameAndValues("  path = '$path' 123 title:'$title'"),
             throwsA(isA<ParserWarning>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
-              equals("'123' could not be parsed to an attribute"
-              ),
+              equals("'123' could not be parsed to an attribute"),
             )));
-
       });
       test('invalid projectFilePath', () {
         TagAttributeParser parser = TagAttributeParser([
@@ -158,12 +156,14 @@ main() {
         ]);
         String path = '/invalid/path/starting/with/slash';
         String title = '# Title';
-        expect(() => parser.parseToNameAndValues(" path='$path' title = '$title'  "),
+        expect(
+            () =>
+                parser.parseToNameAndValues(" path='$path' title = '$title'  "),
             throwsA(isA<ParserWarning>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
-              equals("Invalid ProjectFilePath format: /invalid/path/starting/with/slash"
-              ),
+              equals(
+                  "Invalid ProjectFilePath format: /invalid/path/starting/with/slash"),
             )));
       });
       test('empty title', () {
@@ -173,14 +173,14 @@ main() {
         ]);
         String path = 'doc/templates/README.mtd';
         String title = '';
-        expect(() => parser.parseToNameAndValues(" path='$path' title = '$title'  "),
+        expect(
+            () =>
+                parser.parseToNameAndValues(" path='$path' title = '$title'  "),
             throwsA(isA<ParserWarning>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
-              equals("Title may not be empty"
-              ),
+              equals("Title may not be empty"),
             )));
-
       });
     });
   });
