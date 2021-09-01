@@ -1,5 +1,19 @@
 {ImportDartDoc path='lib/parser/tag_parser.dart|Tag'}
 
+{ImportDartDoc path='lib/parser/tag_attribute_parser.dart|Attribute' title='## Tag Attributes'}
+The following paragraphs will explain the format of different path [Attribute]s:
+
+{ImportDartDoc path='lib/generic/paths.dart|ProjectFilePath' title='### Project File Path'}
+
+{ImportDartDoc path='lib/generic/paths.dart|DartCodePath' title='### Dart Code Path'}
+
+{ImportDartDoc path='lib/generic/paths.dart|DartFilePath' title='### Dart File Path'}
+
+{ImportDartDoc path='lib/generic/paths.dart|DartMemberPath' title='### Dart Member Path'}
+
+## Tag types
+The following paragraphs will explain the different tags:
+
 {ImportDartDoc path='lib/parser/tag_parser.dart|ImportFileTag' title='### Import File Tag'}
 
 {ImportDartDoc path='lib/parser/tag_parser.dart|ImportCodeTag' title='### Import Code Tag'}

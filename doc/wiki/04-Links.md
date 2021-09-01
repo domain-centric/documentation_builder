@@ -1,6 +1,6 @@
-[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-01 12:59:47.822666.)
+[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-01 19:28:34.642471.)
 <a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link]s.
-[Link]s are references between [] brackets in [MarkdownPage]s, e.g.: [MyClass]
+[Link]s are references between [] brackets in [MarkdownTemplates]s, e.g.: [MyClass]
 The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing document on the internet.
 The [Link] will not be replaced to a hyperlink when the [Link] can not be resolved
 

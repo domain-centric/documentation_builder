@@ -18,7 +18,7 @@ class TagAttributeParser extends Parser {
   Map<String, dynamic> createNameAndValueMap(RootNode rootNode) {
     Map<String, dynamic> nameAndValues = {};
     for (Node child in rootNode.children) {
-      if (child is AttributeNode) nameAndValues[child.name] = child.value;
+      if (child is Attribute) nameAndValues[child.name] = child.value;
     }
     return nameAndValues;
   }
@@ -42,7 +42,7 @@ class TagAttributeParser extends Parser {
       if ((rule as AttributeRule).required) {
         String name = rule.name;
         var missing = rootNode.children
-            .where((node) => (node is AttributeNode) && node.name == name)
+            .where((node) => (node is Attribute) && node.name == name)
             .isEmpty;
         if (missing) throw ParserWarning('Required $name attribute is missing');
       }
@@ -50,7 +50,7 @@ class TagAttributeParser extends Parser {
   }
 }
 
-/// [Tag]s can contain [Attribute]s. These contain information for the [Tag] to do its work.
+
 abstract class AttributeRule extends TextParserRule {
   final String name;
   final bool required;
@@ -93,11 +93,13 @@ abstract class AttributeRule extends TextParserRule {
   }
 }
 
-class AttributeNode<T> extends Node {
+/// [Tag]s can contain [Attribute]s. These contain additional information for the [Tag].
+/// [Attribute]s can be mandatory or optional.
+class Attribute<T> extends Node {
   final String name;
   final T value;
 
-  AttributeNode({
+  Attribute({
     required ParentNode parent,
     required this.name,
     required this.value,
@@ -111,7 +113,7 @@ class ProjectFilePathAttributeRule extends AttributeRule {
   @override
   Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return Future.value(AttributeNode<ProjectFilePath>(
+      return Future.value(Attribute<ProjectFilePath>(
         parent: parent,
         name: name,
         value: ProjectFilePath(stringValueFor(nameAndValue)),
@@ -132,7 +134,7 @@ class DartCodePathAttributeRule extends AttributeRule {
   @override
   Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return Future.value(AttributeNode<DartCodePath>(
+      return Future.value(Attribute<DartCodePath>(
         parent: parent,
         name: name,
         value: DartCodePath(stringValueFor(nameAndValue)),
@@ -150,7 +152,7 @@ class StringAttributeRule extends AttributeRule {
   @override
   Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return Future.value(AttributeNode<String>(
+      return Future.value(Attribute<String>(
         parent: parent,
         name: name,
         value: stringValueFor(nameAndValue),
@@ -168,7 +170,7 @@ class TitleAttributeRule extends StringAttributeRule {
   @override
   Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
     try {
-      return Future.value(AttributeNode<String>(
+      return Future.value(Attribute<String>(
         parent: parent,
         name: name,
         value: validate(stringValueFor(nameAndValue)),

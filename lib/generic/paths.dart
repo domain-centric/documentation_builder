@@ -8,6 +8,7 @@ import 'package:fluent_regex/fluent_regex.dart';
 /// - The [ProjectFilePath] is always relative to root directory of the project directory.
 /// - The [ProjectFilePath] will always be within the project directory, that is they will never contain "../".
 /// - The [ProjectFilePath] always uses forward slashes as path separators, regardless of the host platform (also for Windows).
+///
 /// Example: doc/wiki/Home.md
 class ProjectFilePath {
   final String path;
@@ -107,6 +108,8 @@ class DartMemberPath {
 
 /// A [DartFilePath] is a [ProjectFilePath] to a dart file.
 /// It must end with a '.dart' extension.
+///
+/// Example: lib/my_library.dart
 class DartFilePath extends ProjectFilePath {
   static final expression =
       FluentRegex(ProjectFilePath.expression.endOfLine(false).toString())
@@ -129,33 +132,32 @@ class DartFilePath extends ProjectFilePath {
 
 /// A [DartCodePath] is a reference to a piece of your Dart source code.
 /// This could be anything from a whole dart file to one of its members.
-/// Format: <dartFilePath>|<dartMemberPath>
-/// - <dartFilePath> (required) is [ProjectFilePath] to a Dart file without dart extension, e.g. lib/my_dart_file.dart
-/// - |: the <dartFilePath> and <dartMemberPath> are separated with a vertical bar | when there is a <dartMemberPath>.
-/// - <dartMemberPath> (optional) is a dot separated path to the member inside the Dart file, e.g.
+/// Format: <[DartFilePath]>|<[DartMemberPath]>
+/// - <[DartFilePath]> (required) is a [DartFilePath] to a Dart file without dart extension, e.g. lib/my_library.dart
+/// - |: the <[DartFilePath]> and <[DartMemberPath]> are separated with a vertical bar | when there is a [DartMemberPath].
+/// - <[DartMemberPath]> (optional) is a dot separated path to the member inside the Dart file, e.g.
 ///   - .constantName
 ///   - .functionName
 ///   - .EnumName (optionally followed by a dot and a enum value)
 ///   - .ClassName (optionally followed by a dot and a class member such as a field name or method name)
 ///   - .ExtensionName  (optionally followed by a dot and a extension member such as a field name or method name)
 ///
-///
 /// Examples:
-/// - lib/my_dart_file.dart
-/// - lib/my_dart_file.dart|myConstant
-/// - lib/my_dart_file.dart|myFunction
-/// - lib/my_dart_file.dart|MyEnum
-/// - lib/my_dart_file.dart|MyEnum.myValue
-/// - lib/my_dart_file.dart|MyClass
-/// - lib/my_dart_file.dart|MyClass.myFieldName
-/// - lib/my_dart_file.dart|MyClass.myFieldName.get
-/// - lib/my_dart_file.dart|MyClass.myFieldName.set
-/// - lib/my_dart_file.dart|MyClass.myMethod
-/// - lib/my_dart_file.dart|MyExtension
-/// - lib/my_dart_file.dart|MyExtension.myFieldName
-/// - lib/my_dart_file.dart|MyExtension.myFieldName.get
-/// - lib/my_dart_file.dart|MyExtension.myFieldName.set
-/// - lib/my_dart_file.dart|MyExtension.myMethod
+/// - lib/my_library.dart
+/// - lib/my_library.dart|myConstant
+/// - lib/my_library.dart|myFunction
+/// - lib/my_library.dart|MyEnum
+/// - lib/my_library.dart|MyEnum.myValue
+/// - lib/my_library.dart|MyClass
+/// - lib/my_library.dart|MyClass.myFieldName
+/// - lib/my_library.dart|MyClass.myFieldName.get
+/// - lib/my_library.dart|MyClass.myFieldName.set
+/// - lib/my_library.dart|MyClass.myMethod
+/// - lib/my_library.dart|MyExtension
+/// - lib/my_library.dart|MyExtension.myFieldName
+/// - lib/my_library.dart|MyExtension.myFieldName.get
+/// - lib/my_library.dart|MyExtension.myFieldName.set
+/// - lib/my_library.dart|MyExtension.myMethod
 class DartCodePath {
   static final dartFilePathGroupName = 'dartFilePath';
   static final dartMemberPathGroupName = 'dartMemberPath';
@@ -212,6 +214,6 @@ class DartCodePath {
 
 extension UriExtension on Uri {
   Uri withPathSuffix(String pathSuffix) {
-    return this.replace(path: path+pathSuffix);
+    return this.replace(path: path + pathSuffix);
   }
 }
