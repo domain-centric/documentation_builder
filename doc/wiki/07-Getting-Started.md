@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/07-Getting-Started.mdt using the documentation_builder package on: 2021-09-01 19:28:34.644465.)
+[//]: # (This file was generated from: doc/templates/07-Getting-Started.mdt using the documentation_builder package on: 2021-09-01 19:35:30.497318.)
 - Read the [GitHubProjectWiki title='Wiki documentation']
 - [PubDevInstall title='Install the documentation_builder package'] in your project
 - Create 'doc/templates' directories in the root of your project
