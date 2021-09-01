@@ -124,6 +124,24 @@ class ProjectFilePathAttributeRule extends AttributeRule {
   }
 }
 
+class DartFilePathAttributeRule extends AttributeRule {
+  DartFilePathAttributeRule({String name = 'path', bool required = true})
+      : super(name, required: required);
+
+  @override
+  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+    try {
+      return Future.value(Attribute<ProjectFilePath>(
+        parent: parent,
+        name: name,
+        value: DartFilePath(stringValueFor(nameAndValue)),
+      ));
+    } on Exception catch (e) {
+      _throwParserWarning(e);
+    }
+  }
+}
+
 Never _throwParserWarning(Exception e) =>
     throw ParserWarning(e.toString().replaceAll('Exception: ', ''));
 

@@ -112,10 +112,6 @@ main() {
                 'toString()',
                 equals("Title may not be empty in tag: '$text'."))));
       });
-      test('parse all template files in this project successfully', () async {
-        await TagParser().parse(createModelFromTemplateFiles());
-        //should not throw ParserWarnings
-      });
     });
   });
   group('class: Anchor', () {

@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/03-Tags.mdt using the documentation_builder package on: 2021-09-01 19:35:30.496320.)
+[//]: # (This file was generated from: doc/templates/03-Tags.mdt using the documentation_builder package on: 2021-09-01 20:05:06.051169.)
 <a id='lib-parser-tag-parser-dart-tag'></a>[Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
  [DocumentationBuilder] with other information
  (e.g. by an imported Dart Documentation Comment) before the output file is written.
@@ -118,7 +118,7 @@ The following paragraphs will explain the different tags:
 - **{ImportDartCodeTag file:'file_to_import.dart' title='## Dart code example'&rcub;**
 - Imports a (none Dart) code file.
 - Attributes:
-  - path= (required) A [DartCodePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
+  - path= (required) A [DartFilePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 
 

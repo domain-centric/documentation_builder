@@ -166,7 +166,7 @@ class ImportCodeTagRule extends TagRule {
 /// - **{ImportDartCodeTag file:'file_to_import.dart' title='## Dart code example'&rcub;**
 /// - Imports a (none Dart) code file.
 /// - Attributes:
-///   - path= (required) A [DartCodePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
+///   - path= (required) A [DartFilePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
 ///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
@@ -175,12 +175,12 @@ class ImportDartCodeTag extends Tag {
 
   @override
   Future<List<Node>> createChildren() async {
-    DartCodePath path = attributeNamesAndValues['path'];
+    DartFilePath path = attributeNamesAndValues['path'];
     String? title = attributeNamesAndValues['title'];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var codePrefix = TextNode(this, "\n```dart\n");
-    var code = await _readCode(this, path);
+    var code =  _readCodeFile(path.toFile());
     var codeNode = TextNode(this, code);
     var codeSuffix = TextNode(this, "\n```\n");
     return [
@@ -191,38 +191,13 @@ class ImportDartCodeTag extends Tag {
     ];
   }
 
-  Future<String> _readCode(ParentNode parent, DartCodePath path) async {
-    var dartFilePath = path.dartFilePath;
-
-    if (path.dartMemberPath == null) {
-      //return whole file if there is no dartMemberPath
-      return _readCodeFile(dartFilePath.toFile());
-    } else {
-      //TODO this might be too difficult since a parsed library
-      // seems to have no reference to the location in the source file.
-      // e.g.
-      // - it will be tricky to find the code in the source file using Regex.
-      //   - When does a class or function end?
-      //     - strings and comments can also contain single parentheses?
-      //   - how to distinguish between a function and a function call?
-
-      //get path.dartMemberPath from code
-      analyzer.LibraryElement library = await parseLibrary(parent, dartFilePath);
-      String code = '';
-      var elements = library.topLevelElements;
-      elements.forEach((element) {
-        code += element.kind.name;
-      });
-      return code; //TODO only return part of the code
-    }
-  }
 }
 
 /// Recognizes and creates an [ImportDartCodeTag]
 class ImportDartCodeTagRule extends TagRule {
   ImportDartCodeTagRule()
       : super('ImportDartCode', [
-          DartCodePathAttributeRule(),
+          DartFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
 
