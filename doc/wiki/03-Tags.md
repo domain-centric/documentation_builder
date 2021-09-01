@@ -20,7 +20,7 @@ Format:
 <a id='import-code-tag'></a>
 ### Import Code Tag
 Format:
-```
+```HTML
 {ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;
 ```
 - Imports a (none Dart) code file.
