@@ -67,8 +67,8 @@ abstract class TagRule extends TextParserRule {
 ///
 /// [Tag]s in text form:
 /// - are surrounded by curly brackets: {}
-/// - start with a name: e.g.  {ImportFile}
-/// - may have [Attribute]s after the name: e.g. {ImportFile path:'OtherTemplateFile.mdt' title:'## Other Template File'}
+/// - start with a name: e.g.  {ImportFile&rcub;
+/// - may have [Attribute]s after the name: e.g. {ImportFile path:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;
 abstract class Tag extends ParentNode {
   final Map<String, dynamic> attributeNamesAndValues;
   late final Anchor anchor;
@@ -78,7 +78,7 @@ abstract class Tag extends ParentNode {
   Future<List<Node>> createChildren();
 }
 
-/// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'}
+/// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;
 /// - It imports another file.
 /// - Attributes:
 ///   - path: (required) A [ProjectFilePath] to a file name inside the markdown directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
@@ -114,7 +114,7 @@ class ImportFileTagRule extends TagRule {
       ImportFileTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportCodeTag file:'file_to_import.txt' title:'## Code example'}
+/// [ImportCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;
 /// - It imports a (none Dart) code file.
 /// - Attributes:
 ///   - path: (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
@@ -157,7 +157,7 @@ class ImportCodeTagRule extends TagRule {
       ImportCodeTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportDartCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartCodeTag file:'file_to_import.dart' title:'## Dart code example'}
+/// [ImportDartCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartCodeTag file:'file_to_import.dart' title:'## Dart code example'&rcub;
 /// - It imports a (none Dart) code file.
 /// - Attributes:
 ///   - path: (required) A [DartCodePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
@@ -226,7 +226,7 @@ class ImportDartCodeTagRule extends TagRule {
       ImportDartCodeTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportDartDocTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartDoc member:'lib\my_lib.dart.MyClass' title:'## My Class'}
+/// [ImportDartDocTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartDoc member:'lib\my_lib.dart.MyClass' title:'## My Class'&rcub;
 /// - It imports dart documentation comments from dart files.
 /// - Attributes:
 ///   - path: (required) A [DartCodePath] to be imported Dart comments.
