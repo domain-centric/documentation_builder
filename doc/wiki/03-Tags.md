@@ -20,9 +20,7 @@ Format:
 <a id='import-code-tag'></a>
 ### Import Code Tag
 Format:
-```HTML
-{ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;
-```
+`{ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;`
 - Imports a (none Dart) code file.
 - Attributes:
   - path: (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
