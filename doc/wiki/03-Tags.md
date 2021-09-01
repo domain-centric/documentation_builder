@@ -9,8 +9,7 @@
 
 <a id='import-file-tag'></a>
 ### Import File Tag
-Format:
-> {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;
+- **{ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;**
 - Imports another text file or markdown file.
 - Attributes:
   - path: (required) A [ProjectFilePath] to a file name inside the markdown directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
