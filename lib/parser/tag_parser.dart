@@ -78,8 +78,11 @@ abstract class Tag extends ParentNode {
   Future<List<Node>> createChildren();
 }
 
-/// [ImportFileTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;
-/// - It imports another file.
+/// Format:
+/// ```
+/// {ImportFile file:'OtherTemplateFile.mdt' title:'## Other Template File'&rcub;
+/// ```
+/// - Imports another text file or markdown file.
 /// - Attributes:
 ///   - path: (required) A [ProjectFilePath] to a file name inside the markdown directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
@@ -114,8 +117,11 @@ class ImportFileTagRule extends TagRule {
       ImportFileTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;
-/// - It imports a (none Dart) code file.
+/// Format:
+/// ```
+/// {ImportCodeTag file:'file_to_import.txt' title:'## Code example'&rcub;
+/// ```
+/// - Imports a (none Dart) code file.
 /// - Attributes:
 ///   - path: (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
@@ -157,8 +163,11 @@ class ImportCodeTagRule extends TagRule {
       ImportCodeTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportDartCodeTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartCodeTag file:'file_to_import.dart' title:'## Dart code example'&rcub;
-/// - It imports a (none Dart) code file.
+/// Format:
+/// ```
+/// {ImportDartCodeTag file:'file_to_import.dart' title:'## Dart code example'&rcub;
+/// ```
+/// - Imports a (none Dart) code file.
 /// - Attributes:
 ///   - path: (required) A [DartCodePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
@@ -226,8 +235,11 @@ class ImportDartCodeTagRule extends TagRule {
       ImportDartCodeTag(parent, attributeNamesAndValues);
 }
 
-/// [ImportDartDocTag]'s have the following format inside a [MarkdownTemplateFile]: {ImportDartDoc member:'lib\my_lib.dart.MyClass' title:'## My Class'&rcub;
-/// - It imports dart documentation comments from dart files.
+/// Format:
+/// ```
+/// {ImportDartDoc member:'lib\my_lib.dart.MyClass' title:'## My Class'&rcub;
+/// ```
+/// - Imports Dart documentation comments from a library member in a dart file.
 /// - Attributes:
 ///   - path: (required) A [DartCodePath] to be imported Dart comments.
 ///   - title: (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
