@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/README.mdt using the documentation_builder package on: 2021-09-01 20:05:06.054161.)
+[//]: # (This file was generated from: doc/templates/README.mdt using the documentation_builder package on: 2021-09-01 22:38:09.252728.)
 [![Pub Package](https://img.shields.io/pub/v/fluent_regex)](https://pub.dev/packages/fluent_regex)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
@@ -10,15 +10,17 @@
 <a id='documentation-builder'></a>
 # documentation_builder
 Generates markdown documentation files from markdown template files.
-This can be useful when you write documentation for a Dart or Flutter project and want to reuse/import Dart code or Dart documentation comments.
-[documentation_builder] is not intended to generate API documentation. Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
+This can be useful when you write documentation for a Dart or Flutter project
+and want to reuse/import Dart code or Dart documentation comments.
 
-TODO: use [MarkdownTemplateFileFactories]
 It can generate the following files:
 - README.md file
 - CHANGELOG.mdt file
 - example.md file
 - Github Wiki pages (also markdown files)
+
+[documentation_builder] is not intended to generate API documentation.
+Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
 
 
 <a id='examples'></a>

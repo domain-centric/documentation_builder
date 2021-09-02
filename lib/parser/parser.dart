@@ -3,7 +3,6 @@ import 'package:documentation_builder/builders/template_builder.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// A [Parser] checks if any of its rules can replace nodes in the model.
-///
 abstract class Parser {
   final List<ParserRule> rules;
 
@@ -14,35 +13,58 @@ abstract class Parser {
   /// Throws a ParseWarning when there where warnings
   Future<RootNode> parse(RootNode rootNode) async {
     List<ParserWarning> warnings = [];
-    bool replacedNodes;
-    do {
-      replacedNodes = await _findAndReplaceNodes(rootNode, warnings);
-    } while (replacedNodes);
+    rootNode = await _findAndReplaceNodes(rootNode, warnings);
     if (warnings.isNotEmpty) throw new ParserWarning(warnings.join('\n'));
     return rootNode;
   }
 
-  /// returns true if nodes where found and replaced
-  Future<bool> _findAndReplaceNodes(
-      ParentNode model, List<ParserWarning> warnings) async {
-    for (ParserRule rule in rules) {
+  /// returns true when done
+  Future<RootNode> _findAndReplaceNodes(
+      RootNode rootNode, List<ParserWarning> warnings) async {
+    if (rules.isEmpty) return rootNode;
+    ParserRule rule = rules.first;
+    bool done = false;
+    do {
       try {
-        var childrenNodesToReplace = rule.findChildNodesToReplace(model);
-        if (childrenNodesToReplace.isNotEmpty) {
-          await _replaceChildNodes(rule, childrenNodesToReplace, warnings);
-          return true;
+        ParentNode? uncompletedNode =
+            rootNode.findNodeWithUncompletedRule(rules.indexOf(rule));
+        if (uncompletedNode == null) {
+          if (rule == rules.last) {
+            done = true;
+          } else {
+            rule = _nextRule(rule);
+          }
+        } else {
+          var childrenNodesToReplace =
+              rule.findChildNodesToReplace(uncompletedNode);
+          if (childrenNodesToReplace.isEmpty) {
+            _markRuleAsCompletedForNode(rule, uncompletedNode);
+          } else {
+            try {
+              await _replaceChildNodes(rule, childrenNodesToReplace);
+              // check new nodes (re)starting with the first rule
+              rule = rules.first;
+            } catch(e) {
+              // Failed to create replacement nodes.
+              // Mark rule as completed to prevent an endless loop
+              _markRuleAsCompletedForNode(rule, uncompletedNode);
+              rethrow;
+            }
+          }
         }
       } on ParserWarning catch (warning) {
         warnings.add(warning);
       }
-    }
-    return false;
+    } while (!done);
+    return rootNode;
   }
 
+  ParserRule _nextRule(ParserRule rule) => rules[rules.indexOf(rule) + 1];
+
   Future<void> _replaceChildNodes(
-      ParserRule rule,
-      ChildNodesToReplace childNodesToReplace,
-      List<ParserWarning> warnings) async {
+    ParserRule rule,
+    ChildNodesToReplace childNodesToReplace,
+  ) async {
     Node firstChild = childNodesToReplace.first;
     ParentNode parent = firstChild.parent!;
     int startIndex = parent.children.indexOf(firstChild);
@@ -51,24 +73,10 @@ abstract class Parser {
           'First child to replace not found from rule: $rule');
       //It is likely that one or more children have an invalid parent (use this as parent in parser rules!)
     }
+    List<Node> replacementNodes =
+        await rule.createReplacementNodes(childNodesToReplace);
     _removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
-    await _addReplacementNodes(
-        rule, childNodesToReplace, parent, startIndex, warnings);
-  }
-
-  Future<void> _addReplacementNodes(
-      ParserRule rule,
-      ChildNodesToReplace childNodesToReplace,
-      ParentNode parent,
-      int startIndex,
-      List<ParserWarning> warnings) async {
-    try {
-      List<Node> replacementNodes =
-          await rule.createReplacementNodes(childNodesToReplace);
-      parent.children.insertAll(startIndex, replacementNodes);
-    } on ParserWarning catch (warning) {
-      logWarning(warnings, parent, warning);
-    }
+    parent.children.insertAll(startIndex, replacementNodes);
   }
 
   void logWarning(List<ParserWarning> warnings, ParentNode parent,
@@ -87,6 +95,11 @@ abstract class Parser {
     for (int index = startIndex;
         index < startIndex + childNodesToReplace.length;
         index++) parent.children.removeAt(index);
+  }
+
+  void _markRuleAsCompletedForNode(
+      ParserRule rule, ParentNode parentNodeToProcess) {
+    parentNodeToProcess.lastCompletedRuleIndex = rules.indexOf(rule);
   }
 }
 
@@ -240,6 +253,21 @@ class TextNode extends Node {
 class ParentNode extends Node {
   final List<Node> children = [];
 
+  /// A [ParserRule] is done when its [ParserRule.findChildNodesToReplace] method
+  /// can no longer find children to replace.
+  /// -1 = no [ParserRule]s are done:
+  ///      they still all need to check if they can find children to replace
+  ///  0 = the first [ParserRule] is done:
+  ///      - it did not find any children to replace
+  ///      - the remaining rules (if any) still need to check
+  ///        if they can find children to replace
+  ///  1 = the first 2 [ParserRule]s are done:
+  ///      - they did not find any children to replace
+  ///      - the remaining rules (if any) still need to check
+  ///        if they can find children to replace
+  ///  etc
+  int lastCompletedRuleIndex = -1;
+
   ParentNode(ParentNode? parent) : super(parent);
 
   @override
@@ -265,6 +293,20 @@ class ParentNode extends Node {
       }
     }
     return null; //not found
+  }
+
+  /// Find a ParentNode that still needs to check the given rule
+  ParentNode? findNodeWithUncompletedRule(int ruleIndex) {
+    if (lastCompletedRuleIndex < ruleIndex) {
+      return this;
+    }
+    for (Node child in children) {
+      if (child is ParentNode) {
+        var found = child.findNodeWithUncompletedRule(ruleIndex);
+        if (found != null) return found;
+      }
+    }
+    return null;
   }
 }
 
