@@ -15,13 +15,12 @@ abstract class Parser {
   Future<RootNode> parse(RootNode rootNode) async {
     List<ParserWarning> warnings = [];
     rootNode.resetLastCompletedRuleIndexes();
-    rootNode = await findAndReplaceNodes(rootNode, warnings);
+    rootNode = await _findAndReplaceNodes(rootNode, warnings);
     if (warnings.isNotEmpty) throw new ParserWarning(warnings.join('\n'));
     return rootNode;
   }
 
-  //TODO make private
-  Future<RootNode> findAndReplaceNodes(
+  Future<RootNode> _findAndReplaceNodes(
       RootNode rootNode, List<ParserWarning> warnings) async {
     if (rules.isEmpty) return rootNode;
     ParserRule rule = rules.first;
@@ -34,22 +33,22 @@ abstract class Parser {
           if (rule == rules.last) {
             done = true;
           } else {
-            rule = nextRule(rule);
+            rule = _nextRule(rule);
           }
         } else {
           var childrenNodesToReplace =
               rule.findChildNodesToReplace(uncompletedNode);
           if (childrenNodesToReplace.isEmpty) {
-            markRuleAsCompletedForNode(rule, uncompletedNode);
+            _markRuleAsCompletedForNode(rule, uncompletedNode);
           } else {
             try {
-              await replaceChildNodes(rule, childrenNodesToReplace);
+              await _replaceChildNodes(rule, childrenNodesToReplace);
               // check new nodes (re)starting with the first rule
               rule = rules.first;
             } on ParserWarning catch (warning) {
               // Failed to create replacement nodes.
               // Mark rule as completed to prevent an endless loop
-              markRuleAsCompletedForNode(rule, uncompletedNode);
+              _markRuleAsCompletedForNode(rule, uncompletedNode);
               logWarning(warnings, uncompletedNode, warning);
             }
           }
@@ -61,11 +60,9 @@ abstract class Parser {
     return rootNode;
   }
 
-  //TODO make private
-  ParserRule nextRule(ParserRule rule) => rules[rules.indexOf(rule) + 1];
+  ParserRule _nextRule(ParserRule rule) => rules[rules.indexOf(rule) + 1];
 
-  //TODO make private
-  Future<void> replaceChildNodes(
+  Future<void> _replaceChildNodes(
     ParserRule rule,
     ChildNodesToReplace childNodesToReplace,
   ) async {
@@ -79,7 +76,7 @@ abstract class Parser {
     }
     List<Node> replacementNodes =
         await rule.createReplacementNodes(childNodesToReplace);
-    removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
+    _removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
     parent.children.insertAll(startIndex, replacementNodes);
   }
 
@@ -94,16 +91,14 @@ abstract class Parser {
     }
   }
 
-  //TODO make private
-  void removeNodesToBeReplaced(int startIndex,
+  void _removeNodesToBeReplaced(int startIndex,
       ChildNodesToReplace childNodesToReplace, ParentNode parent) {
     for (int index = startIndex;
         index < startIndex + childNodesToReplace.length;
         index++) parent.children.removeAt(index);
   }
 
-  //TODO make private
-  void markRuleAsCompletedForNode(
+  void _markRuleAsCompletedForNode(
       ParserRule rule, ParentNode parentNodeToProcess) {
     parentNodeToProcess.lastCompletedRuleIndex = rules.indexOf(rule);
   }
