@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:documentation_builder/builders/template_builder.dart';
+import 'package:documentation_builder/generic/paths.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// A [Parser] checks if any of its rules can replace nodes in the model.
@@ -13,13 +14,14 @@ abstract class Parser {
   /// Throws a ParseWarning when there where warnings
   Future<RootNode> parse(RootNode rootNode) async {
     List<ParserWarning> warnings = [];
-    rootNode = await _findAndReplaceNodes(rootNode, warnings);
+    rootNode.resetLastCompletedRuleIndexes();
+    rootNode = await findAndReplaceNodes(rootNode, warnings);
     if (warnings.isNotEmpty) throw new ParserWarning(warnings.join('\n'));
     return rootNode;
   }
 
-  /// returns true when done
-  Future<RootNode> _findAndReplaceNodes(
+  //TODO make private
+  Future<RootNode> findAndReplaceNodes(
       RootNode rootNode, List<ParserWarning> warnings) async {
     if (rules.isEmpty) return rootNode;
     ParserRule rule = rules.first;
@@ -32,23 +34,23 @@ abstract class Parser {
           if (rule == rules.last) {
             done = true;
           } else {
-            rule = _nextRule(rule);
+            rule = nextRule(rule);
           }
         } else {
           var childrenNodesToReplace =
               rule.findChildNodesToReplace(uncompletedNode);
           if (childrenNodesToReplace.isEmpty) {
-            _markRuleAsCompletedForNode(rule, uncompletedNode);
+            markRuleAsCompletedForNode(rule, uncompletedNode);
           } else {
             try {
-              await _replaceChildNodes(rule, childrenNodesToReplace);
+              await replaceChildNodes(rule, childrenNodesToReplace);
               // check new nodes (re)starting with the first rule
               rule = rules.first;
-            } catch(e) {
+            } on ParserWarning catch (warning) {
               // Failed to create replacement nodes.
               // Mark rule as completed to prevent an endless loop
-              _markRuleAsCompletedForNode(rule, uncompletedNode);
-              rethrow;
+              markRuleAsCompletedForNode(rule, uncompletedNode);
+              logWarning(warnings, uncompletedNode, warning);
             }
           }
         }
@@ -59,9 +61,11 @@ abstract class Parser {
     return rootNode;
   }
 
-  ParserRule _nextRule(ParserRule rule) => rules[rules.indexOf(rule) + 1];
+  //TODO make private
+  ParserRule nextRule(ParserRule rule) => rules[rules.indexOf(rule) + 1];
 
-  Future<void> _replaceChildNodes(
+  //TODO make private
+  Future<void> replaceChildNodes(
     ParserRule rule,
     ChildNodesToReplace childNodesToReplace,
   ) async {
@@ -75,7 +79,7 @@ abstract class Parser {
     }
     List<Node> replacementNodes =
         await rule.createReplacementNodes(childNodesToReplace);
-    _removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
+    removeNodesToBeReplaced(startIndex, childNodesToReplace, parent);
     parent.children.insertAll(startIndex, replacementNodes);
   }
 
@@ -90,24 +94,25 @@ abstract class Parser {
     }
   }
 
-  void _removeNodesToBeReplaced(int startIndex,
+  //TODO make private
+  void removeNodesToBeReplaced(int startIndex,
       ChildNodesToReplace childNodesToReplace, ParentNode parent) {
     for (int index = startIndex;
         index < startIndex + childNodesToReplace.length;
         index++) parent.children.removeAt(index);
   }
 
-  void _markRuleAsCompletedForNode(
+  //TODO make private
+  void markRuleAsCompletedForNode(
       ParserRule rule, ParentNode parentNodeToProcess) {
     parentNodeToProcess.lastCompletedRuleIndex = rules.indexOf(rule);
   }
 }
 
 abstract class ParserRule {
-  /// checks the whole [ParentNode] (all it children, children's' children, etc) if it can replace [Node] (s).
-  /// It returns:
-  /// - [FindResult] with the [Node] (s) that need to replaced
-  /// - [Result.notFound()] when no nodes could be replaced.
+  /// checks the whole [ParentNode] (all it children) if it can replace [Node] (s).
+  /// We do not need to check the children's children (do not need a recursive call),
+  /// the Parser will do this for us
   ChildNodesToReplace findChildNodesToReplace(ParentNode model);
 
   Future<List<Node>> createReplacementNodes(
@@ -121,41 +126,52 @@ abstract class TextParserRule extends ParserRule {
 
   TextParserRule(this.expression);
 
-  /// Searches all child nodes (recursively) for [TextNode]s that have a match with the [expression]
+  /// Searches all child nodes for [TextNode]s that have a match with the [expression]
   ChildNodesToReplace findChildNodesToReplace(ParentNode node) {
     for (Node child in node.children) {
-      if (child is TextNode && expression.hasMatch(child.text))
+      if (child is TextNode && createMatches(child.text).isNotEmpty)
         return ChildNodesToReplace.foundNode(child);
-      if (child is ParentNode) {
-        //recursive call
-        ChildNodesToReplace result = findChildNodesToReplace(child);
-        if (result.isNotEmpty) return result;
-      }
+
     }
     return ChildNodesToReplace.notFound();
   }
 
   /// It will replace the [TextNode] with:
-  /// - A new [TextNode] containing the text before the regular expression (if there is any)
-  /// - A new node that represents the text found by the [RegExp]
-  /// - A new [TextNode] containing the text after the regular expression (if there is any)
+  /// - [Node]s that represent the text found by the [RegExp]
+  /// - [TextNode]s that represent the remaining text
   Future<List<Node>> createReplacementNodes(
       ChildNodesToReplace childNodesToReplace) async {
     TextNode textNode = childNodesToReplace.first as TextNode;
-    String text = textNode.text;
-    RegExpMatch firstMatch = expression.firstMatch(text)!;
-    int start = firstMatch.start;
-    int end = firstMatch.end;
+    var parent = textNode.parent!;
+    var test = textNode.text;
 
-    TextNode? textBeforeNode = createTextBeforeNode(textNode, start);
-    TextNode? textAfterNode = createTextAfterNode(textNode, end);
-    var replacementNode = await createReplacementNode(
-        textNode.parent!, text.substring(start, end));
-    return [
-      if (textBeforeNode != null) textBeforeNode,
-      replacementNode,
-      if (textAfterNode != null) textAfterNode,
-    ];
+    List<RegExpMatch> matches=createMatches(test);
+
+    List<Node> replacementNodes=[];
+
+    TextNode? leadingTextNode = createTextBeforeNode(textNode, matches.first.start);
+    if (leadingTextNode != null) replacementNodes.add(leadingTextNode);
+
+    RegExpMatch? previousMatch;
+    for (RegExpMatch match in matches) {
+      if (previousMatch!=null) {
+        int betweenStart= previousMatch.end;
+        int betweenEnd= match.start;
+        if (betweenStart<betweenEnd) {
+          var betweenText = test.substring(betweenStart, betweenEnd);
+          var betweenNode = TextNode(parent, betweenText);
+          replacementNodes.add(betweenNode);
+        }
+      }
+      Node replacementNode=await createReplacementNode(parent, match);
+      replacementNodes.add(replacementNode);
+      previousMatch=match;
+    }
+
+    TextNode? trailingTextNode = createTrailingTextNode(textNode, matches.last.end);
+    if (trailingTextNode != null) replacementNodes.add(trailingTextNode);
+
+    return replacementNodes;
   }
 
   TextNode? createTextBeforeNode(TextNode textNode, int start) {
@@ -168,7 +184,7 @@ abstract class TextParserRule extends ParserRule {
     }
   }
 
-  TextNode? createTextAfterNode(TextNode textNode, int end) {
+  TextNode? createTrailingTextNode(TextNode textNode, int end) {
     String text = textNode.text;
     if (end < text.length) {
       ParentNode parent = textNode.parent!;
@@ -181,7 +197,24 @@ abstract class TextParserRule extends ParserRule {
 
   /// Note that the parentNode parameter should only be used to get information from the tree to create replacement nodes.
   /// The [Parser] will add the created replacement node's to the parent.
-  Future<Node> createReplacementNode(ParentNode parent, String textToReplace);
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match);
+
+  /// Removing RegEx matches that are inside other matches.
+  /// These will be replaced later when the replacement nodes are parsed
+  List<RegExpMatch> removeMatchesInsideMatches(List<RegExpMatch> matches) {
+    //TODO
+    return matches;
+  }
+
+
+
+  /// A method that can be overridden by sibling classes if additional logic is needed
+  /// This is the default operation
+  List<RegExpMatch> createMatches(String text) {
+    var matches=expression.allMatches(text).toList();
+    matches=removeMatchesInsideMatches(matches);
+    return matches;
+  }
 }
 
 class ChildNodesToReplace extends DelegatingList<Node> {
@@ -308,6 +341,13 @@ class ParentNode extends Node {
     }
     return null;
   }
+
+  void resetLastCompletedRuleIndexes() {
+    lastCompletedRuleIndex = -1;
+    for (Node child in children) {
+      if (child is ParentNode) child.resetLastCompletedRuleIndexes();
+    }
+  }
 }
 
 /// The RootNode must be a [ParentNode] without a parent
@@ -360,4 +400,8 @@ class ParserError extends ParserThrowable {
     }
     return string;
   }
+}
+
+extension MatchExtension on RegExpMatch {
+  String get result => input.substring(start, end);
 }

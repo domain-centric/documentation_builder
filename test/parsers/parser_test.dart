@@ -65,7 +65,7 @@ class LetterParserRule extends TextParserRule {
   LetterParserRule() : super(FluentRegex().letter());
 
   @override
-  Future<Node>   createReplacementNode(ParentNode parent, String textToReplace) => Future.value(
+  Future<Node>   createReplacementNode(ParentNode parent, RegExpMatch match) => Future.value(
       TextNode(parent, letterSymbol));
 }
 
@@ -73,7 +73,7 @@ class DigitParserRule extends TextParserRule {
   DigitParserRule() : super(FluentRegex().digit());
 
   @override
-  Future<Node>  createReplacementNode(ParentNode parent, String textToReplace) => Future.value(
+  Future<Node>  createReplacementNode(ParentNode parent, RegExpMatch match) => Future.value(
       TextNode(parent, digitSymbol));
 }
 

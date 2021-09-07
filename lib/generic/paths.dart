@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:build/build.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -58,6 +58,34 @@ class ProjectFilePath {
 
   @override
   int get hashCode => path.hashCode;
+}
+
+
+
+/// [UriSuffixPath] is a path that can be appended to a http [Uri]
+/// It may only use valid [Uri] characters
+///
+/// Example: documentation_builder/issues?q=is%3Aissue+is%3Aclosed
+class UriSuffixPath {
+  final String path;
+
+  static final expression = FluentRegex()
+      .startOfLine()
+      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-._~:?#[]@!\$&()*+,;%=/'),
+      Quantity.zeroOrMoreTimes())
+      .endOfLine();
+
+  UriSuffixPath(this.path) {
+    validate();
+  }
+
+  void validate() {
+    if (expression.hasNoMatch(path))
+      throw Exception('Invalid UriSuffixPath format: $path');
+  }
+
+  @override
+  String toString() => path;
 }
 
 /// A [DartMemberPath] is a dot separated path to a member inside the Dart file.
@@ -214,6 +242,16 @@ class DartCodePath {
 
 extension UriExtension on Uri {
   Uri withPathSuffix(String pathSuffix) {
-    return this.replace(path: path + pathSuffix);
+    if (pathSuffix.trim().startsWith('/')) {
+      return this.replace(path: path + pathSuffix);
+    } else {
+      return this.replace(path: path + '/'+ pathSuffix);
+    }
+  }
+
+  Future<bool> canGetWithHttp() async {
+    var response = await http.get(this);
+    var success = response.statusCode >= 200 && response.statusCode < 300;
+    return success;
   }
 }

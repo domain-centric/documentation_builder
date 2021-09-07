@@ -454,4 +454,40 @@ main() {
       });
     });
   });
+  group('class: UriSuffixPath', () {
+    group('constructor', () {
+      test("path may begin with slash", () {
+        String path = '/hello';
+        expect(UriSuffixPath.expression.hasMatch(path),true);
+      });
+
+      test("path should not begin with backslash", () {
+        String path = '\\hello';
+        expect(() {
+          UriSuffixPath(path);
+        },
+            throwsA(isA<Exception>().having(
+                  (e) => e.toString(),
+              'toString()',
+              equals('Exception: Invalid UriSuffixPath format: $path'),
+            )));
+      });
+
+      test("path should not contain a backslash", () {
+        String path = 'hello\\all';
+        expect(() {
+          UriSuffixPath(path);
+        },
+            throwsA(isA<Exception>().having(
+                  (e) => e.toString(),
+              'toString()',
+              equals('Exception: Invalid UriSuffixPath format: $path'),
+            )));
+      });
+      test("path may contain '-._~:?#[]@!\$&()*+,;%=/'", () {
+        String path = '-._~:?#[]@!\$&()*+,;%=/';
+        expect(UriSuffixPath(path).toString(), path);
+      });
+    });
+  });
 }

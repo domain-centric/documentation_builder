@@ -7,7 +7,8 @@ class TagAttributeParser extends Parser {
   TagAttributeParser(List<AttributeRule> rules) : super(rules);
 
   /// attributeNamesAndValues are the inside of a [Tag] string
-  Future<Map<String, dynamic>> parseToNameAndValues(String attributeNamesAndValues) async {
+  Future<Map<String, dynamic>> parseToNameAndValues(
+      String attributeNamesAndValues) async {
     var rootNode = createRootNode(attributeNamesAndValues);
     await parse(rootNode);
     validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
@@ -50,7 +51,6 @@ class TagAttributeParser extends Parser {
   }
 }
 
-
 abstract class AttributeRule extends TextParserRule {
   final String name;
   final bool required;
@@ -61,34 +61,23 @@ abstract class AttributeRule extends TextParserRule {
   static final valueExpression =
       FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant);
 
+  static String groupNameValue='value';
+
   static createExpression(String name) => FluentRegex()
       .whiteSpace(Quantity.oneOrMoreTimes())
       .literal(name)
       .whiteSpace(Quantity.zeroOrMoreTimes())
-      .or([
-        FluentRegex().literal(':'),
-        FluentRegex().literal('='),
-      ])
+      .characterSet(CharacterSet().addLiterals(':='))
       .whiteSpace(Quantity.zeroOrMoreTimes())
-      .or([
-        FluentRegex()
-            .literal("'")
-            .group(valueExpression, type: GroupType.captureUnNamed())
-            .literal("'"),
-        FluentRegex()
-            .literal('"')
-            .group(valueExpression, type: GroupType.captureUnNamed())
-            .literal('"'),
-      ]);
+      .characterSet(CharacterSet().addLiterals('"\''))
+      .group(valueExpression, type: GroupType.captureNamed(groupNameValue))
+      .characterSet(CharacterSet().addLiterals('"\''));
 
-  String stringValueFor(String attributeNameAndValueText) {
-    String? value = expression
-        .findCapturedGroups(attributeNameAndValueText)
-        .values
-        .firstWhere((value) => value != null);
+  String stringValueFor(RegExpMatch match) {
+    String? value = match.namedGroup(groupNameValue);
     if (value == null)
       throw Exception(
-          'Could not find value for $name attribute in for: $attributeNameAndValueText');
+          "Could not find value for $name attribute in: '${match.result}'");
     return value;
   }
 }
@@ -111,12 +100,34 @@ class ProjectFilePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
+      try {
+        return Future.value(Attribute<ProjectFilePath>(
+          parent: parent,
+          name: name,
+          value: ProjectFilePath(stringValueFor(match)),
+        ));
+      } on Exception catch (e) {
+        _throwParserWarning(e);
+      }
+
+  }
+
+
+
+}
+
+class UriSuffixAttributeRule extends AttributeRule {
+  UriSuffixAttributeRule({String name = 'suffix', bool required = false})
+      : super(name, required: required);
+
+  @override
+  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
     try {
-      return Future.value(Attribute<ProjectFilePath>(
+      return Future.value(Attribute<UriSuffixPath>(
         parent: parent,
         name: name,
-        value: ProjectFilePath(stringValueFor(nameAndValue)),
+        value: UriSuffixPath(stringValueFor(match)),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -129,12 +140,12 @@ class DartFilePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
     try {
       return Future.value(Attribute<ProjectFilePath>(
         parent: parent,
         name: name,
-        value: DartFilePath(stringValueFor(nameAndValue)),
+        value: DartFilePath(stringValueFor(match)),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -150,12 +161,12 @@ class DartCodePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
       return Future.value(Attribute<DartCodePath>(
         parent: parent,
         name: name,
-        value: DartCodePath(stringValueFor(nameAndValue)),
+        value: DartCodePath(stringValueFor(match)),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -168,12 +179,12 @@ class StringAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
     try {
       return Future.value(Attribute<String>(
         parent: parent,
         name: name,
-        value: stringValueFor(nameAndValue),
+        value: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -186,12 +197,12 @@ class TitleAttributeRule extends StringAttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String nameAndValue) {
+  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
     try {
       return Future.value(Attribute<String>(
         parent: parent,
         name: name,
-        value: validate(stringValueFor(nameAndValue)),
+        value: validate(stringValueFor(match)),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -203,3 +214,5 @@ class TitleAttributeRule extends StringAttributeRule {
     return text;
   }
 }
+
+

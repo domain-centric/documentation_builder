@@ -1,13 +1,11 @@
-[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-01 22:38:09.247741.)
+[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-07 19:56:11.452307.)
 <a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link]s.
-[Link]s are references between [] brackets in [MarkdownPage]s, e.g.: [MyClass]
-The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing document on the internet.
-The [Link] will not be replaced to a hyperlink when the [Link] can not be resolved
+[Link]s:
+- are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass]
+- can have optional or required attributes, e.g. []
 
-A [Link] has a default title (the text of the hyperlink).
-You can specify the title attribute when you would like the title to customize the title of the [Link], e.g.:
-- Default title: [MyClass] can be converted to [MyClass](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
-- Custom title:  [MyClass title='Custom Title'] can be converted to [Custom Title](https://github.com/my_domain/my_project/blob/main/lib/my_lib.dart)
+The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing http uri.
+The [Link] will not be replaced to a hyperlink when the uri does not exits.
 
 
 TODO all Links

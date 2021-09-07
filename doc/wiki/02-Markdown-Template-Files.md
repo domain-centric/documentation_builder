@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-01 22:38:09.246744.)
+[//]: # (This file was generated from: doc/templates/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-07 19:56:11.451310.)
 <a id='lib-builders-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
 - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 - [Tag]s
@@ -29,7 +29,7 @@ which will generate the versions assuming you are using GitHub and mark very ver
 ### Wiki template files
 Project's that are stored in [Github](https://github.com/) can have wiki pages.
 [Github](https://github.com/) wiki pages are markdown files.
-See [Github Wiki pages](TODO Add link) for more information.
+See [Github Wiki pages](TODO%20Add%20link) for more information.
 
 
 Any [MarkdownTemplate] is considered to be a [WikiMarkdownTemplateFile] when:

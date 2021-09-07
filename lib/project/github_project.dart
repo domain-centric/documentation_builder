@@ -59,7 +59,7 @@ class GitHubProject {
           type: GroupType.captureUnNamed())
       .literal('.git');
 
-  Uri? get roadMapUri => _createUriWithSuffix('milestones');
+  Uri? get milestonesUri => _createUriWithSuffix('milestones');
 
   Uri? get versionsUri => _createUriWithSuffix('milestones?state=closed');
 

@@ -27,7 +27,6 @@ class OutputBuilder extends Builder {
         AssetId assetId = markdownPage.destinationFilePath.toAssetId();
         FutureOr<String> contents = markdownPage.toString();
         buildStep.writeAsString(assetId, contents);
-        print('Wrote: ${assetId.path}');
       } on Exception catch (e) {
         print(
             'Could not write file: ${markdownPage.destinationFilePath}, $e');

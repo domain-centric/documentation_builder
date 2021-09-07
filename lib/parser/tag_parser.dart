@@ -24,6 +24,7 @@ class TagParser extends Parser {
           ImportDartDocTagRule(),
         ]);
 }
+const groupNameAttributes='attributes';
 
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
@@ -35,17 +36,14 @@ abstract class TagRule extends TextParserRule {
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .literal(name)
       .group(FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant),
-          type: GroupType.captureUnNamed())
+          type: GroupType.captureNamed(groupNameAttributes))
       .literal('}')
       .ignoreCase();
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent, String tagText) async {
+  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) async {
     try {
-      String attributesText = expression
-              .findCapturedGroups(tagText)
-              .values
-              .firstWhere((value) => value != null) ??
+      String attributesText = match.namedGroup(groupNameAttributes)??
           '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributeNamesAndValues =
@@ -56,7 +54,7 @@ abstract class TagRule extends TextParserRule {
       return tagNode;
     } on ParserWarning catch (warning) {
       // Wrap warning with tag information, so it can be found easily
-      throw ParserWarning("$warning in tag: '$tagText'.");
+      throw ParserWarning("$warning in tag: '${match.result}'.");
     }
   }
 
@@ -546,7 +544,7 @@ class Anchor extends Node {
     if (markdownTemplate == null) return null;
     Uri? uri = markdownTemplate.destinationWebUri;
     if (uri == null) return null;
-    uri = uri.withPathSuffix('#$name');
+    uri = uri.replace(fragment: name);
     return uri;
   }
 

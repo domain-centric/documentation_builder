@@ -59,23 +59,28 @@ main() {
     group('method: stringValueFor', () {
       test(" name='value' has match", () {
         var rule = StringAttributeRule('name', required: true);
-        expect(rule.stringValueFor(" name='value'"), 'value');
+        RegExpMatch match=rule.expression.firstMatch(" name='value'")!;
+        expect(rule.stringValueFor(match), 'value');
       });
       test(" name  =    'value' has match", () {
         var rule = StringAttributeRule('name', required: true);
-        expect(rule.stringValueFor("  name  =    'value'"), 'value');
+        RegExpMatch match=rule.expression.firstMatch("  name  =    'value'")!;
+        expect(rule.stringValueFor(match), 'value');
       });
       test(' name  =    "value" has match', () {
         var rule = StringAttributeRule('name', required: true);
-        expect(rule.stringValueFor(' name  =    "value"'), 'value');
+        RegExpMatch match=rule.expression.firstMatch(' name  =    "value"')!;
+        expect(rule.stringValueFor(match), 'value');
       });
       test(" name  :    'value' has match", () {
         var rule = StringAttributeRule('name', required: true);
-        expect(rule.stringValueFor("  name  :    'value'"), 'value');
+        RegExpMatch match=rule.expression.firstMatch("  name  :    'value'")!;
+        expect(rule.stringValueFor(match), 'value');
       });
       test(' name  :    "value" has match', () {
         var rule = StringAttributeRule('name', required: true);
-        expect(rule.stringValueFor(' name  :    "value"'), 'value');
+        RegExpMatch match=rule.expression.firstMatch(' name  :    "value"')!;
+        expect(rule.stringValueFor(match), 'value');
       });
     });
   });
@@ -185,3 +190,4 @@ main() {
     });
   });
 }
+

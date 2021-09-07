@@ -123,8 +123,8 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.https(
-                'pub.dev', 'packages/documentation_builder#$expectedName'));
+            Uri.parse('https://pub.dev/packages/documentation_builder#a1-z')
+        );
       });
       test('title with hyphens', () {
         var title = 'A-sentence-with-hyphens';
@@ -133,8 +133,7 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.https(
-                'pub.dev', 'packages/documentation_builder#$expectedName'));
+            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title with double hyphens', () {
         var title = 'A------sentence-with--multiple---hyphens';
@@ -143,8 +142,7 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.https(
-                'pub.dev', 'packages/documentation_builder#$expectedName'));
+            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphen', () {
         var title = '-A sentence starting with a hyphen';
@@ -153,8 +151,7 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.https(
-                'pub.dev', 'packages/documentation_builder#$expectedName'));
+            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphens', () {
         var title = '---A sentence starting with hyphens';
@@ -163,8 +160,7 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.https(
-                'pub.dev', 'packages/documentation_builder#$expectedName'));
+            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
       });
     });
   });
