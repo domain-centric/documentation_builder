@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import 'local_project.dart';
@@ -13,6 +14,29 @@ class GitHubProject {
   factory GitHubProject() => _singleton;
 
   GitHubProject._() : uri = _createUri();
+
+  List<LinkDefinition> get linkDefinitions => [
+    LinkDefinition(
+        name: 'GitHub',
+        defaultTitle: 'GitHub Project',
+        uri: GitHubProject().uri!),
+    LinkDefinition(
+        name: 'GitHubWiki',
+        defaultTitle: 'GitHub Wiki',
+        uri: GitHubProject().wikiUri!),
+    LinkDefinition(
+        name: 'GitHubMilestones',
+        defaultTitle: 'GitHub Milestones',
+        uri: GitHubProject().milestonesUri!),
+    LinkDefinition(
+        name: 'GitHubVersions',
+        defaultTitle: 'GitHub Versions',
+        uri: GitHubProject().versionsUri!),
+    LinkDefinition(
+        name: 'GitHubPullRequests',
+        defaultTitle: 'GitHub Pull Requests',
+        uri: GitHubProject().pullRequestsUri!),
+  ];
 
   /// returns a [Uri] to the where the project is stored on https://github.com
   /// or null when no github information was found

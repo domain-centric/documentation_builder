@@ -227,29 +227,7 @@ class LinkDefinition {
 /// - title: An alternative title for the hyperlink. e.g. [GitHubWiki title='# Wiki documentation'&rsqb;
 class GitHubProjectLinkRule extends LinkDefinitionsRule {
   GitHubProjectLinkRule()
-      : super([
-          //TODO move list to GitHubProject, so we can reuse it e.g. for badges
-          LinkDefinition(
-              name: 'GitHub',
-              defaultTitle: 'GitHub Project',
-              uri: GitHubProject().uri!),
-          LinkDefinition(
-              name: 'GitHubWiki',
-              defaultTitle: 'GitHub Wiki',
-              uri: GitHubProject().wikiUri!),
-          LinkDefinition(
-              name: 'GitHubMilestones',
-              defaultTitle: 'GitHub Milestones',
-              uri: GitHubProject().milestonesUri!),
-          LinkDefinition(
-              name: 'GitHubVersions',
-              defaultTitle: 'GitHub Versions',
-              uri: GitHubProject().versionsUri!),
-          LinkDefinition(
-              name: 'GitHubPullRequests',
-              defaultTitle: 'GitHub Pull Requests',
-              uri: GitHubProject().pullRequestsUri!),
-        ]);
+      : super(GitHubProject().linkDefinitions);
 }
 
 ///TODO PUBSPECRULES
