@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:documentation_builder/builders/template_builder.dart';
+import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
@@ -13,8 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 main() {
   group('class: ImportFileTagRule', () {
     String pathName = 'path';
-    String pathValue = 'doc/templates/README.md';
-    String invalidPathValue = 'doc\\templates\\README.md';
+    String pathValue = 'doc/template/README.md';
+    String invalidPathValue = 'doc\\template\\README.md';
     String pathAttribute = '$pathName="$pathValue"';
     String invalidPathAttribute = '$pathName="$invalidPathValue"';
     String titleName = 'title';
@@ -191,9 +191,9 @@ main() {
           () {
         expect(
             TitleAndOrAnchor(TestRootNode(''), null,
-                    'builders/documentation_builder|DocumentationBuilder')
+                    'builder/documentation_builder|DocumentationBuilder')
                 .toString(),
-            "<a id='builders-documentation-builder-documentationbuilder'></a>");
+            "<a id='builder-documentation-builder-documentationbuilder'></a>");
       });
     });
   });
@@ -203,7 +203,7 @@ main() {
       test(
           'Creating a ImportFileTag results in an object containing children with a anchor, title and markdown text',
           () async {
-        ProjectFilePath filePath = ProjectFilePath('doc/templates/README.mdt');
+        ProjectFilePath filePath = ProjectFilePath('doc/template/README.mdt');
         Map<String, dynamic> attributes = {
           'path': filePath,
           'title': '## Paragraph Title'
@@ -221,11 +221,11 @@ main() {
       test(
           'Creating a ImportFileTag results in an object containing children with a anchor and markdown text',
           () async {
-        ProjectFilePath filePath = ProjectFilePath('doc/templates/README.mdt');
+        ProjectFilePath filePath = ProjectFilePath('doc/template/README.mdt');
         Map<String, dynamic> attributes = {
           'path': filePath,
         };
-        var expectedPreFix = "<a id=\'doc-templates-readme-mdt\'></a>";
+        var expectedPreFix = "<a id=\'doc-template-readme-mdt\'></a>";
         var tag = ImportFileTag(TestRootNode(''), attributes);
         var newChildren = await tag.createChildren();
         tag.children.addAll(newChildren);
@@ -241,7 +241,7 @@ main() {
           'Creating a ImportCodeTag results in an object containing children with a anchor, title and markdown text',
           () async {
         ProjectFilePath filePath =
-            ProjectFilePath('test/parsers/import_test_code_file.dart');
+            ProjectFilePath('test/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
           'path': filePath,
           'title': '## Paragraph Title'
@@ -264,12 +264,12 @@ main() {
           'Creating a ImportCodeTag results in an object containing children with a anchor and markdown text',
           () async {
         ProjectFilePath filePath =
-            ProjectFilePath('test/parsers/import_test_code_file.dart');
+            ProjectFilePath('test/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
           'path': filePath,
         };
         var expected =
-            '<a id=\'test-parsers-import-test-code-file-dart\'></a>\n'
+            '<a id=\'test-parser-import-test-code-file-dart\'></a>\n'
             '```\n'
             'main() {\r\n'
             '  print(\'test\');\r\n'
@@ -290,7 +290,7 @@ main() {
       //     'Creating a ImportDartCodeTag results in an object containing children with a anchor, title and markdown text',
       //     () {
       //   ProjectFilePath filePath =
-      //       ProjectFilePath('test/parsers/import_test_code_file.dart');
+      //       ProjectFilePath('test/parser/import_test_code_file.dart');
       //   Map<String, dynamic> attributes = {
       //     'path': filePath,
       //     'title': '## Paragraph Title'
@@ -313,7 +313,7 @@ main() {
 Anchor createTestAnchor(String title) {
   RootNode rootNode = RootNode();
   var markdownPage =
-      ReadMeFactory().createMarkdownPage(rootNode, 'doc/templates/README.mdt');
+      ReadMeFactory().createMarkdownPage(rootNode, 'doc/template/README.mdt');
   var anchor = Anchor(markdownPage, title);
   markdownPage.children.add(anchor);
   return anchor;

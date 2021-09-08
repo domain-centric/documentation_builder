@@ -2,7 +2,7 @@ import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:test/test.dart';
 
-const String dartFilePath = 'lib/builders/documentation_builder.dart';
+const String dartFilePath = 'lib/builder/documentation_builder.dart';
 
 main() {
   group('class: ProjectFilePath', () {
@@ -62,14 +62,14 @@ main() {
     });
     group('method: toAssetId', () {
       test("must return a valid AssetId", () {
-        String path = 'doc/templates/README.mdt';
+        String path = 'doc/template/README.mdt';
         expect(ProjectFilePath(path).toAssetId().package, LocalProject.name);
         expect(ProjectFilePath(path).toAssetId().path, path);
       });
     });
     group('method toFile', () {
       test("must return an existing File", () {
-        String path = 'doc/templates/README.mdt';
+        String path = 'doc/template/README.mdt';
         expect(ProjectFilePath(path).toFile().existsSync(), true);
       });
     });
@@ -246,14 +246,14 @@ main() {
     });
     group('method: toAssetId', () {
       test("must return a valid AssetId", () {
-        String path = 'lib/parsers/documentation_builder.dart';
+        String path = 'lib/parser/documentation_builder.dart';
         expect(DartFilePath(path).toAssetId().package, LocalProject.name);
         expect(DartFilePath(path).toAssetId().path, path);
       });
     });
     group('method toFile', () {
       test("must return an existing File", () {
-        String path = 'lib/builders/documentation_builder.dart';
+        String path = 'lib/builder/documentation_builder.dart';
         expect(DartFilePath(path).toFile().existsSync(), true);
       });
     });
@@ -427,7 +427,7 @@ main() {
     });
     group('field: dartFilePath', () {
       test("returns correct path when only file is specified", () {
-        String path = 'lib/builders/documentation_builder.dart';
+        String path = 'lib/builder/documentation_builder.dart';
         expect(DartCodePath(path).dartFilePath.toString(), path);
       });
       test("returns correct path when file and member is specified", () {
@@ -443,7 +443,7 @@ main() {
     });
     group('field: dartMemberPath', () {
       test("returns null when only file is specified", () {
-        String path = 'lib/parsers/documentation_builder.dart';
+        String path = 'lib/parser/documentation_builder.dart';
         expect(DartCodePath(path).dartMemberPath, null);
       });
       test("returns correct path when file and member is specified", () {

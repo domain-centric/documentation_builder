@@ -1,5 +1,5 @@
-[//]: # (This file was generated from: doc/templates/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-08 14:21:59.507216.)
-<a id='lib-builders-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
+[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-08 15:54:07.727292.)
+<a id='lib-builder-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
 - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 - [Tag]s
 - [Link]s
@@ -7,7 +7,7 @@
 [MarkdownTemplateFile]s are converted to [GeneratedMarkdownFile]s
 
 
-<a id='lib-builders-template-builder-dart-generatedmarkdownfile'></a>[GeneratedMarkdownFile]s are files with a .md extension that are generated
+<a id='lib-builder-template-builder-dart-generatedmarkdownfile'></a>[GeneratedMarkdownFile]s are files with a .md extension that are generated
 by the [DocumentationBuilder].
 
 

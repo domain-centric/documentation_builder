@@ -1,5 +1,5 @@
 import 'package:build/build.dart';
-import 'package:documentation_builder/builders/template_builder.dart';
+import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/parser/parser.dart';
 
 /// All information needed to generate the markdown documentation files.
@@ -33,5 +33,5 @@ class DocumentationModel extends RootNode {
   }
 }
 
-/// A [Resource] containing the [DocumentationModel] so that it can be shared between builders.
+/// A [Resource] containing the [DocumentationModel] so that it can be shared between builder.
 final resource = Resource(() => DocumentationModel());

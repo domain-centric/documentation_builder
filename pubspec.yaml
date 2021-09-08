@@ -1,7 +1,7 @@
 name: documentation_builder
 description: Generates markdown documentation files from markdown template files.
 version: 0.0.1
-homepage:
+repository: https://github.com/efficientyboosters/documentation_builder
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

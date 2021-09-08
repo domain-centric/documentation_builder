@@ -15,7 +15,7 @@ targets:
 
 builders:
   template_builder:
-    import: 'package:documentation_builder/builders/builder_factory.dart'
+    import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: ['markdownTemplateBuilder']
     build_extensions:
       .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
@@ -24,7 +24,7 @@ builders:
     auto_apply: root_package
     runs_before: [documentation_builder|parse_builder]
   parse_builder:
-    import: 'package:documentation_builder/builders/builder_factory.dart'
+    import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: [ 'parseBuilder' ]
     build_extensions:
       .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
@@ -33,7 +33,7 @@ builders:
     auto_apply: root_package
     runs_before: [documentation_builder|output_builder]
   output_builder:
-    import: 'package:documentation_builder/builders/builder_factory.dart'
+    import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: ['outputBuilder']
     build_extensions:
       .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method

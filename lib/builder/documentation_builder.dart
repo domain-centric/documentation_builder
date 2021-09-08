@@ -16,11 +16,11 @@ import 'dart:io';
 
 // [DocumentationBuilder] isn't actually a builder. Its purpose:
 // - for documentation
-// - a convenient way to run the shell commands to start the builders,
+// - a convenient way to run the shell commands to start the builder,
 //   using the build_runner package
 class DocumentationBuilder {
 
-  /// The [documentation_builder] uses several builders that are run with the [build_runner] package.
+  /// The [documentation_builder] uses several builder that are run with the [build_runner] package.
   ///
   /// The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):
   /// ```

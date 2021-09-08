@@ -6,8 +6,8 @@
 [![GitHub Issues](https://img.shields.io/github/issues/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
 
-{ImportDartDoc path='lib/builders/documentation_builder.dart|DocumentationBuilder' title='# documentation_builder'}
+{ImportDartDoc path='lib/builder/documentation_builder.dart|DocumentationBuilder' title='# documentation_builder'}
 
-{ImportFile path='doc/templates/example.mdt' title='## Examples'}
+{ImportFile path='doc/template/example.mdt' title='## Examples'}
 
-{ImportFile path='doc/templates/07-Getting-Started.mdt' title='## Getting Started'}
+{ImportFile path='doc/template/07-Getting-Started.mdt' title='## Getting Started'}

@@ -92,7 +92,7 @@ main() {
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
-        String path = 'doc/templates/README.mtd';
+        String path = 'doc/template/README.mtd';
         String title = '# Title';
         Map<String, dynamic> expectedAttributes = {
           'path': ProjectFilePath(path),
@@ -107,7 +107,7 @@ main() {
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
-        String path = 'doc/templates/README.mtd';
+        String path = 'doc/template/README.mtd';
         Map<String, dynamic> expectedAttributes = {
           'path': ProjectFilePath(path),
         };
@@ -142,7 +142,7 @@ main() {
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
-        String path = 'doc/templates/README.mtd';
+        String path = 'doc/template/README.mtd';
         String title = '# Title';
 
         expect(
@@ -176,7 +176,7 @@ main() {
           ProjectFilePathAttributeRule(),
           TitleAttributeRule(),
         ]);
-        String path = 'doc/templates/README.mtd';
+        String path = 'doc/template/README.mtd';
         String title = '';
         expect(
             () =>

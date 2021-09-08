@@ -1,5 +1,5 @@
-import 'package:documentation_builder/builders/documentation_builder.dart';
-import 'package:documentation_builder/builders/template_builder.dart';
+import 'package:documentation_builder/builder/documentation_builder.dart';
+import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
