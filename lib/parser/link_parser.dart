@@ -221,6 +221,7 @@ class LinkDefinition {
 /// [GitHubMilestones&rsqb;
 /// [GitHubVersions&rsqb;
 /// [GitHubPullRequests&rsqb;
+/// [GitHubRule&rsqb;
 ///
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [Github suffix='wiki'&rsqb; is the same as [GithubWiki&rsqb;

@@ -36,6 +36,10 @@ class GitHubProject {
         name: 'GitHubPullRequests',
         defaultTitle: 'GitHub Pull Requests',
         uri: GitHubProject().pullRequestsUri!),
+    LinkDefinition(
+        name: 'GitHubRaw',
+        defaultTitle: 'GitHub raw source file',
+        uri: GitHubProject().rawUri!),
   ];
 
   /// returns a [Uri] to the where the project is stored on https://github.com
@@ -90,6 +94,17 @@ class GitHubProject {
   Uri? get pullRequestsUri => _createUriWithSuffix('pulls');
 
   Uri? get wikiUri => _createUriWithSuffix('wiki');
+
+  /// Gets a uri to plain view of the source file.
+  /// e.g. if you open the [uri] and click on a markdown file in github,
+  /// it will show the rendered markdown file
+  /// You can use this link instead to see the un-rendered (source) file.
+  Uri? get rawUri {
+    if (uri==null) return null;
+    Uri rawUri=Uri.https('raw.githubusercontent.com', uri!.path);
+    //TODO test if uriWithSuffix exists otherwise return null
+    return rawUri;
+  }
 
   Uri? searchUri(String query) => _createUriWithSuffix('search?q=$query');
 

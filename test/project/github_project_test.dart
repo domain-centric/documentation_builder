@@ -39,6 +39,11 @@ main() {
           'https://github.com/efficientyboosters/documentation_builder/search%3Fq=Test');
       expect(await GitHubProject().uri!.canGetWithHttp(), true);
     });
+    test('method: rawUri', () async {
+      expect(GitHubProject().rawUri.toString(),
+          'https://raw.githubusercontent.com/efficientyboosters/documentation_builder');
+      expect(await GitHubProject().rawUri!.withPathSuffix('main/README.md').canGetWithHttp(), true);
+    });
   });
 }
 

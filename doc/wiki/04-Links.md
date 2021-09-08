@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-07 19:56:11.452307.)
+[//]: # (This file was generated from: doc/templates/04-Links.mdt using the documentation_builder package on: 2021-09-08 14:21:59.509211.)
 <a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link]s.
 [Link]s:
 - are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass]
