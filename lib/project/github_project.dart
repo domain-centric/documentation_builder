@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:documentation_builder/parser/link_parser.dart';
+import 'package:documentation_builder/generic/paths.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import 'local_project.dart';
@@ -9,7 +10,7 @@ import 'local_project.dart';
 class GitHubProject {
   final Uri? uri;
 
-  static GitHubProject _singleton = GitHubProject._();
+  static final GitHubProject _singleton = GitHubProject._();
 
   factory GitHubProject() => _singleton;
 
@@ -18,7 +19,7 @@ class GitHubProject {
   List<LinkDefinition> get linkDefinitions => [
     LinkDefinition(
         name: 'GitHub',
-        defaultTitle: 'GitHub Project',
+        defaultTitle: 'GitHub project',
         uri: GitHubProject().uri!),
     LinkDefinition(
         name: 'GitHubWiki',
@@ -26,15 +27,15 @@ class GitHubProject {
         uri: GitHubProject().wikiUri!),
     LinkDefinition(
         name: 'GitHubMilestones',
-        defaultTitle: 'GitHub Milestones',
+        defaultTitle: 'GitHub milestones',
         uri: GitHubProject().milestonesUri!),
     LinkDefinition(
-        name: 'GitHubVersions',
-        defaultTitle: 'GitHub Versions',
-        uri: GitHubProject().versionsUri!),
+        name: 'GitHubReleases',
+        defaultTitle: 'GitHub releases',
+        uri: GitHubProject().releasesUri!),
     LinkDefinition(
         name: 'GitHubPullRequests',
-        defaultTitle: 'GitHub Pull Requests',
+        defaultTitle: 'GitHub pull requests',
         uri: GitHubProject().pullRequestsUri!),
     LinkDefinition(
         name: 'GitHubRaw',
@@ -65,7 +66,8 @@ class GitHubProject {
     }
     String path = found.values.first!;
     Uri uri = Uri(scheme: 'https', host: 'github.com', path: path);
-    //TODO test if uri exists, if not return null
+    // would be nice if we could return null if the uri did not exist
+    // but we can't since it is a async call and _createUri is used in constructor
     return uri;
   }
 
@@ -89,7 +91,7 @@ class GitHubProject {
 
   Uri? get milestonesUri => _createUriWithSuffix('milestones');
 
-  Uri? get versionsUri => _createUriWithSuffix('milestones?state=closed');
+  Uri? get releasesUri => _createUriWithSuffix('releases');
 
   Uri? get pullRequestsUri => _createUriWithSuffix('pulls');
 

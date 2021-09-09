@@ -4,6 +4,7 @@ import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
+import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// The [LinkParser] searches for [TextNode]'s that contain texts that represent a [Link]
@@ -13,7 +14,10 @@ class LinkParser extends Parser {
       : super([
           CompleteLinkRule(),
           GitHubProjectLinkRule(),
-          //TODO
+          PubDevProjectLinkRule(),
+//TODO DartCodeMemberLinkRule
+//TODO MarkDownFileLinkRule
+//TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES
         ]);
 }
 
@@ -81,14 +85,15 @@ abstract class InCompleteLinkRule extends TextParserRule {
           type: GroupType.captureNamed(groupNameName),
         )
         .group(
-            FluentRegex()
-                .whiteSpace()
-                .anyCharacter(Quantity.oneOrMoreTimes().reluctant),
+            FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).characterSet(
+                CharacterSet.exclude().addLiterals(']'),
+                Quantity.oneOrMoreTimes()),
+            quantity: Quantity.zeroOrMoreTimes(),
             type: GroupType.captureNamed(groupNameAttributes))
+        .whiteSpace(Quantity.zeroOrMoreTimes())
         .literal(']')
         .ignoreCase();
   }
-
 
   @override
   Future<Node> createReplacementNode(
@@ -205,7 +210,7 @@ class LinkDefinition {
   final String defaultTitle;
   final Uri uri;
 
-  LinkDefinition({
+  const LinkDefinition({
     required this.name,
     required this.defaultTitle,
     required this.uri,
@@ -219,19 +224,35 @@ class LinkDefinition {
 /// [GitHub&rsqb;
 /// [GitHubWiki&rsqb;
 /// [GitHubMilestones&rsqb;
-/// [GitHubVersions&rsqb;
+/// [GitHubReleases&rsqb;
 /// [GitHubPullRequests&rsqb;
-/// [GitHubRule&rsqb;
+/// [GitHubRaw&rsqb;
 ///
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [Github suffix='wiki'&rsqb; is the same as [GithubWiki&rsqb;
-/// - title: An alternative title for the hyperlink. e.g. [GitHubWiki title='# Wiki documentation'&rsqb;
+/// - title: An alternative title for the hyperlink. e.g. [GitHubWiki title='Wiki documentation'&rsqb;
 class GitHubProjectLinkRule extends LinkDefinitionsRule {
-  GitHubProjectLinkRule()
-      : super(GitHubProject().linkDefinitions);
+  GitHubProjectLinkRule() : super(GitHubProject().linkDefinitions);
 }
 
-///TODO PUBSPECRULES
+/// [GitHubProjectLink]s point to a [PubDev](https://pub.dev/) page of the
+/// current project (assuming it is published on PubDev).
+///
+/// You can use the following MarkDown:
+/// [PubDev&rsqb;
+/// [PubDevChangeLog&rsqb;
+/// [PubDevVersions&rsqb;
+/// [PubDevExample&rsqb;
+/// [PubDevInstall&rsqb;
+/// [PubDevScore&rsqb;
+/// [PubDevLicense&rsqb;
+///
+/// You can the following optional attributes:
+/// - suffix: A path suffix e.g. [PubDev suffix='example'&rsqb; is the same as [PubDevExample&rsqb;
+/// - title: An alternative title for the hyperlink. e.g. [PubDevExample title='Examples'&rsqb;
+class PubDevProjectLinkRule extends LinkDefinitionsRule {
+  PubDevProjectLinkRule() : super(PubDevProject().linkDefinitions);
+}
 
 /// A library can have members such as a:
 /// - constant
@@ -265,7 +286,3 @@ class GitHubProjectLinkRule extends LinkDefinitionsRule {
 /// - Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
-//TODO MemberLinkRule
-//TODO MarkDownFileLinkRule
-//TODO PubDevLinkRule
-//TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES

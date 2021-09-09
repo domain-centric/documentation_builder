@@ -18,8 +18,8 @@ main() {
     });
 
     test('get method: versionsUri', () async {
-      expect(GitHubProject().versionsUri.toString(),
-          'https://github.com/efficientyboosters/documentation_builder/milestones%3Fstate=closed');
+      expect(GitHubProject().releasesUri.toString(),
+          'https://github.com/efficientyboosters/documentation_builder/releases');
       expect(await GitHubProject().uri!.canGetWithHttp(), true);
     });
 

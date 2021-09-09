@@ -12,7 +12,7 @@ You can view the templates files and the generated output on https://github.com 
   - [PubDevProjectVersions title='Generated Markdown Rendered']
 - Wiki pages
   - [GitHub suffix='/tree/main/doc/template' title='Markdown Template Files'] (select a file and select raw to see the source)
-  - [GitHub suffix='/tree/main/doc/wiki' title='Generated Markdown Files'] (select a file and select raw to see the source)
+  - [GitHub suffix='/tree/main/doc/wiki' title='Generated Markdown Files Raw'] (select a file and select raw to see the source)
   - [GitHubWiki title='Generated Markdown Files Rendered']
 - example
   - [GitHubRaw suffix='/main/doc/template/example.mdt' title='Markdown Template File']

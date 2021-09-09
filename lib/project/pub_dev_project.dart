@@ -1,10 +1,12 @@
+import 'package:documentation_builder/parser/link_parser.dart';
+
 import 'local_project.dart';
 
 /// Provides uri's of the project on https://github.com
 class PubDevProject {
   final Uri? uri;
 
-  static PubDevProject _singleton = PubDevProject._();
+  static final PubDevProject _singleton = PubDevProject._();
 
   factory PubDevProject() => _singleton;
 
@@ -32,6 +34,38 @@ class PubDevProject {
   Uri? get scoreUri => _createUriWithSuffix('score');
 
   Uri? get licenseUri => _createUriWithSuffix('license');
+
+  List<LinkDefinition> get linkDefinitions => [
+    LinkDefinition(
+        name: 'PubDev',
+        defaultTitle: 'PubDev package',
+        uri: PubDevProject().uri!),
+    LinkDefinition(
+        name: 'PubDevChangeLog',
+        defaultTitle: 'PubDev change log',
+        uri: PubDevProject().changeLogUri!),
+    LinkDefinition(
+        name: 'PubDevVersions',
+        defaultTitle: 'PubDev versions',
+        uri: PubDevProject().versionsUri!),
+    LinkDefinition(
+        name: 'PubDevExample',
+        defaultTitle: 'PubDev example',
+        uri: PubDevProject().exampleUri!),
+    LinkDefinition(
+        name: 'PubDevInstall',
+        defaultTitle: 'PubDev installation',
+        uri: PubDevProject().installUri!),
+    LinkDefinition(
+        name: 'PubDevScore',
+        defaultTitle: 'PubDev score',
+        uri: PubDevProject().scoreUri!),
+    LinkDefinition(
+        name: 'PubDevLicense',
+        defaultTitle: 'PubDev license',
+        uri: PubDevProject().licenseUri!),
+  ];
+
 
   _createUriWithSuffix(String suffix) {
     if (uri == null) {

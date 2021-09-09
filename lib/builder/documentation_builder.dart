@@ -2,7 +2,8 @@ import 'dart:io';
 
 
 /// Generates markdown documentation files from markdown template files.
-/// This can be useful when you write documentation for a Dart or Flutter project
+/// This can be useful when you write documentation for a
+/// [Dart](https://dart.dev/) or [Flutter](https://flutter.dev/) project
 /// and want to reuse/import Dart code or Dart documentation comments.
 ///
 /// It can generate the following files:
