@@ -7,7 +7,6 @@ import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:test/test.dart';
 
-
 main() {
   String suffixName = UriSuffixAttributeRule().name;
   String wikiSuffixValue = 'wiki';
@@ -152,16 +151,13 @@ main() {
       test("with spaces has match", () {
         var rule = GitHubProjectLinkRule();
         expect(
-            rule.expression
-                .hasMatch("[  GitHub  $wikiSuffixAttribute $titleAttribute    ]"),
+            rule.expression.hasMatch(
+                "[  GitHub  $wikiSuffixAttribute $titleAttribute    ]"),
             true);
       });
       test("[GitHubWiki] has match", () {
         var rule = GitHubProjectLinkRule();
-        expect(
-            rule.expression
-                .hasMatch("[GitHubWiki]"),
-            true);
+        expect(rule.expression.hasMatch("[GitHubWiki]"), true);
       });
     });
   });
@@ -188,7 +184,7 @@ main() {
 
       test('GitHub link with uri becomes complete link', () async {
         var parsedNode =
-        await LinkParser().parse(TestRootNode("[GitHub]($uri)"));
+            await LinkParser().parse(TestRootNode("[GitHub]($uri)"));
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is Link, true);
         expect((parsedNode.children.first as Link).title, 'GitHub');
@@ -197,17 +193,14 @@ main() {
     });
 
     group('GitHub links', () {
-
       test('GitHub existing link', () async {
-        var parsedNode = await LinkParser()
-            .parse(TestRootNode("[GitHub $wikiSuffixAttribute $titleAttribute]"));
+        var parsedNode = await LinkParser().parse(
+            TestRootNode("[GitHub $wikiSuffixAttribute $titleAttribute]"));
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is Link, true);
         expect((parsedNode.children.first as Link).title, titleValue);
-        expect(
-            (parsedNode.children.first as Link).uri,
-            Uri.parse(
-                '${GitHubProject().uri}/$wikiSuffixValue'));
+        expect((parsedNode.children.first as Link).uri,
+            Uri.parse('${GitHubProject().uri}/$wikiSuffixValue'));
       });
 
       test('GitHub existing link surrounded by text', () async {
@@ -217,10 +210,8 @@ main() {
         expect(parsedNode.children.length, 3);
         expect((parsedNode.children[0] as TextNode).text, 'Hello ');
         expect((parsedNode.children[1] as Link).title, titleValue);
-        expect(
-            (parsedNode.children[1] as Link).uri,
-            Uri.parse(
-                '${GitHubProject().uri}/$wikiSuffixValue'));
+        expect((parsedNode.children[1] as Link).uri,
+            Uri.parse('${GitHubProject().uri}/$wikiSuffixValue'));
         expect((parsedNode.children[2] as TextNode).text, ' world.');
       });
 
@@ -237,46 +228,50 @@ main() {
       });
       test("[GitHub] parsed to correctly", () async {
         var parsedNode = await LinkParser().parse(TestRootNode('[GitHub]'));
-        expect(parsedNode.toString(), '[GitHub project](${GitHubProject().uri})');
+        expect(
+            parsedNode.toString(), '[GitHub project](${GitHubProject().uri})');
       });
       test("[GitHubWiki] parsed to correctly", () async {
         var parsedNode = await LinkParser().parse(TestRootNode('[GitHubWiki]'));
-        expect(parsedNode.toString(), '[GitHub Wiki](${GitHubProject().wikiUri})');
+        expect(
+            parsedNode.toString(), '[GitHub Wiki](${GitHubProject().wikiUri})');
       });
       test("[GitHubMilestones] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[GitHubMilestones]'));
-        expect(parsedNode.toString(), '[GitHub milestones](${GitHubProject().milestonesUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[GitHubMilestones]'));
+        expect(parsedNode.toString(),
+            '[GitHub milestones](${GitHubProject().milestonesUri})');
       });
       test("[GitHubReleases] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[GitHubReleases]'));
-        expect(parsedNode.toString(), '[GitHub releases](${GitHubProject().releasesUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[GitHubReleases]'));
+        expect(parsedNode.toString(),
+            '[GitHub releases](${GitHubProject().releasesUri})');
       });
       test("[GitHubPullRequests] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[GitHubPullRequests]'));
-        expect(parsedNode.toString(), '[GitHub pull requests](${GitHubProject().pullRequestsUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[GitHubPullRequests]'));
+        expect(parsedNode.toString(),
+            '[GitHub pull requests](${GitHubProject().pullRequestsUri})');
       });
       test("[GitHubRaw] parsed to correctly", () async {
-        String suffix='/main/README.md';
-        var parsedNode = await LinkParser().parse(TestRootNode('[GitHubRaw suffix="$suffix"]'));
-        expect(parsedNode.toString(), '[GitHub raw source file](${GitHubProject().rawUri}$suffix)');
+        String suffix = '/main/README.md';
+        var parsedNode = await LinkParser()
+            .parse(TestRootNode('[GitHubRaw suffix="$suffix"]'));
+        expect(parsedNode.toString(),
+            '[GitHub raw source file](${GitHubProject().rawUri}$suffix)');
       });
-
-
     });
 
-    group('PubDevLinkRule links', () {
-
-
+    group('PubDevProject links', () {
       test('PubDev existing link', () async {
-        var parsedNode = await LinkParser()
-            .parse(TestRootNode("[PubDev $exampleSuffixAttribute $titleAttribute]"));
+        var parsedNode = await LinkParser().parse(
+            TestRootNode("[PubDev $exampleSuffixAttribute $titleAttribute]"));
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is Link, true);
         expect((parsedNode.children.first as Link).title, titleValue);
-        expect(
-            (parsedNode.children.first as Link).uri,
-            Uri.parse(
-                '${PubDevProject().uri}/$exampleSuffixValue'));
+        expect((parsedNode.children.first as Link).uri,
+            Uri.parse('${PubDevProject().uri}/$exampleSuffixValue'));
       });
 
       test('PubDev existing link surrounded by text', () async {
@@ -286,19 +281,17 @@ main() {
         expect(parsedNode.children.length, 3);
         expect((parsedNode.children[0] as TextNode).text, 'Hello ');
         expect((parsedNode.children[1] as Link).title, titleValue);
-        expect(
-            (parsedNode.children[1] as Link).uri,
-            Uri.parse(
-                '${PubDevProject().uri}/$exampleSuffixValue'));
+        expect((parsedNode.children[1] as Link).uri,
+            Uri.parse('${PubDevProject().uri}/$exampleSuffixValue'));
         expect((parsedNode.children[2] as TextNode).text, ' world.');
       });
 
       test('PubDev none existing link', () async {
         expect(
-                () async => await LinkParser().parse(TestRootNode(
+            () async => await LinkParser().parse(TestRootNode(
                 "[PubDev $invalidSuffixAttribute $titleAttribute]")),
             throwsA(isA<ParserWarning>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
               equals(
                   "Could not get uri: ${PubDevProject().uri}/$invalidSuffixValue in link: '[PubDev suffix=\"$invalidSuffixValue\"   title  : '$titleValue'  ]'."),
@@ -306,39 +299,72 @@ main() {
       });
       test("[PubDev] parsed to correctly", () async {
         var parsedNode = await LinkParser().parse(TestRootNode('[PubDev]'));
-        expect(parsedNode.toString(), '[PubDev package](${PubDevProject().uri})');
+        expect(
+            parsedNode.toString(), '[PubDev package](${PubDevProject().uri})');
       });
       test("[PubDevChangeLog] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevChangeLog]'));
-        expect(parsedNode.toString(), '[PubDev change log](${PubDevProject().changeLogUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevChangeLog]'));
+        expect(parsedNode.toString(),
+            '[PubDev change log](${PubDevProject().changeLogUri})');
       });
       test("[PubDevVersions] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevVersions]'));
-        expect(parsedNode.toString(), '[PubDev versions](${PubDevProject().versionsUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevVersions]'));
+        expect(parsedNode.toString(),
+            '[PubDev versions](${PubDevProject().versionsUri})');
       });
       test("[PubDevExample] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevExample]'));
-        expect(parsedNode.toString(), '[PubDev example](${PubDevProject().exampleUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevExample]'));
+        expect(parsedNode.toString(),
+            '[PubDev example](${PubDevProject().exampleUri})');
       });
       test("[PubDevInstall] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevInstall]'));
-        expect(parsedNode.toString(), '[PubDev installation](${PubDevProject().installUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevInstall]'));
+        expect(parsedNode.toString(),
+            '[PubDev installation](${PubDevProject().installUri})');
       });
       test("[PubDevScore] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevScore]'));
-        expect(parsedNode.toString(), '[PubDev score](${PubDevProject().scoreUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevScore]'));
+        expect(parsedNode.toString(),
+            '[PubDev score](${PubDevProject().scoreUri})');
       });
       test("[PubDevLicense] parsed to correctly", () async {
-        var parsedNode = await LinkParser().parse(TestRootNode('[PubDevLicense]'));
-        expect(parsedNode.toString(), '[PubDev license](${PubDevProject().licenseUri})');
+        var parsedNode =
+            await LinkParser().parse(TestRootNode('[PubDevLicense]'));
+        expect(parsedNode.toString(),
+            '[PubDev license](${PubDevProject().licenseUri})');
       });
-
-
-
-
-
     });
 
+    group('PubPackageLinkRule links', () {
+      test('not an existing pub dev package', () async {
+        var noneExistingPackage = "[none_existent_package]";
+        var parsedNode =
+            await LinkParser().parse(TestRootNode(noneExistingPackage));
+        expect(parsedNode.toString(), noneExistingPackage);
+      });
+
+      String jsonSerializableName = 'json_serializable';
+      String jsonSerializableUrl = 'https://pub.dev/packages/json_serializable';
+
+      test('existing pub dev package', () async {
+        var parsedNode =
+            await LinkParser().parse(TestRootNode("[$jsonSerializableName]"));
+        expect(parsedNode.toString(),
+            '[$jsonSerializableName]($jsonSerializableUrl)');
+      });
+
+      test('existing pub dev package with title attribute', () async {
+        String title = 'Package for json conversion';
+        var parsedNode = await LinkParser()
+            .parse(TestRootNode("[$jsonSerializableName title='$title']"));
+        expect(parsedNode.toString(), '[$title]($jsonSerializableUrl)');
+      });
+    });
   });
 }
 

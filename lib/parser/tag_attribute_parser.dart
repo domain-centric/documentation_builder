@@ -61,7 +61,7 @@ abstract class AttributeRule extends TextParserRule {
   static final valueExpression =
       FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant);
 
-  static String groupNameValue='value';
+  static String groupNameValue = 'value';
 
   static createExpression(String name) => FluentRegex()
       .whiteSpace(Quantity.oneOrMoreTimes())
@@ -101,20 +101,16 @@ class ProjectFilePathAttributeRule extends AttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      try {
-        return Future.value(Attribute<ProjectFilePath>(
-          parent: parent,
-          name: name,
-          value: ProjectFilePath(stringValueFor(match)),
-        ));
-      } on Exception catch (e) {
-        _throwParserWarning(e);
-      }
-
+    try {
+      return Future.value(Attribute<ProjectFilePath>(
+        parent: parent,
+        name: name,
+        value: ProjectFilePath(stringValueFor(match)),
+      ));
+    } on Exception catch (e) {
+      _throwParserWarning(e);
+    }
   }
-
-
-
 }
 
 class UriSuffixAttributeRule extends AttributeRule {
@@ -122,7 +118,7 @@ class UriSuffixAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
       return Future.value(Attribute<UriSuffixPath>(
         parent: parent,
@@ -140,7 +136,7 @@ class DartFilePathAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
       return Future.value(Attribute<ProjectFilePath>(
         parent: parent,
@@ -179,7 +175,7 @@ class StringAttributeRule extends AttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
       return Future.value(Attribute<String>(
         parent: parent,
@@ -197,7 +193,7 @@ class TitleAttributeRule extends StringAttributeRule {
       : super(name, required: required);
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) {
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
       return Future.value(Attribute<String>(
         parent: parent,
@@ -214,5 +210,3 @@ class TitleAttributeRule extends StringAttributeRule {
     return text;
   }
 }
-
-

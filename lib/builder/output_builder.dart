@@ -28,8 +28,7 @@ class OutputBuilder extends Builder {
         FutureOr<String> contents = markdownPage.toString();
         buildStep.writeAsString(assetId, contents);
       } on Exception catch (e) {
-        print(
-            'Could not write file: ${markdownPage.destinationFilePath}, $e');
+        print('Could not write file: ${markdownPage.destinationFilePath}, $e');
       }
     }
   }
@@ -52,7 +51,8 @@ class OutputBuilder extends Builder {
     templateFilePaths.forEach((String sourcePath) {
       try {
         var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-        String outputPathRelativeToLib = factory.createDestinationPath(sourcePath).relativeToLibDirectory;
+        String outputPathRelativeToLib =
+            factory.createDestinationPath(sourcePath).relativeToLibDirectory;
         outputPathsRelativeToLib.add(outputPathRelativeToLib);
       } on Error {
         // Continue

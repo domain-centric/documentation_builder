@@ -36,7 +36,7 @@ abstract class Parser {
           }
         } else {
           var childrenNodesToReplace =
-              rule.findChildNodesToReplace(uncompletedNode);
+              await rule.findChildNodesToReplace(uncompletedNode);
           if (childrenNodesToReplace.isEmpty) {
             _markRuleAsCompletedForNode(rule, uncompletedNode);
           } else {
@@ -107,7 +107,7 @@ abstract class ParserRule {
   /// checks the whole [ParentNode] (all it children) if it can replace [Node] (s).
   /// We do not need to check the children's children (do not need a recursive call),
   /// the Parser will do this for us
-  ChildNodesToReplace findChildNodesToReplace(ParentNode model);
+  Future<ChildNodesToReplace> findChildNodesToReplace(ParentNode model);
 
   Future<List<Node>> createReplacementNodes(
       ChildNodesToReplace childNodesToReplace);
@@ -120,12 +120,16 @@ abstract class TextParserRule extends ParserRule {
 
   TextParserRule(this.expression);
 
+  @override
   /// Searches all child nodes for [TextNode]s that have a match with the [expression]
-  ChildNodesToReplace findChildNodesToReplace(ParentNode node) {
+  Future<ChildNodesToReplace> findChildNodesToReplace(ParentNode node) async {
     for (Node child in node.children) {
-      if (child is TextNode && createMatches(child.text).isNotEmpty)
-        return ChildNodesToReplace.foundNode(child);
-
+      if (child is TextNode ) {
+        List<RegExpMatch> matches = await createMatches(child.text);
+        if (matches.isNotEmpty) {
+          return ChildNodesToReplace.foundNode(child);
+        }
+      }
     }
     return ChildNodesToReplace.notFound();
   }
@@ -139,30 +143,32 @@ abstract class TextParserRule extends ParserRule {
     var parent = textNode.parent!;
     var test = textNode.text;
 
-    List<RegExpMatch> matches=createMatches(test);
+    List<RegExpMatch> matches = await createMatches(test);
 
-    List<Node> replacementNodes=[];
+    List<Node> replacementNodes = [];
 
-    TextNode? leadingTextNode = createTextBeforeNode(textNode, matches.first.start);
+    TextNode? leadingTextNode =
+        createTextBeforeNode(textNode, matches.first.start);
     if (leadingTextNode != null) replacementNodes.add(leadingTextNode);
 
     RegExpMatch? previousMatch;
     for (RegExpMatch match in matches) {
-      if (previousMatch!=null) {
-        int betweenStart= previousMatch.end;
-        int betweenEnd= match.start;
-        if (betweenStart<betweenEnd) {
+      if (previousMatch != null) {
+        int betweenStart = previousMatch.end;
+        int betweenEnd = match.start;
+        if (betweenStart < betweenEnd) {
           var betweenText = test.substring(betweenStart, betweenEnd);
           var betweenNode = TextNode(parent, betweenText);
           replacementNodes.add(betweenNode);
         }
       }
-      Node replacementNode=await createReplacementNode(parent, match);
+      Node replacementNode = await createReplacementNode(parent, match);
       replacementNodes.add(replacementNode);
-      previousMatch=match;
+      previousMatch = match;
     }
 
-    TextNode? trailingTextNode = createTrailingTextNode(textNode, matches.last.end);
+    TextNode? trailingTextNode =
+        createTrailingTextNode(textNode, matches.last.end);
     if (trailingTextNode != null) replacementNodes.add(trailingTextNode);
 
     return replacementNodes;
@@ -200,14 +206,12 @@ abstract class TextParserRule extends ParserRule {
     return matches;
   }
 
-
-
   /// A method that can be overridden by sibling classes if additional logic is needed
   /// This is the default operation
-  List<RegExpMatch> createMatches(String text) {
-    var matches=expression.allMatches(text).toList();
-    matches=removeMatchesInsideMatches(matches);
-    return matches;
+  Future<List<RegExpMatch>> createMatches(String text) {
+    var matches = expression.allMatches(text).toList();
+    matches = removeMatchesInsideMatches(matches);
+    return Future.value(matches);
   }
 }
 

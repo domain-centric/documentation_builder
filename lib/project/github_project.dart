@@ -16,32 +16,6 @@ class GitHubProject {
 
   GitHubProject._() : uri = _createUri();
 
-  List<LinkDefinition> get linkDefinitions => [
-    LinkDefinition(
-        name: 'GitHub',
-        defaultTitle: 'GitHub project',
-        uri: GitHubProject().uri!),
-    LinkDefinition(
-        name: 'GitHubWiki',
-        defaultTitle: 'GitHub Wiki',
-        uri: GitHubProject().wikiUri!),
-    LinkDefinition(
-        name: 'GitHubMilestones',
-        defaultTitle: 'GitHub milestones',
-        uri: GitHubProject().milestonesUri!),
-    LinkDefinition(
-        name: 'GitHubReleases',
-        defaultTitle: 'GitHub releases',
-        uri: GitHubProject().releasesUri!),
-    LinkDefinition(
-        name: 'GitHubPullRequests',
-        defaultTitle: 'GitHub pull requests',
-        uri: GitHubProject().pullRequestsUri!),
-    LinkDefinition(
-        name: 'GitHubRaw',
-        defaultTitle: 'GitHub raw source file',
-        uri: GitHubProject().rawUri!),
-  ];
 
   /// returns a [Uri] to the where the project is stored on https://github.com
   /// or null when no github information was found
@@ -113,9 +87,36 @@ class GitHubProject {
   _createUriWithSuffix(String suffix) {
     if (uri == null) {
       return null;
+    } else {
+      return uri!.withPathSuffix(suffix);
     }
-    Uri uriWithSuffix = uri!.replace(path: '${uri!.path}/$suffix');
-    //TODO test if uriWithSuffix exists otherwise return null
-    return uriWithSuffix;
   }
+
+  List<LinkDefinition> get linkDefinitions => [
+    LinkDefinition(
+        name: 'GitHub',
+        defaultTitle: 'GitHub project',
+        uri: GitHubProject().uri!),
+    LinkDefinition(
+        name: 'GitHubWiki',
+        defaultTitle: 'GitHub Wiki',
+        uri: GitHubProject().wikiUri!),
+    LinkDefinition(
+        name: 'GitHubMilestones',
+        defaultTitle: 'GitHub milestones',
+        uri: GitHubProject().milestonesUri!),
+    LinkDefinition(
+        name: 'GitHubReleases',
+        defaultTitle: 'GitHub releases',
+        uri: GitHubProject().releasesUri!),
+    LinkDefinition(
+        name: 'GitHubPullRequests',
+        defaultTitle: 'GitHub pull requests',
+        uri: GitHubProject().pullRequestsUri!),
+    LinkDefinition(
+        name: 'GitHubRaw',
+        defaultTitle: 'GitHub raw source file',
+        uri: GitHubProject().rawUri!),
+  ];
+
 }

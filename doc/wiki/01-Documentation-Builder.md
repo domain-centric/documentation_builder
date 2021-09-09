@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/01-Documentation-Builder.mdt using the documentation_builder package on: 2021-09-09 20:20:11.749030.)
+[//]: # (This file was generated from: doc/template/01-Documentation-Builder.mdt using the documentation_builder package on: 2021-09-09 22:26:29.106968.)
 <a id='lib-builder-documentation-builder-dart-documentationbuilder'></a>Generates markdown documentation files from markdown template files.
 This can be useful when you write documentation for a
 [Dart](https://dart.dev/) or [Flutter](https://flutter.dev/) project
@@ -10,5 +10,5 @@ It can generate the following files:
 - example.md file
 - Github Wiki pages (also markdown files)
 
-[documentation_builder] is not intended to generate API documentation.
+[documentation_builder](https://pub.dev/packages/documentation_builder) is not intended to generate API documentation.
 Use [dartdoc](https://dart.dev/tools/dartdoc) instead.

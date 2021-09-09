@@ -24,7 +24,8 @@ class TagParser extends Parser {
           ImportDartDocTagRule(),
         ]);
 }
-const groupNameAttributes='attributes';
+
+const groupNameAttributes = 'attributes';
 
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
@@ -41,10 +42,10 @@ abstract class TagRule extends TextParserRule {
       .ignoreCase();
 
   @override
-  Future<Node> createReplacementNode(ParentNode parent,  RegExpMatch match) async {
+  Future<Node> createReplacementNode(
+      ParentNode parent, RegExpMatch match) async {
     try {
-      String attributesText = match.namedGroup(groupNameAttributes)??
-          '';
+      String attributesText = match.namedGroup(groupNameAttributes) ?? '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributeNamesAndValues =
           await tagAttributeParser.parseToNameAndValues(attributesText);
@@ -79,6 +80,7 @@ abstract class Tag extends ParentNode {
 
   Future<List<Node>> createChildren();
 }
+
 /// - **{ImportFile file:'OtherTemplateFile.mdt' title='## Other Template File'&rcub;**
 /// - Imports another text file or markdown file.
 /// - Attributes:
@@ -178,7 +180,7 @@ class ImportDartCodeTag extends Tag {
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var codePrefix = TextNode(this, "\n```dart\n");
-    var code =  _readCodeFile(path.toFile());
+    var code = _readCodeFile(path.toFile());
     var codeNode = TextNode(this, code);
     var codeSuffix = TextNode(this, "\n```\n");
     return [
@@ -188,7 +190,6 @@ class ImportDartCodeTag extends Tag {
       codeSuffix,
     ];
   }
-
 }
 
 /// Recognizes and creates an [ImportDartCodeTag]
@@ -204,7 +205,6 @@ class ImportDartCodeTagRule extends TagRule {
           ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
       ImportDartCodeTag(parent, attributeNamesAndValues);
 }
-
 
 /// - **{ImportDartDoc path='lib\my_lib.dart|MyClass' title='## My Class'&rcub;**
 /// - Imports Dart documentation comments from a library member in a dart file.
@@ -223,7 +223,7 @@ class ImportDartDocTag extends Tag {
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var documentation = await _readDocumentationComments(parent!, path);
-   // var documentation = _removeLeadingTripleSlashes(documentationComments);
+    // var documentation = _removeLeadingTripleSlashes(documentationComments);
     var codeNode = TextNode(this, documentation);
     return [
       titleAndOrAnchor,
@@ -235,7 +235,8 @@ class ImportDartDocTag extends Tag {
       ParentNode parent, DartCodePath path) async {
     validate(path);
 
-    analyzer.LibraryElement library = await parseLibrary(parent, path.dartFilePath);
+    analyzer.LibraryElement library =
+        await parseLibrary(parent, path.dartFilePath);
 
     analyzer.Element foundElement = findAnalyzerElement(library, path);
 
@@ -280,7 +281,8 @@ class ImportDartDocTag extends Tag {
     }
   }
 
-  analyzer.Element findAnalyzerElement(analyzer.Element element, DartCodePath path) {
+  analyzer.Element findAnalyzerElement(
+      analyzer.Element element, DartCodePath path) {
     var visitor = ElementFinder(path.dartMemberPath!);
     element.visitChildren(visitor);
 
@@ -292,7 +294,8 @@ class ImportDartDocTag extends Tag {
     return foundElement;
   }
 
-  void validateIfMemberFound(analyzer.Element? foundElement, DartCodePath path) {
+  void validateIfMemberFound(
+      analyzer.Element? foundElement, DartCodePath path) {
     if (foundElement == null) {}
   }
 
@@ -309,7 +312,8 @@ class ElementFinder implements analyzer.ElementVisitor {
 
   analyzer.Element? foundElement;
 
-  ElementFinder(DartMemberPath dartMemberPath) : memberPathToFind=dartMemberPath.toString();
+  ElementFinder(DartMemberPath dartMemberPath)
+      : memberPathToFind = dartMemberPath.toString();
 
   @override
   visitClassElement(analyzer.ClassElement element) {
@@ -435,15 +439,13 @@ class ElementFinder implements analyzer.ElementVisitor {
   }
 
   String _memberPath(analyzer.Element element, List<String> path) {
-    String pathSegment=element.displayName;
-    if (pathSegment.trim().isNotEmpty)
-      path.insert(0, pathSegment);
+    String pathSegment = element.displayName;
+    if (pathSegment.trim().isNotEmpty) path.insert(0, pathSegment);
     var parent = element.enclosingElement;
-    if (parent!=null) _memberPath(parent, path);
+    if (parent != null) _memberPath(parent, path);
     return path.join('.');
   }
 }
-
 
 Future<analyzer.LibraryElement> parseLibrary(
     ParentNode parent, ProjectFilePath dartFile) async {
