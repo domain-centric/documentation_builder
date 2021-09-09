@@ -8,7 +8,7 @@ import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/parser/tag_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 main() {
   group('class: ImportFileTagRule', () {

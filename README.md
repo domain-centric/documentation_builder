@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-09 19:58:22.414333.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-09 20:20:11.753020.)
 [![Pub Package](https://img.shields.io/pub/v/fluent_regex)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
@@ -35,9 +35,9 @@ You can view the templates files and the generated output on https://github.com 
   - [Generated Markdown File Raw](https://raw.githubusercontent.com/efficientyboosters/documentation_builder/main/README.md)
   - [Generated Markdown File Rendered](https://pub.dev/packages/documentation_builder)
 - CHANGELOG
-  - [Markdown Template File](https://raw.githubusercontent.com/efficientyboosters/documentation_builder/main/doc/template/CHANGELOG.mdt)
-  - [Generated Markdown File Raw](https://raw.githubusercontent.com/efficientyboosters/documentation_builder/main/CHANGELOG.md)
-  - [PubDevProjectVersions title='Generated Markdown Rendered']
+  - TODO (GitHubRaw suffix='/main/doc/template/CHANGELOG.mdt' title='Markdown Template File']
+  - TODO (GitHubRaw suffix='/main/CHANGELOG.md' title='Generated Markdown File Raw']
+  - [Generated Markdown Rendered](https://pub.dev/packages/documentation_builder/versions)
 - Wiki pages
   - [Markdown Template Files](https://github.com/efficientyboosters/documentation_builder/tree/main/doc/template) (select a file and select raw to see the source)
   - [Generated Markdown Files Raw](https://github.com/efficientyboosters/documentation_builder/tree/main/doc/wiki) (select a file and select raw to see the source)

@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-09-09 19:58:22.412304.)
+[//]: # (This file was generated from: doc/template/05-Generating-Documentation-Files.mdt using the documentation_builder package on: 2021-09-09 20:20:11.751025.)
 <a id='lib-builder-documentation-builder-dart-documentationbuilder-run'></a>The [documentation_builder] uses several builder that are run with the [build_runner] package.
 
 The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):

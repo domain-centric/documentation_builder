@@ -5,7 +5,8 @@ import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
+
 
 main() {
   String suffixName = UriSuffixAttributeRule().name;
