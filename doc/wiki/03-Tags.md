@@ -1,7 +1,8 @@
-[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-09 22:26:29.114952.)
+[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-10 19:47:13.945930.)
 <a id='lib-parser-tag-parser-dart-tag'></a>[Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
  [DocumentationBuilder] with other information
- (e.g. by an imported Dart Documentation Comment) before the output file is written.
+ (e.g. by an imported Dart Documentation Comment) before the
+ [GeneratedMarkdownFile] is written.
 
 [Tag]s:
 - are surrounded by curly brackets: {}

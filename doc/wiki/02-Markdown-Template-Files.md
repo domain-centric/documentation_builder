@@ -1,9 +1,10 @@
-[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-09 22:26:29.113948.)
+[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-10 19:47:13.944944.)
 <a id='lib-builder-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
 - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 - [Tag]s
 - [Link]s
 - [Badge]s
+
 [MarkdownTemplateFile]s are converted to [GeneratedMarkdownFile]s
 
 
@@ -13,16 +14,32 @@ by the [DocumentationBuilder].
 
 <a id='readme-template-file'></a>
 ### README template file
-README.md files are .....TODO explain what a README file is and what it should contain.
-A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the README.md file in the root of your dart project.
+A README.md file is tippacally the first item a visitor will see when visiting
+your package on https://pub.dev or visiting your code on https://github.com.
+
+A README.md file typically include information on:
+- What the project does
+- Why the project is useful
+- How to use it
+- other relevant high level information
+
+A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+to create or override the README.md file in the root of your dart project.
 
 
 <a id='changelog-template-file'></a>
 ### CHANGELOG template file
-CHANGELOG.mdt files are .....TODO explain what a CHANGELOG file is and what it should contain.
-A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the CHANGELOG.md file in the root of your dart project.
-A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG]
-which will generate the versions assuming you are using GitHub and mark very version as a milestone
+A CHANGELOG.md is a log or record of all notable changes made to a project.
+To support tools that parse CHANGELOG.md, use the following format:
+- Each version has its own section with a heading.
+- The version headings are either a chapter (#) or a paragraph (##).
+- The version heading text contains a package version number, optionally prefixed with “v”.
+
+A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+to create or override the CHANGELOG.md file in the root of your dart project.
+
+A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
+versions assuming you are using GitHub and mark very version as a milestone
 
 
 <a id='wiki-template-files'></a>
@@ -40,5 +57,7 @@ Any [MarkdownTemplate] is considered to be a [WikiMarkdownTemplateFile] when:
 <a id='example-template-file'></a>
 ### example template file
 Your Dart/Flutter project can have an example.md file
-A example.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder] to create or override the example.md file in the example folder of your dart project.
+A example.mdt is a [MarkdownTemplate] that is used by the
+[DocumentationBuilder] to create or override the example.md file in the
+example folder of your dart project.
 

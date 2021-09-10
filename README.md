@@ -1,5 +1,5 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-09 22:26:29.117938.)
-[![Pub Package](https://img.shields.io/pub/v/fluent_regex)](https://pub.dev/packages/documentation_builder)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-10 19:47:13.947929.)
+[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
 [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)

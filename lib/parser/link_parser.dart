@@ -22,12 +22,12 @@ class LinkParser extends Parser {
         ]);
 }
 
-/// A text between square brackets [] followed by a [Uri] between parentheses (),
-/// These will be replaced by a complete [Link]
-/// Example: [Search the webt&rsqb;(https://google.com)
-///
-/// This Rule was added and will be parces first to prevent complete links
-/// to be replaced by incomplete links
+/// A complete Hyperlink in Markdown is a text between square brackets []
+/// followed by a [Uri] between parentheses (),
+/// e.g.: [Search the webt&rsqb;(https://google.com)
+
+// This Rule was added and will be parses first to prevent complete links
+// to be replaced by incomplete links
 class CompleteLinkRule extends TextParserRule {
   CompleteLinkRule() : super(createExpression());
 
@@ -123,8 +123,8 @@ abstract class InCompleteLinkRule extends TextParserRule {
 
 /// You can refer to other parts of the documentation using [Link]s.
 /// [Link]s:
-/// - are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass]
-/// - can have optional or required attributes, e.g. []
+/// - are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass&rsqb;
+/// - can have optional or required attributes, e.g.: [MyClass title='Link to my class'&rsqb;
 ///
 /// The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing http uri.
 /// The [Link] will not be replaced to a hyperlink when the uri does not exits.
@@ -316,8 +316,8 @@ class PubDevPackageLinkRule extends InCompleteLinkRule {
   }
 
   @override
-  Link createLinkNode(ParentNode parent, String name,
-      Map<String, dynamic> attributes) {
+  Link createLinkNode(
+      ParentNode parent, String name, Map<String, dynamic> attributes) {
     String title = findTitle(name, attributes);
     Uri uri = PubDevProject.forProjectName(name).uri!;
     return Link(parent: parent, title: title, uri: uri);
@@ -342,13 +342,10 @@ class PubDevPackageLinkRule extends InCompleteLinkRule {
     List<RegExpMatch> pubDevPackageMatches = [];
     for (RegExpMatch match in matches) {
       String tagName = match.namedGroup(InCompleteLinkRule.groupNameName)!;
-      bool exists = await PubDevProject.forProjectName(tagName)
-          .uri!
-          .canGetWithHttp();
+      bool exists =
+          await PubDevProject.forProjectName(tagName).uri!.canGetWithHttp();
       if (exists) pubDevPackageMatches.add(match);
     }
     return pubDevPackageMatches;
   }
-
-
 }

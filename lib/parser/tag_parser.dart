@@ -65,7 +65,8 @@ abstract class TagRule extends TextParserRule {
 
 /// [Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
 ///  [DocumentationBuilder] with other information
-///  (e.g. by an imported Dart Documentation Comment) before the output file is written.
+///  (e.g. by an imported Dart Documentation Comment) before the
+///  [GeneratedMarkdownFile] is written.
 ///
 /// [Tag]s:
 /// - are surrounded by curly brackets: {}
