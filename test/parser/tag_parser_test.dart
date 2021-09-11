@@ -313,7 +313,7 @@ main() {
 Anchor createTestAnchor(String title) {
   RootNode rootNode = RootNode();
   var markdownPage =
-      ReadMeFactory().createMarkdownPage(rootNode, 'doc/template/README.mdt');
+      ReadMeFactory().createMarkdownTemplate(rootNode, 'doc/template/README.mdt');
   var anchor = Anchor(markdownPage, title);
   markdownPage.children.add(anchor);
   return anchor;
@@ -340,7 +340,7 @@ DocumentationModel createModelFromTemplateFiles() {
   templateFilePaths.forEach((String sourcePath) {
     try {
       var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-      var markdownPage = factory.createMarkdownPage(model, sourcePath);
+      var markdownPage = factory.createMarkdownTemplate(model, sourcePath);
       model.add(markdownPage);
     } on Error {
       // Continue

@@ -32,7 +32,7 @@ class MarkdownTemplateBuilder implements Builder {
           factories.firstWhere((f) => f.canCreateFor(markdownTemplatePath));
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
-      var markdownPage = factory.createMarkdownPage(model, buildStep.inputId.path);
+      var markdownPage = factory.createMarkdownTemplate(model, buildStep.inputId.path);
 
       model.add(markdownPage);
     } on Error {
@@ -59,7 +59,7 @@ class GeneratedMarkdownFile {}
 /// The [MarkdownTemplate] will put the contents of the [MarkdownTemplateFile] as [TextNode] in its [children]
 /// The [DocumentationParser] will replace this [TextNode] with multiple [Node]s if needed.
 /// The [OutputBuilder] converts each [MarkdownTemplate] into a [GeneratedMarkdownFile]
-class MarkdownTemplate extends ParentNode {
+class MarkdownTemplate extends ParentNode implements Comparable {
 
   /// The [MarkdownTemplateFile]
   final ProjectFilePath sourceFilePath;
@@ -71,7 +71,12 @@ class MarkdownTemplate extends ParentNode {
   /// null if it does not exits of is unknown
   final Uri? destinationWebUri;
 
+  /// [MarkdownTemplateFactory] that created this [MarkdownTemplate]
+  /// to determine its type.
+  final MarkdownTemplateFactory factory;
+
   MarkdownTemplate({
+    required this.factory,
     required ParentNode parent,
     required String sourcePath,
     required this.destinationFilePath,
@@ -100,6 +105,22 @@ class MarkdownTemplate extends ParentNode {
   String thisFileWasGeneratedComment(ProjectFilePath sourcePath) =>
       '[//]: # (This file was generated from: ${sourcePath.toString()} using the documentation_builder package on: ${DateTime.now()}.)\n';
 
+  /// Orders wiki pages first.
+  @override
+  int compareTo(other) {
+    if (this.factory is WikiFactory ) {
+      if (other is MarkdownTemplate && other.factory is WikiFactory) {
+        // both are wiki pages so compare names
+        return this.destinationFilePath.path.compareTo(other.destinationFilePath.path);
+      }
+      // this is a wiki page and other is not a wiki page so this comes before
+      return -1;
+    } else {
+      // this is not a wiki page so this comes after
+      return 1;
+    }
+  }
+
 }
 
 abstract class MarkdownTemplateFactory {
@@ -113,8 +134,9 @@ abstract class MarkdownTemplateFactory {
     return fileNameExpression.hasMatch(markdownTemplatePath);
   }
 
-  MarkdownTemplate createMarkdownPage(ParentNode parent, String sourceFilePath) {
+  MarkdownTemplate createMarkdownTemplate(ParentNode parent, String sourceFilePath) {
     return MarkdownTemplate(
+      factory: this,
       parent: parent,
       sourcePath: sourceFilePath,
       destinationFilePath: createDestinationPath(sourceFilePath),

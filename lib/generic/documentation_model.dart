@@ -31,6 +31,16 @@ class DocumentationModel extends RootNode {
       // No double destination paths found. Perfect!
     }
   }
+
+  /// finds all [MarkdownTemplate]s and orders them with wiki pages first.
+  List<MarkdownTemplate> findOrderedMarkdownTemplateFiles() {
+    List<MarkdownTemplate> markdownTemplates= children
+      .where((child) => child is MarkdownTemplate)
+      .map<MarkdownTemplate>((child) => child as MarkdownTemplate)
+      .toList();
+    markdownTemplates.sort();
+    return markdownTemplates;
+  }
 }
 
 /// A [Resource] containing the [DocumentationModel] so that it can be shared between builder.

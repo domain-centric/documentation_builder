@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-10 19:47:13.944944.)
+[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-11 16:16:13.135831.)
 <a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link]s.
 [Link]s:
 - are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass&rsqb;
@@ -14,7 +14,7 @@ A complete Hyperlink in Markdown is a text between square brackets []
 followed by a [Uri] between parentheses (),
 e.g.: [Search the webt&rsqb;(https://google.com)
 
-h
+
 <a id='github-project-links'></a>
 ## GitHub project links
 [GitHubProjectLink]s point to a [GitHub](https://github.com/) page of the
@@ -54,38 +54,6 @@ You can the following optional attributes:
 
 <a id='pubdev-package-links'></a>
 ## PubDev package links
-A library can have members such as a:
-- constant
-- function
-- enum (an enum can have value members)
-- class (a class can have members such as methods, fields, and field access methods)
-- extension (an extension can have members such as methods, fields, and field access methods)
-
-These library members can be referred to in [MarkdownPage]'s using brackets. e.g.
-- [myConstant]
-- [myFunction]
-- [MyEnum]
-  - [MyEnum.myValue]
-- [MyClass]
-  - [MyClass.myField]
-  - [MyClass.get.myField]
-  - [MyClass.set.myField]
-  - [MyClass.myMethod]
-- [MyExtension]
-  - [MyClass.myField]
-  - [MyExtension.get.myField]
-  - [MyExtension.set.myField]
-  - [MyExtension.myMethod]
-You can also include the library name in case a project uses same member names in different libraries, e.g.:
-- [MyLib/myConstant]
-- [MyLib/myFunction]
-- etc.
-
-The [DocumentationBuilder] will try to resolve these [MemberLink]s in the following order:
-- Within the [MarkdownPage], e.g.: link it to the position of a [ImportDartDocTag]
-- Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
-- Link it to a [GitHubProjectCodeLink]
-The [Link] will not be replaced when the [Link] can not be resolved
 A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
 
 The [DocumentationBuilder] will check if any valid package name
@@ -100,6 +68,23 @@ It will be converter to a hyperlink if it exists. e.g.:
 You can use the optional title attribute, e.g.:
 [json_serializable title='Package for json conversion'&rsqb; will be replaced by
 [Package for json conversion&rsqb;(https://pub.dev/packages/json_serializable)
+
+
+<a id='markdown-file-links'></a>
+## Markdown file links
+A [MarkdownFileLink] links point to an other [GeneratedMarkdownFile].
+
+The [DocumentationBuilder] will try to find this [GeneratedMarkdownFile] and
+replace the link to a hyperlink with an absolute Url.
+
+You can use :
+- the template name e.g.: [README.mdt&rsqb;
+- the output name e.g.: [README.md&rsqb;
+- the [ProjectFilePath], e.g.: [doc/template/README.md&rsqb;
+- an optional optional title attribute, e.g.:
+[README.mdt title='About this project'&rsqb;
+
+Note that the [DocumentationBuilder] ignores letter casing.
 
 
  //TODO DartCodeMemberLinkRule

@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-10 19:47:13.944944.)
+[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-11 16:16:13.133825.)
 <a id='lib-builder-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
 - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 - [Tag]s

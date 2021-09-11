@@ -125,7 +125,7 @@ abstract class TextParserRule extends ParserRule {
   Future<ChildNodesToReplace> findChildNodesToReplace(ParentNode node) async {
     for (Node child in node.children) {
       if (child is TextNode ) {
-        List<RegExpMatch> matches = await createMatches(child.text);
+        List<RegExpMatch> matches = await createMatches(child);
         if (matches.isNotEmpty) {
           return ChildNodesToReplace.foundNode(child);
         }
@@ -141,9 +141,8 @@ abstract class TextParserRule extends ParserRule {
       ChildNodesToReplace childNodesToReplace) async {
     TextNode textNode = childNodesToReplace.first as TextNode;
     var parent = textNode.parent!;
-    var test = textNode.text;
 
-    List<RegExpMatch> matches = await createMatches(test);
+    List<RegExpMatch> matches = await createMatches(textNode);
 
     List<Node> replacementNodes = [];
 
@@ -157,7 +156,7 @@ abstract class TextParserRule extends ParserRule {
         int betweenStart = previousMatch.end;
         int betweenEnd = match.start;
         if (betweenStart < betweenEnd) {
-          var betweenText = test.substring(betweenStart, betweenEnd);
+          var betweenText = textNode.text.substring(betweenStart, betweenEnd);
           var betweenNode = TextNode(parent, betweenText);
           replacementNodes.add(betweenNode);
         }
@@ -208,7 +207,8 @@ abstract class TextParserRule extends ParserRule {
 
   /// A method that can be overridden by sibling classes if additional logic is needed
   /// This is the default operation
-  Future<List<RegExpMatch>> createMatches(String text) {
+  Future<List<RegExpMatch>> createMatches(TextNode textNode) {
+    String text=textNode.text;
     var matches = expression.allMatches(text).toList();
     matches = removeMatchesInsideMatches(matches);
     return Future.value(matches);
@@ -312,7 +312,7 @@ class ParentNode extends Node {
 
   /// Finds the first parent of a given [Type]
   T? findParent<T>() {
-    if (this.runtimeType == T) {
+    if (this is T) {
       return this as T;
     } else {
       if (parent != null) {
@@ -346,6 +346,7 @@ class ParentNode extends Node {
       if (child is ParentNode) child.resetLastCompletedRuleIndexes();
     }
   }
+
 }
 
 /// The RootNode must be a [ParentNode] without a parent

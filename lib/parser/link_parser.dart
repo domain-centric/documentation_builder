@@ -1,11 +1,13 @@
 import 'package:documentation_builder/builder/documentation_builder.dart';
 import 'package:documentation_builder/builder/template_builder.dart';
+import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
+import 'package:collection/collection.dart';
 
 /// The [LinkParser] searches for [TextNode]'s that contain texts that represent a [Link]
 /// It then replaces these [TextNode]'s into a [Link] and additional [TextNode]'s for the remaining text.
@@ -15,9 +17,10 @@ class LinkParser extends Parser {
           CompleteLinkRule(),
           GitHubProjectLinkRule(),
           PubDevProjectLinkRule(),
+          PubDevPackageLinkRule(),
 //TODO DartCodeMemberLinkRule
 //TODO MarkDownFileLinkRule
-          PubDevPackageLinkRule(),
+          MarkdownFileLinkRule(),
 //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES
         ]);
 }
@@ -119,6 +122,15 @@ abstract class InCompleteLinkRule extends TextParserRule {
     String name,
     Map<String, dynamic> attributes,
   );
+
+  String findTitle(String defaultTitle, attributes) {
+    final String nameAttribute = TitleAttributeRule().name;
+    if (attributes.keys.contains(nameAttribute)) {
+      return attributes[nameAttribute];
+    } else {
+      return defaultTitle;
+    }
+  }
 }
 
 /// You can refer to other parts of the documentation using [Link]s.
@@ -181,7 +193,7 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
       ParentNode parent, String name, Map<String, dynamic> attributes) {
     LinkDefinition linkDef = linkDefinitions.firstWhere(
         (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
-    String title = findTitle(linkDef, attributes);
+    String title = findTitle(linkDef.defaultTitle, attributes);
     Uri uri = createUri(linkDef, attributes);
     return Link(parent: parent, title: title, uri: uri);
   }
@@ -194,15 +206,6 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
       uri = uri.withPathSuffix(suffix.path);
     }
     return uri;
-  }
-
-  String findTitle(LinkDefinition linkDef, Map<String, dynamic> attributes) {
-    final String name = TitleAttributeRule().name;
-    if (attributes.keys.contains(name)) {
-      return attributes[name];
-    } else {
-      return linkDef.defaultTitle;
-    }
   }
 }
 
@@ -255,6 +258,127 @@ class PubDevProjectLinkRule extends LinkDefinitionsRule {
   PubDevProjectLinkRule() : super(PubDevProject().linkDefinitions);
 }
 
+/// A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
+///
+/// The [DocumentationBuilder] will check if any valid package name
+/// (lower case letter, numbers and underscores) between
+/// square brackets exists as a package on https://pub.dev.
+///
+/// It will be converter to a hyperlink if it exists. e.g.:
+/// - [json_serializable&rsqb; will be replaced by
+///   [json_serializable&rsqb;(https://pub.dev/packages/json_serializable)
+/// - [none_existent_package] will remain the same.
+///
+/// You can use the optional title attribute, e.g.:
+/// [json_serializable title='Package for json conversion'&rsqb; will be replaced by
+/// [Package for json conversion&rsqb;(https://pub.dev/packages/json_serializable)
+class PubDevPackageLinkRule extends InCompleteLinkRule {
+  PubDevPackageLinkRule()
+      : super([TitleAttributeRule()], nameExpression: createNameExpression());
+
+  @override
+  Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>
+      await pubDevPackageMatches(textNode);
+
+  @override
+  Link createLinkNode(
+      ParentNode parent, String name, Map<String, dynamic> attributes) {
+    String title = findTitle(name, attributes);
+    Uri uri = PubDevProject.forProjectName(name).uri!;
+    return Link(parent: parent, title: title, uri: uri);
+  }
+
+  static FluentRegex createNameExpression() => FluentRegex().characterSet(
+      CharacterSet().addLetters(CaseType.lower).addDigits().addLiterals('_'),
+      Quantity.oneOrMoreTimes());
+
+  /// Returns matches that represent existing packages on https://pub.dev only
+  Future<List<RegExpMatch>> pubDevPackageMatches(TextNode textNode) async {
+    var matches = await super.createMatches(textNode);
+    List<RegExpMatch> pubDevPackageMatches = [];
+    for (RegExpMatch match in matches) {
+      String tagName = match.namedGroup(InCompleteLinkRule.groupNameName)!;
+      bool exists =
+          await PubDevProject.forProjectName(tagName).uri!.canGetWithHttp();
+      if (exists) pubDevPackageMatches.add(match);
+    }
+    return pubDevPackageMatches;
+  }
+}
+
+/// A [MarkdownFileLink] links point to an other [GeneratedMarkdownFile].
+///
+/// The [DocumentationBuilder] will try to find this [GeneratedMarkdownFile] and
+/// replace the link to a hyperlink with an absolute Url.
+///
+/// You can use :
+/// - the template name e.g.: [README.mdt&rsqb;
+/// - the output name e.g.: [README.md&rsqb;
+/// - the [ProjectFilePath], e.g.: [doc/template/README.md&rsqb;
+/// - an optional optional title attribute, e.g.:
+/// [README.mdt title='About this project'&rsqb;
+///
+/// Note that the [DocumentationBuilder] ignores letter casing.
+class MarkdownFileLinkRule extends InCompleteLinkRule {
+  MarkdownFileLinkRule()
+      : super([TitleAttributeRule()],
+            nameExpression: ProjectFilePath.expression.startOfLine(false).endOfLine(false));
+
+  @override
+  Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>
+      await markdownFileMatches(textNode);
+
+  @override
+  Link createLinkNode(
+      ParentNode parent, String path, Map<String, dynamic> attributes) {
+    var defaultTitle = createTitleFromPath(path);
+    String title = findTitle(defaultTitle, attributes);
+    Uri uri = findMarkdownTemplate(parent, path)!.destinationWebUri!;
+    return Link(parent: parent, title: title, uri: uri);
+  }
+
+  /// Returns matches that represent existing [GeneratedMarkdownFile]s
+  Future<List<RegExpMatch>> markdownFileMatches(TextNode textNode) async {
+    var matches = await super.createMatches(textNode);
+    List<RegExpMatch> markdownFileMatches = [];
+    for (RegExpMatch match in matches) {
+      String path = match.namedGroup(InCompleteLinkRule.groupNameName)!;
+      MarkdownTemplate? markdownTemplate = findMarkdownTemplate(textNode.parent!, path);
+
+      if (markdownTemplate != null) markdownFileMatches.add(match);
+    }
+    return markdownFileMatches;
+  }
+
+  /// finds a [MarkdownTemplate] with a sourceFilePath or destinationFilePath
+  /// that ends with path, while ignoring upper or lower case.
+  MarkdownTemplate? findMarkdownTemplate(ParentNode parent, String path) {
+    path = path.toLowerCase();
+    DocumentationModel? model = parent.findParent<DocumentationModel>();
+    if (model==null) return null;
+    var templates = model.findOrderedMarkdownTemplateFiles();
+    return templates.firstWhereOrNull((template) => (template.sourceFilePath.path.toLowerCase().endsWith(path) ||
+            template.destinationFilePath.path.toLowerCase().endsWith(path)) &&
+        template.destinationWebUri != null);
+  }
+
+  static final FluentRegex filePath =
+      FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
+
+  static final FluentRegex fileExtension = FluentRegex()
+      .literal('.')
+      .characterSet(
+          CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
+      .endOfLine();
+
+  String createTitleFromPath(String path) {
+    String fileName = filePath.removeFirst(path);
+    String fileNameWithoutExtension= fileExtension.removeFirst(fileName);
+    String title= fileNameWithoutExtension.replaceAll('-', ' ');
+    return title;
+  }
+}
+
 /// A library can have members such as a:
 /// - constant
 /// - function
@@ -288,64 +412,3 @@ class PubDevProjectLinkRule extends LinkDefinitionsRule {
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
 //TODO
-
-/// A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
-///
-/// The [DocumentationBuilder] will check if any valid package name
-/// (lower case letter, numbers and underscores) between
-/// square brackets exists as a package on https://pub.dev.
-///
-/// It will be converter to a hyperlink if it exists. e.g.:
-/// - [json_serializable&rsqb; will be replaced by
-///   [json_serializable&rsqb;(https://pub.dev/packages/json_serializable)
-/// - [none_existent_package] will remain the same.
-///
-/// You can use the optional title attribute, e.g.:
-/// [json_serializable title='Package for json conversion'&rsqb; will be replaced by
-/// [Package for json conversion&rsqb;(https://pub.dev/packages/json_serializable)
-class PubDevPackageLinkRule extends InCompleteLinkRule {
-  PubDevPackageLinkRule()
-      : super([TitleAttributeRule()], nameExpression: createNameExpression());
-
-  @override
-  Future<List<RegExpMatch>> createMatches(String text) async {
-    var matches = expression.allMatches(text).toList();
-    matches = removeMatchesInsideMatches(matches);
-    matches = await pubDevPackageMatches(matches);
-    return matches;
-  }
-
-  @override
-  Link createLinkNode(
-      ParentNode parent, String name, Map<String, dynamic> attributes) {
-    String title = findTitle(name, attributes);
-    Uri uri = PubDevProject.forProjectName(name).uri!;
-    return Link(parent: parent, title: title, uri: uri);
-  }
-
-  String findTitle(String name, attributes) {
-    final String nameAttribute = TitleAttributeRule().name;
-    if (attributes.keys.contains(nameAttribute)) {
-      return attributes[nameAttribute];
-    } else {
-      return name;
-    }
-  }
-
-  static FluentRegex createNameExpression() => FluentRegex().characterSet(
-      CharacterSet().addLetters(CaseType.lower).addDigits().addLiterals('_'),
-      Quantity.oneOrMoreTimes());
-
-  /// Returns matches that represent existing packages on https://pub.dev only
-  Future<List<RegExpMatch>> pubDevPackageMatches(
-      List<RegExpMatch> matches) async {
-    List<RegExpMatch> pubDevPackageMatches = [];
-    for (RegExpMatch match in matches) {
-      String tagName = match.namedGroup(InCompleteLinkRule.groupNameName)!;
-      bool exists =
-          await PubDevProject.forProjectName(tagName).uri!.canGetWithHttp();
-      if (exists) pubDevPackageMatches.add(match);
-    }
-    return pubDevPackageMatches;
-  }
-}

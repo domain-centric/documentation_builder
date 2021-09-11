@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:documentation_builder/builder/template_builder.dart';
+import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
@@ -161,6 +163,39 @@ main() {
       });
     });
   });
+  group('class: MarkdownFileLinkRule', () {
+    group('field:expression', () {
+      test('file name only has match', () {
+        var rule = MarkdownFileLinkRule();
+        expect(rule.expression.hasMatch("[README.md]"), true);
+      });
+      test('file and path has match', () {
+        var rule = MarkdownFileLinkRule();
+        expect(rule.expression.hasMatch("[doc/template/README.mdt]"), true);
+      });
+      test('wiki file has match', () {
+        var rule = MarkdownFileLinkRule();
+        expect(
+            rule.expression.hasMatch("[01-Documentation-Builder.mdt]"), true);
+      });
+    });
+    group('method: createDefaultTitle', () {
+      test('README.md returns README', () {
+        var rule = MarkdownFileLinkRule();
+        expect(rule.createTitleFromPath("README.md"), 'README');
+      });
+      test("'doc/template/README.mdt' returns README", () {
+        var rule = MarkdownFileLinkRule();
+        expect(rule.createTitleFromPath("doc/template/README.mdt"), 'README');
+      });
+      test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'", () {
+        var rule = MarkdownFileLinkRule();
+        expect(rule.createTitleFromPath("01-Documentation-Builder.mdt"),
+            '01 Documentation Builder');
+      });
+    });
+  });
+
   group('class: LinkParser', () {
     group('Complete Link', () {
       test('complete link', () async {
@@ -365,7 +400,81 @@ main() {
         expect(parsedNode.toString(), '[$title]($jsonSerializableUrl)');
       });
     });
+
+    group('MarkdownFileLinkRule links', () {
+      var expectedReadMeUri = 'https://pub.dev/packages/documentation_builder';
+
+      test('not an none existing MarkdownFile', () async {
+        var linkPath = 'NoneExisting.mdt';
+        var model = TestDocumentationModel.withLink('[$linkPath]');
+        await LinkParser().parse(model);
+        expect(model.link is TextNode, true);
+        expect(model.link is TextNode, true);
+        expect(model.link.toString(), '[$linkPath]');
+      });
+
+      test('existing markdown source file', () async {
+        var linkPath = 'README.mdt';
+        var model = TestDocumentationModel.withLink('[$linkPath]');
+        await LinkParser().parse(model);
+        expect(model.link is Link, true);
+        expect(model.link.toString(), '[README]($expectedReadMeUri)');
+      });
+
+      test('existing markdown destination file', () async {
+        var linkPath = 'README.md';
+        var model = TestDocumentationModel.withLink('[$linkPath]');
+        await LinkParser().parse(model);
+        expect(model.link is Link, true);
+        expect(model.link.toString(), '[README]($expectedReadMeUri)');
+      });
+
+      test('existing markdown destination file case un-sensitive', () async {
+        var linkPath = 'readme.md';
+        var model = TestDocumentationModel.withLink('[$linkPath]');
+        await LinkParser().parse(model);
+        expect(model.link is Link, true);
+        expect(model.link.toString(), '[readme]($expectedReadMeUri)');
+      });
+
+      test('existing markdown file with path', () async {
+        var linkPath = 'doc/template/README.mdt';
+        var model = TestDocumentationModel.withLink('[$linkPath]');
+        await LinkParser().parse(model);
+        expect(model.link is Link, true);
+        expect(model.link.toString(), '[README]($expectedReadMeUri)');
+      });
+
+      test('existing markdown file with path', () async {
+        String title='About this project';
+        var model = TestDocumentationModel.withLink(
+
+            '[README.mdt title="$title"]');
+        await LinkParser().parse(model);
+        expect(model.link is Link, true);
+        expect(model.link.toString(), '[$title]($expectedReadMeUri)');
+      });
+    });
   });
+}
+
+class TestDocumentationModel extends DocumentationModel {
+  TestDocumentationModel.withLink(String markdownFilePath) {
+    children.add(createReadMeTemplate());
+    children.add(createWikiTemplate());
+    children.add(createLinkTextNode(markdownFilePath));
+  }
+
+  TextNode createLinkTextNode(String markdownFilePath) =>
+      TextNode(this, markdownFilePath);
+
+  MarkdownTemplate createReadMeTemplate() =>
+      ReadMeFactory().createMarkdownTemplate(this, 'doc/template/README.mdt');
+
+  MarkdownTemplate createWikiTemplate() => WikiFactory()
+      .createMarkdownTemplate(this, 'doc/template/01-Documentation-Builder.mdt');
+
+  Node get link => children[2];
 }
 
 class TestRootNode extends RootNode {
