@@ -1,4 +1,5 @@
 import 'package:build/build.dart';
+import 'package:documentation_builder/builder/dart_code_path_builder.dart';
 import 'package:documentation_builder/builder/documentation_builder.dart';
 import 'package:documentation_builder/builder/output_builder.dart';
 import 'package:documentation_builder/builder/parse_builder.dart';
@@ -14,6 +15,9 @@ import 'package:documentation_builder/builder/template_builder.dart';
 
 Builder markdownTemplateBuilder(BuilderOptions builderOptions) =>
     MarkdownTemplateBuilder();
+
+Builder dartCodePathBuilder(BuilderOptions builderOptions) =>
+    DartCodePathBuilder();
 
 Builder parseBuilder(BuilderOptions builderOptions) =>
     ParseBuilder();

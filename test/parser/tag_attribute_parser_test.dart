@@ -1,3 +1,4 @@
+import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
@@ -95,8 +96,8 @@ main() {
         String path = 'doc/template/README.mtd';
         String title = '# Title';
         Map<String, dynamic> expectedAttributes = {
-          'path': ProjectFilePath(path),
-          'title': '# Title'
+          AttributeName.path: ProjectFilePath(path),
+          AttributeName.title: '# Title'
         };
         var attributes = await parser
             .parseToNameAndValues("  path = '$path'  title:'$title'");
@@ -109,7 +110,7 @@ main() {
         ]);
         String path = 'doc/template/README.mtd';
         Map<String, dynamic> expectedAttributes = {
-          'path': ProjectFilePath(path),
+          AttributeName.path: ProjectFilePath(path),
         };
         var attributes = await parser.parseToNameAndValues("  path = '$path'  ");
         expect(attributes, expectedAttributes);

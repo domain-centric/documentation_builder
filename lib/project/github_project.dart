@@ -82,7 +82,10 @@ class GitHubProject {
     return rawUri;
   }
 
+
   Uri? searchUri(String query) => _createUriWithSuffix('search?q=$query');
+
+  Uri? dartFile(DartFilePath path) => _createUriWithSuffix('blob/main/$path');
 
   _createUriWithSuffix(String suffix) {
     if (uri == null) {

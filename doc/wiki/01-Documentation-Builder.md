@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/01-Documentation-Builder.mdt using the documentation_builder package on: 2021-09-11 16:16:13.126850.)
+[//]: # (This file was generated from: doc/template/01-Documentation-Builder.mdt using the documentation_builder package on: 2021-09-15 07:44:17.147436.)
 <a id='lib-builder-documentation-builder-dart-documentationbuilder'></a>Generates markdown documentation files from markdown template files.
 This can be useful when you write documentation for a
 [Dart](https://dart.dev/) or [Flutter](https://flutter.dev/) project

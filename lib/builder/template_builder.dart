@@ -32,7 +32,8 @@ class MarkdownTemplateBuilder implements Builder {
           factories.firstWhere((f) => f.canCreateFor(markdownTemplatePath));
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
-      var markdownPage = factory.createMarkdownTemplate(model, buildStep.inputId.path);
+      var markdownPage =
+          factory.createMarkdownTemplate(model, buildStep.inputId.path);
 
       model.add(markdownPage);
     } on Error {
@@ -40,7 +41,6 @@ class MarkdownTemplateBuilder implements Builder {
     }
   }
 }
-
 
 /// [MarkdownTemplateFile]s are files with a .mdt extension that can contain:
 /// - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
@@ -60,7 +60,6 @@ class GeneratedMarkdownFile {}
 /// The [DocumentationParser] will replace this [TextNode] with multiple [Node]s if needed.
 /// The [OutputBuilder] converts each [MarkdownTemplate] into a [GeneratedMarkdownFile]
 class MarkdownTemplate extends ParentNode implements Comparable {
-
   /// The [MarkdownTemplateFile]
   final ProjectFilePath sourceFilePath;
 
@@ -81,7 +80,7 @@ class MarkdownTemplate extends ParentNode implements Comparable {
     required String sourcePath,
     required this.destinationFilePath,
     required this.destinationWebUri,
-  })  : sourceFilePath= ProjectFilePath(sourcePath),
+  })  : sourceFilePath = ProjectFilePath(sourcePath),
         super(parent) {
     children.addAll(_createChildren());
   }
@@ -95,9 +94,9 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   /// - [Tag] texts will be converted to [Tag] objects by the [TagParser]
   /// - [Link] texts will be converted to [LinkNode] objects by the [LinkParser]
   List<Node> _createChildren() => [
-    TextNode(this, thisFileWasGeneratedComment(sourceFilePath)),
-    TextNode(this, readSourceFileText(sourceFilePath)),
-  ];
+        TextNode(this, thisFileWasGeneratedComment(sourceFilePath)),
+        TextNode(this, readSourceFileText(sourceFilePath)),
+      ];
 
   String readSourceFileText(ProjectFilePath sourcePath) =>
       sourcePath.toFile().readAsStringSync();
@@ -108,10 +107,13 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   /// Orders wiki pages first.
   @override
   int compareTo(other) {
-    if (this.factory is WikiFactory ) {
+    if (this.factory is WikiFactory) {
       if (other is MarkdownTemplate && other.factory is WikiFactory) {
         // both are wiki pages so compare names
-        return this.destinationFilePath.path.compareTo(other.destinationFilePath.path);
+        return this
+            .destinationFilePath
+            .path
+            .compareTo(other.destinationFilePath.path);
       }
       // this is a wiki page and other is not a wiki page so this comes before
       return -1;
@@ -121,6 +123,12 @@ class MarkdownTemplate extends ParentNode implements Comparable {
     }
   }
 
+  hasWebUriAndFileEndsWith(String path) {
+    path = path.toLowerCase();
+    return destinationWebUri != null &&
+        (sourceFilePath.path.toLowerCase().endsWith(path) ||
+            destinationFilePath.path.toLowerCase().endsWith(path));
+  }
 }
 
 abstract class MarkdownTemplateFactory {
@@ -134,7 +142,8 @@ abstract class MarkdownTemplateFactory {
     return fileNameExpression.hasMatch(markdownTemplatePath);
   }
 
-  MarkdownTemplate createMarkdownTemplate(ParentNode parent, String sourceFilePath) {
+  MarkdownTemplate createMarkdownTemplate(
+      ParentNode parent, String sourceFilePath) {
     return MarkdownTemplate(
       factory: this,
       parent: parent,
@@ -143,22 +152,18 @@ abstract class MarkdownTemplateFactory {
       destinationWebUri: createDestinationWebUri(sourceFilePath),
     );
   }
-
-
 }
 
 class MarkdownTemplateFactories
     extends DelegatingList<MarkdownTemplateFactory> {
   MarkdownTemplateFactories()
       : super([
-    ReadMeFactory(),
-    ChangeLogFactory(),
-    ExampleFactory(),
-    WikiFactory(),
-  ]);
+          ReadMeFactory(),
+          ChangeLogFactory(),
+          ExampleFactory(),
+          WikiFactory(),
+        ]);
 }
-
-
 
 /// A README.md file is tippacally the first item a visitor will see when visiting
 /// your package on https://pub.dev or visiting your code on https://github.com.
@@ -182,7 +187,6 @@ class ReadMeFactory extends MarkdownTemplateFactory {
 
   @override
   Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().uri;
-
 }
 
 /// A CHANGELOG.md is a log or record of all notable changes made to a project.
@@ -206,7 +210,8 @@ class ChangeLogFactory extends MarkdownTemplateFactory {
       ProjectFilePath('CHANGELOG.md');
 
   @override
-  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().changeLogUri;
+  Uri? createDestinationWebUri(String sourceFilePath) =>
+      PubDevProject().changeLogUri;
 }
 
 /// Your Dart/Flutter project can have an example.md file
@@ -223,7 +228,8 @@ class ExampleFactory extends MarkdownTemplateFactory {
       ProjectFilePath('example/example.md');
 
   @override
-  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().exampleUri;
+  Uri? createDestinationWebUri(String sourceFilePath) =>
+      PubDevProject().exampleUri;
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
@@ -238,17 +244,17 @@ class WikiFactory extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression => FluentRegex()
       .or([
-    FluentRegex().group(FluentRegex().literal('home'),
-        type: GroupType.captureUnNamed()),
-    FluentRegex().group(
-        FluentRegex()
-            .characterSet(CharacterSet().addDigits(), Quantity.exactly(2))
-            .characterSet(
-          CharacterSet().addLetters().addDigits().addLiterals('-_'),
-          Quantity.oneOrMoreTimes(),
-        ),
-        type: GroupType.captureUnNamed())
-  ])
+        FluentRegex().group(FluentRegex().literal('home'),
+            type: GroupType.captureUnNamed()),
+        FluentRegex().group(
+            FluentRegex()
+                .characterSet(CharacterSet().addDigits(), Quantity.exactly(2))
+                .characterSet(
+                  CharacterSet().addLetters().addDigits().addLiterals('-_'),
+                  Quantity.oneOrMoreTimes(),
+                ),
+            type: GroupType.captureUnNamed())
+      ])
       .literal('.mdt')
       .endOfLine()
       .ignoreCase();
@@ -260,7 +266,7 @@ class WikiFactory extends MarkdownTemplateFactory {
   }
 
   String createFileName(String sourcePath) {
-     String? wikiFileName = fileNameExpression
+    String? wikiFileName = fileNameExpression
         .findCapturedGroups(sourcePath)
         .values
         .firstWhere((v) => v != null);
@@ -272,15 +278,13 @@ class WikiFactory extends MarkdownTemplateFactory {
 
   @override
   Uri? createDestinationWebUri(String sourceFilePath) {
-    Uri? wikiUri=GitHubProject().wikiUri;
-    if (wikiUri==null) return null;
+    Uri? wikiUri = GitHubProject().wikiUri;
+    if (wikiUri == null) return null;
     return wikiUri.withPathSuffix(createPathSuffix(sourceFilePath));
   }
 
-  String createPathSuffix(String sourceFilePath) => '/'+createFileName(sourceFilePath);
-
-
+  String createPathSuffix(String sourceFilePath) =>
+      '/' + createFileName(sourceFilePath);
 }
-
 
 //TODO LicenseFactory + LicenseTags + Year tag

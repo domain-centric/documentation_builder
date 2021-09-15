@@ -1,15 +1,15 @@
-[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-11 16:16:13.133825.)
-<a id='lib-builder-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile]s are files with a .mdt extension that can contain:
+[//]: # (This file was generated from: doc/template/02-Markdown-Template-Files.mdt using the documentation_builder package on: 2021-09-15 07:44:17.156412.)
+<a id='lib-builder-template-builder-dart-markdowntemplatefile'></a>[MarkdownTemplateFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-markdowntemplatefile)s are files with a .mdt extension that can contain:
 - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
-- [Tag]s
-- [Link]s
+- [Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag)s
+- [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)s
 - [Badge]s
 
-[MarkdownTemplateFile]s are converted to [GeneratedMarkdownFile]s
+[MarkdownTemplateFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-markdowntemplatefile)s are converted to [GeneratedMarkdownFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-generatedmarkdownfile)s
 
 
-<a id='lib-builder-template-builder-dart-generatedmarkdownfile'></a>[GeneratedMarkdownFile]s are files with a .md extension that are generated
-by the [DocumentationBuilder].
+<a id='lib-builder-template-builder-dart-generatedmarkdownfile'></a>[GeneratedMarkdownFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-generatedmarkdownfile)s are files with a .md extension that are generated
+by the [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder).
 
 
 <a id='readme-template-file'></a>
@@ -23,7 +23,7 @@ A README.md file typically include information on:
 - How to use it
 - other relevant high level information
 
-A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder)
 to create or override the README.md file in the root of your dart project.
 
 
@@ -35,7 +35,7 @@ To support tools that parse CHANGELOG.md, use the following format:
 - The version headings are either a chapter (#) or a paragraph (##).
 - The version heading text contains a package version number, optionally prefixed with “v”.
 
-A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder)
 to create or override the CHANGELOG.md file in the root of your dart project.
 
 A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
@@ -58,6 +58,6 @@ Any [MarkdownTemplate] is considered to be a [WikiMarkdownTemplateFile] when:
 ### example template file
 Your Dart/Flutter project can have an example.md file
 A example.mdt is a [MarkdownTemplate] that is used by the
-[DocumentationBuilder] to create or override the example.md file in the
+[DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) to create or override the example.md file in the
 example folder of your dart project.
 

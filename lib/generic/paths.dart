@@ -4,6 +4,8 @@ import 'package:build/build.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
+import 'documentation_model.dart';
+
 /// [ProjectFilePath] is a reference to a file in your source project
 /// - The [ProjectFilePath] is always relative to root directory of the project directory.
 /// - The [ProjectFilePath] will always be within the project directory, that is they will never contain "../".
@@ -110,7 +112,7 @@ class UriSuffixPath {
 class DartMemberPath {
   final String path;
 
-  static final expression = FluentRegex()
+  static final FluentRegex expression = FluentRegex()
       .startOfLine()
       .characterSet(
           CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
@@ -187,17 +189,15 @@ class DartFilePath extends ProjectFilePath {
 /// - lib/my_library.dart|MyExtension.myFieldName.set
 /// - lib/my_library.dart|MyExtension.myMethod
 class DartCodePath {
-  static final dartFilePathGroupName = 'dartFilePath';
-  static final dartMemberPathGroupName = 'dartMemberPath';
 
   static final expression = FluentRegex()
       .startOfLine()
       .group(DartFilePath.expression.startOfLine(false).endOfLine(false),
-          type: GroupType.captureNamed(dartFilePathGroupName))
+          type: GroupType.captureNamed(GroupName.dartFilePath))
       .group(
           FluentRegex().literal('|').group(
               DartMemberPath.expression.startOfLine(false).endOfLine(false),
-              type: GroupType.captureNamed(dartMemberPathGroupName)),
+              type: GroupType.captureNamed(GroupName.dartMemberPath)),
           quantity: Quantity.zeroOrOneTime())
       .endOfLine()
       .ignoreCase();
@@ -213,7 +213,7 @@ class DartCodePath {
   static DartFilePath _createProjectFilePath(String path) {
     validate(path);
     String? dartFilePath =
-        expression.findCapturedGroups(path)[dartFilePathGroupName];
+        expression.findCapturedGroups(path)[GroupName.dartFilePath];
     if (dartFilePath == null)
       throw Exception(
           'Invalid DartCodePath, could not find DartFilePath: $path');
@@ -222,7 +222,7 @@ class DartCodePath {
 
   static DartMemberPath? _createDartMemberPath(String path) {
     String? dartMemberPath =
-        expression.findCapturedGroups(path)[dartMemberPathGroupName];
+        expression.findCapturedGroups(path)[GroupName.dartMemberPath];
     if (dartMemberPath == null) {
       return null;
     } else {

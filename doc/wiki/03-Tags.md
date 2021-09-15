@@ -1,41 +1,41 @@
-[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-11 16:16:13.134829.)
-<a id='lib-parser-tag-parser-dart-tag'></a>[Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
- [DocumentationBuilder] with other information
+[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-15 07:44:17.156517.)
+<a id='lib-parser-tag-parser-dart-tag'></a>[Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag)s are specific texts in [MarkdownTemplate]s that are replaced by the
+ [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) with other information
  (e.g. by an imported Dart Documentation Comment) before the
- [GeneratedMarkdownFile] is written.
+ [GeneratedMarkdownFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-generatedmarkdownfile) is written.
 
-[Tag]s:
+[Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag)s:
 - are surrounded by curly brackets: {}
 - start with a name: e.g.  {ImportFile&rcub;
-- may have [Attribute]s after the name:
+- may have [Attribute](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#tag-attributes)s after the name:
   e.g. {ImportFile path='OtherTemplateFile.mdt' title='## Other Template File'&rcub;
 
 
 <a id='tag-attributes'></a>
 ## Tag Attributes
-[Tag]s can contain [Attribute]s. These contain additional information for the [Tag].
-[Attribute]s can be mandatory or optional.
+[Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag)s can contain [Attribute](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#tag-attributes)s. These contain additional information for the [Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag).
+[Attribute](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#tag-attributes)s can be mandatory or optional.
 
-The following paragraphs will explain the format of different path [Attribute]s:
+The following paragraphs will explain the format of different path [Attribute](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#tag-attributes)s:
 
 <a id='project-file-path'></a>
 ### Project File Path
-[ProjectFilePath] is a reference to a file in your source project
-- The [ProjectFilePath] is always relative to root directory of the project directory.
-- The [ProjectFilePath] will always be within the project directory, that is they will never contain "../".
-- The [ProjectFilePath] always uses forward slashes as path separators, regardless of the host platform (also for Windows).
+[ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) is a reference to a file in your source project
+- The [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) is always relative to root directory of the project directory.
+- The [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) will always be within the project directory, that is they will never contain "../".
+- The [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) always uses forward slashes as path separators, regardless of the host platform (also for Windows).
 
 Example: doc/wiki/Home.md
 
 
 <a id='dart-code-path'></a>
 ### Dart Code Path
-A [DartCodePath] is a reference to a piece of your Dart source code.
+A [DartCodePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-code-path) is a reference to a piece of your Dart source code.
 This could be anything from a whole dart file to one of its members.
-Format: <[DartFilePath]>|<[DartMemberPath]>
-- <[DartFilePath]> (required) is a [DartFilePath] to a Dart file without dart extension, e.g. lib/my_library.dart
-- |: the <[DartFilePath]> and <[DartMemberPath]> are separated with a vertical bar | when there is a [DartMemberPath].
-- <[DartMemberPath]> (optional) is a dot separated path to the member inside the Dart file, e.g.
+Format: <[DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path)>|<[DartMemberPath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-member-path)>
+- <[DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path)> (required) is a [DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path) to a Dart file without dart extension, e.g. lib/my_library.dart
+- |: the <[DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path)> and <[DartMemberPath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-member-path)> are separated with a vertical bar | when there is a [DartMemberPath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-member-path).
+- <[DartMemberPath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-member-path)> (optional) is a dot separated path to the member inside the Dart file, e.g.
   - .constantName
   - .functionName
   - .EnumName (optionally followed by a dot and a enum value)
@@ -62,7 +62,7 @@ Examples:
 
 <a id='dart-file-path'></a>
 ### Dart File Path
-A [DartFilePath] is a [ProjectFilePath] to a dart file.
+A [DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path) is a [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) to a dart file.
 It must end with a '.dart' extension.
 
 Example: lib/my_library.dart
@@ -70,8 +70,8 @@ Example: lib/my_library.dart
 
 <a id='dart-member-path'></a>
 ### Dart Member Path
-A [DartMemberPath] is a dot separated path to a member inside the Dart file.
-It is a part of a [DartCodePath].
+A [DartMemberPath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-member-path) is a dot separated path to a member inside the Dart file.
+It is a part of a [DartCodePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-code-path).
 
 Examples:
 - myConstant
@@ -98,11 +98,11 @@ The following paragraphs will explain the different tags:
 - **{ImportFile file:'OtherTemplateFile.mdt' title='## Other Template File'&rcub;**
 - Imports another text file or markdown file.
 - Attributes:
-  - path= (required) A [ProjectFilePath] to a file name inside the markdown
+  - path= (required) A [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) to a file name inside the markdown
     directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
   - title= (optional) title. You can precede the title with a number of #
     to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph).
-    A title can be referenced in the documentation with a [Link]
+    A title can be referenced in the documentation with a [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)
 
 
 <a id='import-code-tag'></a>
@@ -110,8 +110,8 @@ The following paragraphs will explain the different tags:
 - **{ImportCodeTag file:'file_to_import.txt' title='## Code example'&rcub;**
 - Imports a (none Dart) code file.
 - Attributes:
-  - path= (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
-  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+  - path= (required) A [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path) a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#import-dart-code-tag) to import Dart code
+  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)
 
 
 <a id='import-dart-code-tag'></a>
@@ -119,8 +119,8 @@ The following paragraphs will explain the different tags:
 - **{ImportDartCodeTag file:'file_to_import.dart' title='## Dart code example'&rcub;**
 - Imports a (none Dart) code file.
 - Attributes:
-  - path= (required) A [DartFilePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
-  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+  - path= (required) A [DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path) to be imported as a Dart code example. See also [ImportCodeTag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#import-code-tag) to import none Dart code.
+  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)
 
 
 <a id='import-dart-documentation-comments-tag'></a>
@@ -128,6 +128,6 @@ The following paragraphs will explain the different tags:
 - **{ImportDartDoc path='lib\my_lib.dart|MyClass' title='## My Class'&rcub;**
 - Imports Dart documentation comments from a library member in a dart file.
 - Attributes:
-  - path= (required) A [DartCodePath] to be imported Dart comments.
-  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+  - path= (required) A [DartCodePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-code-path) to be imported Dart comments.
+  - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)
 

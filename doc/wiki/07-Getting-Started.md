@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/07-Getting-Started.mdt using the documentation_builder package on: 2021-09-11 16:16:13.136825.)
+[//]: # (This file was generated from: doc/template/07-Getting-Started.mdt using the documentation_builder package on: 2021-09-15 07:44:17.158406.)
 - Read the [Wiki documentation](https://github.com/efficientyboosters/documentation_builder/wiki)
 - [Install the documentation_builder package](https://pub.dev/packages/documentation_builder/install) in your project
 - Create 'doc/template' directories in the root of your project

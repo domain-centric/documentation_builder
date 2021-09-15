@@ -1,28 +1,29 @@
+import 'package:collection/collection.dart';
 import 'package:documentation_builder/builder/documentation_builder.dart';
 import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/tag_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
-import 'package:collection/collection.dart';
 
 /// The [LinkParser] searches for [TextNode]'s that contain texts that represent a [Link]
 /// It then replaces these [TextNode]'s into a [Link] and additional [TextNode]'s for the remaining text.
 class LinkParser extends Parser {
   LinkParser()
       : super([
-          CompleteLinkRule(),
-          GitHubProjectLinkRule(),
-          PubDevProjectLinkRule(),
-          PubDevPackageLinkRule(),
-//TODO DartCodeMemberLinkRule
-//TODO MarkDownFileLinkRule
-          MarkdownFileLinkRule(),
+    CompleteLinkRule(),
+    GitHubProjectLinkRule(),
+    PubDevProjectLinkRule(),
+    PubDevPackageLinkRule(),
+    DartCodeLinkRule(),
+    MarkdownFileLinkRule(),
+    DartCodeLinkRule(),
 //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES
-        ]);
+  ]);
 }
 
 /// A complete Hyperlink in Markdown is a text between square brackets []
@@ -34,30 +35,32 @@ class LinkParser extends Parser {
 class CompleteLinkRule extends TextParserRule {
   CompleteLinkRule() : super(createExpression());
 
-  static String groupNameTitle = 'title';
-  static String groupNameUri = 'uri';
-
-  static FluentRegex createExpression() => FluentRegex()
-      .literal('[')
-      .whiteSpace(Quantity.zeroOrMoreTimes())
-      .group(FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant),
-          type: GroupType.captureNamed(groupNameTitle))
-      .whiteSpace(Quantity.zeroOrMoreTimes())
-      .literal(']')
-      .literal('(')
-      .whiteSpace(Quantity.zeroOrMoreTimes())
-      .group(FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant),
-          type: GroupType.captureNamed(groupNameUri))
-      .whiteSpace(Quantity.zeroOrMoreTimes())
-      .literal(')')
-      .ignoreCase();
+  static FluentRegex createExpression() =>
+      FluentRegex()
+          .literal('[')
+          .whiteSpace(Quantity.zeroOrMoreTimes())
+          .group(FluentRegex().anyCharacter(Quantity
+          .zeroOrMoreTimes()
+          .reluctant),
+          type: GroupType.captureNamed(GroupName.title))
+          .whiteSpace(Quantity.zeroOrMoreTimes())
+          .literal(']')
+          .literal('(')
+          .whiteSpace(Quantity.zeroOrMoreTimes())
+          .group(FluentRegex().anyCharacter(Quantity
+          .zeroOrMoreTimes()
+          .reluctant),
+          type: GroupType.captureNamed(GroupName.uri))
+          .whiteSpace(Quantity.zeroOrMoreTimes())
+          .literal(')')
+          .ignoreCase();
 
   @override
-  Future<Node> createReplacementNode(
-      ParentNode parent, RegExpMatch match) async {
+  Future<Node> createReplacementNode(ParentNode parent,
+      RegExpMatch match) async {
     try {
-      String title = match.namedGroup(groupNameTitle) ?? ''.trim();
-      Uri uri = Uri.parse(match.namedGroup(groupNameUri) ?? '');
+      String title = match.namedGroup(GroupName.title) ?? ''.trim();
+      Uri uri = Uri.parse(match.namedGroup(GroupName.uri) ?? '');
       return Link(parent: parent, title: title, uri: uri);
     } on ParserWarning catch (warning) {
       // Wrap warning with link information, so it can be easily found
@@ -77,37 +80,35 @@ abstract class InCompleteLinkRule extends TextParserRule {
   InCompleteLinkRule(this.attributeRules, {required FluentRegex nameExpression})
       : super(createExpression(nameExpression));
 
-  static String groupNameName = 'name';
-  static String groupNameAttributes = 'attributes';
-
   static FluentRegex createExpression(FluentRegex nameExpression) {
     return FluentRegex()
         .literal('[')
         .whiteSpace(Quantity.zeroOrMoreTimes())
         .group(
-          nameExpression,
-          type: GroupType.captureNamed(groupNameName),
-        )
+      nameExpression,
+      type: GroupType.captureNamed(GroupName.name),
+    )
         .group(
-            FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).characterSet(
-                CharacterSet.exclude().addLiterals(']'),
-                Quantity.oneOrMoreTimes()),
-            quantity: Quantity.zeroOrMoreTimes(),
-            type: GroupType.captureNamed(groupNameAttributes))
+        FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).characterSet(
+            CharacterSet.exclude().addLiterals(']['),
+            Quantity.oneOrMoreTimes()),
+        quantity: Quantity.zeroOrMoreTimes(),
+        type: GroupType.captureNamed(GroupName.attributes))
         .whiteSpace(Quantity.zeroOrMoreTimes())
         .literal(']')
         .ignoreCase();
+
   }
 
   @override
-  Future<Node> createReplacementNode(
-      ParentNode parent, RegExpMatch match) async {
+  Future<Node> createReplacementNode(ParentNode parent,
+      RegExpMatch match) async {
     try {
-      String name = match.namedGroup(groupNameName)!;
-      String attributesText = match.namedGroup(groupNameAttributes) ?? '';
+      String name = match.namedGroup(GroupName.name)!;
+      String attributesText = match.namedGroup(GroupName.attributes) ?? '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
       Map<String, dynamic> attributes =
-          await tagAttributeParser.parseToNameAndValues(attributesText);
+      await tagAttributeParser.parseToNameAndValues(attributesText);
       var linkNode = createLinkNode(parent, name, attributes);
       await linkNode.validateUriHttpGet();
       return linkNode;
@@ -117,11 +118,9 @@ abstract class InCompleteLinkRule extends TextParserRule {
     }
   }
 
-  Link createLinkNode(
-    ParentNode parent,
-    String name,
-    Map<String, dynamic> attributes,
-  );
+  Link createLinkNode(ParentNode parent,
+      String name,
+      Map<String, dynamic> attributes,);
 
   String findTitle(String defaultTitle, attributes) {
     final String nameAttribute = TitleAttributeRule().name;
@@ -158,7 +157,9 @@ class Link extends ParentNode {
   }
 
   void validateTitle() {
-    if (title.trim().isEmpty)
+    if (title
+        .trim()
+        .isEmpty)
       throw ParserWarning('The title attribute may not be empty');
   }
 
@@ -176,9 +177,9 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
 
   LinkDefinitionsRule(this.linkDefinitions)
       : super([
-          UriSuffixAttributeRule(),
-          TitleAttributeRule(),
-        ], nameExpression: createNameExpression(linkDefinitions));
+    UriSuffixAttributeRule(),
+    TitleAttributeRule(),
+  ], nameExpression: createNameExpression(linkDefinitions));
 
   static FluentRegex createNameExpression(
       List<LinkDefinition> linkDefinitions) {
@@ -189,10 +190,10 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
   }
 
   @override
-  Link createLinkNode(
-      ParentNode parent, String name, Map<String, dynamic> attributes) {
+  Link createLinkNode(ParentNode parent, String name,
+      Map<String, dynamic> attributes) {
     LinkDefinition linkDef = linkDefinitions.firstWhere(
-        (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
+            (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
     String title = findTitle(linkDef.defaultTitle, attributes);
     Uri uri = createUri(linkDef, attributes);
     return Link(parent: parent, title: title, uri: uri);
@@ -281,25 +282,32 @@ class PubDevPackageLinkRule extends InCompleteLinkRule {
       await pubDevPackageMatches(textNode);
 
   @override
-  Link createLinkNode(
-      ParentNode parent, String name, Map<String, dynamic> attributes) {
+  Link createLinkNode(ParentNode parent, String name,
+      Map<String, dynamic> attributes) {
     String title = findTitle(name, attributes);
-    Uri uri = PubDevProject.forProjectName(name).uri!;
+    Uri uri = PubDevProject
+        .forProjectName(name)
+        .uri!;
     return Link(parent: parent, title: title, uri: uri);
   }
 
-  static FluentRegex createNameExpression() => FluentRegex().characterSet(
-      CharacterSet().addLetters(CaseType.lower).addDigits().addLiterals('_'),
-      Quantity.oneOrMoreTimes());
+  static FluentRegex createNameExpression() =>
+      FluentRegex().characterSet(
+          CharacterSet().addLetters(CaseType.lower).addDigits().addLiterals(
+              '_'),
+          Quantity.oneOrMoreTimes());
 
   /// Returns matches that represent existing packages on https://pub.dev only
   Future<List<RegExpMatch>> pubDevPackageMatches(TextNode textNode) async {
     var matches = await super.createMatches(textNode);
     List<RegExpMatch> pubDevPackageMatches = [];
     for (RegExpMatch match in matches) {
-      String tagName = match.namedGroup(InCompleteLinkRule.groupNameName)!;
+      String tagName = match.namedGroup(GroupName.name)!;
       bool exists =
-          await PubDevProject.forProjectName(tagName).uri!.canGetWithHttp();
+      await PubDevProject
+          .forProjectName(tagName)
+          .uri!
+          .canGetWithHttp();
       if (exists) pubDevPackageMatches.add(match);
     }
     return pubDevPackageMatches;
@@ -322,16 +330,17 @@ class PubDevPackageLinkRule extends InCompleteLinkRule {
 class MarkdownFileLinkRule extends InCompleteLinkRule {
   MarkdownFileLinkRule()
       : super([TitleAttributeRule()],
-            nameExpression: ProjectFilePath.expression.startOfLine(false).endOfLine(false));
+      nameExpression:
+      ProjectFilePath.expression.startOfLine(false).endOfLine(false));
 
   @override
   Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>
       await markdownFileMatches(textNode);
 
   @override
-  Link createLinkNode(
-      ParentNode parent, String path, Map<String, dynamic> attributes) {
-    var defaultTitle = createTitleFromPath(path);
+  Link createLinkNode(ParentNode parent, String path,
+      Map<String, dynamic> attributes) {
+    var defaultTitle = createDefaultTitle(path);
     String title = findTitle(defaultTitle, attributes);
     Uri uri = findMarkdownTemplate(parent, path)!.destinationWebUri!;
     return Link(parent: parent, title: title, uri: uri);
@@ -342,8 +351,9 @@ class MarkdownFileLinkRule extends InCompleteLinkRule {
     var matches = await super.createMatches(textNode);
     List<RegExpMatch> markdownFileMatches = [];
     for (RegExpMatch match in matches) {
-      String path = match.namedGroup(InCompleteLinkRule.groupNameName)!;
-      MarkdownTemplate? markdownTemplate = findMarkdownTemplate(textNode.parent!, path);
+      String path = match.namedGroup(GroupName.name)!;
+      MarkdownTemplate? markdownTemplate =
+      findMarkdownTemplate(textNode.parent!, path);
 
       if (markdownTemplate != null) markdownFileMatches.add(match);
     }
@@ -355,31 +365,31 @@ class MarkdownFileLinkRule extends InCompleteLinkRule {
   MarkdownTemplate? findMarkdownTemplate(ParentNode parent, String path) {
     path = path.toLowerCase();
     DocumentationModel? model = parent.findParent<DocumentationModel>();
-    if (model==null) return null;
+    if (model == null) return null;
     var templates = model.findOrderedMarkdownTemplateFiles();
-    return templates.firstWhereOrNull((template) => (template.sourceFilePath.path.toLowerCase().endsWith(path) ||
-            template.destinationFilePath.path.toLowerCase().endsWith(path)) &&
-        template.destinationWebUri != null);
+    return templates.firstWhereOrNull(
+            (template) => (template.hasWebUriAndFileEndsWith(path)));
   }
 
   static final FluentRegex filePath =
-      FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
+  FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
 
   static final FluentRegex fileExtension = FluentRegex()
       .literal('.')
       .characterSet(
-          CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
+      CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
       .endOfLine();
 
-  String createTitleFromPath(String path) {
+  String createDefaultTitle(String path) {
     String fileName = filePath.removeFirst(path);
-    String fileNameWithoutExtension= fileExtension.removeFirst(fileName);
-    String title= fileNameWithoutExtension.replaceAll('-', ' ');
+    String fileNameWithoutExtension = fileExtension.removeFirst(fileName);
+    String title = fileNameWithoutExtension.replaceAll('-', ' ');
     return title;
   }
 }
 
-/// A library can have members such as a:
+/// A DartCodeLink is a [Link] to a piece of Dart code.
+/// You can make a link to any library members, e.g.:
 /// - constant
 /// - function
 /// - enum (an enum can have value members)
@@ -401,14 +411,112 @@ class MarkdownFileLinkRule extends InCompleteLinkRule {
 ///   - [MyExtension.get.myField]
 ///   - [MyExtension.set.myField]
 ///   - [MyExtension.myMethod]
-/// You can also include the library name in case a project uses same member names in different libraries, e.g.:
-/// - [MyLib/myConstant]
-/// - [MyLib/myFunction]
-/// - etc.
+/// You can also include the library name or the full [DartFilePath] in case a project uses same member names in different libraries, e.g.:
+/// - [my_lib.dart|myConstant]
+/// - [lib/my_lib.dart|myFunction]
 ///
 /// The [DocumentationBuilder] will try to resolve these [MemberLink]s in the following order:
 /// - Within the [MarkdownPage], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
-//TODO
+class DartCodeLinkRule extends InCompleteLinkRule {
+  DartCodeLinkRule()
+      : super([TitleAttributeRule()], nameExpression: createNameExpression());
+
+  @override
+  Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>
+      await dartCodeMatches(textNode);
+
+  /// Returns matches that can be converted to DartCodeLinks
+  Future<List<RegExpMatch>> dartCodeMatches(TextNode textNode) async {
+    var matches = await super.createMatches(textNode);
+    List<RegExpMatch> dartCodeMatches = [];
+    for (RegExpMatch match in matches) {
+      String path = match.namedGroup(GroupName.name)!;
+      if (createUri(textNode.parent!, path) != null) {
+        dartCodeMatches.add(match);
+      }
+    }
+    return dartCodeMatches;
+  }
+
+  @override
+  Link createLinkNode(ParentNode parent, String path,
+      Map<String, dynamic> attributes) {
+    var defaultTitle = findDartMemberPath(path);
+    String title = findTitle(defaultTitle, attributes);
+    Uri uri = createUri(parent, path)!;
+    return Link(parent: parent, title: title, uri: uri);
+  }
+
+  /// finds a [MarkdownTemplate] with a sourceFilePath or destinationFilePath
+  /// that ends with path, while ignoring upper or lower case.
+  Uri? createUri(ParentNode parent, String path) {
+    path = path.toLowerCase();
+    DocumentationModel? model = parent.findParent<DocumentationModel>();
+    if (model != null) {
+      ImportDartDocTag? importDartDocTag = findTag<ImportDartDocTag>(
+          model, path);
+      if (importDartDocTag != null) {
+        Uri? uri = importDartDocTag.anchor.uriToAnchor;
+        if (uri != null) return uri;
+      }
+
+      ImportDartCodeTag? importDartCodeTag = findTag<ImportDartCodeTag>(
+          model, path);
+      if (importDartCodeTag != null) {
+        Uri? uri = importDartCodeTag.anchor.uriToAnchor;
+        if (uri != null) return uri;
+      }
+
+      //return a link to the dart file on GitHub if the member exists in this project
+      var foundPath = model.dartCodePaths.firstWhereOrNull((dartCodePath) =>
+          dartCodePath.dartFilePath.path.toLowerCase().endsWith(path));
+      if (foundPath != null) {
+        return GitHubProject().dartFile(foundPath.dartFilePath);
+      }
+    }
+
+    ///when no match: return null otherwise almost all remaining uncompleted links will be replaced
+    return null;
+  }
+
+  /// Finds tags of a given Type where the path attribute ends with a given path.
+  T? findTag<T extends Tag>(DocumentationModel model, String path) {
+    List<T> tags = model.findChildren<T>();
+    return tags.firstWhereOrNull((tag) =>
+        tag
+            .attributes[AttributeName.path]
+            .toString()
+            .trim()
+            .toLowerCase()
+            .endsWith(path));
+  }
+
+  String findDartMemberPath(String path) {
+    try {
+      DartCodePath dartCodePath = DartCodePath(path);
+      return dartCodePath.dartMemberPath!.path;
+    } catch (e) {
+      DartMemberPath dartMemberPath = DartMemberPath(path);
+      return dartMemberPath.path;
+    }
+  }
+
+  static FluentRegex createNameExpression() =>
+      FluentRegex().or([
+        DartMemberPath.expression.startOfLine(false).endOfLine(false),
+        DartCodePath.expression.startOfLine(false).endOfLine(false)
+      ]);
+
+  bool isValidatePath(String path) {
+    try {
+      return findDartMemberPath(path)
+          .trim()
+          .isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+}

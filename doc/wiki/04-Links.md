@@ -1,11 +1,11 @@
-[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-11 16:16:13.135831.)
-<a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link]s.
-[Link]s:
-- are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass&rsqb;
+[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-15 07:44:17.157409.)
+<a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)s.
+[Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)s:
+- are references between square brackets [] in [MarkdownTemplateFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-markdowntemplatefile)s, e.g.: [MyClass&rsqb;
 - can have optional or required attributes, e.g.: [MyClass title='Link to my class'&rsqb;
 
-The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing http uri.
-The [Link] will not be replaced to a hyperlink when the uri does not exits.
+The [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) will try to convert these to hyperlinks that point to an existing http uri.
+The [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link) will not be replaced to a hyperlink when the uri does not exits.
 
 
 <a id='hyperlink'></a>
@@ -56,7 +56,7 @@ You can the following optional attributes:
 ## PubDev package links
 A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
 
-The [DocumentationBuilder] will check if any valid package name
+The [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) will check if any valid package name
 (lower case letter, numbers and underscores) between
 square brackets exists as a package on https://pub.dev.
 
@@ -72,19 +72,19 @@ You can use the optional title attribute, e.g.:
 
 <a id='markdown-file-links'></a>
 ## Markdown file links
-A [MarkdownFileLink] links point to an other [GeneratedMarkdownFile].
+A [MarkdownFileLink] links point to an other [GeneratedMarkdownFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-generatedmarkdownfile).
 
-The [DocumentationBuilder] will try to find this [GeneratedMarkdownFile] and
+The [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) will try to find this [GeneratedMarkdownFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-generatedmarkdownfile) and
 replace the link to a hyperlink with an absolute Url.
 
 You can use :
 - the template name e.g.: [README.mdt&rsqb;
 - the output name e.g.: [README.md&rsqb;
-- the [ProjectFilePath], e.g.: [doc/template/README.md&rsqb;
+- the [ProjectFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#project-file-path), e.g.: [doc/template/README.md&rsqb;
 - an optional optional title attribute, e.g.:
 [README.mdt title='About this project'&rsqb;
 
-Note that the [DocumentationBuilder] ignores letter casing.
+Note that the [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) ignores letter casing.
 
 
  //TODO DartCodeMemberLinkRule

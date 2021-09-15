@@ -1,11 +1,14 @@
 import 'package:build/build.dart';
 import 'package:documentation_builder/builder/template_builder.dart';
+import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 
 /// All information needed to generate the markdown documentation files.
 class DocumentationModel extends RootNode {
   //admittedly yuki: adding the buildStep so we can assess the resolver if need to.
   BuildStep? buildStep;
+
+  Set<DartCodePath> dartCodePaths={};
 
   /// adds a [MarkdownTemplate] while verifying that each [MarkdownTemplate]
   /// has a unique [MarkdownTemplate.destinationFilePath] to prevent overriding generated files
@@ -45,3 +48,22 @@ class DocumentationModel extends RootNode {
 
 /// A [Resource] containing the [DocumentationModel] so that it can be shared between builder.
 final resource = Resource(() => DocumentationModel());
+
+/// common attribute names
+class AttributeName {
+  static const path='path';
+  static const title='title';
+}
+
+
+/// common [RegExp] group names
+class GroupName {
+  static const name='name';
+  static const title='title';
+  static const value='value';
+  static const path='path';
+  static const uri='uri';
+  static const attributes='attributes';
+  static const dartFilePath = 'dartFilePath';
+  static const dartMemberPath = 'dartMemberPath';
+}

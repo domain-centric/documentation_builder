@@ -42,7 +42,15 @@ main() {
     test('method: rawUri', () async {
       expect(GitHubProject().rawUri.toString(),
           'https://raw.githubusercontent.com/efficientyboosters/documentation_builder');
-      expect(await GitHubProject().rawUri!.withPathSuffix('main/README.md').canGetWithHttp(), true);
+      expect(await GitHubProject().rawUri!
+          .withPathSuffix('main/README.md').canGetWithHttp(), true);
+    });
+
+    test('method: dartFile', () async {
+      Uri uri = GitHubProject().dartFile(DartFilePath('lib/parser/link_parser.dart'))!;
+      expect(uri,
+          Uri.parse('https://github.com/efficientyboosters/documentation_builder/blob/main/lib/parser/link_parser.dart'));
+      expect(await uri.canGetWithHttp(),true);
     });
   });
 }

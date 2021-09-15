@@ -12,12 +12,12 @@ import 'package:test/test.dart';
 
 main() {
   group('class: ImportFileTagRule', () {
-    String pathName = 'path';
+    String pathName = AttributeName.path;
     String pathValue = 'doc/template/README.md';
     String invalidPathValue = 'doc\\template\\README.md';
     String pathAttribute = '$pathName="$pathValue"';
     String invalidPathAttribute = '$pathName="$invalidPathValue"';
-    String titleName = 'title';
+    String titleName = AttributeName.title;
     String titleValue = '# Title';
     String invalidTitleValue = '';
     String titleAttribute = "  $titleName  : '$titleValue'  ";
@@ -56,7 +56,7 @@ main() {
         };
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is TestTag, true);
-        expect((parsedNode.children.first as TestTag).attributeNamesAndValues,
+        expect((parsedNode.children.first as TestTag).attributes,
             expectedMap);
       });
 
@@ -68,7 +68,7 @@ main() {
         };
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is TestTag, true);
-        expect((parsedNode.children.first as TestTag).attributeNamesAndValues,
+        expect((parsedNode.children.first as TestTag).attributes,
             expectedMap);
       });
 
@@ -205,8 +205,8 @@ main() {
           () async {
         ProjectFilePath filePath = ProjectFilePath('doc/template/README.mdt');
         Map<String, dynamic> attributes = {
-          'path': filePath,
-          'title': '## Paragraph Title'
+          AttributeName.path: filePath,
+          AttributeName.title: '## Paragraph Title'
         };
         var expectedPreFix = "<a id=\'paragraph-title\'></a>\n"
             "## Paragraph Title\n";
@@ -223,7 +223,7 @@ main() {
           () async {
         ProjectFilePath filePath = ProjectFilePath('doc/template/README.mdt');
         Map<String, dynamic> attributes = {
-          'path': filePath,
+          AttributeName.path: filePath,
         };
         var expectedPreFix = "<a id=\'doc-template-readme-mdt\'></a>";
         var tag = ImportFileTag(TestRootNode(''), attributes);
@@ -243,8 +243,8 @@ main() {
         ProjectFilePath filePath =
             ProjectFilePath('test/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
-          'path': filePath,
-          'title': '## Paragraph Title'
+          AttributeName.path: filePath,
+          AttributeName.title: '## Paragraph Title'
         };
         var expected = '<a id=\'paragraph-title\'></a>\n'
             '## Paragraph Title\n'
@@ -266,7 +266,7 @@ main() {
         ProjectFilePath filePath =
             ProjectFilePath('test/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
-          'path': filePath,
+          AttributeName.path: filePath,
         };
         var expected =
             '<a id=\'test-parser-import-test-code-file-dart\'></a>\n'
@@ -369,15 +369,15 @@ class TestTagRule extends TagRule {
 
   @override
   Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
-      TestTag(parent, attributeNamesAndValues);
+          ParentNode parent, Map<String, dynamic> attributes) =>
+      TestTag(parent, attributes);
 }
 
 class TestTag extends Tag {
-  final Map<String, dynamic> attributeNamesAndValues;
+  final Map<String, dynamic> attributes;
 
-  TestTag(ParentNode? parent, this.attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues);
+  TestTag(ParentNode? parent, this.attributes)
+      : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() => Future.value([]);

@@ -326,6 +326,23 @@ class ParentNode extends Node {
     return null; //not found
   }
 
+  /// Finds all children (or children's children) of a given [Type]
+  List<T> findChildren<T>() {
+    List<T> matchingChildren=[];
+    for (Node child in children) {
+      if (child is T) {
+        matchingChildren.add(child as T);
+      }
+      if (child is ParentNode) {
+        // recursive call
+        matchingChildren.addAll(child.findChildren<T>());
+      }
+    }
+    return matchingChildren;
+  }
+
+
+
   /// Find a ParentNode that still needs to check the given rule
   ParentNode? findNodeWithUncompletedRule(int ruleIndex) {
     if (lastCompletedRuleIndex < ruleIndex) {

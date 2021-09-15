@@ -6,6 +6,7 @@ import 'package:build/build.dart';
 import 'package:documentation_builder/builder/documentation_builder.dart';
 import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
+import 'package:documentation_builder/generic/element.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/tag_attribute_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
@@ -25,7 +26,6 @@ class TagParser extends Parser {
         ]);
 }
 
-const groupNameAttributes = 'attributes';
 
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
@@ -37,7 +37,7 @@ abstract class TagRule extends TextParserRule {
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .literal(name)
       .group(FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant),
-          type: GroupType.captureNamed(groupNameAttributes))
+          type: GroupType.captureNamed(GroupName.attributes))
       .literal('}')
       .ignoreCase();
 
@@ -45,11 +45,11 @@ abstract class TagRule extends TextParserRule {
   Future<Node> createReplacementNode(
       ParentNode parent, RegExpMatch match) async {
     try {
-      String attributesText = match.namedGroup(groupNameAttributes) ?? '';
+      String attributesText = match.namedGroup(GroupName.attributes) ?? '';
       var tagAttributeParser = TagAttributeParser(attributeRules);
-      Map<String, dynamic> attributeNamesAndValues =
+      Map<String, dynamic> attributes =
           await tagAttributeParser.parseToNameAndValues(attributesText);
-      var tagNode = createTagNode(parent, attributeNamesAndValues);
+      var tagNode = createTagNode(parent, attributes);
       var newChildren = await tagNode.createChildren();
       tagNode.children.addAll(newChildren);
       return tagNode;
@@ -60,7 +60,7 @@ abstract class TagRule extends TextParserRule {
   }
 
   Tag createTagNode(
-      ParentNode parent, Map<String, dynamic> attributeNamesAndValues);
+      ParentNode parent, Map<String, dynamic> attributes);
 }
 
 /// [Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
@@ -74,10 +74,10 @@ abstract class TagRule extends TextParserRule {
 /// - may have [Attribute]s after the name:
 ///   e.g. {ImportFile path='OtherTemplateFile.mdt' title='## Other Template File'&rcub;
 abstract class Tag extends ParentNode {
-  final Map<String, dynamic> attributeNamesAndValues;
+  final Map<String, dynamic> attributes;
   late final Anchor anchor;
 
-  Tag(ParentNode? parent, this.attributeNamesAndValues) : super(parent);
+  Tag(ParentNode? parent, this.attributes) : super(parent);
 
   Future<List<Node>> createChildren();
 }
@@ -92,13 +92,13 @@ abstract class Tag extends ParentNode {
 ///     A title can be referenced in the documentation with a [Link]
 class ImportFileTag extends Tag {
   ImportFileTag(
-      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues);
+      ParentNode? parent, Map<String, dynamic> attributes)
+      : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() {
-    ProjectFilePath path = attributeNamesAndValues['path'];
-    String? title = attributeNamesAndValues['title'];
+    ProjectFilePath path = attributes[AttributeName.path];
+    String? title = attributes[AttributeName.title];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var file = path.toFile();
@@ -117,8 +117,8 @@ class ImportFileTagRule extends TagRule {
 
   @override
   Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
-      ImportFileTag(parent, attributeNamesAndValues);
+          ParentNode parent, Map<String, dynamic> attributes) =>
+      ImportFileTag(parent, attributes);
 }
 
 /// - **{ImportCodeTag file:'file_to_import.txt' title='## Code example'&rcub;**
@@ -128,13 +128,13 @@ class ImportFileTagRule extends TagRule {
 ///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportCodeTag extends Tag {
   ImportCodeTag(
-      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues);
+      ParentNode? parent, Map<String, dynamic> attributes)
+      : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() {
-    ProjectFilePath path = attributeNamesAndValues['path'];
-    String? title = attributeNamesAndValues['title'];
+    ProjectFilePath path = attributes[AttributeName.path];
+    String? title = attributes[AttributeName.title];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var codePrefix = TextNode(this, "\n```\n");
@@ -160,8 +160,8 @@ class ImportCodeTagRule extends TagRule {
 
   @override
   Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
-      ImportCodeTag(parent, attributeNamesAndValues);
+          ParentNode parent, Map<String, dynamic> attributes) =>
+      ImportCodeTag(parent, attributes);
 }
 
 /// - **{ImportDartCodeTag file:'file_to_import.dart' title='## Dart code example'&rcub;**
@@ -171,13 +171,13 @@ class ImportCodeTagRule extends TagRule {
 ///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
-      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues);
+      ParentNode? parent, Map<String, dynamic> attributes)
+      : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() async {
-    DartFilePath path = attributeNamesAndValues['path'];
-    String? title = attributeNamesAndValues['title'];
+    DartFilePath path = attributes[AttributeName.path];
+    String? title = attributes[AttributeName.title];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var codePrefix = TextNode(this, "\n```dart\n");
@@ -203,8 +203,8 @@ class ImportDartCodeTagRule extends TagRule {
 
   @override
   Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
-      ImportDartCodeTag(parent, attributeNamesAndValues);
+          ParentNode parent, Map<String, dynamic> attributes) =>
+      ImportDartCodeTag(parent, attributes);
 }
 
 /// - **{ImportDartDoc path='lib\my_lib.dart|MyClass' title='## My Class'&rcub;**
@@ -214,13 +214,13 @@ class ImportDartCodeTagRule extends TagRule {
 ///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
 class ImportDartDocTag extends Tag {
   ImportDartDocTag(
-      ParentNode? parent, Map<String, dynamic> attributeNamesAndValues)
-      : super(parent, attributeNamesAndValues);
+      ParentNode? parent, Map<String, dynamic> attributes)
+      : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() async {
-    DartCodePath path = attributeNamesAndValues['path'];
-    String? title = attributeNamesAndValues['title'];
+    DartCodePath path = attributes[AttributeName.path];
+    String? title = attributes[AttributeName.title];
     var titleAndOrAnchor = TitleAndOrAnchor(this, title, path.toString());
     anchor = titleAndOrAnchor.anchor;
     var documentation = await _readDocumentationComments(parent!, path);
@@ -308,145 +308,6 @@ class ImportDartDocTag extends Tag {
   }
 }
 
-class ElementFinder implements analyzer.ElementVisitor {
-  final String memberPathToFind;
-
-  analyzer.Element? foundElement;
-
-  ElementFinder(DartMemberPath dartMemberPath)
-      : memberPathToFind = dartMemberPath.toString();
-
-  @override
-  visitClassElement(analyzer.ClassElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitCompilationUnitElement(analyzer.CompilationUnitElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitConstructorElement(analyzer.ConstructorElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitExportElement(analyzer.ExportElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitExtensionElement(analyzer.ExtensionElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitFieldElement(analyzer.FieldElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitFieldFormalParameterElement(
-      analyzer.FieldFormalParameterElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitFunctionElement(analyzer.FunctionElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitFunctionTypeAliasElement(analyzer.FunctionTypeAliasElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitGenericFunctionTypeElement(analyzer.GenericFunctionTypeElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitImportElement(analyzer.ImportElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitLabelElement(analyzer.LabelElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitLibraryElement(analyzer.LibraryElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitLocalVariableElement(analyzer.LocalVariableElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitMethodElement(analyzer.MethodElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitMultiplyDefinedElement(analyzer.MultiplyDefinedElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitParameterElement(analyzer.ParameterElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitPrefixElement(analyzer.PrefixElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitPropertyAccessorElement(analyzer.PropertyAccessorElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitTopLevelVariableElement(analyzer.TopLevelVariableElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitTypeAliasElement(analyzer.TypeAliasElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitTypeParameterElement(analyzer.TypeParameterElement element) {
-    checkElementRecursively(element);
-  }
-
-  checkElementRecursively(analyzer.Element element) {
-    if (foundElement == null) {
-      var memberPath = _memberPath(element, []);
-      if (memberPath == memberPathToFind) {
-        foundElement = element;
-      } else if (memberPathToFind.startsWith(memberPath)) {
-        //search recursively;
-        element.visitChildren(this);
-      }
-    }
-  }
-
-  String _memberPath(analyzer.Element element, List<String> path) {
-    String pathSegment = element.displayName;
-    if (pathSegment.trim().isNotEmpty) path.insert(0, pathSegment);
-    var parent = element.enclosingElement;
-    if (parent != null) _memberPath(parent, path);
-    return path.join('.');
-  }
-}
 
 Future<analyzer.LibraryElement> parseLibrary(
     ParentNode parent, ProjectFilePath dartFile) async {
@@ -472,8 +333,8 @@ class ImportDartDocTagRule extends TagRule {
 
   @override
   Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributeNamesAndValues) =>
-      ImportDartDocTag(parent, attributeNamesAndValues);
+          ParentNode parent, Map<String, dynamic> attributes) =>
+      ImportDartDocTag(parent, attributes);
 }
 
 class TitleAndOrAnchor extends ParentNode {

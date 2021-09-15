@@ -1,3 +1,4 @@
+import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
@@ -6,10 +7,10 @@ import 'parser.dart';
 class TagAttributeParser extends Parser {
   TagAttributeParser(List<AttributeRule> rules) : super(rules);
 
-  /// attributeNamesAndValues are the inside of a [Tag] string
+  /// attributes are the inside of a [Tag] string
   Future<Map<String, dynamic>> parseToNameAndValues(
-      String attributeNamesAndValues) async {
-    var rootNode = createRootNode(attributeNamesAndValues);
+      String attributes) async {
+    var rootNode = createRootNode(attributes);
     await parse(rootNode);
     validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
     validateIfAllRequiredAttributesAreFound(rootNode);
@@ -61,8 +62,6 @@ abstract class AttributeRule extends TextParserRule {
   static final valueExpression =
       FluentRegex().anyCharacter(Quantity.zeroOrMoreTimes().reluctant);
 
-  static String groupNameValue = 'value';
-
   static createExpression(String name) => FluentRegex()
       .whiteSpace(Quantity.oneOrMoreTimes())
       .literal(name)
@@ -70,11 +69,11 @@ abstract class AttributeRule extends TextParserRule {
       .characterSet(CharacterSet().addLiterals(':='))
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .characterSet(CharacterSet().addLiterals('"\''))
-      .group(valueExpression, type: GroupType.captureNamed(groupNameValue))
+      .group(valueExpression, type: GroupType.captureNamed(GroupName.value))
       .characterSet(CharacterSet().addLiterals('"\''));
 
   String stringValueFor(RegExpMatch match) {
-    String? value = match.namedGroup(groupNameValue);
+    String? value = match.namedGroup(GroupName.value);
     if (value == null)
       throw Exception(
           "Could not find value for $name attribute in: '${match.result}'");
@@ -96,7 +95,7 @@ class Attribute<T> extends Node {
 }
 
 class ProjectFilePathAttributeRule extends AttributeRule {
-  ProjectFilePathAttributeRule({String name = 'path', bool required = true})
+  ProjectFilePathAttributeRule({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -132,7 +131,7 @@ class UriSuffixAttributeRule extends AttributeRule {
 }
 
 class DartFilePathAttributeRule extends AttributeRule {
-  DartFilePathAttributeRule({String name = 'path', bool required = true})
+  DartFilePathAttributeRule({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -153,7 +152,7 @@ Never _throwParserWarning(Exception e) =>
     throw ParserWarning(e.toString().replaceAll('Exception: ', ''));
 
 class DartCodePathAttributeRule extends AttributeRule {
-  DartCodePathAttributeRule({String name = 'path', bool required = true})
+  DartCodePathAttributeRule({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -189,7 +188,7 @@ class StringAttributeRule extends AttributeRule {
 }
 
 class TitleAttributeRule extends StringAttributeRule {
-  TitleAttributeRule({String name = 'title', bool required = false})
+  TitleAttributeRule({String name = AttributeName.title, bool required = false})
       : super(name, required: required);
 
   @override

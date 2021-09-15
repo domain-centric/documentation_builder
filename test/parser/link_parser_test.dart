@@ -78,11 +78,11 @@ main() {
         expect(rule.expression.hasMatch(markdown), true);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameTitle],
+                .findCapturedGroups(markdown)[GroupName.title],
             titleValue);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameUri],
+                .findCapturedGroups(markdown)[GroupName.uri],
             uri);
       });
       test("Link without title", () {
@@ -91,11 +91,11 @@ main() {
         expect(rule.expression.hasMatch(markdown), true);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameTitle],
+                .findCapturedGroups(markdown)[GroupName.title],
             '');
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameUri],
+                .findCapturedGroups(markdown)[GroupName.uri],
             uri);
       });
       test("Link without url", () {
@@ -104,11 +104,11 @@ main() {
         expect(rule.expression.hasMatch(markdown), true);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameTitle],
+                .findCapturedGroups(markdown)[GroupName.title],
             titleValue);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameUri],
+                .findCapturedGroups(markdown)[GroupName.uri],
             '');
       });
 
@@ -118,11 +118,11 @@ main() {
         expect(rule.expression.hasMatch(markdown), true);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameTitle],
+                .findCapturedGroups(markdown)[GroupName.title],
             titleValue);
         expect(
             rule.expression
-                .findCapturedGroups(markdown)[CompleteLinkRule.groupNameUri],
+                .findCapturedGroups(markdown)[GroupName.uri],
             uri);
       });
 
@@ -182,15 +182,15 @@ main() {
     group('method: createDefaultTitle', () {
       test('README.md returns README', () {
         var rule = MarkdownFileLinkRule();
-        expect(rule.createTitleFromPath("README.md"), 'README');
+        expect(rule.createDefaultTitle("README.md"), 'README');
       });
       test("'doc/template/README.mdt' returns README", () {
         var rule = MarkdownFileLinkRule();
-        expect(rule.createTitleFromPath("doc/template/README.mdt"), 'README');
+        expect(rule.createDefaultTitle("doc/template/README.mdt"), 'README');
       });
       test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'", () {
         var rule = MarkdownFileLinkRule();
-        expect(rule.createTitleFromPath("01-Documentation-Builder.mdt"),
+        expect(rule.createDefaultTitle("01-Documentation-Builder.mdt"),
             '01 Documentation Builder');
       });
     });
