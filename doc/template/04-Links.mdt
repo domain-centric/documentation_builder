@@ -10,6 +10,6 @@
 
 {ImportDartDoc path='lib/parser/link_parser.dart|MarkdownFileLinkRule' title='## Markdown file links'}
 
- //TODO DartCodeMemberLinkRule
- //TODO MarkDownFileLinkRule
+{ImportDartDoc path='lib/parser/link_parser.dart|DartCodeLinkRule' title='## Dart code links'}
+
  //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES

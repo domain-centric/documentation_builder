@@ -8,6 +8,8 @@ targets:
     builders:
       documentation_builder|template_builder:
         enabled: True
+      documentation_builder|dart_code_path_builder:
+        enabled: True
       documentation_builder|parse_builder:
         enabled: True
       documentation_builder|output_builder:
@@ -22,7 +24,16 @@ builders:
         - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: cache
     auto_apply: root_package
-    runs_before: [documentation_builder|parse_builder]
+    runs_before: [documentation_builder|dart_code_path_builder]
+  dart_code_path_builder:
+    import: 'package:documentation_builder/builder/builder_factory.dart'
+    builder_factories: [ 'dartCodePathBuilder' ]
+    build_extensions:
+      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+    build_to: source
+    auto_apply: root_package
+    runs_before: [ documentation_builder|parse_builder]
   parse_builder:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: [ 'parseBuilder' ]

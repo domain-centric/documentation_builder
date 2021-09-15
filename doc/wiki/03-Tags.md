@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-15 07:44:17.156517.)
+[//]: # (This file was generated from: doc/template/03-Tags.mdt using the documentation_builder package on: 2021-09-15 20:45:16.042763.)
 <a id='lib-parser-tag-parser-dart-tag'></a>[Tag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#lib-parser-tag-parser-dart-tag)s are specific texts in [MarkdownTemplate]s that are replaced by the
  [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) with other information
  (e.g. by an imported Dart Documentation Comment) before the

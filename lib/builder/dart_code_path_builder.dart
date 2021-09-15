@@ -19,15 +19,16 @@ class DartCodePathBuilder implements Builder {
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     var library = await buildStep.inputLibrary;
-    // TODO
+    // TODO Remove?
     // // Resolves all libraries reachable from the primary input.
     // var resolver = buildStep.resolver;
     // // Get a `LibraryElement` for another asset.
     // var library = await resolver.libraryFor(buildStep.inputId);
-    DartCodePathFinder visitor=DartCodePathFinder();
+    DartFilePath path=DartFilePath(buildStep.inputId.path);
+    DartCodePathFinder visitor=DartCodePathFinder(path);
     library.visitChildren(visitor);
     DocumentationModel model =
     await buildStep.fetchResource<DocumentationModel>(resource);
-    model.dartCodePaths=visitor.foundPaths;
+    model.dartCodePaths.addAll(visitor.foundPaths);
   }
 }

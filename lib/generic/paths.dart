@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:build/build.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
+import 'package:http/http.dart' as http;
 
 import 'documentation_model.dart';
 
@@ -62,8 +63,6 @@ class ProjectFilePath {
   int get hashCode => path.hashCode;
 }
 
-
-
 /// [UriSuffixPath] is a path that can be appended to a http [Uri]
 /// It may only use valid [Uri] characters
 ///
@@ -73,8 +72,12 @@ class UriSuffixPath {
 
   static final expression = FluentRegex()
       .startOfLine()
-      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-._~:?#[]@!\$&()*+,;%=/'),
-      Quantity.zeroOrMoreTimes())
+      .characterSet(
+          CharacterSet()
+              .addLetters()
+              .addDigits()
+              .addLiterals('-._~:?#[]@!\$&()*+,;%=/'),
+          Quantity.zeroOrMoreTimes())
       .endOfLine();
 
   UriSuffixPath(this.path) {
@@ -112,16 +115,58 @@ class UriSuffixPath {
 class DartMemberPath {
   final String path;
 
+  static final List<FluentRegex> _operatorExpressions = [
+    FluentRegex().literal('+'),
+    FluentRegex().literal('-'),
+    FluentRegex().literal('*'),
+    FluentRegex().literal('/'),
+    FluentRegex().literal('%'),
+    FluentRegex().literal('<<'),
+    FluentRegex().literal('>>'),
+    FluentRegex().literal('>>>'),
+    FluentRegex().literal('&'),
+    FluentRegex().literal('&&'),
+    FluentRegex().literal('^'),
+    FluentRegex().literal('|'),
+    FluentRegex().literal('||'),
+    FluentRegex().literal('>='),
+    FluentRegex().literal('>'),
+    FluentRegex().literal('<='),
+    FluentRegex().literal('<'),
+    FluentRegex().literal('as'),
+    FluentRegex().literal('is'),
+    FluentRegex().literal('is!'),
+    FluentRegex().literal('=='),
+    FluentRegex().literal('!='),
+    FluentRegex().literal('??'),
+    FluentRegex().literal('='),
+    FluentRegex().literal('*='),
+    FluentRegex().literal('/='),
+    FluentRegex().literal('+='),
+    FluentRegex().literal('-='),
+    FluentRegex().literal('&='),
+    FluentRegex().literal('^='),
+    FluentRegex().literal('|='),
+  ];
+
   static final FluentRegex expression = FluentRegex()
       .startOfLine()
+      .literal('_', Quantity.zeroOrOneTime())
       .characterSet(
           CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
       .group(
-          FluentRegex().literal('.').characterSet(
-              CharacterSet().addLetters().addDigits(),
-              Quantity.oneOrMoreTimes()),
+          FluentRegex().literal('.') .or([
+          FluentRegex().literal('_'),
+            FluentRegex().group(
+                FluentRegex()
+                    .literal('_', Quantity.zeroOrMoreTimes())
+                    .characterSet(CharacterSet().addLetters().addDigits(),
+                        Quantity.oneOrMoreTimes())),
+            ..._operatorExpressions,
+          ]),
           quantity: Quantity.zeroOrMoreTimes())
-      .endOfLine();
+      .endOfLine()
+      .ignoreCase();
 
   DartMemberPath(this.path) {
     validate(path);
@@ -189,7 +234,6 @@ class DartFilePath extends ProjectFilePath {
 /// - lib/my_library.dart|MyExtension.myFieldName.set
 /// - lib/my_library.dart|MyExtension.myMethod
 class DartCodePath {
-
   static final expression = FluentRegex()
       .startOfLine()
       .group(DartFilePath.expression.startOfLine(false).endOfLine(false),
@@ -245,7 +289,7 @@ extension UriExtension on Uri {
     if (pathSuffix.trim().startsWith('/')) {
       return this.replace(path: path + pathSuffix);
     } else {
-      return this.replace(path: path + '/'+ pathSuffix);
+      return this.replace(path: path + '/' + pathSuffix);
     }
   }
 

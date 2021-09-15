@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-15 07:44:17.157409.)
+[//]: # (This file was generated from: doc/template/04-Links.mdt using the documentation_builder package on: 2021-09-15 20:45:16.050740.)
 <a id='lib-parser-link-parser-dart-link'></a>You can refer to other parts of the documentation using [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)s.
 [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link)s:
 - are references between square brackets [] in [MarkdownTemplateFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#lib-builder-template-builder-dart-markdowntemplatefile)s, e.g.: [MyClass&rsqb;
@@ -87,6 +87,40 @@ You can use :
 Note that the [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) ignores letter casing.
 
 
- //TODO DartCodeMemberLinkRule
- //TODO MarkDownFileLinkRule
+<a id='dart-code-links'></a>
+## Dart code links
+A DartCodeLink is a [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link) to a piece of Dart code.
+You can make a link to any library members, e.g.:
+- constant
+- function
+- enum (an enum can have value members)
+- class (a class can have members such as methods, fields, and field access methods)
+- extension (an extension can have members such as methods, fields, and field access methods)
+
+These library members can be referred to in [MarkdownPage]'s using brackets. e.g.
+- [myConstant]
+- [myFunction]
+- [MyEnum]
+  - [MyEnum.myValue]
+- [MyClass]
+  - [MyClass.myField]
+  - [MyClass.get.myField]
+  - [MyClass.set.myField]
+  - [MyClass.myMethod]
+- [MyExtension]
+  - [MyClass.myField]
+  - [MyExtension.get.myField]
+  - [MyExtension.set.myField]
+  - [MyExtension.myMethod]
+You can also include the library name or the full [DartFilePath](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#dart-file-path) in case a project uses same member names in different libraries, e.g.:
+- [my_lib.dart|myConstant]
+- [lib/my_lib.dart|myFunction]
+
+The [DocumentationBuilder](https://github.com/efficientyboosters/documentation_builder/wiki/01-Documentation-Builder#lib-builder-documentation-builder-dart-documentationbuilder) will try to resolve these [MemberLink]s in the following order:
+- Within the [MarkdownPage], e.g.: link it to the position of a [ImportDartDocTag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#import-dart-documentation-comments-tag)
+- Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag](https://github.com/efficientyboosters/documentation_builder/wiki/03-Tags#import-dart-documentation-comments-tag)
+- Link it to a [GitHubProjectCodeLink]
+The [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link) will not be replaced when the [Link](https://github.com/efficientyboosters/documentation_builder/wiki/04-Links#lib-parser-link-parser-dart-link) can not be resolved
+
+ 
  //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES

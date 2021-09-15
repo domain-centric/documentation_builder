@@ -165,6 +165,9 @@ class ElementFinder implements ElementVisitor {
 /// An [ElementVisitor] for finding all [DartCodePath]s
 class DartCodePathFinder implements ElementVisitor {
   final Set<DartCodePath> foundPaths = {};
+  final DartFilePath dartFilePath;
+
+  DartCodePathFinder(this.dartFilePath);
 
   @override
   visitClassElement(ClassElement element) {
@@ -277,8 +280,14 @@ class DartCodePathFinder implements ElementVisitor {
   }
 
   checkElementRecursively(Element element) {
-    DartCodePath path = DartCodePath(element.path);
-    foundPaths.add(path);
+    if (element is! LibraryElement && element.path.isNotEmpty) {
+      try {
+        DartCodePath path = DartCodePath('$dartFilePath|${element.path}');
+        foundPaths.add(path);
+      }  catch (e) {
+        // failed try next...
+      }
+    }
     //search recursively;
     element.visitChildren(this);
   }

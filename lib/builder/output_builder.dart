@@ -1,5 +1,3 @@
-library documentation_builder;
-
 import 'dart:async';
 import 'dart:io';
 

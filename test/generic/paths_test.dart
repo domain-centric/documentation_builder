@@ -174,6 +174,22 @@ main() {
         String path = 'HelloAll2';
         expect(DartMemberPath(path).toString(), path);
       });
+      test("path may begin with underscore", () {
+        String path = '_hello._world';
+        expect(DartMemberPath(path).toString(), path);
+      });
+      test("path may contain a == operator", () {
+        String path = 'MyClass.==';
+        expect(DartMemberPath(path).toString(), path);
+      });
+      test("path may contain a + operator", () {
+        String path = 'MyClass.+';
+        expect(DartMemberPath(path).toString(), path);
+      });
+      test("path with multiple layers", () {
+        String path = 'DocumentationParser.parse.model';
+        expect(DartMemberPath(path).toString(), path);
+      });
     });
   });
 
@@ -458,7 +474,7 @@ main() {
     group('constructor', () {
       test("path may begin with slash", () {
         String path = '/hello';
-        expect(UriSuffixPath.expression.hasMatch(path),true);
+        expect(UriSuffixPath.expression.hasMatch(path), true);
       });
 
       test("path should not begin with backslash", () {
@@ -467,7 +483,7 @@ main() {
           UriSuffixPath(path);
         },
             throwsA(isA<Exception>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
               equals('Exception: Invalid UriSuffixPath format: $path'),
             )));
@@ -479,7 +495,7 @@ main() {
           UriSuffixPath(path);
         },
             throwsA(isA<Exception>().having(
-                  (e) => e.toString(),
+              (e) => e.toString(),
               'toString()',
               equals('Exception: Invalid UriSuffixPath format: $path'),
             )));
