@@ -1,0 +1,31 @@
+You need to publish the [GeneratedMarkdownFile]s to make them available for reading on web pages.
+The following paragraphs will explain how.
+
+## Publishing none Wiki pages
+[MarkDownFile]s that are not [WikiFile]s are published:
+- on https://github.com: by committing and pushing the files to [GitHub](https://github.com) using ```git commit``` and ```git push``` commands
+- on https://pub.dev: by publishing your project to [PubDev](https://pub.dev) using ```dart pub publish``` or ```flutter pub publish``` commands
+
+## Cloning Wiki pages
+Before you can publish the Wiki files to [GitHub](https://github.com), you must first clone the Wiki pages into your local project. You only have to do this the first time:
+- Create a Wiki page on your github project:
+  - Open in browser: ```https://github.com/<user_name>/<repository_name>/wiki```
+  - Click New Page button
+  - Edit page (add some dummy title and text)
+  - Click Save page
+- Clone the Wiki pages in your local project
+  - Open the command line and go to your project (e.g.: C:\Users\myName\AndroidStudioProjects\my_project)
+  - Go into the doc directory (this directory was already created when making the template files)
+  - Enter command: ```git clone https://github.com/<user_name>/<repository_name>.wiki.git```
+    (you can also find the clone url on the bottom right of the github Wiki pages)
+
+You can now generate the documentation files (see...). The Wiki pages will be stored in the doc/<>project_name>.wiki directory.
+
+## Publishing Wiki pages
+You can push newly generated Wiki pages to GitHub:
+  - Open the command Line
+  - Go into the doc/<project_name>.wiki directory
+  - Enter commands:
+    - ```git add .```
+    - ```git commit -m "Generated on:<date time>"```
+    - ```git push (a pop up page may appear for authorisation)```

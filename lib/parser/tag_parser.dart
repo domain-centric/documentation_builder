@@ -8,7 +8,7 @@ import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/element.dart';
 import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
@@ -46,7 +46,7 @@ abstract class TagRule extends TextParserRule {
       ParentNode parent, RegExpMatch match) async {
     try {
       String attributesText = match.namedGroup(GroupName.attributes) ?? '';
-      var tagAttributeParser = TagAttributeParser(attributeRules);
+      var tagAttributeParser = AttributeParser(attributeRules);
       Map<String, dynamic> attributes =
           await tagAttributeParser.parseToNameAndValues(attributesText);
       var tagNode = createTagNode(parent, attributes);
@@ -85,11 +85,9 @@ abstract class Tag extends ParentNode {
 /// - **{ImportFile file:'OtherTemplateFile.mdt' title='## Other Template File'&rcub;**
 /// - Imports another text file or markdown file.
 /// - Attributes:
-///   - path= (required) A [ProjectFilePath] to a file name inside the markdown
-///     directory that needs to be imported. This may be any type of text file (e.g. .mdt file).
-///   - title= (optional) title. You can precede the title with a number of #
-///     to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph).
-///     A title can be referenced in the documentation with a [Link]
+///   - path= (required) A [ProjectFilePath] to a file that needs to be imported.
+///     This may be any type of text file (e.g. .mdt file).
+///   - title= (optional) See [TitleAttribute]
 class ImportFileTag extends Tag {
   ImportFileTag(
       ParentNode? parent, Map<String, dynamic> attributes)
@@ -111,8 +109,8 @@ class ImportFileTag extends Tag {
 class ImportFileTagRule extends TagRule {
   ImportFileTagRule()
       : super('ImportFile', [
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
 
   @override
@@ -125,7 +123,7 @@ class ImportFileTagRule extends TagRule {
 /// - Imports a (none Dart) code file.
 /// - Attributes:
 ///   - path= (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
-///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+///   - title= (optional) See [TitleAttribute]
 class ImportCodeTag extends Tag {
   ImportCodeTag(
       ParentNode? parent, Map<String, dynamic> attributes)
@@ -154,8 +152,8 @@ class ImportCodeTag extends Tag {
 class ImportCodeTagRule extends TagRule {
   ImportCodeTagRule()
       : super('ImportCode', [
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
 
   @override
@@ -168,7 +166,7 @@ class ImportCodeTagRule extends TagRule {
 /// - Imports a (none Dart) code file.
 /// - Attributes:
 ///   - path= (required) A [DartFilePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
-///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+///   - title= (optional) See [TitleAttribute]
 class ImportDartCodeTag extends Tag {
   ImportDartCodeTag(
       ParentNode? parent, Map<String, dynamic> attributes)
@@ -197,8 +195,8 @@ class ImportDartCodeTag extends Tag {
 class ImportDartCodeTagRule extends TagRule {
   ImportDartCodeTagRule()
       : super('ImportDartCode', [
-          DartFilePathAttributeRule(),
-          TitleAttributeRule(),
+          DartFilePathAttribute(),
+          TitleAttribute(),
         ]);
 
   @override
@@ -208,10 +206,10 @@ class ImportDartCodeTagRule extends TagRule {
 }
 
 /// - **{ImportDartDoc path='lib\my_lib.dart|MyClass' title='## My Class'&rcub;**
-/// - Imports Dart documentation comments from a library member in a dart file.
+/// - Imports Dart documentation comments from a library member of a dart file.
 /// - Attributes:
 ///   - path= (required) A [DartCodePath] to be imported Dart comments.
-///   - title= (optional) title. You can precede the title with a number of # to indicate the title level (#=chapter, ##=paragraph, ###=sub paragraph). A title can be referenced in the documentation with a [Link]
+///   - title= (optional) See [TitleAttribute]
 class ImportDartDocTag extends Tag {
   ImportDartDocTag(
       ParentNode? parent, Map<String, dynamic> attributes)
@@ -327,8 +325,8 @@ Future<analyzer.LibraryElement> parseLibrary(
 class ImportDartDocTagRule extends TagRule {
   ImportDartDocTagRule()
       : super('ImportDartDoc', [
-          DartCodePathAttributeRule(),
-          TitleAttributeRule(),
+          DartCodePathAttribute(),
+          TitleAttribute(),
         ]);
 
   @override

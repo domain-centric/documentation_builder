@@ -9,8 +9,8 @@ main() {
         var model=TestDocumentationModel();
         var templates=model.findOrderedMarkdownTemplateFiles();
         expect (templates.length,2);
-        expect (templates.first.factory,equals(WikiFactory()));
-        expect (templates.last.factory,equals(ReadMeFactory()));
+        expect (templates.first.factory,equals(WikiFile()));
+        expect (templates.last.factory,equals(ReadMeFile()));
       });
     });
   });
@@ -24,10 +24,10 @@ class TestDocumentationModel extends DocumentationModel {
   }
 
   MarkdownTemplate createReadMeTemplate() =>
-      ReadMeFactory().createMarkdownTemplate(this, 'doc/template/README.mdt');
+      ReadMeFile().createMarkdownTemplate(this, 'doc/template/README.mdt');
 
   MarkdownTemplate createWikiTemplate() =>
-      WikiFactory().createMarkdownTemplate(
+      WikiFile().createMarkdownTemplate(
           this, 'doc/template/01-Documentation-Builder.md');
 
 

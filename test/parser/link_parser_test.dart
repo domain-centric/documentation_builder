@@ -4,20 +4,20 @@ import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:test/test.dart';
 
 main() {
-  String suffixName = UriSuffixAttributeRule().name;
+  String suffixName = UriSuffixAttribute().name;
   String wikiSuffixValue = 'wiki';
   String wikiSuffixAttribute = '$suffixName="$wikiSuffixValue"';
   String exampleSuffixValue = 'example';
   String exampleSuffixAttribute = '$suffixName="$exampleSuffixValue"';
   String invalidSuffixValue = 'none-existing-path-suffix';
   String invalidSuffixAttribute = '$suffixName="$invalidSuffixValue"';
-  String titleName = TitleAttributeRule().name;
+  String titleName = TitleAttribute().name;
   String titleValue = '# Title';
   String titleAttribute = "  $titleName  : '$titleValue'  ";
   String uri = 'https://google.com';
@@ -73,7 +73,7 @@ main() {
   group('class: CompleteLinkRule', () {
     group('field: expression', () {
       test("Correct Link", () {
-        var rule = CompleteLinkRule();
+        var rule = CompleteLink();
         var markdown = "[$titleValue]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
@@ -86,7 +86,7 @@ main() {
             uri);
       });
       test("Link without title", () {
-        var rule = CompleteLinkRule();
+        var rule = CompleteLink();
         var markdown = "[]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
@@ -99,7 +99,7 @@ main() {
             uri);
       });
       test("Link without url", () {
-        var rule = CompleteLinkRule();
+        var rule = CompleteLink();
         var markdown = "[$titleValue]()";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
@@ -113,7 +113,7 @@ main() {
       });
 
       test("with spaces has match", () {
-        var rule = CompleteLinkRule();
+        var rule = CompleteLink();
         var markdown = "[  $titleValue  ](    $uri )";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
@@ -127,7 +127,7 @@ main() {
       });
 
       test("with spaces between brackets and braces has no match", () {
-        var rule = CompleteLinkRule();
+        var rule = CompleteLink();
         var markdown = "[  $titleValue  ]  (    $uri )";
         expect(rule.expression.hasMatch(markdown), false);
       });
@@ -137,28 +137,28 @@ main() {
   group('class: GitHubProjectLinkRule', () {
     group('field: expression', () {
       test("lowercase name has match", () {
-        var rule = GitHubProjectLinkRule();
+        var rule = GitHubProjectLink();
         expect(
             rule.expression
                 .hasMatch("[github $wikiSuffixAttribute $titleAttribute] "),
             true);
       });
       test("lowercase and uppercase name has match", () {
-        var rule = GitHubProjectLinkRule();
+        var rule = GitHubProjectLink();
         expect(
             rule.expression
                 .hasMatch("[GitHub  $wikiSuffixAttribute $titleAttribute]"),
             true);
       });
       test("with spaces has match", () {
-        var rule = GitHubProjectLinkRule();
+        var rule = GitHubProjectLink();
         expect(
             rule.expression.hasMatch(
                 "[  GitHub  $wikiSuffixAttribute $titleAttribute    ]"),
             true);
       });
       test("[GitHubWiki] has match", () {
-        var rule = GitHubProjectLinkRule();
+        var rule = GitHubProjectLink();
         expect(rule.expression.hasMatch("[GitHubWiki]"), true);
       });
     });
@@ -166,30 +166,30 @@ main() {
   group('class: MarkdownFileLinkRule', () {
     group('field:expression', () {
       test('file name only has match', () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(rule.expression.hasMatch("[README.md]"), true);
       });
       test('file and path has match', () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(rule.expression.hasMatch("[doc/template/README.mdt]"), true);
       });
       test('wiki file has match', () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(
             rule.expression.hasMatch("[01-Documentation-Builder.mdt]"), true);
       });
     });
     group('method: createDefaultTitle', () {
       test('README.md returns README', () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(rule.createDefaultTitle("README.md"), 'README');
       });
       test("'doc/template/README.mdt' returns README", () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(rule.createDefaultTitle("doc/template/README.mdt"), 'README');
       });
       test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'", () {
-        var rule = MarkdownFileLinkRule();
+        var rule = MarkdownFileLink();
         expect(rule.createDefaultTitle("01-Documentation-Builder.mdt"),
             '01 Documentation Builder');
       });
@@ -469,9 +469,9 @@ class TestDocumentationModel extends DocumentationModel {
       TextNode(this, markdownFilePath);
 
   MarkdownTemplate createReadMeTemplate() =>
-      ReadMeFactory().createMarkdownTemplate(this, 'doc/template/README.mdt');
+      ReadMeFile().createMarkdownTemplate(this, 'doc/template/README.mdt');
 
-  MarkdownTemplate createWikiTemplate() => WikiFactory()
+  MarkdownTemplate createWikiTemplate() => WikiFile()
       .createMarkdownTemplate(this, 'doc/template/01-Documentation-Builder.mdt');
 
   Node get link => children[2];

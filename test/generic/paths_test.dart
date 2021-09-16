@@ -59,6 +59,10 @@ main() {
         String path = 'lib\my_dart_file.dart';
         expect(ProjectFilePath(path).toString(), path);
       });
+      test("path may have a dot in file name or directory name", () {
+        String path = 'my.folder\my.file.txt';
+        expect(ProjectFilePath(path).toString(), path);
+      });
     });
     group('method: toAssetId', () {
       test("must return a valid AssetId", () {

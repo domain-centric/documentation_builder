@@ -1,11 +1,12 @@
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
+import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import 'parser.dart';
 
-class TagAttributeParser extends Parser {
-  TagAttributeParser(List<AttributeRule> rules) : super(rules);
+class AttributeParser extends Parser {
+  AttributeParser(List<AttributeRule> rules) : super(rules);
 
   /// attributes are the inside of a [Tag] string
   Future<Map<String, dynamic>> parseToNameAndValues(
@@ -94,8 +95,8 @@ class Attribute<T> extends Node {
   }) : super(parent);
 }
 
-class ProjectFilePathAttributeRule extends AttributeRule {
-  ProjectFilePathAttributeRule({String name = AttributeName.path, bool required = true})
+class ProjectFilePathAttribute extends AttributeRule {
+  ProjectFilePathAttribute({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -112,8 +113,8 @@ class ProjectFilePathAttributeRule extends AttributeRule {
   }
 }
 
-class UriSuffixAttributeRule extends AttributeRule {
-  UriSuffixAttributeRule({String name = 'suffix', bool required = false})
+class UriSuffixAttribute extends AttributeRule {
+  UriSuffixAttribute({String name = 'suffix', bool required = false})
       : super(name, required: required);
 
   @override
@@ -130,8 +131,8 @@ class UriSuffixAttributeRule extends AttributeRule {
   }
 }
 
-class DartFilePathAttributeRule extends AttributeRule {
-  DartFilePathAttributeRule({String name = AttributeName.path, bool required = true})
+class DartFilePathAttribute extends AttributeRule {
+  DartFilePathAttribute({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -151,8 +152,8 @@ class DartFilePathAttributeRule extends AttributeRule {
 Never _throwParserWarning(Exception e) =>
     throw ParserWarning(e.toString().replaceAll('Exception: ', ''));
 
-class DartCodePathAttributeRule extends AttributeRule {
-  DartCodePathAttributeRule({String name = AttributeName.path, bool required = true})
+class DartCodePathAttribute extends AttributeRule {
+  DartCodePathAttribute({String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
@@ -187,8 +188,20 @@ class StringAttributeRule extends AttributeRule {
   }
 }
 
-class TitleAttributeRule extends StringAttributeRule {
-  TitleAttributeRule({String name = AttributeName.title, bool required = false})
+/// You can specify a title with a [TitleAttribute].
+/// [TitleAttribute]s are often optional.
+///
+/// You can precede the title with a number of hashes #: to indicate the title level, e.g.:
+/// - #=chapter
+/// - ##=paragraph
+/// - ###=sub paragraph
+///
+/// [TitleAttribute] example: title='## My Title'
+///
+/// A [TitleAttribute]s can be referenced in the documentation, e.g. with a [MarkdownFileLink] or [DartCodeLink]
+
+class TitleAttribute extends StringAttributeRule {
+  TitleAttribute({String name = AttributeName.title, bool required = false})
       : super(name, required: required);
 
   @override

@@ -4,7 +4,7 @@ import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/tag_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
@@ -15,25 +15,26 @@ import 'package:fluent_regex/fluent_regex.dart';
 class LinkParser extends Parser {
   LinkParser()
       : super([
-    CompleteLinkRule(),
-    GitHubProjectLinkRule(),
-    PubDevProjectLinkRule(),
-    PubDevPackageLinkRule(),
-    DartCodeLinkRule(),
-    MarkdownFileLinkRule(),
-    DartCodeLinkRule(),
+    CompleteLink(),
+    GitHubProjectLink(),
+    PubDevProjectLink(),
+    PubDevPackageLink(),
+    DartCodeLink(),
+    MarkdownFileLink(),
+    DartCodeLink(),
 //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES
   ]);
 }
 
 /// A complete Hyperlink in Markdown is a text between square brackets []
-/// followed by a [Uri] between parentheses (),
+/// followed by a Uri between parentheses (),
+///
 /// e.g.: [Search the webt&rsqb;(https://google.com)
 
 // This Rule was added and will be parses first to prevent complete links
 // to be replaced by incomplete links
-class CompleteLinkRule extends TextParserRule {
-  CompleteLinkRule() : super(createExpression());
+class CompleteLink extends TextParserRule {
+  CompleteLink() : super(createExpression());
 
   static FluentRegex createExpression() =>
       FluentRegex()
@@ -106,9 +107,9 @@ abstract class InCompleteLinkRule extends TextParserRule {
     try {
       String name = match.namedGroup(GroupName.name)!;
       String attributesText = match.namedGroup(GroupName.attributes) ?? '';
-      var tagAttributeParser = TagAttributeParser(attributeRules);
+      var attributeParser = AttributeParser(attributeRules);
       Map<String, dynamic> attributes =
-      await tagAttributeParser.parseToNameAndValues(attributesText);
+      await attributeParser.parseToNameAndValues(attributesText);
       var linkNode = createLinkNode(parent, name, attributes);
       await linkNode.validateUriHttpGet();
       return linkNode;
@@ -123,7 +124,7 @@ abstract class InCompleteLinkRule extends TextParserRule {
       Map<String, dynamic> attributes,);
 
   String findTitle(String defaultTitle, attributes) {
-    final String nameAttribute = TitleAttributeRule().name;
+    final String nameAttribute = TitleAttribute().name;
     if (attributes.keys.contains(nameAttribute)) {
       return attributes[nameAttribute];
     } else {
@@ -163,7 +164,7 @@ class Link extends ParentNode {
       throw ParserWarning('The title attribute may not be empty');
   }
 
-  /// This method is called by [CompleteLinkRule.createReplacementNodes]
+  /// This method is called by [CompleteLink.createReplacementNodes]
   /// because it is a async method.
   Future<void> validateUriHttpGet() async {
     if (!await uri.canGetWithHttp())
@@ -177,8 +178,8 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
 
   LinkDefinitionsRule(this.linkDefinitions)
       : super([
-    UriSuffixAttributeRule(),
-    TitleAttributeRule(),
+    UriSuffixAttribute(),
+    TitleAttribute(),
   ], nameExpression: createNameExpression(linkDefinitions));
 
   static FluentRegex createNameExpression(
@@ -201,7 +202,7 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
 
   Uri createUri(LinkDefinition linkDef, Map<String, dynamic> attributes) {
     Uri uri = linkDef.uri;
-    final String name = UriSuffixAttributeRule().name;
+    final String name = UriSuffixAttribute().name;
     if (attributes.keys.contains(name)) {
       UriSuffixPath suffix = attributes[name];
       uri = uri.withPathSuffix(suffix.path);
@@ -226,37 +227,37 @@ class LinkDefinition {
 /// current project (assuming it is stored on GitHub).
 ///
 /// You can use the following MarkDown:
-/// [GitHub&rsqb;
-/// [GitHubWiki&rsqb;
-/// [GitHubMilestones&rsqb;
-/// [GitHubReleases&rsqb;
-/// [GitHubPullRequests&rsqb;
-/// [GitHubRaw&rsqb;
+/// - [GitHub&rsqb;
+/// - [GitHubWiki&rsqb;
+/// - [GitHubMilestones&rsqb;
+/// - [GitHubReleases&rsqb;
+/// - [GitHubPullRequests&rsqb;
+/// - [GitHubRaw&rsqb;
 ///
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [Github suffix='wiki'&rsqb; is the same as [GithubWiki&rsqb;
 /// - title: An alternative title for the hyperlink. e.g. [GitHubWiki title='Wiki documentation'&rsqb;
-class GitHubProjectLinkRule extends LinkDefinitionsRule {
-  GitHubProjectLinkRule() : super(GitHubProject().linkDefinitions);
+class GitHubProjectLink extends LinkDefinitionsRule {
+  GitHubProjectLink() : super(GitHubProject().linkDefinitions);
 }
 
 /// [GitHubProjectLink]s point to a [PubDev](https://pub.dev/) page of the
 /// current project (assuming it is published on PubDev).
 ///
 /// You can use the following MarkDown:
-/// [PubDev&rsqb;
-/// [PubDevChangeLog&rsqb;
-/// [PubDevVersions&rsqb;
-/// [PubDevExample&rsqb;
-/// [PubDevInstall&rsqb;
-/// [PubDevScore&rsqb;
-/// [PubDevLicense&rsqb;
+/// - [PubDev&rsqb;
+/// - [PubDevChangeLog&rsqb;
+/// - [PubDevVersions&rsqb;
+/// - [PubDevExample&rsqb;
+/// - [PubDevInstall&rsqb;
+/// - [PubDevScore&rsqb;
+/// - [PubDevLicense&rsqb;
 ///
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [PubDev suffix='example'&rsqb; is the same as [PubDevExample&rsqb;
 /// - title: An alternative title for the hyperlink. e.g. [PubDevExample title='Examples'&rsqb;
-class PubDevProjectLinkRule extends LinkDefinitionsRule {
-  PubDevProjectLinkRule() : super(PubDevProject().linkDefinitions);
+class PubDevProjectLink extends LinkDefinitionsRule {
+  PubDevProjectLink() : super(PubDevProject().linkDefinitions);
 }
 
 /// A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
@@ -273,9 +274,9 @@ class PubDevProjectLinkRule extends LinkDefinitionsRule {
 /// You can use the optional title attribute, e.g.:
 /// [json_serializable title='Package for json conversion'&rsqb; will be replaced by
 /// [Package for json conversion&rsqb;(https://pub.dev/packages/json_serializable)
-class PubDevPackageLinkRule extends InCompleteLinkRule {
-  PubDevPackageLinkRule()
-      : super([TitleAttributeRule()], nameExpression: createNameExpression());
+class PubDevPackageLink extends InCompleteLinkRule {
+  PubDevPackageLink()
+      : super([TitleAttribute()], nameExpression: createNameExpression());
 
   @override
   Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>
@@ -327,9 +328,9 @@ class PubDevPackageLinkRule extends InCompleteLinkRule {
 /// [README.mdt title='About this project'&rsqb;
 ///
 /// Note that the [DocumentationBuilder] ignores letter casing.
-class MarkdownFileLinkRule extends InCompleteLinkRule {
-  MarkdownFileLinkRule()
-      : super([TitleAttributeRule()],
+class MarkdownFileLink extends InCompleteLinkRule {
+  MarkdownFileLink()
+      : super([TitleAttribute()],
       nameExpression:
       ProjectFilePath.expression.startOfLine(false).endOfLine(false));
 
@@ -420,9 +421,9 @@ class MarkdownFileLinkRule extends InCompleteLinkRule {
 /// - Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
-class DartCodeLinkRule extends InCompleteLinkRule {
-  DartCodeLinkRule()
-      : super([TitleAttributeRule()], nameExpression: createNameExpression());
+class DartCodeLink extends InCompleteLinkRule {
+  DartCodeLink()
+      : super([TitleAttribute()], nameExpression: createNameExpression());
 
   @override
   Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>

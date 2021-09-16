@@ -4,7 +4,7 @@ import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/tag_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -313,7 +313,7 @@ main() {
 Anchor createTestAnchor(String title) {
   RootNode rootNode = RootNode();
   var markdownPage =
-      ReadMeFactory().createMarkdownTemplate(rootNode, 'doc/template/README.mdt');
+      ReadMeFile().createMarkdownTemplate(rootNode, 'doc/template/README.mdt');
   var anchor = Anchor(markdownPage, title);
   markdownPage.children.add(anchor);
   return anchor;
@@ -363,8 +363,8 @@ class TestRootNode extends RootNode {
 class TestTagRule extends TagRule {
   TestTagRule()
       : super('testTag', [
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
 
   @override

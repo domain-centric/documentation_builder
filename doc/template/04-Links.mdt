@@ -1,15 +1,15 @@
 {ImportDartDoc path='lib/parser/link_parser.dart|Link'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|CompleteLinkRule' title='## Hyperlink'}
+{ImportDartDoc path='lib/parser/link_parser.dart|CompleteLink' title='## Hyperlink'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|GitHubProjectLinkRule' title='## GitHub project links'}
+{ImportDartDoc path='lib/parser/link_parser.dart|GitHubProjectLink' title='## GitHub project links'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|PubDevProjectLinkRule' title='## PubDev project links'}
+{ImportDartDoc path='lib/parser/link_parser.dart|PubDevProjectLink' title='## PubDev project links'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|PubDevPackageLinkRule' title='## PubDev package links'}
+{ImportDartDoc path='lib/parser/link_parser.dart|PubDevPackageLink' title='## PubDev package links'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|MarkdownFileLinkRule' title='## Markdown file links'}
+{ImportDartDoc path='lib/parser/link_parser.dart|MarkdownFileLink' title='## Markdown file links'}
 
-{ImportDartDoc path='lib/parser/link_parser.dart|DartCodeLinkRule' title='## Dart code links'}
+{ImportDartDoc path='lib/parser/link_parser.dart|DartCodeLink' title='## Dart code links'}
 
  //TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES

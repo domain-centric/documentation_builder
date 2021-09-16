@@ -6,6 +6,7 @@ import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
+import 'package:documentation_builder/project/local_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
@@ -107,8 +108,8 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   /// Orders wiki pages first.
   @override
   int compareTo(other) {
-    if (this.factory is WikiFactory) {
-      if (other is MarkdownTemplate && other.factory is WikiFactory) {
+    if (this.factory is WikiFile) {
+      if (other is MarkdownTemplate && other.factory is WikiFile) {
         // both are wiki pages so compare names
         return this
             .destinationFilePath
@@ -158,14 +159,14 @@ class MarkdownTemplateFactories
     extends DelegatingList<MarkdownTemplateFactory> {
   MarkdownTemplateFactories()
       : super([
-          ReadMeFactory(),
-          ChangeLogFactory(),
-          ExampleFactory(),
-          WikiFactory(),
+          ReadMeFile(),
+          ChangeLogFile(),
+          ExampleFile(),
+          WikiFile(),
         ]);
 }
 
-/// A README.md file is tippacally the first item a visitor will see when visiting
+/// A README.md file is typically the first item a visitor will see when visiting
 /// your package on https://pub.dev or visiting your code on https://github.com.
 ///
 /// A README.md file typically include information on:
@@ -174,9 +175,9 @@ class MarkdownTemplateFactories
 /// - How to use it
 /// - other relevant high level information
 ///
-/// A README.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+/// A README.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the README.md file in the root of your dart project.
-class ReadMeFactory extends MarkdownTemplateFactory {
+class ReadMeFile extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('readme.mdt').endOfLine().ignoreCase();
@@ -195,12 +196,12 @@ class ReadMeFactory extends MarkdownTemplateFactory {
 /// - The version headings are either a chapter (#) or a paragraph (##).
 /// - The version heading text contains a package version number, optionally prefixed with “v”.
 ///
-/// A CHANGELOG.mdt is a [MarkdownTemplate] that is used by the [DocumentationBuilder]
+/// A CHANGELOG.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the CHANGELOG.md file in the root of your dart project.
 ///
 /// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
 /// versions assuming you are using GitHub and mark very version as a milestone
-class ChangeLogFactory extends MarkdownTemplateFactory {
+class ChangeLogFile extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('changelog.mdt').endOfLine().ignoreCase();
@@ -215,10 +216,10 @@ class ChangeLogFactory extends MarkdownTemplateFactory {
 }
 
 /// Your Dart/Flutter project can have an example.md file
-/// A example.mdt is a [MarkdownTemplate] that is used by the
+/// A example.mdt is a [MarkdownTemplateFile] that is used by the
 /// [DocumentationBuilder] to create or override the example.md file in the
 /// example folder of your dart project.
-class ExampleFactory extends MarkdownTemplateFactory {
+class ExampleFile extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('example.mdt').endOfLine().ignoreCase();
@@ -233,14 +234,17 @@ class ExampleFactory extends MarkdownTemplateFactory {
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
-/// [Github](https://github.com/) wiki pages are markdown files.
+/// [Github](https://github.com/) wiki pages are [WikiFile]s.
 /// See [Github Wiki pages](TODO Add link) for more information.
 ///
 ///
-/// Any [MarkdownTemplate] is considered to be a [WikiMarkdownTemplateFile] when:
+/// Any [MarkdownTemplateFile] is considered to be a [WikiFile] when:
 /// - Its name is: Home.mdt This is the wiki landing page which often contains a [TableOfContentTag]
-/// - Its name starts with 2 digits, and has a .mdt extension (e.g.: 07-Getting-Started.mdt)
-class WikiFactory extends MarkdownTemplateFactory {
+/// - Its name starts with 2 digits, and has a .mdt extension (e.g.: 08-Getting-Started.mdt)
+///
+/// All generated [WikiFile]s are stored in the doc/<project name&gt;.wiki directory.
+/// This directory is a clone of the [GitHub wiki repository](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages#adding-or-editing-wiki-pages-locally).
+class WikiFile extends MarkdownTemplateFactory {
   @override
   FluentRegex get fileNameExpression => FluentRegex()
       .or([
@@ -262,7 +266,7 @@ class WikiFactory extends MarkdownTemplateFactory {
   @override
   ProjectFilePath createDestinationPath(String sourcePath) {
     String wikiFileName = createFileName(sourcePath);
-    return ProjectFilePath('doc/wiki/$wikiFileName.md');
+    return ProjectFilePath('doc/${LocalProject.name}.wiki/$wikiFileName.md'); //TODO automatically empty directory (except for .git directory) in an earlier builder
   }
 
   String createFileName(String sourcePath) {

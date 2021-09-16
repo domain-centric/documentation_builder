@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:documentation_builder/builder/template_builder.dart';
+
 
 /// Generates markdown documentation files from markdown template files.
 /// This can be useful when you write documentation for a
@@ -7,10 +9,10 @@ import 'dart:io';
 /// and want to reuse/import Dart code or Dart documentation comments.
 ///
 /// It can generate the following files:
-/// - README.md file
-/// - CHANGELOG.mdt file
-/// - example.md file
-/// - Github Wiki pages (also markdown files)
+/// - [ReadMeFile]
+/// - [ChangeLogFile]
+/// - [ExampleFile]
+/// - GitHub [WikiFile]s
 ///
 /// [documentation_builder] is not intended to generate API documentation.
 /// Use [dartdoc](https://dart.dev/tools/dartdoc) instead.

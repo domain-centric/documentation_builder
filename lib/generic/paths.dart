@@ -24,7 +24,7 @@ class ProjectFilePath {
   static final expression = FluentRegex()
       .startOfLine()
       .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_'))
-      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_/'),
+      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_./'),
           Quantity.zeroOrMoreTimes())
       .group(_fileExtensionExpression, quantity: Quantity.zeroOrOneTime())
       .endOfLine();

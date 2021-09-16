@@ -1,7 +1,9 @@
 {ImportDartDoc path='lib/parser/tag_parser.dart|Tag'}
 
-{ImportDartDoc path='lib/parser/tag_attribute_parser.dart|Attribute' title='## Tag Attributes'}
-The following paragraphs will explain the format of different path [Attribute]s:
+{ImportDartDoc path='lib/parser/attribute_parser.dart|Attribute' title='## Tag Attributes'}
+The following paragraphs describe common attribute values:
+
+{ImportDartDoc path='lib/parser/attribute_parser.dart|TitleAttribute' title='### Titles'}
 
 {ImportDartDoc path='lib/generic/paths.dart|ProjectFilePath' title='### Project File Path'}
 

@@ -1,7 +1,7 @@
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/tag_attribute_parser.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:test/test.dart';
 
 main() {
@@ -89,9 +89,9 @@ main() {
   group('class: TagAttributeParser', () {
     group('method: parseToNameAndValues', () {
       test('2 valid attributes', () async {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '# Title';
@@ -104,9 +104,9 @@ main() {
         expect(attributes, expectedAttributes);
       });
       test('missing optional attribute', () async {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String path = 'doc/template/README.mtd';
         Map<String, dynamic> expectedAttributes = {
@@ -117,9 +117,9 @@ main() {
       });
 
       test('missing required attribute', () {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String title = '# Title';
         expect(
@@ -132,16 +132,16 @@ main() {
       });
 
       test('no attributes', () async {
-        TagAttributeParser parser = TagAttributeParser([]);
+        AttributeParser parser = AttributeParser([]);
         Map<String, dynamic> expectedAttributes = {};
         var attributes = await parser.parseToNameAndValues("");
         expect(attributes, expectedAttributes);
       });
 
       test('invalid text', () {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '# Title';
@@ -156,9 +156,9 @@ main() {
             )));
       });
       test('invalid projectFilePath', () {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String path = '/invalid/path/starting/with/slash';
         String title = '# Title';
@@ -173,9 +173,9 @@ main() {
             )));
       });
       test('empty title', () {
-        TagAttributeParser parser = TagAttributeParser([
-          ProjectFilePathAttributeRule(),
-          TitleAttributeRule(),
+        AttributeParser parser = AttributeParser([
+          ProjectFilePathAttribute(),
+          TitleAttribute(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '';
