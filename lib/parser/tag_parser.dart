@@ -354,7 +354,7 @@ class TableOfContentsTag extends Tag {
             var level = subTitle.level; //1,2,3
             if (uri != null && level <= 3) {
               Link subTitleLink = Link(parent: parent, title: title, uri: uri);
-              toc += "${'  ' * level}- $subTitleLink\n";
+              toc += "${'  ' * (level-1)}- $subTitleLink\n";
             }
           }
         }

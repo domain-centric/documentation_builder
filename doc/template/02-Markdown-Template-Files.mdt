@@ -2,10 +2,10 @@
 
 {ImportDartDoc path='lib/builder/template_builder.dart|GeneratedMarkdownFile'}
 
-{ImportDartDoc path='lib/builder/template_builder.dart|ReadMeFile' title='## README template file'}
+{ImportDartDoc path='lib/builder/template_builder.dart|ReadMeFile' title='# README template file'}
 
-{ImportDartDoc path='lib/builder/template_builder.dart|ChangeLogFile' title='## CHANGELOG template file'}
+{ImportDartDoc path='lib/builder/template_builder.dart|ChangeLogFile' title='# CHANGELOG template file'}
 
-{ImportDartDoc path='lib/builder/template_builder.dart|WikiFile' title='## Wiki template files'}
+{ImportDartDoc path='lib/builder/template_builder.dart|WikiFile' title='# Wiki template files'}
 
-{ImportDartDoc path='lib/builder/template_builder.dart|ExampleFile' title='## example template file'}
+{ImportDartDoc path='lib/builder/template_builder.dart|ExampleFile' title='# example template file'}
