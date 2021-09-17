@@ -346,7 +346,7 @@ class TableOfContentsTag extends Tag {
               parent: parent,
               title: template.title,
               uri: template.destinationWebUri!);
-          toc += "**$titleLink**\n\n";
+          toc += "\n**$titleLink**\n\n";
           List<Title> subTitles = template.findChildren<Title>();
           for (Title subTitle in subTitles) {
             var title = subTitle.titleWithoutHashes;
