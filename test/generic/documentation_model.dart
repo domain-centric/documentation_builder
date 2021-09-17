@@ -7,7 +7,7 @@ main() {
     group('method: findOrderedMarkdownTemplateFiles', () {
       test("finds templates in correct order (wiki's first)", () {
         var model=TestDocumentationModel();
-        var templates=model.findOrderedMarkdownTemplateFiles();
+        var templates=model.findOrderedMarkdownTemplates();
         expect (templates.length,2);
         expect (templates.first.factory,equals(WikiFile()));
         expect (templates.last.factory,equals(ReadMeFile()));

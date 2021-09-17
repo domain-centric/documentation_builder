@@ -9,6 +9,7 @@ import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/element.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/attribute_parser.dart';
+import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
@@ -23,9 +24,9 @@ class TagParser extends Parser {
           ImportCodeTagRule(),
           ImportDartCodeTagRule(),
           ImportDartDocTagRule(),
+          TableOfContentsTagRule(),
         ]);
 }
-
 
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
@@ -59,8 +60,7 @@ abstract class TagRule extends TextParserRule {
     }
   }
 
-  Tag createTagNode(
-      ParentNode parent, Map<String, dynamic> attributes);
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes);
 }
 
 /// [Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
@@ -89,8 +89,7 @@ abstract class Tag extends ParentNode {
 ///     This may be any type of text file (e.g. .mdt file).
 ///   - title= (optional) See [TitleAttribute]
 class ImportFileTag extends Tag {
-  ImportFileTag(
-      ParentNode? parent, Map<String, dynamic> attributes)
+  ImportFileTag(ParentNode? parent, Map<String, dynamic> attributes)
       : super(parent, attributes);
 
   @override
@@ -114,8 +113,7 @@ class ImportFileTagRule extends TagRule {
         ]);
 
   @override
-  Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributes) =>
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
       ImportFileTag(parent, attributes);
 }
 
@@ -125,8 +123,7 @@ class ImportFileTagRule extends TagRule {
 ///   - path= (required) A [ProjectFilePath] a file path that needs to be imported as a (none Dart) code example. See also [ImportDartCodeTag] to import Dart code
 ///   - title= (optional) See [TitleAttribute]
 class ImportCodeTag extends Tag {
-  ImportCodeTag(
-      ParentNode? parent, Map<String, dynamic> attributes)
+  ImportCodeTag(ParentNode? parent, Map<String, dynamic> attributes)
       : super(parent, attributes);
 
   @override
@@ -157,8 +154,7 @@ class ImportCodeTagRule extends TagRule {
         ]);
 
   @override
-  Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributes) =>
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
       ImportCodeTag(parent, attributes);
 }
 
@@ -168,8 +164,7 @@ class ImportCodeTagRule extends TagRule {
 ///   - path= (required) A [DartFilePath] to be imported as a Dart code example. See also [ImportCodeTag] to import none Dart code.
 ///   - title= (optional) See [TitleAttribute]
 class ImportDartCodeTag extends Tag {
-  ImportDartCodeTag(
-      ParentNode? parent, Map<String, dynamic> attributes)
+  ImportDartCodeTag(ParentNode? parent, Map<String, dynamic> attributes)
       : super(parent, attributes);
 
   @override
@@ -200,8 +195,7 @@ class ImportDartCodeTagRule extends TagRule {
         ]);
 
   @override
-  Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributes) =>
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
       ImportDartCodeTag(parent, attributes);
 }
 
@@ -211,8 +205,7 @@ class ImportDartCodeTagRule extends TagRule {
 ///   - path= (required) A [DartCodePath] to be imported Dart comments.
 ///   - title= (optional) See [TitleAttribute]
 class ImportDartDocTag extends Tag {
-  ImportDartDocTag(
-      ParentNode? parent, Map<String, dynamic> attributes)
+  ImportDartDocTag(ParentNode? parent, Map<String, dynamic> attributes)
       : super(parent, attributes);
 
   @override
@@ -306,7 +299,6 @@ class ImportDartDocTag extends Tag {
   }
 }
 
-
 Future<analyzer.LibraryElement> parseLibrary(
     ParentNode parent, ProjectFilePath dartFile) async {
   try {
@@ -330,9 +322,69 @@ class ImportDartDocTagRule extends TagRule {
         ]);
 
   @override
-  Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributes) =>
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
       ImportDartDocTag(parent, attributes);
+}
+
+/// - **{TableOfContents title='## Table of contents example'&rcub;**
+/// - Creates a table of contents.
+/// - Attributes:
+///   - title= (optional) See [TitleAttribute]
+class TableOfContentsTag extends Tag {
+  TableOfContentsTag(ParentNode? parent, Map<String, dynamic> attributes)
+      : super(parent, attributes);
+
+  @override
+  Future<List<Node>> createChildren() {
+    String toc = "";
+    DocumentationModel? model = parent!.findParent<DocumentationModel>();
+    if (model != null) {
+      var templates = model.findOrderedMarkdownTemplates();
+      for (MarkdownTemplate template in templates) {
+        if (template.factory is WikiFile && !isWikiHomePage(template)) {
+          Link titleLink = Link(
+              parent: parent,
+              title: template.title,
+              uri: template.destinationWebUri!);
+          toc += "**$titleLink**\n";
+          List<Title> subTitles = template.findChildren<Title>();
+          for (Title subTitle in subTitles) {
+            var title = subTitle.titleWithoutHashes;
+            var uri = subTitle.anchor.uriToAnchor;
+            var level = subTitle.level; //1,2,3
+            if (uri != null && level <= 3) {
+              Link subTitleLink = Link(parent: parent, title: title, uri: uri);
+              toc += "${'  ' * level}- $subTitleLink\n";
+            }
+          }
+        }
+      }
+    }
+    String? titleText = attributes[AttributeName.title];
+    var tableOfContents=TextNode(this, toc);
+    if (titleText!=null && titleText.trim().isNotEmpty) {
+      var title=Title(this, titleText);
+      anchor = title.anchor;
+      return Future.value([title, tableOfContents]);
+    } else {
+      return Future.value([tableOfContents]);
+    }
+  }
+
+  bool isWikiHomePage(MarkdownTemplate template) =>
+      template.sourceFilePath.path.toLowerCase().contains('home.mdt');
+}
+
+/// Recognizes and creates an [TableOfContentsTag]
+class TableOfContentsTagRule extends TagRule {
+  TableOfContentsTagRule()
+      : super('TableOfContents', [
+          TitleAttribute(),
+        ]);
+
+  @override
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
+      TableOfContentsTag(parent, attributes);
 }
 
 class TitleAndOrAnchor extends ParentNode {
@@ -358,16 +410,47 @@ class TitleAndOrAnchor extends ParentNode {
 /// ## Paragraph Title
 class Title extends ParentNode {
   late final Anchor anchor;
+  final String title;
+  final String titleWithoutHashes;
+
+  /// The title can have leading hashtags to indicate the title level, e.g.:
+  /// # = Chapter (level=1)
+  /// ## = Paragraph (level=2)
+  /// ### = Sub paragraph (level=3)
+  /// etc... up to 6 levels.
+  final int level;
 
   /// The title can have leading hashtags to indicate the title level, e.g.:
   /// # = Chapter
   /// ## = Paragraph
   /// ### = Sub paragraph
   /// etc... up to 6 levels.
-  Title(ParentNode parent, String title) : super(parent) {
+  Title(ParentNode parent, this.title)
+      : titleWithoutHashes = createTitleWithoutHashes(title),
+        level = createLevel(title),
+        super(parent) {
     anchor = Anchor(this, title);
     children.add(anchor);
     children.add(TextNode(this, '\n$title\n'));
+  }
+
+  static final FluentRegex _leadingHashExpression = FluentRegex()
+      .startOfLine()
+      .group(FluentRegex().whiteSpace(Quantity.zeroOrMoreTimes()).literal('#'),
+          quantity: Quantity.atMost(6))
+      .whiteSpace(Quantity.zeroOrMoreTimes());
+
+  static createLevel(String title) {
+    String? leadingHashes = _leadingHashExpression.findFirst(title);
+    if (leadingHashes == null) {
+      return 7;
+    } else {
+      return FluentRegex().literal('#').allMatches(leadingHashes).length;
+    }
+  }
+
+  static createTitleWithoutHashes(String title) {
+    return _leadingHashExpression.removeFirst(title);
   }
 }
 

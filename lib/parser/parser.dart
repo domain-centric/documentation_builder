@@ -70,8 +70,7 @@ abstract class Parser {
     int startIndex = parent.children.indexOf(firstChild);
     if (startIndex == -1) {
       throw new ParserError(
-          'First child to replace not found from rule: $rule');
-      //It is likely that one or more children have an invalid parent (use this as parent in parser rules!)
+          "Could not find first child node to replace from rule: $rule, ${firstChild.runtimeType} likely has children with the wrong parent.");
     }
     List<Node> replacementNodes =
         await rule.createReplacementNodes(childNodesToReplace);
@@ -121,10 +120,11 @@ abstract class TextParserRule extends ParserRule {
   TextParserRule(this.expression);
 
   @override
+
   /// Searches all child nodes for [TextNode]s that have a match with the [expression]
   Future<ChildNodesToReplace> findChildNodesToReplace(ParentNode node) async {
     for (Node child in node.children) {
-      if (child is TextNode ) {
+      if (child is TextNode) {
         List<RegExpMatch> matches = await createMatches(child);
         if (matches.isNotEmpty) {
           return ChildNodesToReplace.foundNode(child);
@@ -208,7 +208,7 @@ abstract class TextParserRule extends ParserRule {
   /// A method that can be overridden by sibling classes if additional logic is needed
   /// This is the default operation
   Future<List<RegExpMatch>> createMatches(TextNode textNode) {
-    String text=textNode.text;
+    String text = textNode.text;
     var matches = expression.allMatches(text).toList();
     matches = removeMatchesInsideMatches(matches);
     return Future.value(matches);
@@ -328,7 +328,7 @@ class ParentNode extends Node {
 
   /// Finds all children (or children's children) of a given [Type]
   List<T> findChildren<T>() {
-    List<T> matchingChildren=[];
+    List<T> matchingChildren = [];
     for (Node child in children) {
       if (child is T) {
         matchingChildren.add(child as T);
@@ -340,8 +340,6 @@ class ParentNode extends Node {
     }
     return matchingChildren;
   }
-
-
 
   /// Find a ParentNode that still needs to check the given rule
   ParentNode? findNodeWithUncompletedRule(int ruleIndex) {
@@ -363,7 +361,6 @@ class ParentNode extends Node {
       if (child is ParentNode) child.resetLastCompletedRuleIndexes();
     }
   }
-
 }
 
 /// The RootNode must be a [ParentNode] without a parent

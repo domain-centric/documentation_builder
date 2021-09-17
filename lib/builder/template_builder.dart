@@ -75,13 +75,15 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   /// to determine its type.
   final MarkdownTemplateFactory factory;
 
+  final String title;
+
   MarkdownTemplate({
     required this.factory,
     required ParentNode parent,
     required String sourcePath,
     required this.destinationFilePath,
     required this.destinationWebUri,
-  })  : sourceFilePath = ProjectFilePath(sourcePath),
+  })  : sourceFilePath = ProjectFilePath(sourcePath), title=createTitle(sourcePath),
         super(parent) {
     children.addAll(_createChildren());
   }
@@ -129,6 +131,22 @@ class MarkdownTemplate extends ParentNode implements Comparable {
     return destinationWebUri != null &&
         (sourceFilePath.path.toLowerCase().endsWith(path) ||
             destinationFilePath.path.toLowerCase().endsWith(path));
+  }
+
+  static final FluentRegex filePath =
+  FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
+
+  static final FluentRegex fileExtension = FluentRegex()
+      .literal('.')
+      .characterSet(
+      CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
+      .endOfLine();
+
+  static String createTitle(String path) {
+    String fileName = filePath.removeFirst(path);
+    String fileNameWithoutExtension = fileExtension.removeFirst(fileName);
+    String title = fileNameWithoutExtension.replaceAll('-', ' ');
+    return title;
   }
 }
 

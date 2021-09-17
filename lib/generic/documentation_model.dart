@@ -36,7 +36,7 @@ class DocumentationModel extends RootNode {
   }
 
   /// finds all [MarkdownTemplate]s and orders them with wiki pages first.
-  List<MarkdownTemplate> findOrderedMarkdownTemplateFiles() {
+  List<MarkdownTemplate> findOrderedMarkdownTemplates() {
     List<MarkdownTemplate> markdownTemplates= children
       .where((child) => child is MarkdownTemplate)
       .map<MarkdownTemplate>((child) => child as MarkdownTemplate)

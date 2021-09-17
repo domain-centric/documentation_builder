@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-16 12:12:48.006997.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-09-17 16:00:37.337178.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
@@ -40,7 +40,6 @@ You can view the templates files and the generated output on https://github.com 
   - [Generated Markdown Rendered](https://pub.dev/packages/documentation_builder/versions)
 - Wiki pages
   - [Markdown Template Files](https://github.com/efficientyboosters/documentation_builder/tree/main/doc/template) (select a file and select raw to see the source)
-  - [Generated Markdown Files Raw](https://github.com/efficientyboosters/documentation_builder/tree/main/doc/wiki) (select a file and select raw to see the source)
   - [Generated Markdown Files Rendered](https://github.com/efficientyboosters/documentation_builder/wiki)
 - example
   - [Markdown Template File](https://raw.githubusercontent.com/efficientyboosters/documentation_builder/main/doc/template/example.mdt)

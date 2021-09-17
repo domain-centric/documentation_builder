@@ -367,7 +367,7 @@ class MarkdownFileLink extends InCompleteLinkRule {
     path = path.toLowerCase();
     DocumentationModel? model = parent.findParent<DocumentationModel>();
     if (model == null) return null;
-    var templates = model.findOrderedMarkdownTemplateFiles();
+    var templates = model.findOrderedMarkdownTemplates();
     return templates.firstWhereOrNull(
             (template) => (template.hasWebUriAndFileEndsWith(path)));
   }

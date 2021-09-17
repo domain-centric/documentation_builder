@@ -23,3 +23,5 @@ The following paragraphs will explain the different tags:
 {ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartCodeTag' title='### Import Dart Code Tag'}
 
 {ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartDocTag' title='### Import Dart Documentation Comments Tag'}
+
+{ImportDartDoc path='lib/parser/tag_parser.dart|TableOfContentsTag' title='### Table Of Contents Tag'}
