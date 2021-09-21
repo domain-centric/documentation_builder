@@ -63,10 +63,10 @@ abstract class TagRule extends TextParserRule {
   Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes);
 }
 
-/// [Tag]s are specific texts in [MarkdownTemplate]s that are replaced by the
+/// [Tag]s are specific texts in [Template]s that are replaced by the
 ///  [DocumentationBuilder] with other information
 ///  (e.g. by an imported Dart Documentation Comment) before the
-///  [GeneratedMarkdownFile] is written.
+///  [GeneratedFile] is written.
 ///
 /// [Tag]s:
 /// - are surrounded by curly brackets: {}
@@ -340,8 +340,8 @@ class TableOfContentsTag extends Tag {
     DocumentationModel? model = parent!.findParent<DocumentationModel>();
     if (model != null) {
       var templates = model.findOrderedMarkdownTemplates();
-      for (MarkdownTemplate template in templates) {
-        if (template.factory is WikiFile && !isWikiHomePage(template)) {
+      for (Template template in templates) {
+        if (template is WikiTemplate && !isWikiHomePage(template)) {
           Link titleLink = Link(
               parent: parent,
               title: template.title,
@@ -371,7 +371,7 @@ class TableOfContentsTag extends Tag {
     }
   }
 
-  bool isWikiHomePage(MarkdownTemplate template) =>
+  bool isWikiHomePage(Template template) =>
       template.sourceFilePath.path.toLowerCase().contains('home.mdt');
 }
 
@@ -485,7 +485,7 @@ class Anchor extends Node {
 
   Uri? createUriToAnchor(String name) {
     if (parent == null) return null;
-    MarkdownTemplate? markdownTemplate = parent!.findParent<MarkdownTemplate>();
+    Template? markdownTemplate = parent!.findParent<Template>();
     if (markdownTemplate == null) return null;
     Uri? uri = markdownTemplate.destinationWebUri;
     if (uri == null) return null;

@@ -135,7 +135,7 @@ abstract class InCompleteLinkRule extends TextParserRule {
 
 /// You can refer to other parts of the documentation using [Link]s.
 /// [Link]s:
-/// - are references between square brackets [] in [MarkdownTemplateFile]s, e.g.: [MyClass&rsqb;
+/// - are references between square brackets [] in [TemplateFile]s, e.g.: [MyClass&rsqb;
 /// - can have optional or required attributes, e.g.: [MyClass title='Link to my class'&rsqb;
 ///
 /// The [DocumentationBuilder] will try to convert these to hyperlinks that point to an existing http uri.
@@ -315,9 +315,9 @@ class PubDevPackageLink extends InCompleteLinkRule {
   }
 }
 
-/// A [MarkdownFileLink] links point to an other [GeneratedMarkdownFile].
+/// A [MarkdownFileLink] links point to an other [GeneratedFile].
 ///
-/// The [DocumentationBuilder] will try to find this [GeneratedMarkdownFile] and
+/// The [DocumentationBuilder] will try to find this [GeneratedFile] and
 /// replace the link to a hyperlink with an absolute Url.
 ///
 /// You can use :
@@ -347,13 +347,13 @@ class MarkdownFileLink extends InCompleteLinkRule {
     return Link(parent: parent, title: title, uri: uri);
   }
 
-  /// Returns matches that represent existing [GeneratedMarkdownFile]s
+  /// Returns matches that represent existing [GeneratedFile]s
   Future<List<RegExpMatch>> markdownFileMatches(TextNode textNode) async {
     var matches = await super.createMatches(textNode);
     List<RegExpMatch> markdownFileMatches = [];
     for (RegExpMatch match in matches) {
       String path = match.namedGroup(GroupName.name)!;
-      MarkdownTemplate? markdownTemplate =
+      Template? markdownTemplate =
       findMarkdownTemplate(textNode.parent!, path);
 
       if (markdownTemplate != null) markdownFileMatches.add(match);
@@ -361,9 +361,9 @@ class MarkdownFileLink extends InCompleteLinkRule {
     return markdownFileMatches;
   }
 
-  /// finds a [MarkdownTemplate] with a sourceFilePath or destinationFilePath
+  /// finds a [Template] with a sourceFilePath or destinationFilePath
   /// that ends with path, while ignoring upper or lower case.
-  MarkdownTemplate? findMarkdownTemplate(ParentNode parent, String path) {
+  Template? findMarkdownTemplate(ParentNode parent, String path) {
     path = path.toLowerCase();
     DocumentationModel? model = parent.findParent<DocumentationModel>();
     if (model == null) return null;
@@ -451,7 +451,7 @@ class DartCodeLink extends InCompleteLinkRule {
     return Link(parent: parent, title: title, uri: uri);
   }
 
-  /// finds a [MarkdownTemplate] with a sourceFilePath or destinationFilePath
+  /// finds a [Template] with a sourceFilePath or destinationFilePath
   /// that ends with path, while ignoring upper or lower case.
   Uri? createUri(ParentNode parent, String path) {
     path = path.toLowerCase();

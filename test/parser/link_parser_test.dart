@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
+import 'package:documentation_builder/generic/paths.dart';
+import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:test/test.dart';
@@ -76,54 +77,37 @@ main() {
         var rule = CompleteLink();
         var markdown = "[$titleValue]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
-        expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.title],
+        expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
             titleValue);
         expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.uri],
-            uri);
+            rule.expression.findCapturedGroups(markdown)[GroupName.uri], uri);
       });
       test("Link without title", () {
         var rule = CompleteLink();
         var markdown = "[]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.title],
-            '');
+            rule.expression.findCapturedGroups(markdown)[GroupName.title], '');
         expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.uri],
-            uri);
+            rule.expression.findCapturedGroups(markdown)[GroupName.uri], uri);
       });
       test("Link without url", () {
         var rule = CompleteLink();
         var markdown = "[$titleValue]()";
         expect(rule.expression.hasMatch(markdown), true);
-        expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.title],
+        expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
             titleValue);
-        expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.uri],
-            '');
+        expect(rule.expression.findCapturedGroups(markdown)[GroupName.uri], '');
       });
 
       test("with spaces has match", () {
         var rule = CompleteLink();
         var markdown = "[  $titleValue  ](    $uri )";
         expect(rule.expression.hasMatch(markdown), true);
-        expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.title],
+        expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
             titleValue);
         expect(
-            rule.expression
-                .findCapturedGroups(markdown)[GroupName.uri],
-            uri);
+            rule.expression.findCapturedGroups(markdown)[GroupName.uri], uri);
       });
 
       test("with spaces between brackets and braces has no match", () {
@@ -188,7 +172,8 @@ main() {
         var rule = MarkdownFileLink();
         expect(rule.createDefaultTitle("doc/template/README.mdt"), 'README');
       });
-      test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'", () {
+      test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'",
+          () {
         var rule = MarkdownFileLink();
         expect(rule.createDefaultTitle("01-Documentation-Builder.mdt"),
             '01 Documentation Builder');
@@ -446,10 +431,9 @@ main() {
       });
 
       test('existing markdown file with path', () async {
-        String title='About this project';
-        var model = TestDocumentationModel.withLink(
-
-            '[README.mdt title="$title"]');
+        String title = 'About this project';
+        var model =
+            TestDocumentationModel.withLink('[README.mdt title="$title"]');
         await LinkParser().parse(model);
         expect(model.link is Link, true);
         expect(model.link.toString(), '[$title]($expectedReadMeUri)');
@@ -468,11 +452,11 @@ class TestDocumentationModel extends DocumentationModel {
   TextNode createLinkTextNode(String markdownFilePath) =>
       TextNode(this, markdownFilePath);
 
-  MarkdownTemplate createReadMeTemplate() =>
-      ReadMeFile().createMarkdownTemplate(this, 'doc/template/README.mdt');
+  Template createReadMeTemplate() => ReadMeTemplateFactory()
+      .createTemplate(this, ProjectFilePath('doc/template/README.mdt'));
 
-  MarkdownTemplate createWikiTemplate() => WikiFile()
-      .createMarkdownTemplate(this, 'doc/template/01-Documentation-Builder.mdt');
+  Template createWikiTemplate() => WikiTemplateFactory().createTemplate(
+      this, ProjectFilePath('doc/template/01-Documentation-Builder.mdt'));
 
   Node get link => children[2];
 }

@@ -80,7 +80,7 @@ abstract class Parser {
 
   void logWarning(List<ParserWarning> warnings, ParentNode parent,
       ParserWarning newWarning) {
-    var markDownPage = parent.findParent<MarkdownTemplate>();
+    var markDownPage = parent.findParent<Template>();
     if (markDownPage == null) {
       warnings.add(newWarning);
     } else {

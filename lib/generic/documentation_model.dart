@@ -10,21 +10,21 @@ class DocumentationModel extends RootNode {
 
   Set<DartCodePath> dartCodePaths={};
 
-  /// adds a [MarkdownTemplate] while verifying that each [MarkdownTemplate]
-  /// has a unique [MarkdownTemplate.destinationFilePath] to prevent overriding generated files
-  void add(MarkdownTemplate markdownPage) {
+  /// adds a [Template] while verifying that each [Template]
+  /// has a unique [Template.destinationFilePath] to prevent overriding generated files
+  void add(Template markdownPage) {
     verifyUniqueDestinationPath(markdownPage);
     children.add(markdownPage);
   }
 
-  /// all [MarkdownTemplate]s should be stored into the [DocumentationModel.children]
-  /// This accessor gets all the [MarkdownTemplate]s
-  List<MarkdownTemplate> get markdownPages =>
-      children.whereType<MarkdownTemplate>().toList();
+  /// all [Template]s should be stored into the [DocumentationModel.children]
+  /// This accessor gets all the [Template]s
+  List<Template> get markdownPages =>
+      children.whereType<Template>().toList();
 
-  void verifyUniqueDestinationPath(MarkdownTemplate newMarkdownPage) {
+  void verifyUniqueDestinationPath(Template newMarkdownPage) {
     try {
-      MarkdownTemplate existingMarkDownPageWithSameDestination =
+      Template existingMarkDownPageWithSameDestination =
           markdownPages.firstWhere((existingMarkDownPage) =>
               newMarkdownPage.destinationFilePath ==
               existingMarkDownPage.destinationFilePath);
@@ -35,11 +35,11 @@ class DocumentationModel extends RootNode {
     }
   }
 
-  /// finds all [MarkdownTemplate]s and orders them with wiki pages first.
-  List<MarkdownTemplate> findOrderedMarkdownTemplates() {
-    List<MarkdownTemplate> markdownTemplates= children
-      .where((child) => child is MarkdownTemplate)
-      .map<MarkdownTemplate>((child) => child as MarkdownTemplate)
+  /// finds all [Template]s and orders them with wiki pages first.
+  List<Template> findOrderedMarkdownTemplates() {
+    List<Template> markdownTemplates= children
+      .where((child) => child is Template)
+      .map<Template>((child) => child as Template)
       .toList();
     markdownTemplates.sort();
     return markdownTemplates;

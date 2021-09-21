@@ -11,8 +11,8 @@ import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// Finds .mdt files, and puts them in the [DocumentationModel]
-class MarkdownTemplateBuilder implements Builder {
-  /// '.mdt' makes the build_runner run [MarkdownTemplateBuilder] for every file with a .mdt extension
+class TemplateBuilder implements Builder {
+  /// '.mdt' makes the build_runner run [TemplateBuilder] for every file with a .mdt extension
   /// This builder stores the result in the [DocumentationModel] resource  to be further processed by other Builders.
   /// the buildExtension outputs therefore do not matter ('dummy.dummy') .
   @override
@@ -20,21 +20,21 @@ class MarkdownTemplateBuilder implements Builder {
         '.mdt': ['dummy.dummy']
       };
 
-  /// For each [MarkdownTemplate] the [MarkdownTemplateBuilder] will:
-  /// - try to find a matching [MarkdownTemplateFactory]
-  /// - create a [MarkdownTemplate] object that converts the text to [MarkdownText] objects.
-  /// - this [MarkdownTemplate] object is than stored inside the [DocumentationModel] to be further processed by other Builders
+  /// For each [Template] the [TemplateBuilder] will:
+  /// - try to find a matching [TemplateFactory]
+  /// - create a [Template] object that converts the text to [MarkdownText] objects.
+  /// - this [Template] object is than stored inside the [DocumentationModel] to be further processed by other Builders
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
-    var factories = MarkdownTemplateFactories();
+    var factories = TemplateFactories();
     try {
       String markdownTemplatePath = buildStep.inputId.path;
-      MarkdownTemplateFactory factory =
+      TemplateFactory factory =
           factories.firstWhere((f) => f.canCreateFor(markdownTemplatePath));
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
-      var markdownPage =
-          factory.createMarkdownTemplate(model, buildStep.inputId.path);
+      var sourceFilePath = ProjectFilePath(buildStep.inputId.path);
+      var markdownPage = factory.createTemplate(model, sourceFilePath);
 
       model.add(markdownPage);
     } on Error {
@@ -43,54 +43,53 @@ class MarkdownTemplateBuilder implements Builder {
   }
 }
 
-/// [MarkdownTemplateFile]s are files with a .mdt extension that can contain:
+/// [TemplateFile]s are text files with that can contain:
 /// - [Markdown](https://www.markdownguide.org/cheat-sheet/) text
 /// - [Tag]s
 /// - [Link]s
 /// - [Badge]s
 ///
-/// [MarkdownTemplateFile]s are converted to [GeneratedMarkdownFile]s
-class MarkdownTemplateFile {}
+/// [TemplateFile]s are converted to [GeneratedFile]s
+class TemplateFile {}
 
-/// [GeneratedMarkdownFile]s are files with a .md extension that are generated
+/// [MarkdownTemplateFile]s are [TemplateFile]s that have a MarkDownTemplate (.mdt) extension.
+class MarkdownTemplateFile extends TemplateFile {}
+
+/// [GeneratedFile]s are files with that are generated
 /// by the [DocumentationBuilder].
-class GeneratedMarkdownFile {}
+/// The file will have a a MarkDown (.md) extension when it contains MarkDown text
+class GeneratedFile {}
 
-/// The [MarkdownTemplateBuilder] will create the [MarkdownTemplate] for each [MarkdownTemplateFile]
-/// The [MarkdownTemplate] will put the contents of the [MarkdownTemplateFile] as [TextNode] in its [children]
+/// The [TemplateBuilder] will create the [Template] for each [TemplateFile]
+/// The [Template] will put the contents of the [TemplateFile] as [TextNode] in its [children]
 /// The [DocumentationParser] will replace this [TextNode] with multiple [Node]s if needed.
-/// The [OutputBuilder] converts each [MarkdownTemplate] into a [GeneratedMarkdownFile]
-class MarkdownTemplate extends ParentNode implements Comparable {
-  /// The [MarkdownTemplateFile]
+/// The [OutputBuilder] converts each [Template] into a [GeneratedFile]
+class Template extends ParentNode implements Comparable {
+  /// The [TemplateFile]
   final ProjectFilePath sourceFilePath;
 
-  /// The path to where the generated [MarkdownTemplateFile] needs to be stored
+  /// The path to where the generated [TemplateFile] needs to be stored
   final ProjectFilePath destinationFilePath;
 
   /// A uri to the web presentation
   /// null if it does not exits of is unknown
   final Uri? destinationWebUri;
 
-  /// [MarkdownTemplateFactory] that created this [MarkdownTemplate]
-  /// to determine its type.
-  final MarkdownTemplateFactory factory;
-
   final String title;
 
-  MarkdownTemplate({
-    required this.factory,
+  Template({
     required ParentNode parent,
-    required String sourcePath,
+    required this.sourceFilePath,
     required this.destinationFilePath,
     required this.destinationWebUri,
-  })  : sourceFilePath = ProjectFilePath(sourcePath), title=createTitle(sourcePath),
+  })  : title = createTitle(sourceFilePath),
         super(parent) {
     children.addAll(_createChildren());
   }
 
   /// Creates 2 [MarkdownNode]s:
   /// - A Markdown comment text stating that the file was generated.
-  /// - The contents of the source file ([MarkdownTemplateFile]) and puts all text in a [MarkdownText]
+  /// - The contents of the source file ([TemplateFile]) and puts all text in a [MarkdownText]
   ///
   /// This [MarkdownText] will later be:
   /// - split up in other [TextNode]s
@@ -110,8 +109,8 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   /// Orders wiki pages first.
   @override
   int compareTo(other) {
-    if (this.factory is WikiFile) {
-      if (other is MarkdownTemplate && other.factory is WikiFile) {
+    if (this is WikiTemplate) {
+      if (other is WikiTemplate) {
         // both are wiki pages so compare names
         return this
             .destinationFilePath
@@ -134,53 +133,39 @@ class MarkdownTemplate extends ParentNode implements Comparable {
   }
 
   static final FluentRegex filePath =
-  FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
+      FluentRegex().anyCharacter(Quantity.oneOrMoreTimes()).literal('/');
 
   static final FluentRegex fileExtension = FluentRegex()
       .literal('.')
       .characterSet(
-      CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
+          CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
       .endOfLine();
 
-  static String createTitle(String path) {
-    String fileName = filePath.removeFirst(path);
+  static String createTitle(ProjectFilePath sourceFilePath) {
+    String fileName = filePath.removeFirst(sourceFilePath.toString());
     String fileNameWithoutExtension = fileExtension.removeFirst(fileName);
     String title = fileNameWithoutExtension.replaceAll('-', ' ');
     return title;
   }
 }
 
-abstract class MarkdownTemplateFactory {
+abstract class TemplateFactory<T extends Template> {
   FluentRegex get fileNameExpression;
-
-  ProjectFilePath createDestinationPath(String sourcePath);
-
-  Uri? createDestinationWebUri(String sourceFilePath);
 
   bool canCreateFor(String markdownTemplatePath) {
     return fileNameExpression.hasMatch(markdownTemplatePath);
   }
 
-  MarkdownTemplate createMarkdownTemplate(
-      ParentNode parent, String sourceFilePath) {
-    return MarkdownTemplate(
-      factory: this,
-      parent: parent,
-      sourcePath: sourceFilePath,
-      destinationFilePath: createDestinationPath(sourceFilePath),
-      destinationWebUri: createDestinationWebUri(sourceFilePath),
-    );
-  }
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath);
 }
 
-class MarkdownTemplateFactories
-    extends DelegatingList<MarkdownTemplateFactory> {
-  MarkdownTemplateFactories()
+class TemplateFactories extends DelegatingList<TemplateFactory> {
+  TemplateFactories()
       : super([
-          ReadMeFile(),
-          ChangeLogFile(),
-          ExampleFile(),
-          WikiFile(),
+          ReadMeTemplateFactory(),
+          ChangeLogTemplateFactory(),
+          ExampleTemplateFactory(),
+          WikiTemplateFactory(),
         ]);
 }
 
@@ -193,19 +178,28 @@ class MarkdownTemplateFactories
 /// - How to use it
 /// - other relevant high level information
 ///
-/// A README.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder]
+/// A README.mdt is a [TemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the README.md file in the root of your dart project.
-class ReadMeFile extends MarkdownTemplateFactory {
+class ReadMeFile extends MarkdownTemplateFile {}
+
+class ReadMeTemplate extends Template {
+  ReadMeTemplate(ParentNode parent, ProjectFilePath sourceFilePath)
+      : super(
+          parent: parent,
+          sourceFilePath: sourceFilePath,
+          destinationFilePath: ProjectFilePath('README.md'),
+          destinationWebUri: PubDevProject().uri,
+        );
+}
+
+class ReadMeTemplateFactory extends TemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('readme.mdt').endOfLine().ignoreCase();
 
   @override
-  ProjectFilePath createDestinationPath(String sourcePath) =>
-      ProjectFilePath('README.md');
-
-  @override
-  Uri? createDestinationWebUri(String sourceFilePath) => PubDevProject().uri;
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>
+      ReadMeTemplate(parent, sourceFilePath);
 }
 
 /// A CHANGELOG.md is a log or record of all notable changes made to a project.
@@ -214,55 +208,111 @@ class ReadMeFile extends MarkdownTemplateFactory {
 /// - The version headings are either a chapter (#) or a paragraph (##).
 /// - The version heading text contains a package version number, optionally prefixed with “v”.
 ///
-/// A CHANGELOG.mdt is a [MarkdownTemplateFile] that is used by the [DocumentationBuilder]
+/// A CHANGELOG.mdt is a [TemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the CHANGELOG.md file in the root of your dart project.
 ///
 /// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
 /// versions assuming you are using GitHub and mark very version as a milestone
-class ChangeLogFile extends MarkdownTemplateFactory {
+class ChangeLogFile extends MarkdownTemplateFile {}
+
+class ChangeLogTemplate extends Template {
+  ChangeLogTemplate(ParentNode parent, ProjectFilePath sourceFilePath)
+      : super(
+          parent: parent,
+          sourceFilePath: sourceFilePath,
+          destinationFilePath: ProjectFilePath('CHANGELOG.md'),
+          destinationWebUri: PubDevProject().changeLogUri,
+        );
+}
+
+class ChangeLogTemplateFactory extends TemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('changelog.mdt').endOfLine().ignoreCase();
 
   @override
-  ProjectFilePath createDestinationPath(String sourcePath) =>
-      ProjectFilePath('CHANGELOG.md');
-
-  @override
-  Uri? createDestinationWebUri(String sourceFilePath) =>
-      PubDevProject().changeLogUri;
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>
+      ChangeLogTemplate(parent, sourceFilePath);
 }
 
 /// Your Dart/Flutter project can have an example.md file
-/// A example.mdt is a [MarkdownTemplateFile] that is used by the
+/// A example.mdt is a [TemplateFile] that is used by the
 /// [DocumentationBuilder] to create or override the example.md file in the
 /// example folder of your dart project.
-class ExampleFile extends MarkdownTemplateFactory {
+class ExampleFile extends MarkdownTemplateFile {}
+
+class ExampleTemplate extends Template {
+  ExampleTemplate(ParentNode parent, ProjectFilePath sourceFilePath)
+      : super(
+          parent: parent,
+          sourceFilePath: sourceFilePath,
+          destinationFilePath: ProjectFilePath('example/example.md'),
+          destinationWebUri: PubDevProject().exampleUri,
+        );
+}
+
+class ExampleTemplateFactory extends TemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
       FluentRegex().literal('example.mdt').endOfLine().ignoreCase();
 
   @override
-  ProjectFilePath createDestinationPath(String sourcePath) =>
-      ProjectFilePath('example/example.md');
-
-  @override
-  Uri? createDestinationWebUri(String sourceFilePath) =>
-      PubDevProject().exampleUri;
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>
+      ExampleTemplate(parent, sourceFilePath);
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
-/// [Github](https://github.com/) wiki pages are [WikiFile]s.
+/// [Github](https://github.com/) wiki pages are [WikiTemplateFactory]s.
 /// See [Github Wiki pages](TODO Add link) for more information.
 ///
 ///
-/// Any [MarkdownTemplateFile] is considered to be a [WikiFile] when:
+/// Any [TemplateFile] is considered to be a [WikiTemplateFactory] when:
 /// - Its name is: Home.mdt This is the wiki landing page which often contains a [TableOfContentTag]
 /// - Its name starts with 2 digits, and has a .mdt extension (e.g.: 08-Getting-Started.mdt)
 ///
-/// All generated [WikiFile]s are stored in the doc/<project name&gt;.wiki directory.
+/// All generated [WikiTemplateFactory]s are stored in the doc/<project name&gt;.wiki directory.
 /// This directory is a clone of the [GitHub wiki repository](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages#adding-or-editing-wiki-pages-locally).
-class WikiFile extends MarkdownTemplateFactory {
+class WikiFile extends MarkdownTemplateFile {}
+
+class WikiTemplate extends Template {
+  WikiTemplate(ParentNode parent, ProjectFilePath sourceFilePath)
+      : super(
+          parent: parent,
+          sourceFilePath: sourceFilePath,
+          destinationFilePath: createDestinationFilePath(sourceFilePath),
+          destinationWebUri: createDestinationWebUri(sourceFilePath),
+        );
+
+  static ProjectFilePath createDestinationFilePath(
+      ProjectFilePath sourceFilePath) {
+    String wikiFileName = createFileName(sourceFilePath);
+    return ProjectFilePath(
+        'doc/${LocalProject.name}.wiki/$wikiFileName.md'); //TODO automatically empty directory (except for .git directory) in an earlier builder
+  }
+
+  static Uri? createDestinationWebUri(ProjectFilePath sourceFilePath) {
+    Uri? wikiUri = GitHubProject().wikiUri;
+    if (wikiUri == null) return null;
+    return wikiUri.withPathSuffix(createPathSuffix(sourceFilePath));
+  }
+
+  static String createFileName(ProjectFilePath sourceFilePath) {
+    String? wikiFileName = WikiTemplateFactory()
+        .fileNameExpression
+        .findCapturedGroups(sourceFilePath.toString())
+        .values
+        .firstWhere((v) => v != null);
+    if (wikiFileName == null) {
+      throw ParserWarning('Could not find the file name of: $sourceFilePath');
+    }
+    return wikiFileName;
+  }
+
+  static String createPathSuffix(ProjectFilePath sourceFilePath) =>
+      '/' + createFileName(sourceFilePath);
+}
+
+class WikiTemplateFactory extends TemplateFactory {
   @override
   FluentRegex get fileNameExpression => FluentRegex()
       .or([
@@ -282,31 +332,8 @@ class WikiFile extends MarkdownTemplateFactory {
       .ignoreCase();
 
   @override
-  ProjectFilePath createDestinationPath(String sourcePath) {
-    String wikiFileName = createFileName(sourcePath);
-    return ProjectFilePath('doc/${LocalProject.name}.wiki/$wikiFileName.md'); //TODO automatically empty directory (except for .git directory) in an earlier builder
-  }
-
-  String createFileName(String sourcePath) {
-    String? wikiFileName = fileNameExpression
-        .findCapturedGroups(sourcePath)
-        .values
-        .firstWhere((v) => v != null);
-    if (wikiFileName == null) {
-      throw ParserWarning('Could not find the file name of: $sourcePath');
-    }
-    return wikiFileName;
-  }
-
-  @override
-  Uri? createDestinationWebUri(String sourceFilePath) {
-    Uri? wikiUri = GitHubProject().wikiUri;
-    if (wikiUri == null) return null;
-    return wikiUri.withPathSuffix(createPathSuffix(sourceFilePath));
-  }
-
-  String createPathSuffix(String sourceFilePath) =>
-      '/' + createFileName(sourceFilePath);
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>
+      WikiTemplate(parent, sourceFilePath);
 }
 
 //TODO LicenseFactory + LicenseTags + Year tag

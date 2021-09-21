@@ -9,12 +9,12 @@ import 'package:documentation_builder/builder/template_builder.dart';
 /// These are configured in the build.yaml file, which refers to this library to create these builder.
 ///
 /// In order of execution:
-/// - [MarkdownTemplateBuilder]
+/// - [TemplateBuilder]
 /// - [ParseBuilder]
 /// - [OutputBuilder]
 
 Builder markdownTemplateBuilder(BuilderOptions builderOptions) =>
-    MarkdownTemplateBuilder();
+    TemplateBuilder();
 
 Builder dartCodePathBuilder(BuilderOptions builderOptions) =>
     DartCodePathBuilder();

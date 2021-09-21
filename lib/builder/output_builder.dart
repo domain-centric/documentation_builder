@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
+import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import 'template_builder.dart';
 
-///  The [OutputBuilder] converts each [MarkdownTemplate] in the [DocumentationModel] into a [GeneratedMarkdownFile]
+///  The [OutputBuilder] converts each [Template] in the [DocumentationModel] into a [GeneratedFile]
 class OutputBuilder extends Builder {
   final List<String> outputPaths = _createOutputPathsRelativeToLib();
 
@@ -44,13 +45,16 @@ class OutputBuilder extends Builder {
             e.path.replaceAll(directorPattern, '').replaceAll('\\', '/'))
         .toList();
 
-    var factories = MarkdownTemplateFactories();
+    var dummy = DocumentationModel();
+    var factories = TemplateFactories();
     List<String> outputPathsRelativeToLib = [];
     templateFilePaths.forEach((String sourcePath) {
       try {
         var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-        String outputPathRelativeToLib =
-            factory.createDestinationPath(sourcePath).relativeToLibDirectory;
+        String outputPathRelativeToLib = factory
+            .createTemplate(dummy, ProjectFilePath(sourcePath))
+            .destinationFilePath
+            .relativeToLibDirectory;
         outputPathsRelativeToLib.add(outputPathRelativeToLib);
       } on Error {
         // Continue

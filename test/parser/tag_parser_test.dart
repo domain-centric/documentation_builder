@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/attribute_parser.dart';
+import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_parser.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -56,8 +56,7 @@ main() {
         };
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is TestTag, true);
-        expect((parsedNode.children.first as TestTag).attributes,
-            expectedMap);
+        expect((parsedNode.children.first as TestTag).attributes, expectedMap);
       });
 
       test('missing optional attribute', () async {
@@ -68,8 +67,7 @@ main() {
         };
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is TestTag, true);
-        expect((parsedNode.children.first as TestTag).attributes,
-            expectedMap);
+        expect((parsedNode.children.first as TestTag).attributes, expectedMap);
       });
 
       test('missing required attribute', () {
@@ -121,10 +119,8 @@ main() {
         var expectedName = 'a1-z';
         expect(createTestAnchor(title).name, expectedName);
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
-        expect(
-            createTestAnchor(title).uriToAnchor,
-            Uri.parse('https://pub.dev/packages/documentation_builder#a1-z')
-        );
+        expect(createTestAnchor(title).uriToAnchor,
+            Uri.parse('https://pub.dev/packages/documentation_builder#a1-z'));
       });
       test('title with hyphens', () {
         var title = 'A-sentence-with-hyphens';
@@ -133,7 +129,8 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
+            Uri.parse(
+                'https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title with double hyphens', () {
         var title = 'A------sentence-with--multiple---hyphens';
@@ -142,7 +139,8 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
+            Uri.parse(
+                'https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphen', () {
         var title = '-A sentence starting with a hyphen';
@@ -151,7 +149,8 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
+            Uri.parse(
+                'https://pub.dev/packages/documentation_builder#$expectedName'));
       });
       test('title starting with hyphens', () {
         var title = '---A sentence starting with hyphens';
@@ -160,7 +159,8 @@ main() {
         expect(createTestAnchor(title).html, "<a id='$expectedName'></a>");
         expect(
             createTestAnchor(title).uriToAnchor,
-            Uri.parse('https://pub.dev/packages/documentation_builder#$expectedName'));
+            Uri.parse(
+                'https://pub.dev/packages/documentation_builder#$expectedName'));
       });
     });
   });
@@ -268,8 +268,7 @@ main() {
         Map<String, dynamic> attributes = {
           AttributeName.path: filePath,
         };
-        var expected =
-            '<a id=\'test-parser-import-test-code-file-dart\'></a>\n'
+        var expected = '<a id=\'test-parser-import-test-code-file-dart\'></a>\n'
             '```\n'
             'main() {\r\n'
             '  print(\'test\');\r\n'
@@ -312,8 +311,8 @@ main() {
 
 Anchor createTestAnchor(String title) {
   RootNode rootNode = RootNode();
-  var markdownPage =
-      ReadMeFile().createMarkdownTemplate(rootNode, 'doc/template/README.mdt');
+  var markdownPage = ReadMeTemplateFactory()
+      .createTemplate(rootNode, ProjectFilePath('doc/template/README.mdt'));
   var anchor = Anchor(markdownPage, title);
   markdownPage.children.add(anchor);
   return anchor;
@@ -336,11 +335,12 @@ DocumentationModel createModelFromTemplateFiles() {
 
   if (templateFilePaths.isEmpty) throw Exception('No template files found!');
 
-  var factories = MarkdownTemplateFactories();
+  var factories = TemplateFactories();
   templateFilePaths.forEach((String sourcePath) {
     try {
       var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-      var markdownPage = factory.createMarkdownTemplate(model, sourcePath);
+      var markdownPage =
+          factory.createTemplate(model, ProjectFilePath(sourcePath));
       model.add(markdownPage);
     } on Error {
       // Continue
@@ -368,16 +368,14 @@ class TestTagRule extends TagRule {
         ]);
 
   @override
-  Tag createTagNode(
-          ParentNode parent, Map<String, dynamic> attributes) =>
+  Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) =>
       TestTag(parent, attributes);
 }
 
 class TestTag extends Tag {
   final Map<String, dynamic> attributes;
 
-  TestTag(ParentNode? parent, this.attributes)
-      : super(parent, attributes);
+  TestTag(ParentNode? parent, this.attributes) : super(parent, attributes);
 
   @override
   Future<List<Node>> createChildren() => Future.value([]);
