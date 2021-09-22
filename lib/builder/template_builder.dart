@@ -55,9 +55,15 @@ class TemplateFile {}
 /// [MarkdownTemplateFile]s are [TemplateFile]s that have a MarkDownTemplate (.mdt) extension.
 class MarkdownTemplateFile extends TemplateFile {}
 
-/// [GeneratedFile]s are files with that are generated
-/// by the [DocumentationBuilder].
-/// The file will have a a MarkDown (.md) extension when it contains MarkDown text
+/// The [DocumentationBuilder] converts [TemplateFile]s to [GeneratedFile]s.
+/// It will replace the following with generated text:
+/// - [Tag]s
+/// - [Link]s
+/// - [Badge]s
+///
+/// [GeneratedFile]s may have a different file extensions.
+/// e.g. [MarkdownTemplateFile] (with .mdt extension) will typically be translated
+/// to MarkDown files (with .md extension) extension.
 class GeneratedFile {}
 
 /// The [TemplateBuilder] will create the [Template] for each [TemplateFile]

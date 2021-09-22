@@ -1,5 +1,13 @@
 {ImportDartDoc path='lib/parser/link_parser.dart|Link'}
 
+## Link Attributes
+
+{ImportDartDoc path='lib/generic/paths.dart|UriSuffixPath' title='### Project File Path Attribute'}
+
+{ImportDartDoc path='lib/parser/attribute_parser.dart|TitleAttribute' title='### Title Attribute'}
+
+## Link types
+
 {ImportDartDoc path='lib/parser/link_parser.dart|CompleteLink' title='## Hyperlink'}
 
 {ImportDartDoc path='lib/parser/link_parser.dart|GitHubProjectLink' title='## GitHub project links'}

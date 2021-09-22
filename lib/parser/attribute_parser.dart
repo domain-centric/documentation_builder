@@ -9,8 +9,7 @@ class AttributeParser extends Parser {
   AttributeParser(List<AttributeRule> rules) : super(rules);
 
   /// attributes are the inside of a [Tag] string
-  Future<Map<String, dynamic>> parseToNameAndValues(
-      String attributes) async {
+  Future<Map<String, dynamic>> parseToNameAndValues(String attributes) async {
     var rootNode = createRootNode(attributes);
     await parse(rootNode);
     validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
@@ -94,18 +93,31 @@ class Attribute<T> extends Node {
     required this.value,
   }) : super(parent);
 }
+class ProjectFilePathAttribute extends Attribute<ProjectFilePath> {
+  ProjectFilePathAttribute({
+    required ParentNode parent,
+    required String name,
+    required String projectFilePath,
+  }) : super(
+    parent: parent,
+    name: name,
+    value: ProjectFilePath(projectFilePath),
+  );
 
-class ProjectFilePathAttribute extends AttributeRule {
-  ProjectFilePathAttribute({String name = AttributeName.path, bool required = true})
+}
+
+class ProjectFilePathAttributeRule extends AttributeRule {
+  ProjectFilePathAttributeRule(
+      {String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
-      return Future.value(Attribute<ProjectFilePath>(
+      return Future.value(ProjectFilePathAttribute(
         parent: parent,
         name: name,
-        value: ProjectFilePath(stringValueFor(match)),
+        projectFilePath: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -113,17 +125,29 @@ class ProjectFilePathAttribute extends AttributeRule {
   }
 }
 
-class UriSuffixAttribute extends AttributeRule {
-  UriSuffixAttribute({String name = 'suffix', bool required = false})
+class UriSuffixAttribute extends Attribute<UriSuffixPath> {
+  UriSuffixAttribute({
+    required ParentNode parent,
+    required String name,
+    required String uriSuffix,
+  }) : super(
+    parent: parent,
+    name: name,
+    value: UriSuffixPath(uriSuffix),
+  );
+}
+
+class UriSuffixAttributeRule extends AttributeRule {
+  UriSuffixAttributeRule({String name = AttributeName.suffix, bool required = false})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
-      return Future.value(Attribute<UriSuffixPath>(
+      return Future.value(UriSuffixAttribute(
         parent: parent,
         name: name,
-        value: UriSuffixPath(stringValueFor(match)),
+        uriSuffix: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -131,17 +155,30 @@ class UriSuffixAttribute extends AttributeRule {
   }
 }
 
-class DartFilePathAttribute extends AttributeRule {
-  DartFilePathAttribute({String name = AttributeName.path, bool required = true})
+class DartFilePathAttribute extends Attribute<DartFilePath> {
+  DartFilePathAttribute({
+    required ParentNode parent,
+    required String name,
+    required String dartFilePath,
+  }) : super(
+    parent: parent,
+    name: name,
+    value: DartFilePath(dartFilePath),
+  );
+}
+
+class DartFilePathAttributeRule extends AttributeRule {
+  DartFilePathAttributeRule(
+      {String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
-      return Future.value(Attribute<ProjectFilePath>(
+      return Future.value(DartFilePathAttribute(
         parent: parent,
         name: name,
-        value: DartFilePath(stringValueFor(match)),
+        dartFilePath: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -152,17 +189,30 @@ class DartFilePathAttribute extends AttributeRule {
 Never _throwParserWarning(Exception e) =>
     throw ParserWarning(e.toString().replaceAll('Exception: ', ''));
 
-class DartCodePathAttribute extends AttributeRule {
-  DartCodePathAttribute({String name = AttributeName.path, bool required = true})
+class DartCodePathAttribute extends Attribute<DartCodePath> {
+  DartCodePathAttribute({
+    required ParentNode parent,
+    required String name,
+    required String dartCodePath,
+  }) : super(
+    parent: parent,
+    name: name,
+    value: DartCodePath(dartCodePath),
+  );
+}
+
+class DartCodePathAttributeRule extends AttributeRule {
+  DartCodePathAttributeRule(
+      {String name = AttributeName.path, bool required = true})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
-      return Future.value(Attribute<DartCodePath>(
+      return Future.value(DartCodePathAttribute(
         parent: parent,
         name: name,
-        value: DartCodePath(stringValueFor(match)),
+        dartCodePath: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
@@ -199,26 +249,40 @@ class StringAttributeRule extends AttributeRule {
 /// [TitleAttribute] example: title='## My Title'
 ///
 /// A [TitleAttribute]s can be referenced in the documentation, e.g. with a [MarkdownFileLink] or [DartCodeLink]
+class TitleAttribute extends Attribute<String> {
+  TitleAttribute({
+    required ParentNode parent,
+    required String name,
+    required String value,
+  }) : super(
+          parent: parent,
+          name: name,
+          value: value,
+        ) {
+    validate(value);
+  }
 
-class TitleAttribute extends StringAttributeRule {
-  TitleAttribute({String name = AttributeName.title, bool required = false})
+  validate(String text) {
+    if (text.trim().isEmpty) {
+      throw Exception('Title may not be empty');
+    }
+  }
+}
+
+class TitleAttributeRule extends StringAttributeRule {
+  TitleAttributeRule({String name = AttributeName.title, bool required = false})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
     try {
-      return Future.value(Attribute<String>(
+      return Future.value(TitleAttribute(
         parent: parent,
         name: name,
-        value: validate(stringValueFor(match)),
+        value: stringValueFor(match),
       ));
     } on Exception catch (e) {
       _throwParserWarning(e);
     }
-  }
-
-  String validate(String text) {
-    if (text.trim().isEmpty) throw Exception('Title may not be empty');
-    return text;
   }
 }

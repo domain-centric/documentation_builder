@@ -53,6 +53,7 @@ final resource = Resource(() => DocumentationModel());
 class AttributeName {
   static const path='path';
   static const title='title';
+  static const suffix='suffix';
 }
 
 

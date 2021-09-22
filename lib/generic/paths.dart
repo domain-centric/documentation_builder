@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'documentation_model.dart';
 
-/// [ProjectFilePath] is a reference to a file in your source project
+/// A [ProjectFilePath] is a reference to a file in your source project
 /// - The [ProjectFilePath] is always relative to root directory of the project directory.
 /// - The [ProjectFilePath] will always be within the project directory, that is they will never contain "../".
 /// - The [ProjectFilePath] always uses forward slashes as path separators, regardless of the host platform (also for Windows).

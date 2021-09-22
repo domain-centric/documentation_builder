@@ -363,8 +363,8 @@ class TestRootNode extends RootNode {
 class TestTagRule extends TagRule {
   TestTagRule()
       : super('testTag', [
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
 
   @override

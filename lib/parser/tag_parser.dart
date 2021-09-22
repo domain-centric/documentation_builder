@@ -108,8 +108,8 @@ class ImportFileTag extends Tag {
 class ImportFileTagRule extends TagRule {
   ImportFileTagRule()
       : super('ImportFile', [
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
 
   @override
@@ -149,8 +149,8 @@ class ImportCodeTag extends Tag {
 class ImportCodeTagRule extends TagRule {
   ImportCodeTagRule()
       : super('ImportCode', [
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
 
   @override
@@ -190,8 +190,8 @@ class ImportDartCodeTag extends Tag {
 class ImportDartCodeTagRule extends TagRule {
   ImportDartCodeTagRule()
       : super('ImportDartCode', [
-          DartFilePathAttribute(),
-          TitleAttribute(),
+          DartFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
 
   @override
@@ -232,11 +232,11 @@ class ImportDartDocTag extends Tag {
 
     analyzer.Element foundElement = findAnalyzerElement(library, path);
 
-    String docComments =
-        _removeLeadingTripleSlashes(foundElement.documentationComment!);
-    validateIfNotEmpty(docComments, path);
+    var documentationComments = foundElement.documentationComment ?? '';
+    String documentation = _removeLeadingTripleSlashes(documentationComments);
+    validateIfNotEmpty(documentation, path);
 
-    return docComments;
+    return documentation;
   }
 
   static final leadingTripleSlashesExpression = FluentRegex()
@@ -317,8 +317,8 @@ Future<analyzer.LibraryElement> parseLibrary(
 class ImportDartDocTagRule extends TagRule {
   ImportDartDocTagRule()
       : super('ImportDartDoc', [
-          DartCodePathAttribute(),
-          TitleAttribute(),
+          DartCodePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
 
   @override
@@ -354,16 +354,16 @@ class TableOfContentsTag extends Tag {
             var level = subTitle.level; //1,2,3
             if (uri != null && level <= 3) {
               Link subTitleLink = Link(parent: parent, title: title, uri: uri);
-              toc += "${'  ' * (level-1)}- $subTitleLink\n";
+              toc += "${'  ' * (level - 1)}- $subTitleLink\n";
             }
           }
         }
       }
     }
     String? titleText = attributes[AttributeName.title];
-    var tableOfContents=TextNode(this, toc);
-    if (titleText!=null && titleText.trim().isNotEmpty) {
-      var title=Title(this, titleText);
+    var tableOfContents = TextNode(this, toc);
+    if (titleText != null && titleText.trim().isNotEmpty) {
+      var title = Title(this, titleText);
       anchor = title.anchor;
       return Future.value([title, tableOfContents]);
     } else {
@@ -379,7 +379,7 @@ class TableOfContentsTag extends Tag {
 class TableOfContentsTagRule extends TagRule {
   TableOfContentsTagRule()
       : super('TableOfContents', [
-          TitleAttribute(),
+          TitleAttributeRule(),
         ]);
 
   @override

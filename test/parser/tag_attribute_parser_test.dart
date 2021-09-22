@@ -90,8 +90,8 @@ main() {
     group('method: parseToNameAndValues', () {
       test('2 valid attributes', () async {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '# Title';
@@ -105,8 +105,8 @@ main() {
       });
       test('missing optional attribute', () async {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String path = 'doc/template/README.mtd';
         Map<String, dynamic> expectedAttributes = {
@@ -118,8 +118,8 @@ main() {
 
       test('missing required attribute', () {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String title = '# Title';
         expect(
@@ -140,8 +140,8 @@ main() {
 
       test('invalid text', () {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '# Title';
@@ -157,8 +157,8 @@ main() {
       });
       test('invalid projectFilePath', () {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String path = '/invalid/path/starting/with/slash';
         String title = '# Title';
@@ -174,8 +174,8 @@ main() {
       });
       test('empty title', () {
         AttributeParser parser = AttributeParser([
-          ProjectFilePathAttribute(),
-          TitleAttribute(),
+          ProjectFilePathAttributeRule(),
+          TitleAttributeRule(),
         ]);
         String path = 'doc/template/README.mtd';
         String title = '';

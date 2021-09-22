@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:documentation_builder/builder/template_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/link_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/project/github_project.dart';
@@ -11,16 +10,14 @@ import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:test/test.dart';
 
 main() {
-  String suffixName = UriSuffixAttribute().name;
   String wikiSuffixValue = 'wiki';
-  String wikiSuffixAttribute = '$suffixName="$wikiSuffixValue"';
+  String wikiSuffixAttribute = '${AttributeName.suffix}="$wikiSuffixValue"';
   String exampleSuffixValue = 'example';
-  String exampleSuffixAttribute = '$suffixName="$exampleSuffixValue"';
+  String exampleSuffixAttribute = '${AttributeName.suffix}="$exampleSuffixValue"';
   String invalidSuffixValue = 'none-existing-path-suffix';
-  String invalidSuffixAttribute = '$suffixName="$invalidSuffixValue"';
-  String titleName = TitleAttribute().name;
+  String invalidSuffixAttribute = '${AttributeName.suffix}="$invalidSuffixValue"';
   String titleValue = '# Title';
-  String titleAttribute = "  $titleName  : '$titleValue'  ";
+  String titleAttribute = "  ${AttributeName.title}  : '$titleValue'  ";
   String uri = 'https://google.com';
 
   group('class: Link', () {

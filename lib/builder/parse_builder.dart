@@ -23,12 +23,12 @@ class ParseBuilder implements Builder {
           await buildStep.fetchResource<DocumentationModel>(resource);
       model.buildStep = buildStep;
       await DocumentationParser().parse(model);
-    } on ParserWarning catch (parseWarning) {
-      showWarningsInConsole(parseWarning);
+    }  catch (e) {
+      showWarningsInConsole(e);
     }
   }
 
-  void showWarningsInConsole(ParserWarning parseWarning) {
-    print(parseWarning.toString());
+  void showWarningsInConsole(e) {
+    print(e.toString());
   }
 }
