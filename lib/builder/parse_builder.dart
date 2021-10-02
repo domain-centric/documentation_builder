@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:build/build.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/parser/documentation_parser.dart';
-import 'package:documentation_builder/parser/parser.dart';
 
 /// Lets the [DocumentationParser] parse the [DocumentationModel].
 class ParseBuilder implements Builder {
@@ -23,7 +22,7 @@ class ParseBuilder implements Builder {
           await buildStep.fetchResource<DocumentationModel>(resource);
       model.buildStep = buildStep;
       await DocumentationParser().parse(model);
-    }  catch (e) {
+    } catch (e) {
       showWarningsInConsole(e);
     }
   }

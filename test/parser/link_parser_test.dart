@@ -71,7 +71,7 @@ main() {
   group('class: CompleteLinkRule', () {
     group('field: expression', () {
       test("Correct Link", () {
-        var rule = CompleteLink();
+        var rule = CompleteLinkRule();
         var markdown = "[$titleValue]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
         expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
@@ -80,7 +80,7 @@ main() {
             rule.expression.findCapturedGroups(markdown)[GroupName.uri], uri);
       });
       test("Link without title", () {
-        var rule = CompleteLink();
+        var rule = CompleteLinkRule();
         var markdown = "[]($uri)";
         expect(rule.expression.hasMatch(markdown), true);
         expect(
@@ -89,7 +89,7 @@ main() {
             rule.expression.findCapturedGroups(markdown)[GroupName.uri], uri);
       });
       test("Link without url", () {
-        var rule = CompleteLink();
+        var rule = CompleteLinkRule();
         var markdown = "[$titleValue]()";
         expect(rule.expression.hasMatch(markdown), true);
         expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
@@ -98,7 +98,7 @@ main() {
       });
 
       test("with spaces has match", () {
-        var rule = CompleteLink();
+        var rule = CompleteLinkRule();
         var markdown = "[  $titleValue  ](    $uri )";
         expect(rule.expression.hasMatch(markdown), true);
         expect(rule.expression.findCapturedGroups(markdown)[GroupName.title],
@@ -108,7 +108,7 @@ main() {
       });
 
       test("with spaces between brackets and braces has no match", () {
-        var rule = CompleteLink();
+        var rule = CompleteLinkRule();
         var markdown = "[  $titleValue  ]  (    $uri )";
         expect(rule.expression.hasMatch(markdown), false);
       });
@@ -118,28 +118,28 @@ main() {
   group('class: GitHubProjectLinkRule', () {
     group('field: expression', () {
       test("lowercase name has match", () {
-        var rule = GitHubProjectLink();
+        var rule = GitHubProjectLinkRule();
         expect(
             rule.expression
                 .hasMatch("[github $wikiSuffixAttribute $titleAttribute] "),
             true);
       });
       test("lowercase and uppercase name has match", () {
-        var rule = GitHubProjectLink();
+        var rule = GitHubProjectLinkRule();
         expect(
             rule.expression
                 .hasMatch("[GitHub  $wikiSuffixAttribute $titleAttribute]"),
             true);
       });
       test("with spaces has match", () {
-        var rule = GitHubProjectLink();
+        var rule = GitHubProjectLinkRule();
         expect(
             rule.expression.hasMatch(
                 "[  GitHub  $wikiSuffixAttribute $titleAttribute    ]"),
             true);
       });
       test("[GitHubWiki] has match", () {
-        var rule = GitHubProjectLink();
+        var rule = GitHubProjectLinkRule();
         expect(rule.expression.hasMatch("[GitHubWiki]"), true);
       });
     });
@@ -147,31 +147,31 @@ main() {
   group('class: MarkdownFileLinkRule', () {
     group('field:expression', () {
       test('file name only has match', () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(rule.expression.hasMatch("[README.md]"), true);
       });
       test('file and path has match', () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(rule.expression.hasMatch("[doc/template/README.mdt]"), true);
       });
       test('wiki file has match', () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(
             rule.expression.hasMatch("[01-Documentation-Builder.mdt]"), true);
       });
     });
     group('method: createDefaultTitle', () {
       test('README.md returns README', () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(rule.createDefaultTitle("README.md"), 'README');
       });
       test("'doc/template/README.mdt' returns README", () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(rule.createDefaultTitle("doc/template/README.mdt"), 'README');
       });
       test("'01-Documentation-Builder.mdt' returns 'Documentation Builder'",
           () {
-        var rule = MarkdownFileLink();
+        var rule = MarkdownFileLinkRule();
         expect(rule.createDefaultTitle("01-Documentation-Builder.mdt"),
             '01 Documentation Builder');
       });

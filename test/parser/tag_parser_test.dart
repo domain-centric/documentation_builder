@@ -307,6 +307,43 @@ main() {
       // });
     });
   });
+
+  group('class: TableOfContentsTagRule', () {
+    group('field: expression', () {
+      test('{tableOfContext}', () {
+        expect(TableOfContentsTagRule().expression.hasMatch('{tableOfContents}'), true);
+      });
+      test('{tableOfContext title="Test"}', () {
+        expect(TableOfContentsTagRule().expression.hasMatch('{tableOfContents title="Test"}'), true);
+      });
+    });
+  });
+
+  group('class: TitleRule', () {
+    group('field: expression', () {
+      test('# Title has match', () {
+        expect(TitleRule().expression.hasMatch('# Title 1'),true);
+      });
+      test('# Title with spaces has match', () {
+        expect(TitleRule().expression.hasMatch('  #     Title 1'),true);
+      });
+      test('###### Title has match', () {
+        expect(TitleRule().expression.hasMatch('  ######     Title 1'),true);
+      });
+      test('####### Title has NO match', () {
+        expect(TitleRule().expression.hasMatch('  #######     Title 1'),false);
+      });
+    });
+    group('with parser:', () {
+      test('parses correctly', () async {
+        var root=TestRootNode('hello\n\# Title\nworld');
+        var parsedNode=await TagParser().parse(root);
+        expect(parsedNode.children.length,3);
+        expect(parsedNode.children[1] is Title,true);
+        expect((parsedNode.children[1] as Title).title,'# Title');
+      });
+    });
+  });
 }
 
 Anchor createTestAnchor(String title) {

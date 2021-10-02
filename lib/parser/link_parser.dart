@@ -15,14 +15,13 @@ import 'package:fluent_regex/fluent_regex.dart';
 class LinkParser extends Parser {
   LinkParser()
       : super([
-          CompleteLink(),
-          GitHubProjectLink(),
-          PubDevProjectLink(),
-          PubDevPackageLink(),
-          DartCodeLink(),
-          MarkdownFileLink(),
-          DartCodeLink(),
-//TODO PREVIOUS_HOME_NEXT LINKS FOR WIKI PAGES
+          CompleteLinkRule(),
+          GitHubProjectLinkRule(),
+          PubDevProjectLinkRule(),
+          PubDevPackageLinkRule(),
+          DartCodeLinkRule(),
+          MarkdownFileLinkRule(),
+          //TODO PreviousHomeNextRule(),
         ]);
 }
 
@@ -31,10 +30,21 @@ class LinkParser extends Parser {
 ///
 /// e.g.: [Search the webt&rsqb;(https://google.com)
 
-// This Rule was added and will be parses first to prevent complete links
-// to be replaced by incomplete links
-class CompleteLink extends TextParserRule {
-  CompleteLink() : super(createExpression());
+class CompleteLink extends Link {
+  CompleteLink(ParentNode parent, RegExpMatch match)
+      : super(parent: parent, uri: createUri(match), title: createTitle(match));
+
+  static createUri(RegExpMatch match) =>
+      Uri.parse(match.namedGroup(GroupName.uri) ?? '');
+
+  static createTitle(RegExpMatch match) =>
+      match.namedGroup(GroupName.title) ?? ''.trim();
+}
+
+/// This Rule was added and will be parses first to prevent complete links
+/// to be replaced by incomplete links
+class CompleteLinkRule extends TextParserRule {
+  CompleteLinkRule() : super(createExpression());
 
   static FluentRegex createExpression() => FluentRegex()
       .literal('[')
@@ -53,16 +63,8 @@ class CompleteLink extends TextParserRule {
 
   @override
   Future<Node> createReplacementNode(
-      ParentNode parent, RegExpMatch match) async {
-    try {
-      String title = match.namedGroup(GroupName.title) ?? ''.trim();
-      Uri uri = Uri.parse(match.namedGroup(GroupName.uri) ?? '');
-      return Link(parent: parent, title: title, uri: uri);
-    } on ParserWarning catch (warning) {
-      // Wrap warning with link information, so it can be easily found
-      throw ParserWarning("$warning in link: '${match.result}'.");
-    }
-  }
+          ParentNode parent, RegExpMatch match) async =>
+      CompleteLink(parent, match);
 }
 
 /// A text between square brackets [] but not followed by a [Uri] between parentheses (),
@@ -118,15 +120,6 @@ abstract class InCompleteLinkRule extends TextParserRule {
     String name,
     Map<String, dynamic> attributes,
   );
-
-  String findTitle(String defaultTitle, attributes) {
-    final String nameAttribute = TitleAttributeRule().name;
-    if (attributes.keys.contains(nameAttribute)) {
-      return attributes[nameAttribute];
-    } else {
-      return defaultTitle;
-    }
-  }
 }
 
 /// You can refer to other parts of the documentation using [Link]s.
@@ -164,6 +157,25 @@ class Link extends ParentNode {
     if (!await uri.canGetWithHttp())
       throw ParserWarning('Could not get uri: $uri');
   }
+
+  static String createTitle(
+      String defaultTitle, Map<String, dynamic> attributes) {
+    final String nameAttribute = TitleAttributeRule().name;
+    if (attributes.keys.contains(nameAttribute)) {
+      return attributes[nameAttribute];
+    } else {
+      return defaultTitle;
+    }
+  }
+
+  static Uri createUri(Uri defaultUri, Map<String, dynamic> attributes) {
+    final String name = AttributeName.suffix;
+    if (attributes.keys.contains(name)) {
+      UriSuffixPath suffix = attributes[name];
+      return defaultUri.withPathSuffix(suffix.path);
+    }
+    return defaultUri;
+  }
 }
 
 /// abstract link rule with optional TitleAttribute
@@ -182,26 +194,6 @@ abstract class LinkDefinitionsRule extends InCompleteLinkRule {
         .map((linkDef) => FluentRegex().literal(linkDef.name))
         .toList();
     return FluentRegex().or(nameExpressions).ignoreCase();
-  }
-
-  @override
-  Link createLinkNode(
-      ParentNode parent, String name, Map<String, dynamic> attributes) {
-    LinkDefinition linkDef = linkDefinitions.firstWhere(
-        (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
-    String title = findTitle(linkDef.defaultTitle, attributes);
-    Uri uri = createUri(linkDef, attributes);
-    return Link(parent: parent, title: title, uri: uri);
-  }
-
-  Uri createUri(LinkDefinition linkDef, Map<String, dynamic> attributes) {
-    Uri uri = linkDef.uri;
-    final String name = AttributeName.suffix;
-    if (attributes.keys.contains(name)) {
-      UriSuffixPath suffix = attributes[name];
-      uri = uri.withPathSuffix(suffix.path);
-    }
-    return uri;
   }
 }
 
@@ -231,8 +223,49 @@ class LinkDefinition {
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [Github suffix='wiki'&rsqb; is the same as [GithubWiki&rsqb;
 /// - title: An alternative title for the hyperlink. e.g. [GitHubWiki title='Wiki documentation'&rsqb;
-class GitHubProjectLink extends LinkDefinitionsRule {
-  GitHubProjectLink() : super(GitHubProject().linkDefinitions);
+
+class GitHubProjectLink extends Link {
+  GitHubProjectLink(
+    ParentNode parent,
+    LinkDefinition linkDef,
+    Map<String, dynamic> attributes,
+  ) : super(
+            parent: parent,
+            title: createTitle(linkDef, attributes),
+            uri: createUri(linkDef, attributes));
+
+  static String createTitle(
+      LinkDefinition linkDef, Map<String, dynamic> attributes) {
+    final String nameAttribute = TitleAttributeRule().name;
+    if (attributes.keys.contains(nameAttribute)) {
+      return attributes[nameAttribute];
+    } else {
+      return linkDef.defaultTitle;
+    }
+  }
+
+  static Uri createUri(
+      LinkDefinition linkDef, Map<String, dynamic> attributes) {
+    Uri uri = linkDef.uri;
+    final String name = AttributeName.suffix;
+    if (attributes.keys.contains(name)) {
+      UriSuffixPath suffix = attributes[name];
+      uri = uri.withPathSuffix(suffix.path);
+    }
+    return uri;
+  }
+}
+
+class GitHubProjectLinkRule extends LinkDefinitionsRule {
+  GitHubProjectLinkRule() : super(GitHubProject().linkDefinitions);
+
+  @override
+  Link createLinkNode(
+      ParentNode parent, String name, Map<String, dynamic> attributes) {
+    LinkDefinition linkDef = linkDefinitions.firstWhere(
+        (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
+    return GitHubProjectLink(parent, linkDef, attributes);
+  }
 }
 
 /// [GitHubProjectLink]s point to a [PubDev](https://pub.dev/) page of the
@@ -250,8 +283,27 @@ class GitHubProjectLink extends LinkDefinitionsRule {
 /// You can the following optional attributes:
 /// - suffix: A path suffix e.g. [PubDev suffix='example'&rsqb; is the same as [PubDevExample&rsqb;
 /// - title: An alternative title for the hyperlink. e.g. [PubDevExample title='Examples'&rsqb;
-class PubDevProjectLink extends LinkDefinitionsRule {
-  PubDevProjectLink() : super(PubDevProject().linkDefinitions);
+class PubDevProjectLink extends Link {
+  PubDevProjectLink(
+    ParentNode parent,
+    LinkDefinition linkDef,
+    Map<String, dynamic> attributes,
+  ) : super(
+            parent: parent,
+            title: Link.createTitle(linkDef.defaultTitle, attributes),
+            uri: Link.createUri(linkDef.uri, attributes));
+}
+
+class PubDevProjectLinkRule extends LinkDefinitionsRule {
+  PubDevProjectLinkRule() : super(PubDevProject().linkDefinitions);
+
+  @override
+  Link createLinkNode(
+      ParentNode parent, String name, Map<String, dynamic> attributes) {
+    LinkDefinition linkDef = linkDefinitions.firstWhere(
+        (linkDef) => linkDef.name.toLowerCase() == name.toLowerCase());
+    return PubDevProjectLink(parent, linkDef, attributes);
+  }
 }
 
 /// A [PubDevPackageLink] links point to a [PubDev](https://pub.dev) package.
@@ -268,8 +320,17 @@ class PubDevProjectLink extends LinkDefinitionsRule {
 /// You can use the optional title attribute, e.g.:
 /// [json_serializable title='Package for json conversion'&rsqb; will be replaced by
 /// [Package for json conversion&rsqb;(https://pub.dev/packages/json_serializable)
-class PubDevPackageLink extends InCompleteLinkRule {
-  PubDevPackageLink()
+class PubDevPackageLink extends Link {
+  PubDevPackageLink(
+      ParentNode parent, String name, Map<String, dynamic> attributes)
+      : super(
+            parent: parent,
+            title: Link.createTitle(name, attributes),
+            uri: PubDevProject.forProjectName(name).uri!);
+}
+
+class PubDevPackageLinkRule extends InCompleteLinkRule {
+  PubDevPackageLinkRule()
       : super(
           [TitleAttributeRule()],
           nameExpression: createNameExpression(),
@@ -282,9 +343,7 @@ class PubDevPackageLink extends InCompleteLinkRule {
   @override
   Link createLinkNode(
       ParentNode parent, String name, Map<String, dynamic> attributes) {
-    String title = findTitle(name, attributes);
-    Uri uri = PubDevProject.forProjectName(name).uri!;
-    return Link(parent: parent, title: title, uri: uri);
+    return PubDevPackageLink(parent, name, attributes);
   }
 
   static FluentRegex createNameExpression() => FluentRegex().characterSet(
@@ -318,8 +377,13 @@ class PubDevPackageLink extends InCompleteLinkRule {
 /// [README.mdt title='About this project'&rsqb;
 ///
 /// Note that the [DocumentationBuilder] ignores letter casing.
-class MarkdownFileLink extends InCompleteLinkRule {
-  MarkdownFileLink()
+class MarkdownFileLink extends Link {
+  MarkdownFileLink(ParentNode parent, String title, Uri uri)
+      : super(parent: parent, title: title, uri: uri);
+}
+
+class MarkdownFileLinkRule extends InCompleteLinkRule {
+  MarkdownFileLinkRule()
       : super([TitleAttributeRule()],
             nameExpression:
                 ProjectFilePath.expression.startOfLine(false).endOfLine(false));
@@ -332,9 +396,9 @@ class MarkdownFileLink extends InCompleteLinkRule {
   Link createLinkNode(
       ParentNode parent, String path, Map<String, dynamic> attributes) {
     var defaultTitle = createDefaultTitle(path);
-    String title = findTitle(defaultTitle, attributes);
+    String title = Link.createTitle(defaultTitle, attributes);
     Uri uri = findMarkdownTemplate(parent, path)!.destinationWebUri!;
-    return Link(parent: parent, title: title, uri: uri);
+    return MarkdownFileLink(parent, title, uri);
   }
 
   /// Returns matches that represent existing [GeneratedFile]s
@@ -378,7 +442,7 @@ class MarkdownFileLink extends InCompleteLinkRule {
   }
 }
 
-/// A DartCodeLink is a [Link] to a piece of Dart code.
+/// A [DartCodeLink] is a [Link] to a piece of Dart code.
 /// You can make a link to any library members, e.g.:
 /// - constant
 /// - function
@@ -410,8 +474,17 @@ class MarkdownFileLink extends InCompleteLinkRule {
 /// - Within another [WikiMarkdownTemplateFile], e.g.: link it to the position of a [ImportDartDocTag]
 /// - Link it to a [GitHubProjectCodeLink]
 /// The [Link] will not be replaced when the [Link] can not be resolved
-class DartCodeLink extends InCompleteLinkRule {
-  DartCodeLink()
+class DartCodeLink extends Link {
+  DartCodeLink(ParentNode parent, String title, Uri uri)
+      : super(
+          parent: parent,
+          title: title,
+          uri: uri,
+        );
+}
+
+class DartCodeLinkRule extends InCompleteLinkRule {
+  DartCodeLinkRule()
       : super(
           [TitleAttributeRule()],
           nameExpression: createNameExpression(),
@@ -438,9 +511,9 @@ class DartCodeLink extends InCompleteLinkRule {
   Link createLinkNode(
       ParentNode parent, String path, Map<String, dynamic> attributes) {
     var defaultTitle = findDartMemberPath(path);
-    String title = findTitle(defaultTitle, attributes);
+    String title = Link.createTitle(defaultTitle, attributes);
     Uri uri = createUri(parent, path)!;
-    return Link(parent: parent, title: title, uri: uri);
+    return DartCodeLink(parent, title, uri);
   }
 
   /// finds a [Template] with a sourceFilePath or destinationFilePath

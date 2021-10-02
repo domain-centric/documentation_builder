@@ -24,9 +24,11 @@ class TagParser extends Parser {
           ImportCodeTagRule(),
           ImportDartCodeTagRule(),
           ImportDartDocTagRule(),
+          TitleRule(),
           TableOfContentsTagRule(),
         ]);
 }
+
 
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
@@ -326,6 +328,25 @@ class ImportDartDocTagRule extends TagRule {
       ImportDartDocTag(parent, attributes);
 }
 
+/// Replaces titles (text starting with # or ## or ### etc) with TitleNodes
+/// This must be done before [TableOfContentsTagRule] so that titles in template files
+/// can also be found by the [TableOfContentsTag]
+class TitleRule extends TextParserRule {
+  TitleRule() : super(createExpression());
+
+  @override
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) =>
+      Future.value(Title(parent, match.result));
+
+  static FluentRegex createExpression() => FluentRegex()
+      .startOfLine()
+      .whiteSpace(Quantity.zeroOrMoreTimes())
+      .literal('#', Quantity.between(1, 6))
+      .whiteSpace(Quantity.zeroOrMoreTimes())
+      .characterSet(CharacterSet.exclude().addLiterals('#'), Quantity.oneOrMoreTimes().reluctant)
+      .endOfLine();
+}
+
 /// - **{TableOfContents title='## Table of contents example'&rcub;**
 /// - Creates a table of contents.
 /// - Attributes:
@@ -431,7 +452,7 @@ class Title extends ParentNode {
         super(parent) {
     anchor = Anchor(this, title);
     children.add(anchor);
-    children.add(TextNode(this, '\n$title\n'));
+    children.add(TitleText(this, title));
   }
 
   static final FluentRegex _leadingHashExpression = FluentRegex()
@@ -452,6 +473,19 @@ class Title extends ParentNode {
   static createTitleWithoutHashes(String title) {
     return _leadingHashExpression.removeFirst(title);
   }
+}
+
+/// [TitleText] is needed because we can not use [TextNode] inside a [Title].
+/// This would create a Stackoverflow by the [TitleRule] that keeps replacing
+/// the [TextNode] inside a [Title]
+class TitleText extends Node {
+  final String title;
+
+  TitleText(ParentNode? parent, this.title) : super(parent);
+
+  /// Titles must be on a single line to be recognized as a title by the markdown engine
+  @override
+  String toString() => '\n$title\n';
 }
 
 /// Represents a HTML anchor point to which you can refer to with a [uriToAnchor]
