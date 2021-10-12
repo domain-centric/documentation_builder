@@ -481,6 +481,12 @@ class DartCodeLink extends Link {
           title: title,
           uri: uri,
         );
+
+  @override
+  Future<void> validateUriHttpGet() {
+    //no validation because url may not exist just yet.
+    return Future.value();
+  }
 }
 
 class DartCodeLinkRule extends InCompleteLinkRule {

@@ -1,9 +1,9 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-10-02 15:45:22.519262.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-10-12 21:03:20.200537.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
 [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io//badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
 
@@ -15,10 +15,10 @@ This can be useful when you write documentation for a
 and want to reuse/import Dart code or Dart documentation comments.
 
 It can generate the following files:
-- [ReadMeFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#readme-template-file)
-- [ChangeLogFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#changelog-template-file)
-- [ExampleFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#example-template-file)
-- GitHub [WikiFile](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files#wiki-template-files)s
+- [ReadMeFile](https://github.com/efficientyboosters/documentation_builder/wiki/03-Markdown-Template-Files#readme-template-file)
+- [ChangeLogFile](https://github.com/efficientyboosters/documentation_builder/wiki/03-Markdown-Template-Files#changelog-template-file)
+- [ExampleFile](https://github.com/efficientyboosters/documentation_builder/wiki/03-Markdown-Template-Files#example-template-file)
+- GitHub [WikiFile](https://github.com/efficientyboosters/documentation_builder/wiki/03-Markdown-Template-Files#wiki-template-files)s
 
 [documentation_builder](https://pub.dev/packages/documentation_builder) is not intended to generate API documentation.
 Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
@@ -51,6 +51,6 @@ You can view the templates files and the generated output on https://github.com 
 - Read the [Wiki documentation](https://github.com/efficientyboosters/documentation_builder/wiki)
 - [Install the documentation_builder package](https://pub.dev/packages/documentation_builder/install) in your project
 - Create 'doc/template' directories in the root of your project
-- [Create markdown template files](https://github.com/efficientyboosters/documentation_builder/wiki/02-Markdown-Template-Files) in the "doc/template" directory ([see examples](https://github.com/efficientyboosters/documentation_builder/wiki/07-Examples))
-- [Generate the documentation files](https://github.com/efficientyboosters/documentation_builder/wiki/05-Generating-Documentation-Files)
-- [Publish the documentation files](https://github.com/efficientyboosters/documentation_builder/wiki/06-Publishing-Documentation-Files)
+- [Create markdown template files](https://github.com/efficientyboosters/documentation_builder/wiki/03-Markdown-Template-Files) in the "doc/template" directory ([see examples](https://github.com/efficientyboosters/documentation_builder/wiki/09-Examples))
+- [Generate the documentation files](https://github.com/efficientyboosters/documentation_builder/wiki/07-Generating-Documentation-Files)
+- [Publish the documentation files](https://github.com/efficientyboosters/documentation_builder/wiki/08-Publishing-Documentation-Files)

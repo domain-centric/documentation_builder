@@ -2,6 +2,7 @@ import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/parser/parser.dart';
 import 'package:documentation_builder/parser/tag_parser.dart';
 
+import 'badge_parser.dart';
 import 'link_parser.dart';
 
 /// Parses the [DocumentationModel]:
@@ -13,6 +14,12 @@ class DocumentationParser {
     String warnings = '';
     try {
       await TagParser().parse(model);
+    } on ParserWarning catch (parseWarning) {
+      warnings += parseWarning.toString();
+    }
+
+    try {
+      await BadgeParser().parse(model);
     } on ParserWarning catch (parseWarning) {
       warnings += parseWarning.toString();
     }

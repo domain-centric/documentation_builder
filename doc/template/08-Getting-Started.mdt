@@ -1,6 +1,0 @@
-- Read the [GitHubWiki title='Wiki documentation']
-- [PubDevInstall title='Install the documentation_builder package'] in your project
-- Create 'doc/template' directories in the root of your project
-- [02-Markdown-Template-Files.mdt title='Create markdown template files'] in the "doc/template" directory ([07-Examples.mdt title='see examples'])
-- [05-Generating-Documentation-Files.mdt title='Generate the documentation files']
-- [06-Publishing-Documentation-Files.mdt title='Publish the documentation files']

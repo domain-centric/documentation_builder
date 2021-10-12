@@ -1,0 +1,17 @@
+{ImportDartDoc path='lib/parser/badge_parser.dart|Badge'}
+
+## Badge Attributes
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|ToolTipAttribute' title='### Tool Tip Attribute'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|LabelAttribute' title='### Label Attribute'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|MessageAttribute' title='### Message Attribute'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|ColorAttribute' title='### Color Attribute'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|LinkAttribute' title='### Link Attribute'}
+
+## Badge types
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|CustomBadge' title='### CustomBadge'}

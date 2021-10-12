@@ -161,9 +161,13 @@ abstract class TextParserRule extends ParserRule {
           replacementNodes.add(betweenNode);
         }
       }
-      Node replacementNode = await createReplacementNode(parent, match);
-      replacementNodes.add(replacementNode);
-      previousMatch = match;
+      try {
+        Node replacementNode = await createReplacementNode(parent, match);
+        replacementNodes.add(replacementNode);
+        previousMatch = match;
+      } on Exception catch (e) {
+        throw ParserWarning.forException(e);
+      }
     }
 
     TextNode? trailingTextNode =
@@ -383,6 +387,10 @@ class ParserWarning extends ParserThrowable {
   final ParserWarning? subWarning;
 
   ParserWarning(String message, [this.subWarning]) : super(message);
+
+  ParserWarning.forException(Exception e)
+      : subWarning = null,
+        super(e.toString().replaceAll('Exception: ', ''));
 
   @override
   String toString() {
