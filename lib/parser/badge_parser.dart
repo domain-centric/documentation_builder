@@ -213,10 +213,10 @@ class LinkAttributeRule extends AttributeRule {
 ///
 /// There are different types of badges. [Badge]s in [TemplateFile]s :
 /// - are surrounded by square brackets: []
-/// - start with a name: e.g.  [Badge &rsqb;
+/// - start with a ! and a name: e.g.  [!CustomBadge &rsqb;
 /// - may have [Attribute]s after the name
 ///
-/// e.g.: [Badge label='license' message='MIT' color='informational' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE' &rsqb;
+/// e.g.: [!CustomBadge label='license' message='MIT' color='informational' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE' &rsqb;
 /// [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
 
 abstract class Badge extends Node {
@@ -248,11 +248,12 @@ abstract class BadgeRule extends TextParserRule {
   static FluentRegex createExpression(String name) => FluentRegex()
       .literal('[')
       .whiteSpace(Quantity.zeroOrMoreTimes())
+      .literal('!')
+      .whiteSpace(Quantity.zeroOrMoreTimes())
       .literal(name)
       .group(
           // using direct expression because CharacterSet is missing characters such as new line
-          // attributes are required therefore one or more times
-          FluentRegex('[^\\n\\]]+'),
+          FluentRegex('[^\\n\\]]*'),
           type: GroupType.captureNamed(GroupName.attributes))
       .literal(']')
       .ignoreCase();

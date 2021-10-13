@@ -55,28 +55,28 @@ main() {
       test("lowercase tag name has match", () {
         var rule = CustomBadgeRule();
         expect(
-            rule.expression.hasMatch("[custombadge $label='$label' $message='$message' $uri='$uri']"),
+            rule.expression.hasMatch("[!custombadge $label='$label' $message='$message' $uri='$uri']"),
             true);
       });
       test("lowercase and uppercase badge name has match", () {
         var rule = CustomBadgeRule();
         expect(
             rule.expression
-                .hasMatch("[CustomBadge $label='$label' $message='$message' $uri='$uri']"),
+                .hasMatch("[!CustomBadge $label='$label' $message='$message' $uri='$uri']"),
             true);
       });
       test("lowercase and uppercase badge name with spaces has match", () {
         var rule = CustomBadgeRule();
         expect(
             rule.expression
-                .hasMatch("[ CustomBadge   $label='$label'  $message='$message'    link='$uri'    ]"),
+                .hasMatch("[ ! CustomBadge   $label='$label'  $message='$message'    link='$uri'    ]"),
             true);
       });
     });
     group('class: BadgeParser', () {
       test('with tooltip, label, message, color, link attributes', () async {
         var parsedNode = await BadgeParser()
-            .parse(TestRootNode("[CustomBadge $toolTip='$toolTip' $label='$label' $message='$message' color='$green' link='$uri' ]"));
+            .parse(TestRootNode("[!CustomBadge $toolTip='$toolTip' $label='$label' $message='$message' color='$green' link='$uri' ]"));
 
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is Badge, true);
@@ -85,7 +85,7 @@ main() {
 
       test('missing optional attribute tooltip', () async {
         var parsedNode = await BadgeParser()
-            .parse(TestRootNode("[CustomBadge $label='$label' $message='$message' color='$green' link='$uri' ]"));
+            .parse(TestRootNode("[!CustomBadge $label='$label' $message='$message' color='$green' link='$uri' ]"));
 
         expect(parsedNode.children.length, 1);
         expect(parsedNode.children.first is CustomBadge, true);
@@ -93,7 +93,7 @@ main() {
       });
 
       test('missing required label attribute', () {
-        var text="[CustomBadge $toolTip='$toolTip' $message='$message' color='$green' link='$uri' ]";
+        var text="[!CustomBadge $toolTip='$toolTip' $message='$message' color='$green' link='$uri' ]";
         expect(
             () async => await BadgeParser().parse(TestRootNode(text)),
             throwsA(isA<ParserWarning>().having(
@@ -104,7 +104,7 @@ main() {
       });
 
       test('invalid attribute', () {
-        var text="[CustomBadge $toolTip='$toolTip' $message='$message' 123 color='$green' link='$uri' ]";
+        var text="[!CustomBadge $toolTip='$toolTip' $message='$message' 123 color='$green' link='$uri' ]";
         expect(
             () => BadgeParser().parse(TestRootNode(text)),
             throwsA(isA<ParserWarning>().having(
