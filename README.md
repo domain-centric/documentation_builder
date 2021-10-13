@@ -1,9 +1,9 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-10-13 19:13:13.278849.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2021-10-13 20:48:46.490865.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
 [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)
-[![GitHub License](https://img.shields.io//badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
 

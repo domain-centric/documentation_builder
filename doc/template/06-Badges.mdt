@@ -15,3 +15,6 @@
 ## Badge types
 
 {ImportDartDoc path='lib/parser/badge_parser.dart|CustomBadge' title='### CustomBadge'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|PubPackageBadge' title='### PubPackageBadge'}
+

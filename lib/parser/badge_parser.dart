@@ -3,6 +3,8 @@ import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
+import 'package:documentation_builder/project/local_project.dart';
+import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 /// The [BadgeParser] searches for [TextNode]'s that contain texts that represent a [Badge]
@@ -11,6 +13,7 @@ class BadgeParser extends Parser {
   BadgeParser()
       : super([
           CustomBadgeRule(),
+          PubPackageBadgeRule(),
         ]);
 }
 
@@ -224,7 +227,7 @@ abstract class Badge extends Node {
   final Uri image;
   final Uri link;
 
-  static Uri imgShieldIoUri = Uri.parse('https://img.shields.io/');
+  static Uri imgShieldIoUri = Uri.parse('https://img.shields.io');
 
   Badge({
     ParentNode? parent,
@@ -277,8 +280,8 @@ abstract class BadgeRule extends TextParserRule {
 }
 
 /// - **[CustomBadge  tooltip='GitHub License' label='license' message='MIT' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE'  &rsqb;**
-/// - Creates a CustomBadge that is defined with customizable [Attribute]s.
-/// - E.g.: [![GitHub License](https://img.shields.io//badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
+/// - Creates a [CustomBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 ///   - required [LabelAttribute]
@@ -334,5 +337,37 @@ class CustomBadgeRule extends BadgeRule {
       color: color,
       link: link,
     );
+  }
+}
+
+/// - **[PubPackageBadge&rsqb;**
+/// - Creates a [PubPackageBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class PubPackageBadge extends Badge {
+  PubPackageBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'Pub Package',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('pub/v/${LocalProject.name}'),
+            link: PubDevProject().uri!);
+}
+
+class PubPackageBadgeRule extends BadgeRule {
+  PubPackageBadgeRule()
+      : super('PubPackageBadge', [
+          ToolTipAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return PubPackageBadge(parent: parent, toolTip: toolTip);
   }
 }
