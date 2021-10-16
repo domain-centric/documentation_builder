@@ -21,6 +21,7 @@
 #.vscode/
 
 # Flutter/Dart/Pub related
+**/doc/documentation_builder.wiki/
 **/doc/api/
 .dart_tool/
 .flutter-plugins
@@ -73,3 +74,5 @@ build/
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
+/doc/documentation_builder.wiki/
+/doc/documentation_builder.wiki/
