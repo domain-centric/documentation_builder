@@ -18,3 +18,5 @@
 
 {ImportDartDoc path='lib/parser/badge_parser.dart|PubPackageBadge' title='### PubPackageBadge'}
 
+{ImportDartDoc path='lib/parser/badge_parser.dart|GitHubBadge' title='### GitHubBadge'}
+

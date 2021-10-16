@@ -3,6 +3,7 @@ import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/attribute_parser.dart';
 import 'package:documentation_builder/parser/parser.dart';
+import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/project/local_project.dart';
 import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
@@ -14,6 +15,7 @@ class BadgeParser extends Parser {
       : super([
           CustomBadgeRule(),
           PubPackageBadgeRule(),
+          GitHubBadgeRule(),
         ]);
 }
 
@@ -369,5 +371,37 @@ class PubPackageBadgeRule extends BadgeRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return PubPackageBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubBadge&rsqb;**
+/// - Creates a [GitHubBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/efficientyboosters/documentation_builder)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class GitHubBadge extends Badge {
+  GitHubBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'Code Repository',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('repository-git%20hub-informational'),
+            link: GitHubProject().uri!);
+}
+
+class GitHubBadgeRule extends BadgeRule {
+  GitHubBadgeRule()
+      : super('GitHubBadge', [
+          ToolTipAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return GitHubBadge(parent: parent, toolTip: toolTip);
   }
 }

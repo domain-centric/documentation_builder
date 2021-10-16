@@ -1,5 +1,5 @@
 [!PubPackageBadge]
-[![Code Repository](https://img.shields.io/badge/repository-git%20hub-blue)](https://github.com/efficientyboosters/documentation_builder)
+[!GitHubBadge]
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-blue)](https://github.com/efficientyboosters/documentation_builder/wiki)
 [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)
 [!CustomBadge tooltip='GitHub License' label='license' message='MIT' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE']
