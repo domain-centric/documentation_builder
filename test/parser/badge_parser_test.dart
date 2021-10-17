@@ -199,14 +199,14 @@ main() {
         test("without tooltip", () {
           var badge = GitHubBadge();
           expect(badge.toString(),
-              '[![Code Repository](https://img.shields.io/repository-git%20hub-informational)](${GitHubProject().uri})');
+              '[![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](${GitHubProject().uri})');
         });
         test("without tooltip", () {
           var badge = GitHubBadge(
             toolTip: toolTip,
           );
           expect(badge.toString(),
-              '[![$toolTip](https://img.shields.io/repository-git%20hub-informational)](${GitHubProject().uri})');
+              '[![$toolTip](https://img.shields.io/badge/repository-git%20hub-informational)](${GitHubProject().uri})');
         });
       });
     });
@@ -246,7 +246,7 @@ main() {
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubBadge, true);
           expect(parsedNode.children.first.toString(),
-              '[![$toolTip](https://img.shields.io/repository-git%20hub-informational)](${GitHubProject().uri})');
+              '[![$toolTip](https://img.shields.io/badge/repository-git%20hub-informational)](${GitHubProject().uri})');
         });
 
         test('missing optional attribute tooltip', () async {
@@ -256,12 +256,81 @@ main() {
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubBadge, true);
           expect(parsedNode.children.first.toString(),
-              '[![Code Repository](https://img.shields.io/repository-git%20hub-informational)](${GitHubProject().uri})');
+              '[![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](${GitHubProject().uri})');
         });
       });
     });
   });
 
+
+  group('GitHubWikiBadge', () {
+    group('class: GitHubWikiBadge ', () {
+      group('method: toString', () {
+        test("without tooltip", () {
+          var badge = GitHubWikiBadge();
+          expect(badge.toString(),
+              '[![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](${GitHubProject().wikiUri})');
+        });
+        test("without tooltip", () {
+          var badge = GitHubWikiBadge(
+            toolTip: toolTip,
+          );
+          expect(badge.toString(),
+              '[![$toolTip](https://img.shields.io/badge/documentation-wiki-informational)](${GitHubProject().wikiUri})');
+        });
+      });
+    });
+
+    group('class: GitHubWikiBadgeRule', () {
+      group('field: expression', () {
+        test("lowercase badge name has match", () {
+          var rule = GitHubWikiBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!githubwikibadge $toolTip='$toolTip' ]"),
+              true);
+        });
+        test("lowercase and uppercase badge name has match", () {
+          var rule = GitHubWikiBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!GitHubWikiBadge $toolTip='$toolTip' ]"),
+              true);
+        });
+        test("lowercase and uppercase badge name with spaces has match", () {
+          var rule = GitHubWikiBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[ ! GitHubWikiBadge   $toolTip='$toolTip'   ]"),
+              true);
+        });
+      });
+    });
+
+    group('class: BadgeParser', () {
+      group('class: GitHubWikiBadge', () {
+        test('with tooltip', () async {
+          var parsedNode = await BadgeParser()
+              .parse(TestRootNode("[!GitHubWikiBadge $toolTip='$toolTip'  ]"));
+
+          expect(parsedNode.children.length, 1);
+          expect(parsedNode.children.first is GitHubWikiBadge, true);
+          expect(parsedNode.children.first.toString(),
+              '[![$toolTip](https://img.shields.io/badge/documentation-wiki-informational)](${GitHubProject().wikiUri})');
+        });
+
+        test('missing optional attribute tooltip', () async {
+          var parsedNode =
+          await BadgeParser().parse(TestRootNode("[!GitHubWikiBadge]"));
+
+          expect(parsedNode.children.length, 1);
+          expect(parsedNode.children.first is GitHubWikiBadge, true);
+          expect(parsedNode.children.first.toString(),
+              '[![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](${GitHubProject().wikiUri})');
+        });
+      });
+    });
+  });
 
 }
 

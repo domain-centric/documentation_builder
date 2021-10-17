@@ -16,6 +16,7 @@ class BadgeParser extends Parser {
           CustomBadgeRule(),
           PubPackageBadgeRule(),
           GitHubBadgeRule(),
+          GitHubWikiBadgeRule(),
         ]);
 }
 
@@ -389,7 +390,7 @@ class GitHubBadge extends Badge {
             parent: parent,
             toolTip: toolTip ?? 'Code Repository',
             image: Badge.imgShieldIoUri
-                .withPathSuffix('repository-git%20hub-informational'),
+                .withPathSuffix('badge/repository-git%20hub-informational'),
             link: GitHubProject().uri!);
 }
 
@@ -403,5 +404,37 @@ class GitHubBadgeRule extends BadgeRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return GitHubBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubWikiBadge&rsqb;**
+/// - Creates a [GitHubBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/efficientyboosters/documentation_builder/wiki)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class GitHubWikiBadge extends Badge {
+  GitHubWikiBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'Github Wiki',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('badge/documentation-wiki-informational'),
+            link: GitHubProject().wikiUri!);
+}
+
+class GitHubWikiBadgeRule extends BadgeRule {
+  GitHubWikiBadgeRule()
+      : super('GitHubWikiBadge', [
+          ToolTipAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return GitHubWikiBadge(parent: parent, toolTip: toolTip);
   }
 }
