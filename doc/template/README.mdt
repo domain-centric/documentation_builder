@@ -4,7 +4,7 @@
 [!GitHubStarsBadge]
 [!CustomBadge tooltip='GitHub License' label='license' message='MIT' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE']
 [!GitHubIssuesBadge]
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
+[!GitHubPullRequestsBadge]
 
 {ImportDartDoc path='lib/builder/documentation_builder.dart|DocumentationBuilder' title='# documentation_builder'}
 

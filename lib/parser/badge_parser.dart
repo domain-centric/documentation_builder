@@ -19,6 +19,7 @@ class BadgeParser extends Parser {
           GitHubWikiBadgeRule(),
           GitHubStarsBadgeRule(),
           GitHubIssuesBadgeRule(),
+          GitHubPullRequestsBadgeRule(),
         ]);
 }
 
@@ -502,5 +503,37 @@ class GitHubIssuesBadgeRule extends BadgeRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return GitHubIssuesBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubPullRequestsBadge&rsqb;**
+/// - Creates a [GitHubPullRequestsBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class GitHubPullRequestsBadge extends Badge {
+  GitHubPullRequestsBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'GitHub Pull Requests',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('github/issues-pr${GitHubProject().uri!.path}'),
+            link: GitHubProject().pullRequestsUri!);
+}
+
+class GitHubPullRequestsBadgeRule extends BadgeRule {
+  GitHubPullRequestsBadgeRule()
+      : super('GitHubPullRequestsBadge', [
+          ToolTipAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return GitHubPullRequestsBadge(parent: parent, toolTip: toolTip);
   }
 }
