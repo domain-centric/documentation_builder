@@ -50,6 +50,11 @@ main() {
           'https://github.com/efficientyboosters/documentation_builder/stargazers');
       expect(await GitHubProject().stargazersUri!.canGetWithHttp(), true);
     });
+    test('method: issuesUri', () async {
+      expect(GitHubProject().issuesUri.toString(),
+          'https://github.com/efficientyboosters/documentation_builder/issues');
+      expect(await GitHubProject().issuesUri!.canGetWithHttp(), true);
+    });
 
     test('method: dartFile', () async {
       Uri uri = GitHubProject().dartFile(DartFilePath('lib/parser/link_parser.dart'))!;

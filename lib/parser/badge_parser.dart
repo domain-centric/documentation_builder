@@ -18,6 +18,7 @@ class BadgeParser extends Parser {
           GitHubBadgeRule(),
           GitHubWikiBadgeRule(),
           GitHubStarsBadgeRule(),
+          GitHubIssuesBadgeRule(),
         ]);
 }
 
@@ -452,22 +453,54 @@ class GitHubStarsBadge extends Badge {
     /// See [ToolTipAttribute]
     String? toolTip,
   }) : super(
-      parent: parent,
-      toolTip: toolTip ?? 'GitHub Stars',
-      image: Badge.imgShieldIoUri
-          .withPathSuffix('github/stars${GitHubProject().uri!.path}'),
-      link: GitHubProject().stargazersUri!);
+            parent: parent,
+            toolTip: toolTip ?? 'GitHub Stars',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('github/stars${GitHubProject().uri!.path}'),
+            link: GitHubProject().stargazersUri!);
 }
 
 class GitHubStarsBadgeRule extends BadgeRule {
   GitHubStarsBadgeRule()
       : super('GitHubStarsBadge', [
-    ToolTipAttributeRule(),
-  ]);
+          ToolTipAttributeRule(),
+        ]);
 
   @override
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return GitHubStarsBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubIssuesBadge&rsqb;**
+/// - Creates a [GitHubStarsBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![GitHub Issues](https://img.shields.io/github/issues/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/issues)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class GitHubIssuesBadge extends Badge {
+  GitHubIssuesBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'GitHub Issues',
+            image: Badge.imgShieldIoUri
+                .withPathSuffix('github/issues${GitHubProject().uri!.path}'),
+            link: GitHubProject().issuesUri!);
+}
+
+class GitHubIssuesBadgeRule extends BadgeRule {
+  GitHubIssuesBadgeRule()
+      : super('GitHubIssuesBadge', [
+          ToolTipAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return GitHubIssuesBadge(parent: parent, toolTip: toolTip);
   }
 }

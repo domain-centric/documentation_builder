@@ -215,6 +215,8 @@ class LinkDefinition {
 /// You can use the following MarkDown:
 /// - [GitHub&rsqb;
 /// - [GitHubWiki&rsqb;
+/// - [GitHubStars&rsqb;
+/// - [GitHubIssues&rsqb;
 /// - [GitHubMilestones&rsqb;
 /// - [GitHubReleases&rsqb;
 /// - [GitHubPullRequests&rsqb;

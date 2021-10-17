@@ -19,6 +19,8 @@ class GitHubProject {
 
 
 
+
+
   /// returns a [Uri] to the where the project is stored on https://github.com
   /// or null when no github information was found
 
@@ -75,6 +77,8 @@ class GitHubProject {
 
   Uri? get stargazersUri => _createUriWithSuffix('stargazers');
 
+  Uri? get issuesUri => _createUriWithSuffix('issues');
+
   /// Gets a uri to plain view of the source file.
   /// e.g. if you open the [uri] and click on a markdown file in github,
   /// it will show the rendered markdown file
@@ -112,6 +116,10 @@ class GitHubProject {
         name: 'GitHubStars',
         defaultTitle: 'GitHub Stars',
         uri: GitHubProject().stargazersUri!),
+    LinkDefinition(
+        name: 'GitHubIssues',
+        defaultTitle: 'GitHub Issues',
+        uri: GitHubProject().issuesUri!),
     LinkDefinition(
         name: 'GitHubMilestones',
         defaultTitle: 'GitHub milestones',

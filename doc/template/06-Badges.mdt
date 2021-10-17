@@ -23,3 +23,5 @@
 {ImportDartDoc path='lib/parser/badge_parser.dart|GitHubWikiBadge' title='### GitHubWikiBadge'}
 
 {ImportDartDoc path='lib/parser/badge_parser.dart|GitHubStarsBadge' title='### GitHubStarsBadge'}
+
+{ImportDartDoc path='lib/parser/badge_parser.dart|GitHubIssuesBadge' title='### GitHubIssuesBadge'}

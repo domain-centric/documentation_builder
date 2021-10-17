@@ -328,6 +328,8 @@ main() {
     });
   });
 
+
+
   group('GitHubStarsBadge', () {
     group('class: GitHubStarsBadge ', () {
       group('method: toString', () {
@@ -386,7 +388,7 @@ main() {
 
         test('missing optional attribute tooltip', () async {
           var parsedNode =
-              await BadgeParser().parse(TestRootNode("[!GitHubStarsBadge]"));
+          await BadgeParser().parse(TestRootNode("[!GitHubStarsBadge]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubStarsBadge, true);
@@ -396,6 +398,76 @@ main() {
       });
     });
   });
+
+  group('GitHubIssuesBadge', () {
+    group('class: GitHubIssuesBadge ', () {
+      group('method: toString', () {
+        test("without tooltip", () {
+          var badge = GitHubIssuesBadge();
+          expect(badge.toString(),
+              '[![GitHub Issues](https://img.shields.io/github/issues${GitHubProject().uri!.path})](${GitHubProject().issuesUri})');
+        });
+        test("without tooltip", () {
+          var badge = GitHubIssuesBadge(
+            toolTip: toolTip,
+          );
+          expect(badge.toString(),
+              '[![$toolTip](https://img.shields.io/github/issues${GitHubProject().uri!.path})](${GitHubProject().issuesUri})');
+        });
+      });
+    });
+
+    group('class: GitHubIssuesBadgeRule', () {
+      group('field: expression', () {
+        test("lowercase badge name has match", () {
+          var rule = GitHubIssuesBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!githubissuesbadge $toolTip='$toolTip' ]"),
+              true);
+        });
+        test("lowercase and uppercase badge name has match", () {
+          var rule = GitHubIssuesBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!GitHubIssuesBadge $toolTip='$toolTip' ]"),
+              true);
+        });
+        test("lowercase and uppercase badge name with spaces has match", () {
+          var rule = GitHubIssuesBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[ ! GitHubIssuesBadge   $toolTip='$toolTip'   ]"),
+              true);
+        });
+      });
+    });
+
+    group('class: BadgeParser', () {
+      group('class: GitHubIssuesBadge', () {
+        test('with tooltip', () async {
+          var parsedNode = await BadgeParser()
+              .parse(TestRootNode("[!GitHubIssuesBadge $toolTip='$toolTip'  ]"));
+
+          expect(parsedNode.children.length, 1);
+          expect(parsedNode.children.first is GitHubIssuesBadge, true);
+          expect(parsedNode.children.first.toString(),
+              '[![$toolTip](https://img.shields.io/github/issues${GitHubProject().uri!.path})](${GitHubProject().issuesUri})');
+        });
+
+        test('missing optional attribute tooltip', () async {
+          var parsedNode =
+          await BadgeParser().parse(TestRootNode("[!GitHubIssuesBadge]"));
+
+          expect(parsedNode.children.length, 1);
+          expect(parsedNode.children.first is GitHubIssuesBadge, true);
+          expect(parsedNode.children.first.toString(),
+              '[![GitHub Issues](https://img.shields.io/github/issues${GitHubProject().uri!.path})](${GitHubProject().issuesUri})');
+        });
+      });
+    });
+  });
+
 }
 
 class TestRootNode extends RootNode {
