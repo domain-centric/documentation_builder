@@ -17,6 +17,7 @@ class BadgeParser extends Parser {
           PubPackageBadgeRule(),
           GitHubBadgeRule(),
           GitHubWikiBadgeRule(),
+          GitHubStarsBadgeRule(),
         ]);
 }
 
@@ -408,7 +409,7 @@ class GitHubBadgeRule extends BadgeRule {
 }
 
 /// - **[GitHubWikiBadge&rsqb;**
-/// - Creates a [GitHubBadge] that is defined with customizable [Attribute]s.
+/// - Creates a [GitHubWikiBadge] that is defined with customizable [Attribute]s.
 /// - E.g.: [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/efficientyboosters/documentation_builder/wiki)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
@@ -436,5 +437,37 @@ class GitHubWikiBadgeRule extends BadgeRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return GitHubWikiBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubStarsBadge&rsqb;**
+/// - Creates a [GitHubStarsBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+class GitHubStarsBadge extends Badge {
+  GitHubStarsBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+  }) : super(
+      parent: parent,
+      toolTip: toolTip ?? 'GitHub Stars',
+      image: Badge.imgShieldIoUri
+          .withPathSuffix('github/stars${GitHubProject().uri!.path}'),
+      link: GitHubProject().stargazersUri!);
+}
+
+class GitHubStarsBadgeRule extends BadgeRule {
+  GitHubStarsBadgeRule()
+      : super('GitHubStarsBadge', [
+    ToolTipAttributeRule(),
+  ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    return GitHubStarsBadge(parent: parent, toolTip: toolTip);
   }
 }

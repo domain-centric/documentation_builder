@@ -45,6 +45,11 @@ main() {
       expect(await GitHubProject().rawUri!
           .withPathSuffix('main/README.md').canGetWithHttp(), true);
     });
+    test('method: stargazersUri', () async {
+      expect(GitHubProject().stargazersUri.toString(),
+          'https://github.com/efficientyboosters/documentation_builder/stargazers');
+      expect(await GitHubProject().stargazersUri!.canGetWithHttp(), true);
+    });
 
     test('method: dartFile', () async {
       Uri uri = GitHubProject().dartFile(DartFilePath('lib/parser/link_parser.dart'))!;
