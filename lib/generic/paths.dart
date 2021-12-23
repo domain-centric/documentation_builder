@@ -155,13 +155,12 @@ class DartMemberPath {
       .characterSet(
           CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
       .group(
-          FluentRegex().literal('.') .or([
-          FluentRegex().literal('_'),
-            FluentRegex().group(
-                FluentRegex()
-                    .literal('_', Quantity.zeroOrMoreTimes())
-                    .characterSet(CharacterSet().addLetters().addDigits(),
-                        Quantity.oneOrMoreTimes())),
+          FluentRegex().literal('.').or([
+            FluentRegex().literal('_'),
+            FluentRegex().group(FluentRegex()
+                .literal('_', Quantity.zeroOrMoreTimes())
+                .characterSet(CharacterSet().addLetters().addDigits(),
+                    Quantity.oneOrMoreTimes())),
             ..._operatorExpressions,
           ]),
           quantity: Quantity.zeroOrMoreTimes())

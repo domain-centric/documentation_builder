@@ -328,8 +328,6 @@ main() {
     });
   });
 
-
-
   group('GitHubStarsBadge', () {
     group('class: GitHubStarsBadge ', () {
       group('method: toString', () {
@@ -388,7 +386,7 @@ main() {
 
         test('missing optional attribute tooltip', () async {
           var parsedNode =
-          await BadgeParser().parse(TestRootNode("[!GitHubStarsBadge]"));
+              await BadgeParser().parse(TestRootNode("[!GitHubStarsBadge]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubStarsBadge, true);
@@ -446,8 +444,8 @@ main() {
     group('class: BadgeParser', () {
       group('class: GitHubIssuesBadge', () {
         test('with tooltip', () async {
-          var parsedNode = await BadgeParser()
-              .parse(TestRootNode("[!GitHubIssuesBadge $toolTip='$toolTip'  ]"));
+          var parsedNode = await BadgeParser().parse(
+              TestRootNode("[!GitHubIssuesBadge $toolTip='$toolTip'  ]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubIssuesBadge, true);
@@ -457,7 +455,7 @@ main() {
 
         test('missing optional attribute tooltip', () async {
           var parsedNode =
-          await BadgeParser().parse(TestRootNode("[!GitHubIssuesBadge]"));
+              await BadgeParser().parse(TestRootNode("[!GitHubIssuesBadge]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubIssuesBadge, true);
@@ -505,8 +503,8 @@ main() {
         test("lowercase and uppercase badge name with spaces has match", () {
           var rule = GitHubPullRequestsBadgeRule();
           expect(
-              rule.expression
-                  .hasMatch("[ ! GitHubPullRequestsBadge   $toolTip='$toolTip'   ]"),
+              rule.expression.hasMatch(
+                  "[ ! GitHubPullRequestsBadge   $toolTip='$toolTip'   ]"),
               true);
         });
       });
@@ -515,8 +513,8 @@ main() {
     group('class: BadgeParser', () {
       group('class: GitHubPullRequestsBadge', () {
         test('with tooltip', () async {
-          var parsedNode = await BadgeParser()
-              .parse(TestRootNode("[!GitHubPullRequestsBadge $toolTip='$toolTip'  ]"));
+          var parsedNode = await BadgeParser().parse(
+              TestRootNode("[!GitHubPullRequestsBadge $toolTip='$toolTip'  ]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubPullRequestsBadge, true);
@@ -525,8 +523,8 @@ main() {
         });
 
         test('missing optional attribute tooltip', () async {
-          var parsedNode =
-          await BadgeParser().parse(TestRootNode("[!GitHubPullRequestsBadge]"));
+          var parsedNode = await BadgeParser()
+              .parse(TestRootNode("[!GitHubPullRequestsBadge]"));
 
           expect(parsedNode.children.length, 1);
           expect(parsedNode.children.first is GitHubPullRequestsBadge, true);

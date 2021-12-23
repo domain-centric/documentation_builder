@@ -1,6 +1,3 @@
-
-
 main() {
   print('test');
 }
-

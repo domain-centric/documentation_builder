@@ -15,7 +15,7 @@ abstract class Parser {
     List<ParserWarning> warnings = [];
     rootNode.resetLastCompletedRuleIndexes();
     rootNode = await _findAndReplaceNodes(rootNode, warnings);
-    if (warnings.isNotEmpty) throw new ParserWarning(warnings.join('\n'));
+    if (warnings.isNotEmpty) throw ParserWarning(warnings.join('\n'));
     return rootNode;
   }
 
@@ -69,7 +69,7 @@ abstract class Parser {
     ParentNode parent = firstChild.parent!;
     int startIndex = parent.children.indexOf(firstChild);
     if (startIndex == -1) {
-      throw new ParserError(
+      throw ParserError(
           "Could not find first child node to replace from rule: $rule, ${firstChild.runtimeType} likely has children with the wrong parent.");
     }
     List<Node> replacementNodes =

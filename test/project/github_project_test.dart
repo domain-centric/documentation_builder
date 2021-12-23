@@ -2,7 +2,6 @@ import 'package:documentation_builder/project/github_project.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:test/test.dart';
 
-
 main() {
   group('class: GitHubProject', () {
     test('get method: uri', () async {
@@ -42,8 +41,12 @@ main() {
     test('method: rawUri', () async {
       expect(GitHubProject().rawUri.toString(),
           'https://raw.githubusercontent.com/efficientyboosters/documentation_builder');
-      expect(await GitHubProject().rawUri!
-          .withPathSuffix('main/README.md').canGetWithHttp(), true);
+      expect(
+          await GitHubProject()
+              .rawUri!
+              .withPathSuffix('main/README.md')
+              .canGetWithHttp(),
+          true);
     });
     test('method: stargazersUri', () async {
       expect(GitHubProject().stargazersUri.toString(),
@@ -57,12 +60,13 @@ main() {
     });
 
     test('method: dartFile', () async {
-      Uri uri = GitHubProject().dartFile(DartFilePath('lib/parser/link_parser.dart'))!;
-      expect(uri,
-          Uri.parse('https://github.com/efficientyboosters/documentation_builder/blob/main/lib/parser/link_parser.dart'));
-      expect(await uri.canGetWithHttp(),true);
+      Uri uri = GitHubProject()
+          .dartFile(DartFilePath('lib/parser/link_parser.dart'))!;
+      expect(
+          uri,
+          Uri.parse(
+              'https://github.com/efficientyboosters/documentation_builder/blob/main/lib/parser/link_parser.dart'));
+      expect(await uri.canGetWithHttp(), true);
     });
   });
 }
-
-

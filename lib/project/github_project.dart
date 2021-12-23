@@ -16,11 +16,6 @@ class GitHubProject {
 
   GitHubProject._() : uri = _createUri();
 
-
-
-
-
-
   /// returns a [Uri] to the where the project is stored on https://github.com
   /// or null when no github information was found
 
@@ -84,12 +79,11 @@ class GitHubProject {
   /// it will show the rendered markdown file
   /// You can use this link instead to see the un-rendered (source) file.
   Uri? get rawUri {
-    if (uri==null) return null;
-    Uri rawUri=Uri.https('raw.githubusercontent.com', uri!.path);
+    if (uri == null) return null;
+    Uri rawUri = Uri.https('raw.githubusercontent.com', uri!.path);
     //TODO test if uriWithSuffix exists otherwise return null
     return rawUri;
   }
-
 
   Uri? searchUri(String query) => _createUriWithSuffix('search?q=$query');
 
@@ -104,38 +98,37 @@ class GitHubProject {
   }
 
   List<LinkDefinition> get linkDefinitions => [
-    LinkDefinition(
-        name: 'GitHub',
-        defaultTitle: 'GitHub project',
-        uri: GitHubProject().uri!),
-    LinkDefinition(
-        name: 'GitHubWiki',
-        defaultTitle: 'GitHub Wiki',
-        uri: GitHubProject().wikiUri!),
-    LinkDefinition(
-        name: 'GitHubStars',
-        defaultTitle: 'GitHub Stars',
-        uri: GitHubProject().stargazersUri!),
-    LinkDefinition(
-        name: 'GitHubIssues',
-        defaultTitle: 'GitHub Issues',
-        uri: GitHubProject().issuesUri!),
-    LinkDefinition(
-        name: 'GitHubMilestones',
-        defaultTitle: 'GitHub milestones',
-        uri: GitHubProject().milestonesUri!),
-    LinkDefinition(
-        name: 'GitHubReleases',
-        defaultTitle: 'GitHub releases',
-        uri: GitHubProject().releasesUri!),
-    LinkDefinition(
-        name: 'GitHubPullRequests',
-        defaultTitle: 'GitHub pull requests',
-        uri: GitHubProject().pullRequestsUri!),
-    LinkDefinition(
-        name: 'GitHubRaw',
-        defaultTitle: 'GitHub raw source file',
-        uri: GitHubProject().rawUri!),
-  ];
-
+        LinkDefinition(
+            name: 'GitHub',
+            defaultTitle: 'GitHub project',
+            uri: GitHubProject().uri!),
+        LinkDefinition(
+            name: 'GitHubWiki',
+            defaultTitle: 'GitHub Wiki',
+            uri: GitHubProject().wikiUri!),
+        LinkDefinition(
+            name: 'GitHubStars',
+            defaultTitle: 'GitHub Stars',
+            uri: GitHubProject().stargazersUri!),
+        LinkDefinition(
+            name: 'GitHubIssues',
+            defaultTitle: 'GitHub Issues',
+            uri: GitHubProject().issuesUri!),
+        LinkDefinition(
+            name: 'GitHubMilestones',
+            defaultTitle: 'GitHub milestones',
+            uri: GitHubProject().milestonesUri!),
+        LinkDefinition(
+            name: 'GitHubReleases',
+            defaultTitle: 'GitHub releases',
+            uri: GitHubProject().releasesUri!),
+        LinkDefinition(
+            name: 'GitHubPullRequests',
+            defaultTitle: 'GitHub pull requests',
+            uri: GitHubProject().pullRequestsUri!),
+        LinkDefinition(
+            name: 'GitHubRaw',
+            defaultTitle: 'GitHub raw source file',
+            uri: GitHubProject().rawUri!),
+      ];
 }

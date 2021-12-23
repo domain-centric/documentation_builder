@@ -93,17 +93,17 @@ class Attribute<T> extends Node {
     required this.value,
   }) : super(parent);
 }
+
 class ProjectFilePathAttribute extends Attribute<ProjectFilePath> {
   ProjectFilePathAttribute({
     required ParentNode parent,
     required String name,
     required String projectFilePath,
   }) : super(
-    parent: parent,
-    name: name,
-    value: ProjectFilePath(projectFilePath),
-  );
-
+          parent: parent,
+          name: name,
+          value: ProjectFilePath(projectFilePath),
+        );
 }
 
 class ProjectFilePathAttributeRule extends AttributeRule {
@@ -113,11 +113,11 @@ class ProjectFilePathAttributeRule extends AttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(ProjectFilePathAttribute(
-        parent: parent,
-        name: name,
-        projectFilePath: stringValueFor(match),
-      ));
+    return Future.value(ProjectFilePathAttribute(
+      parent: parent,
+      name: name,
+      projectFilePath: stringValueFor(match),
+    ));
   }
 }
 
@@ -127,23 +127,24 @@ class UriSuffixAttribute extends Attribute<UriSuffixPath> {
     required String name,
     required String uriSuffix,
   }) : super(
-    parent: parent,
-    name: name,
-    value: UriSuffixPath(uriSuffix),
-  );
+          parent: parent,
+          name: name,
+          value: UriSuffixPath(uriSuffix),
+        );
 }
 
 class UriSuffixAttributeRule extends AttributeRule {
-  UriSuffixAttributeRule({String name = AttributeName.suffix, bool required = false})
+  UriSuffixAttributeRule(
+      {String name = AttributeName.suffix, bool required = false})
       : super(name, required: required);
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(UriSuffixAttribute(
-        parent: parent,
-        name: name,
-        uriSuffix: stringValueFor(match),
-      ));
+    return Future.value(UriSuffixAttribute(
+      parent: parent,
+      name: name,
+      uriSuffix: stringValueFor(match),
+    ));
   }
 }
 
@@ -153,10 +154,10 @@ class DartFilePathAttribute extends Attribute<DartFilePath> {
     required String name,
     required String dartFilePath,
   }) : super(
-    parent: parent,
-    name: name,
-    value: DartFilePath(dartFilePath),
-  );
+          parent: parent,
+          name: name,
+          value: DartFilePath(dartFilePath),
+        );
 }
 
 class DartFilePathAttributeRule extends AttributeRule {
@@ -166,11 +167,11 @@ class DartFilePathAttributeRule extends AttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(DartFilePathAttribute(
-        parent: parent,
-        name: name,
-        dartFilePath: stringValueFor(match),
-      ));
+    return Future.value(DartFilePathAttribute(
+      parent: parent,
+      name: name,
+      dartFilePath: stringValueFor(match),
+    ));
   }
 }
 
@@ -180,10 +181,10 @@ class DartCodePathAttribute extends Attribute<DartCodePath> {
     required String name,
     required String dartCodePath,
   }) : super(
-    parent: parent,
-    name: name,
-    value: DartCodePath(dartCodePath),
-  );
+          parent: parent,
+          name: name,
+          value: DartCodePath(dartCodePath),
+        );
 }
 
 class DartCodePathAttributeRule extends AttributeRule {
@@ -193,11 +194,11 @@ class DartCodePathAttributeRule extends AttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(DartCodePathAttribute(
-        parent: parent,
-        name: name,
-        dartCodePath: stringValueFor(match),
-      ));
+    return Future.value(DartCodePathAttribute(
+      parent: parent,
+      name: name,
+      dartCodePath: stringValueFor(match),
+    ));
   }
 }
 
@@ -207,11 +208,11 @@ class StringAttributeRule extends AttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(Attribute<String>(
-        parent: parent,
-        name: name,
-        value: stringValueFor(match),
-      ));
+    return Future.value(Attribute<String>(
+      parent: parent,
+      name: name,
+      value: stringValueFor(match),
+    ));
   }
 }
 
@@ -252,10 +253,10 @@ class TitleAttributeRule extends StringAttributeRule {
 
   @override
   Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
-      return Future.value(TitleAttribute(
-        parent: parent,
-        name: name,
-        value: stringValueFor(match),
-      ));
+    return Future.value(TitleAttribute(
+      parent: parent,
+      name: name,
+      value: stringValueFor(match),
+    ));
   }
 }

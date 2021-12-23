@@ -29,7 +29,6 @@ class TagParser extends Parser {
         ]);
 }
 
-
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
 
@@ -343,7 +342,8 @@ class TitleRule extends TextParserRule {
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .literal('#', Quantity.between(1, 6))
       .whiteSpace(Quantity.zeroOrMoreTimes())
-      .characterSet(CharacterSet.exclude().addLiterals('#'), Quantity.oneOrMoreTimes().reluctant)
+      .characterSet(CharacterSet.exclude().addLiterals('#'),
+          Quantity.oneOrMoreTimes().reluctant)
       .endOfLine();
 }
 

@@ -12,8 +12,8 @@ class DartCodePathBuilder implements Builder {
   /// the buildExtension outputs therefore do not matter ('dummy.dummy') .
   @override
   Map<String, List<String>> get buildExtensions => {
-    '.dart': ['dummy.dummy']
-  };
+        '.dart': ['dummy.dummy']
+      };
 
   /// For each Dart file the [DartCodePathBuilder] will:
   @override
@@ -24,11 +24,11 @@ class DartCodePathBuilder implements Builder {
     // var resolver = buildStep.resolver;
     // // Get a `LibraryElement` for another asset.
     // var library = await resolver.libraryFor(buildStep.inputId);
-    DartFilePath path=DartFilePath(buildStep.inputId.path);
-    DartCodePathFinder visitor=DartCodePathFinder(path);
+    DartFilePath path = DartFilePath(buildStep.inputId.path);
+    DartCodePathFinder visitor = DartCodePathFinder(path);
     library.visitChildren(visitor);
     DocumentationModel model =
-    await buildStep.fetchResource<DocumentationModel>(resource);
+        await buildStep.fetchResource<DocumentationModel>(resource);
     model.dartCodePaths.addAll(visitor.foundPaths);
   }
 }

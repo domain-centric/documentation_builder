@@ -284,7 +284,7 @@ class DartCodePathFinder implements ElementVisitor {
       try {
         DartCodePath path = DartCodePath('$dartFilePath|${element.path}');
         foundPaths.add(path);
-      }  catch (e) {
+      } catch (e) {
         // failed try next...
       }
     }

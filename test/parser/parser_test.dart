@@ -2,10 +2,10 @@ import 'package:documentation_builder/parser/parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:test/test.dart';
 
-const letterSymbol='@';
-const digitSymbol='#';
-const prefixSymbol='^';
-const suffixSymbol='%';
+const letterSymbol = '@';
+const digitSymbol = '#';
+const prefixSymbol = '^';
+const suffixSymbol = '%';
 
 main() {
   group('class: Parser', () {
@@ -55,7 +55,6 @@ main() {
         TextNode(rootNode, letterSymbol),
         TextNode(rootNode, digitSymbol),
         TextNode(rootNode, suffixSymbol),
-
       ]);
     });
   });
@@ -65,16 +64,16 @@ class LetterParserRule extends TextParserRule {
   LetterParserRule() : super(FluentRegex().letter());
 
   @override
-  Future<Node>   createReplacementNode(ParentNode parent, RegExpMatch match) => Future.value(
-      TextNode(parent, letterSymbol));
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) =>
+      Future.value(TextNode(parent, letterSymbol));
 }
 
 class DigitParserRule extends TextParserRule {
   DigitParserRule() : super(FluentRegex().digit());
 
   @override
-  Future<Node>  createReplacementNode(ParentNode parent, RegExpMatch match) => Future.value(
-      TextNode(parent, digitSymbol));
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) =>
+      Future.value(TextNode(parent, digitSymbol));
 }
 
 class LetterDigitParser extends Parser {
