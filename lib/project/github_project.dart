@@ -57,7 +57,7 @@ class GitHubProject {
       .literal('url = https://github.com')
       .group(
           FluentRegex().characterSet(
-              CharacterSet().addLetters().addLiterals('_/'),
+              CharacterSet().addLetters().addLiterals('-_/'),
               Quantity.oneOrMoreTimes()),
           type: GroupType.captureUnNamed())
       .literal('.git');
