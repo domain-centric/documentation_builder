@@ -115,6 +115,8 @@ abstract class ParserRule {
 /// Looks for a [TextNode] and then matches [TextNode.text] with a [RegExp].
 /// It creates replacement nodes
 abstract class TextParserRule extends ParserRule {
+  static Map<String, Iterable<RegExpMatch>> matchMemo = {};
+
   final FluentRegex expression;
 
   TextParserRule(this.expression);
@@ -125,7 +127,7 @@ abstract class TextParserRule extends ParserRule {
   Future<ChildNodesToReplace> findChildNodesToReplace(ParentNode node) async {
     for (Node child in node.children) {
       if (child is TextNode) {
-        List<RegExpMatch> matches = await createMatches(child);
+        Iterable<RegExpMatch> matches = await createMatches(child);
         if (matches.isNotEmpty) {
           return ChildNodesToReplace.foundNode(child);
         }
@@ -142,7 +144,7 @@ abstract class TextParserRule extends ParserRule {
     TextNode textNode = childNodesToReplace.first as TextNode;
     var parent = textNode.parent!;
 
-    List<RegExpMatch> matches = await createMatches(textNode);
+    Iterable<RegExpMatch> matches = await createMatches(textNode);
 
     List<Node> replacementNodes = [];
 
@@ -204,18 +206,22 @@ abstract class TextParserRule extends ParserRule {
 
   /// Removing RegEx matches that are inside other matches.
   /// These will be replaced later when the replacement nodes are parsed
-  List<RegExpMatch> removeMatchesInsideMatches(List<RegExpMatch> matches) {
-    //TODO
-    return matches;
-  }
+  // List<RegExpMatch> removeMatchesInsideMatches(List<RegExpMatch> matches) {
+  //   //TODO
+  //   return matches;
+  // }
 
   /// A method that can be overridden by sibling classes if additional logic is needed
   /// This is the default operation
-  Future<List<RegExpMatch>> createMatches(TextNode textNode) {
+  Future<Iterable<RegExpMatch>> createMatches(TextNode textNode) {
     String text = textNode.text;
-    var matches = expression.allMatches(text).toList();
-    matches = removeMatchesInsideMatches(matches);
-    return Future.value(matches);
+    String key = '$runtimeType${expression.pattern}${text.hashCode}';
+
+    matchMemo.putIfAbsent(key, () {
+      // print('reuse match in TextParseRule of $key');
+      return expression.allMatches(text);
+    });
+    return Future.value(matchMemo[key]!);
   }
 }
 
