@@ -7,13 +7,28 @@ import 'parser.dart';
 
 class AttributeParser extends Parser {
   AttributeParser(List<AttributeRule> rules) : super(rules);
+  static Map<String, RootNode> rootNodeMemo = {};
 
   /// attributes are the inside of a [Tag] string
   Future<Map<String, dynamic>> parseToNameAndValues(String attributes) async {
-    var rootNode = createRootNode(attributes);
-    await parse(rootNode);
-    validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
-    validateIfAllRequiredAttributesAreFound(rootNode);
+    RootNode rootNode;
+    final key = (rules as List<AttributeRule>)
+            .map(
+              (AttributeRule e) => e.name,
+            )
+            .join() +
+        attributes.hashCode.toString();
+
+    if (rootNodeMemo.containsKey(key)) {
+      print('reuse in AttributeParser of $key');
+      rootNode = rootNodeMemo[key]!;
+    } else {
+      rootNode = createRootNode(attributes);
+      await parse(rootNode);
+      validateIfAllTextNodesOnlyContainWhiteSpace(rootNode);
+      validateIfAllRequiredAttributesAreFound(rootNode);
+      rootNodeMemo[key] = rootNode;
+    }
     return createNameAndValueMap(rootNode);
   }
 
