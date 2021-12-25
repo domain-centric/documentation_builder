@@ -29,7 +29,6 @@ class TagParser extends Parser {
         ]);
 }
 
-
 abstract class TagRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
 
@@ -343,7 +342,8 @@ class TitleRule extends TextParserRule {
       .whiteSpace(Quantity.zeroOrMoreTimes())
       .literal('#', Quantity.between(1, 6))
       .whiteSpace(Quantity.zeroOrMoreTimes())
-      .characterSet(CharacterSet.exclude().addLiterals('#'), Quantity.oneOrMoreTimes().reluctant)
+      .characterSet(CharacterSet.exclude().addLiterals('#'),
+          Quantity.oneOrMoreTimes().reluctant)
       .endOfLine();
 }
 
@@ -540,10 +540,12 @@ String _readFile(File file) {
   }
 }
 
-final _leadingWhiteSpace =
-    FluentRegex().startOfLine().whiteSpace(Quantity.oneOrMoreTimes());
-final _trailingWhiteSpace =
-    FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).endOfLine();
+final _leadingWhiteSpace = FluentRegex()
+    .multiline(false)
+    .startOfLine()
+    .whiteSpace(Quantity.oneOrMoreTimes());
+final _trailingWhiteSpace = FluentRegex()
+  ..multiline(false).whiteSpace(Quantity.oneOrMoreTimes()).endOfLine();
 
 String _trimWhiteSpace(String text) {
   text = _leadingWhiteSpace.removeFirst(text);
