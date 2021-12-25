@@ -141,42 +141,14 @@ abstract class TextParserRule extends ParserRule {
   /// - [TextNode]s that represent the remaining text
   Future<List<Node>> createReplacementNodes(
       ChildNodesToReplace childNodesToReplace) async {
-    TextNode textNode = childNodesToReplace.first as TextNode;
-    var parent = textNode.parent!;
+    final parser = await ReplacementNodesParser.createWithMatches(
+      childNodesToReplace,
+      this,
+    );
 
-    Iterable<RegExpMatch> matches = await createMatches(textNode);
+    await parser.handleMatches();
 
-    List<Node> replacementNodes = [];
-
-    TextNode? leadingTextNode =
-        createTextBeforeNode(textNode, matches.first.start);
-    if (leadingTextNode != null) replacementNodes.add(leadingTextNode);
-
-    RegExpMatch? previousMatch;
-    for (RegExpMatch match in matches) {
-      if (previousMatch != null) {
-        int betweenStart = previousMatch.end;
-        int betweenEnd = match.start;
-        if (betweenStart < betweenEnd) {
-          var betweenText = textNode.text.substring(betweenStart, betweenEnd);
-          var betweenNode = TextNode(parent, betweenText);
-          replacementNodes.add(betweenNode);
-        }
-      }
-      try {
-        Node replacementNode = await createReplacementNode(parent, match);
-        replacementNodes.add(replacementNode);
-        previousMatch = match;
-      } on Exception catch (e) {
-        throw ParserWarning.forException(e);
-      }
-    }
-
-    TextNode? trailingTextNode =
-        createTrailingTextNode(textNode, matches.last.end);
-    if (trailingTextNode != null) replacementNodes.add(trailingTextNode);
-
-    return replacementNodes;
+    return parser.replacementNodes;
   }
 
   TextNode? createTextBeforeNode(TextNode textNode, int start) {
@@ -431,4 +403,76 @@ class ParserError extends ParserThrowable {
 
 extension MatchExtension on RegExpMatch {
   String get result => input.substring(start, end);
+}
+
+class ReplacementNodesParser {
+  final ChildNodesToReplace childNodesToReplace;
+  final TextParserRule rule;
+  TextNode get textNode => childNodesToReplace.first as TextNode;
+  ParentNode get parent => textNode.parent!;
+  late Iterable<RegExpMatch> matches;
+  RegExpMatch? previousMatch;
+
+  // List<TextNode> get leadingTextNode {
+  TextNode? get leadingTextNode => rule.createTextBeforeNode(
+        textNode,
+        matches.first.start,
+      );
+
+  TextNode? get trailingTextNode => rule.createTrailingTextNode(
+        textNode,
+        matches.last.end,
+      );
+
+  final List<Node> _replacementNodes = [];
+  List<Node> get replacementNodes => [
+        leadingTextNode,
+        ..._replacementNodes,
+        trailingTextNode
+      ].whereNotNull().toList();
+
+  ReplacementNodesParser._(
+    this.childNodesToReplace,
+    this.rule,
+  );
+
+  static Future<ReplacementNodesParser> createWithMatches(
+    ChildNodesToReplace childNodesToReplace,
+    TextParserRule rule,
+  ) async {
+    return ReplacementNodesParser._(childNodesToReplace, rule)
+      ..matches = await rule.createMatches(
+        childNodesToReplace.first as TextNode,
+      );
+  }
+
+  Future<void> handleMatches() async {
+    await Future.wait(
+      matches.map(_handleMatch),
+    );
+  }
+
+  Future<void> _handleMatch(RegExpMatch match) async {
+    _handleBetweenWithMatches(match);
+    try {
+      print('$parent $match');
+      Node replacementNode = await rule.createReplacementNode(parent, match);
+      _replacementNodes.add(replacementNode);
+      previousMatch = match;
+    } on Exception catch (e) {
+      throw ParserWarning.forException(e);
+    }
+  }
+
+  void _handleBetweenWithMatches(RegExpMatch match) {
+    if (previousMatch != null) {
+      int betweenStart = previousMatch!.end;
+      int betweenEnd = match.start;
+      if (betweenStart < betweenEnd) {
+        var betweenText = textNode.text.substring(betweenStart, betweenEnd);
+        var betweenNode = TextNode(parent, betweenText);
+        _replacementNodes.add(betweenNode);
+      }
+    }
+  }
 }
