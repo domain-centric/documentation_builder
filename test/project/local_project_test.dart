@@ -9,7 +9,7 @@ main() {
       expect(LocalProject.directory.path, Directory.current.path);
     });
     test('field: name', () {
-      expect(LocalProject.name, 'documentation_builder');
+      expect(LocalProject.name, Directory.current.path.split('/').last);
     });
   });
 }

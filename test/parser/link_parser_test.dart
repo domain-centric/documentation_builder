@@ -64,7 +64,7 @@ main() {
         expect(
             () async => await link.validateUriHttpGet(),
             throwsA(
-              isA<SocketException>(),
+              isA<ParserWarning>(),
             ));
       });
     });

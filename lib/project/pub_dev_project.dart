@@ -1,17 +1,22 @@
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/link_parser.dart';
-
+import 'package:pubspec_parse/pubspec_parse.dart';
+import 'package:universal_io/io.dart';
 import 'local_project.dart';
 
 /// Provides uri's of the project on https://github.com
 class PubDevProject {
-  final Uri? uri;
+  late Uri? uri;
+  late Pubspec pubspec;
 
   static final PubDevProject _singleton = PubDevProject._();
 
   factory PubDevProject() => _singleton;
 
-  PubDevProject._() : uri = _createUri(LocalProject.name);
+  PubDevProject._() {
+    this.pubspec = Pubspec.parse(File('pubspec.yaml').readAsStringSync());
+    this.uri = _createUri(pubspec.name);
+  }
 
   PubDevProject.forProjectName(String projectName)
       : uri = _createUri(projectName);
