@@ -545,7 +545,9 @@ final _leadingWhiteSpace = FluentRegex()
     .startOfLine()
     .whiteSpace(Quantity.oneOrMoreTimes());
 final _trailingWhiteSpace = FluentRegex()
-  ..multiline(false).whiteSpace(Quantity.oneOrMoreTimes()).endOfLine();
+    .multiline(false)
+    .whiteSpace(Quantity.oneOrMoreTimes())
+    .endOfLine();
 
 String _trimWhiteSpace(String text) {
   text = _leadingWhiteSpace.removeFirst(text);
