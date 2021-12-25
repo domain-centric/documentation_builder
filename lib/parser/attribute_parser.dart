@@ -20,7 +20,6 @@ class AttributeParser extends Parser {
         attributes.hashCode.toString();
 
     if (rootNodeMemo.containsKey(key)) {
-      print('reuse in AttributeParser of $key');
       rootNode = rootNodeMemo[key]!;
     } else {
       rootNode = createRootNode(attributes);
