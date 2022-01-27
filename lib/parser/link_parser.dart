@@ -69,7 +69,7 @@ class CompleteLinkRule extends TextParserRule {
 
 /// A text between square brackets [] but not followed by a [Uri] between parentheses (),
 /// These will be replaced by a complete [Link]
-/// Example: [GitHub&rsqb; would be replaced by [GitHub project&rsqb;(https://github.com/efficientyboosters/documentation_builder)
+/// Example: [GitHub&rsqb; would be replaced by [GitHub project&rsqb;(https://github.com/domain-centric/documentation_builder)
 abstract class InCompleteLinkRule extends TextParserRule {
   final List<AttributeRule> attributeRules;
   static final FluentRegex defaultNameExpression = FluentRegex().characterSet(

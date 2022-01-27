@@ -189,7 +189,7 @@ class ColorAttributeRule extends AttributeRule {
 /// A [Badge] can have a [LinkAttribute].
 /// It is a Uri that points to a web site page.
 ///
-/// [MessageAttribute] example: uri='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE'
+/// [MessageAttribute] example: uri='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE'
 class LinkAttribute extends Attribute<Uri> {
   LinkAttribute({
     required ParentNode parent,
@@ -225,8 +225,8 @@ class LinkAttributeRule extends AttributeRule {
 /// - start with a ! and a name: e.g.  [!CustomBadge &rsqb;
 /// - may have [Attribute]s after the name
 ///
-/// e.g.: [!CustomBadge label='license' message='MIT' color='informational' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE' &rsqb;
-/// [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
+/// e.g.: [!CustomBadge label='license' message='MIT' color='informational' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE' &rsqb;
+/// [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
 
 abstract class Badge extends Node {
   final String? toolTip;
@@ -285,9 +285,9 @@ abstract class BadgeRule extends TextParserRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes);
 }
 
-/// - **[CustomBadge  tooltip='GitHub License' label='license' message='MIT' link='https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE'  &rsqb;**
+/// - **[CustomBadge  tooltip='GitHub License' label='license' message='MIT' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE'  &rsqb;**
 /// - Creates a [CustomBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/efficientyboosters/documentation_builder/blob/main/LICENSE)
+/// - E.g.: [![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 ///   - required [LabelAttribute]
@@ -380,7 +380,7 @@ class PubPackageBadgeRule extends BadgeRule {
 
 /// - **[GitHubBadge&rsqb;**
 /// - Creates a [GitHubBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/efficientyboosters/documentation_builder)
+/// - E.g.: [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 class GitHubBadge extends Badge {
@@ -412,7 +412,7 @@ class GitHubBadgeRule extends BadgeRule {
 
 /// - **[GitHubWikiBadge&rsqb;**
 /// - Creates a [GitHubWikiBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/efficientyboosters/documentation_builder/wiki)
+/// - E.g.: [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 class GitHubWikiBadge extends Badge {
@@ -444,7 +444,7 @@ class GitHubWikiBadgeRule extends BadgeRule {
 
 /// - **[GitHubStarsBadge&rsqb;**
 /// - Creates a [GitHubStarsBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![GitHub Stars](https://img.shields.io/github/stars/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/stargazers)
+/// - E.g.: [![GitHub Stars](https://img.shields.io/github/stars/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/stargazers)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 class GitHubStarsBadge extends Badge {
@@ -476,7 +476,7 @@ class GitHubStarsBadgeRule extends BadgeRule {
 
 /// - **[GitHubIssuesBadge&rsqb;**
 /// - Creates a [GitHubStarsBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![GitHub Issues](https://img.shields.io/github/issues/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/issues)
+/// - E.g.: [![GitHub Issues](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 class GitHubIssuesBadge extends Badge {
@@ -508,7 +508,7 @@ class GitHubIssuesBadgeRule extends BadgeRule {
 
 /// - **[GitHubPullRequestsBadge&rsqb;**
 /// - Creates a [GitHubPullRequestsBadge] that is defined with customizable [Attribute]s.
-/// - E.g.: [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/efficientyboosters/documentation_builder)](https://github.com/efficientyboosters/documentation_builder/pull)
+/// - E.g.: [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pull)
 /// - Attributes:
 ///   - optional [ToolTipAttribute]
 class GitHubPullRequestsBadge extends Badge {

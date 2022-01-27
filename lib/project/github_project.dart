@@ -51,7 +51,7 @@ class GitHubProject {
 
   /// e.g.:
   /// [remote "origin"]
-  /// 	url = https://github.com/efficientyboosters/fluent_regex.git
+  /// 	url = https://github.com/domain-centric/fluent_regex.git
   static FluentRegex _configExpression = FluentRegex()
       .lineBreak()
       .literal('[remote "')
@@ -62,7 +62,7 @@ class GitHubProject {
       .literal('url = https://github.com')
       .group(
           FluentRegex().characterSet(
-              CharacterSet().addLetters().addLiterals('_/'),
+              CharacterSet().addLetters().addLiterals('-_/'),
               Quantity.oneOrMoreTimes()),
           type: GroupType.captureUnNamed())
       .literal('.git');

@@ -152,6 +152,11 @@ class ElementFinder implements ElementVisitor {
     }
   }
 
+  @override
+  visitSuperFormalParameterElement(SuperFormalParameterElement element) {
+    throw UnimplementedError();
+  }
+
 // TODO extension element???
 // String _memberPath(Element element, List<String> path) {
 //   String pathSegment = element.displayName;
@@ -290,5 +295,10 @@ class DartCodePathFinder implements ElementVisitor {
     }
     //search recursively;
     element.visitChildren(this);
+  }
+
+  @override
+  visitSuperFormalParameterElement(SuperFormalParameterElement element) {
+    throw UnimplementedError();
   }
 }
