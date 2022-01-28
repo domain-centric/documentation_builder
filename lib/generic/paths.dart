@@ -34,8 +34,9 @@ class ProjectFilePath {
   }
 
   void validate() {
-    if (expression.hasNoMatch(path))
+    if (expression.hasNoMatch(path)) {
       throw Exception('Invalid ProjectFilePath format: $path');
+    }
   }
 
   @override
@@ -85,8 +86,9 @@ class UriSuffixPath {
   }
 
   void validate() {
-    if (expression.hasNoMatch(path))
+    if (expression.hasNoMatch(path)) {
       throw Exception('Invalid UriSuffixPath format: $path');
+    }
   }
 
   @override
@@ -155,13 +157,12 @@ class DartMemberPath {
       .characterSet(
           CharacterSet().addLetters().addDigits(), Quantity.oneOrMoreTimes())
       .group(
-          FluentRegex().literal('.') .or([
-          FluentRegex().literal('_'),
-            FluentRegex().group(
-                FluentRegex()
-                    .literal('_', Quantity.zeroOrMoreTimes())
-                    .characterSet(CharacterSet().addLetters().addDigits(),
-                        Quantity.oneOrMoreTimes())),
+          FluentRegex().literal('.').or([
+            FluentRegex().literal('_'),
+            FluentRegex().group(FluentRegex()
+                .literal('_', Quantity.zeroOrMoreTimes())
+                .characterSet(CharacterSet().addLetters().addDigits(),
+                    Quantity.oneOrMoreTimes())),
             ..._operatorExpressions,
           ]),
           quantity: Quantity.zeroOrMoreTimes())
@@ -173,8 +174,9 @@ class DartMemberPath {
   }
 
   void validate(String path) {
-    if (expression.hasNoMatch(path))
+    if (expression.hasNoMatch(path)) {
       throw Exception('Invalid DartMemberPath format: $path');
+    }
   }
 
   @override
@@ -258,9 +260,10 @@ class DartCodePath {
     validate(path);
     String? dartFilePath =
         expression.findCapturedGroups(path)[GroupName.dartFilePath];
-    if (dartFilePath == null)
+    if (dartFilePath == null) {
       throw Exception(
           'Invalid DartCodePath, could not find DartFilePath: $path');
+    }
     return DartFilePath(dartFilePath);
   }
 

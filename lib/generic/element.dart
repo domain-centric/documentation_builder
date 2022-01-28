@@ -71,11 +71,6 @@ class ElementFinder implements ElementVisitor {
   }
 
   @override
-  visitFunctionTypeAliasElement(element) {
-    checkElementRecursively(element);
-  }
-
-  @override
   visitGenericFunctionTypeElement(GenericFunctionTypeElement element) {
     checkElementRecursively(element);
   }
@@ -140,6 +135,11 @@ class ElementFinder implements ElementVisitor {
     checkElementRecursively(element);
   }
 
+  @override
+  visitSuperFormalParameterElement(SuperFormalParameterElement element) {
+    checkElementRecursively(element);
+  }
+
   checkElementRecursively(Element element) {
     if (foundElement == null) {
       var memberPath = element.path;
@@ -150,11 +150,6 @@ class ElementFinder implements ElementVisitor {
         element.visitChildren(this);
       }
     }
-  }
-
-  @override
-  visitSuperFormalParameterElement(SuperFormalParameterElement element) {
-    throw UnimplementedError();
   }
 
 // TODO extension element???
@@ -211,11 +206,6 @@ class DartCodePathFinder implements ElementVisitor {
 
   @override
   visitFunctionElement(FunctionElement element) {
-    checkElementRecursively(element);
-  }
-
-  @override
-  visitFunctionTypeAliasElement(element) {
     checkElementRecursively(element);
   }
 
@@ -289,7 +279,7 @@ class DartCodePathFinder implements ElementVisitor {
       try {
         DartCodePath path = DartCodePath('$dartFilePath|${element.path}');
         foundPaths.add(path);
-      }  catch (e) {
+      } catch (e) {
         // failed try next...
       }
     }

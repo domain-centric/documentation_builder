@@ -147,15 +147,17 @@ class Link extends ParentNode {
   }
 
   void validateTitle() {
-    if (title.trim().isEmpty)
+    if (title.trim().isEmpty) {
       throw ParserWarning('The title attribute may not be empty');
+    }
   }
 
   /// This method is called by [CompleteLink.createReplacementNodes]
   /// because it is a async method.
   Future<void> validateUriHttpGet() async {
-    if (!await uri.canGetWithHttp())
+    if (!await uri.canGetWithHttp()) {
       throw ParserWarning('Could not get uri: $uri');
+    }
   }
 
   static String createTitle(

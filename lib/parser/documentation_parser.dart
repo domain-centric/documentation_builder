@@ -30,7 +30,9 @@ class DocumentationParser {
       warnings += parseWarning.toString();
     }
 
-    if (warnings.isNotEmpty) throw ParserWarning(warnings);
+    if (warnings.isNotEmpty) {
+      throw ParserWarning(warnings);
+    }
     return model;
   }
 }

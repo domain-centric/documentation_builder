@@ -36,10 +36,7 @@ class DocumentationModel extends RootNode {
 
   /// finds all [Template]s and orders them with wiki pages first.
   List<Template> findOrderedMarkdownTemplates() {
-    List<Template> markdownTemplates = children
-        .where((child) => child is Template)
-        .map<Template>((child) => child as Template)
-        .toList();
+    List<Template> markdownTemplates = children.whereType<Template>().toList();
     markdownTemplates.sort();
     return markdownTemplates;
   }
@@ -57,7 +54,7 @@ class AttributeName {
   static const label = 'label';
   static const message = 'message';
   static const color = 'color';
-  static const link='link';
+  static const link = 'link';
 }
 
 /// common [RegExp] group names

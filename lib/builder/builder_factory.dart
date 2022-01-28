@@ -19,8 +19,6 @@ Builder markdownTemplateBuilder(BuilderOptions builderOptions) =>
 Builder dartCodePathBuilder(BuilderOptions builderOptions) =>
     DartCodePathBuilder();
 
-Builder parseBuilder(BuilderOptions builderOptions) =>
-    ParseBuilder();
+Builder parseBuilder(BuilderOptions builderOptions) => ParseBuilder();
 
-Builder outputBuilder(BuilderOptions builderOptions) =>
-    OutputBuilder();
+Builder outputBuilder(BuilderOptions builderOptions) => OutputBuilder();

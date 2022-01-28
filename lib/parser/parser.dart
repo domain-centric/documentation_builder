@@ -93,7 +93,9 @@ abstract class Parser {
       ChildNodesToReplace childNodesToReplace, ParentNode parent) {
     for (int index = startIndex;
         index < startIndex + childNodesToReplace.length;
-        index++) parent.children.removeAt(index);
+        index++) {
+      parent.children.removeAt(index);
+    }
   }
 
   void _markRuleAsCompletedForNode(

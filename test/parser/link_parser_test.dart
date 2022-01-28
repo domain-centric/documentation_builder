@@ -13,9 +13,11 @@ main() {
   String wikiSuffixValue = 'wiki';
   String wikiSuffixAttribute = '${AttributeName.suffix}="$wikiSuffixValue"';
   String exampleSuffixValue = 'example';
-  String exampleSuffixAttribute = '${AttributeName.suffix}="$exampleSuffixValue"';
+  String exampleSuffixAttribute =
+      '${AttributeName.suffix}="$exampleSuffixValue"';
   String invalidSuffixValue = 'none-existing-path-suffix';
-  String invalidSuffixAttribute = '${AttributeName.suffix}="$invalidSuffixValue"';
+  String invalidSuffixAttribute =
+      '${AttributeName.suffix}="$invalidSuffixValue"';
   String titleValue = '# Title';
   String titleAttribute = "  ${AttributeName.title}  : '$titleValue'  ";
   String uri = 'https://google.com';
