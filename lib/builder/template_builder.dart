@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
+import 'package:documentation_builder/builder/documentation_builder.dart';
 import 'package:documentation_builder/generic/documentation_model.dart';
 import 'package:documentation_builder/generic/paths.dart';
 import 'package:documentation_builder/parser/parser.dart';
@@ -34,6 +35,8 @@ class TemplateBuilder implements Builder {
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
       var sourceFilePath = ProjectFilePath(buildStep.inputId.path);
+      print(
+          '$DocumentationBuilder reading: ${sourceFilePath.absoluteFilePath}');
       var markdownPage = factory.createTemplate(model, sourceFilePath);
 
       model.add(markdownPage);

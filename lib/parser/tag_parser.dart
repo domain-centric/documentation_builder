@@ -540,8 +540,10 @@ String _readFile(File file) {
   }
 }
 
-final _leadingWhiteSpace =
-    FluentRegex().startOfLine().whiteSpace(Quantity.oneOrMoreTimes());
+final _leadingWhiteSpace = FluentRegex()
+    .startOfLine()
+    .whiteSpace(Quantity.oneOrMoreTimes())
+    .multiline(false);
 final _trailingWhiteSpace =
     FluentRegex().whiteSpace(Quantity.oneOrMoreTimes()).endOfLine();
 
