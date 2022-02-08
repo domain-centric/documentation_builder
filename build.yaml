@@ -1,9 +1,9 @@
 targets:
   $default:
     sources:
-      - $package$
       - doc/**
       - lib/**
+      - bin/**
       - test/**
     builders:
       documentation_builder|template_builder:
@@ -20,34 +20,34 @@ builders:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: ['markdownTemplateBuilder']
     build_extensions:
-      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+      .mdt: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: cache
-    auto_apply: root_package
+    auto_apply: dependents
     runs_before: [documentation_builder|dart_code_path_builder]
   dart_code_path_builder:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: [ 'dartCodePathBuilder' ]
     build_extensions:
-      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+      .dart: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: source
-    auto_apply: root_package
+    auto_apply: dependents
     runs_before: [ documentation_builder|parse_builder]
   parse_builder:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: [ 'parseBuilder' ]
     build_extensions:
-      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+      $lib$: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: source
-    auto_apply: root_package
+    auto_apply: dependents
     runs_before: [documentation_builder|output_builder]
   output_builder:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: ['outputBuilder']
     build_extensions:
-      .*: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - .dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+      $lib$: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - .* # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: source
-    auto_apply: root_package
+    auto_apply: dependents

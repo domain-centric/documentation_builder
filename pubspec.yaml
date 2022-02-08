@@ -1,6 +1,6 @@
 name: documentation_builder
 description: Generates markdown documentation files from markdown template files.
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/domain-centric/documentation_builder
 documentation: https://github.com/domain-centric/documentation_builder/wiki
 
@@ -13,7 +13,7 @@ dependencies:
   build_runner: ^2.1.7
   test: ^1.20.1
   collection: ^1.15.0
-  fluent_regex: ^1.0.1
+  fluent_regex: ^1.0.3
   http: ^0.13.4
   analyzer: ^3.2.0
 
