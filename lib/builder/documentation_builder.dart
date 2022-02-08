@@ -24,14 +24,10 @@ class DocumentationBuilder {
   /// The [documentation_builder] uses several builders that are run with the [build_runner] package.
   ///
   /// The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):
-  ///
-  /// For a Dart project: ```dart run build_runner build --delete-conflicting-outputs```\
-  /// For a Flutter project: ```flutter pub run build_runner build --delete-conflicting-outputs```
+  /// ```dart run build_runner build --delete-conflicting-outputs```\
   ///
   /// You’d better clean up before you re-execute [builder_runner]:
-  ///
-  /// For a Dart project: ```dart run build_runner clean```\
-  /// For a Flutter project: ```flutter pub run build_runner clean```
+  /// ```dart run build_runner clean```\
   run() async {
     // TODO create shell class, e.g.:
     // e.g. Shell.run('''
@@ -41,15 +37,15 @@ class DocumentationBuilder {
     //  or maybe there is an existing shell package?
 
     var result = await Process.run(
-      'flutter',
-      ['pub', 'run', 'build_runner', 'clean'],
+      'dart',
+      ['run', 'build_runner', 'clean'],
       runInShell: true,
     );
     stdout.write(result.stdout);
     stderr.write(result.stderr);
     result = await Process.run(
-      'flutter',
-      ['pub', 'run', 'build_runner', 'build', '--delete-conflicting-outputs'],
+      'dart',
+      ['run', 'build_runner', 'build', '--delete-conflicting-outputs'],
       runInShell: true,
     );
     stdout.write(result.stdout);

@@ -5,6 +5,8 @@ targets:
       - lib/**
       - bin/**
       - test/**
+      - pubspec.*
+      - $package$
     builders:
       documentation_builder|template_builder:
         enabled: True
@@ -33,7 +35,7 @@ builders:
         - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: source
     auto_apply: dependents
-    runs_before: [ documentation_builder|parse_builder]
+    runs_before: [documentation_builder|parse_builder]
   parse_builder:
     import: 'package:documentation_builder/builder/builder_factory.dart'
     builder_factories: [ 'parseBuilder' ]
