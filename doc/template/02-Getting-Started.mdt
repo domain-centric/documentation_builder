@@ -1,5 +1,19 @@
 - Read the [GitHubWiki title='Wiki documentation']
 - [PubDevInstall title='Install the documentation_builder package'] in your project
+- Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
+```
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+# The following in needed for documentation_builder, see https://pub.dev/packages/documentation_builder
+targets:
+  $default:
+    sources:
+      - doc/**
+      - lib/**
+      - bin/**
+      - test/**
+      - pubspec.*
+      - $package$
+```
 - Create 'doc/template' directories in the root of your project
 - [03-Markdown-Template-Files.mdt title='Create markdown template files'] in the "doc/template" directory ([09-Examples.mdt title='see examples'])
 - [07-Generating-Documentation-Files.mdt title='Generate the documentation files']
