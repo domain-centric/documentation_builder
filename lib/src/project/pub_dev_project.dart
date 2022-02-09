@@ -45,7 +45,11 @@ class PubDevProject {
     }
   }
 
-  List<LinkDefinition> get linkDefinitions => [
+  List<LinkDefinition> get linkDefinitions {
+    if (PubDevProject().uri == null) {
+      return const [];
+    } else {
+      return [
         LinkDefinition(
             name: 'PubDev',
             defaultTitle: 'PubDev package',
@@ -75,4 +79,6 @@ class PubDevProject {
             defaultTitle: 'PubDev license',
             uri: PubDevProject().licenseUri!),
       ];
+    }
+  }
 }
