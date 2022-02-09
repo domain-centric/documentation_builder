@@ -1,7 +1,8 @@
 import 'package:build/build.dart';
-import 'package:documentation_builder/builder/template_builder.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/parser.dart';
+
+import '../builder/template_builder.dart';
+import '../parser/parser.dart';
+import 'paths.dart';
 
 /// All information needed to generate the markdown documentation files.
 class DocumentationModel extends RootNode {

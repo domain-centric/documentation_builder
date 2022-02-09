@@ -1,4 +1,4 @@
-import 'package:documentation_builder/builder/documentation_builder.dart';
+import 'package:documentation_builder/documentation_builder.dart';
 
 main() {
   DocumentationBuilder().run();

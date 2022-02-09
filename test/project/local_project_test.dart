@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:documentation_builder/project/local_project.dart';
+import 'package:documentation_builder/src/project/local_project.dart';
 import 'package:test/test.dart';
 
 main() {

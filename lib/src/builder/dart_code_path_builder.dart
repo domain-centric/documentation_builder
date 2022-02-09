@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/element.dart';
-import 'package:documentation_builder/generic/paths.dart';
+import '../generic/documentation_model.dart';
+import '../generic/element.dart';
+import '../generic/paths.dart';
 
 /// Finds .dart files, find all the [DartCodePath]s for its members and puts them in the [DocumentationModel]
 class DartCodePathBuilder implements Builder {

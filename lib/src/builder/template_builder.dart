@@ -2,14 +2,15 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
-import 'package:documentation_builder/builder/documentation_builder.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/project/github_project.dart';
-import 'package:documentation_builder/project/local_project.dart';
-import 'package:documentation_builder/project/pub_dev_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
+
+import '../generic/documentation_model.dart';
+import '../generic/paths.dart';
+import '../parser/parser.dart';
+import '../project/github_project.dart';
+import '../project/local_project.dart';
+import '../project/pub_dev_project.dart';
+import 'documentation_builder.dart';
 
 /// Finds .mdt files, and puts them in the [DocumentationModel]
 class TemplateBuilder implements Builder {

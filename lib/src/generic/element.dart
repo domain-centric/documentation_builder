@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:documentation_builder/generic/paths.dart';
+
+import 'paths.dart';
 
 extension UriExtension on Element {
   String get path {

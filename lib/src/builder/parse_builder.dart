@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/parser/documentation_parser.dart';
+import '../generic/documentation_model.dart';
+import '../parser/documentation_parser.dart';
 
 /// Lets the [DocumentationParser] parse the [DocumentationModel].
 class ParseBuilder implements Builder {

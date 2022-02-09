@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:documentation_builder/builder/template_builder.dart';
+import 'template_builder.dart';
 
 /// Generates markdown documentation files from markdown template files.
 /// This can be useful when you write documentation for a

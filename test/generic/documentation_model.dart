@@ -1,6 +1,6 @@
-import 'package:documentation_builder/builder/template_builder.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
+import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/generic/documentation_model.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
 import 'package:test/test.dart';
 
 main() {

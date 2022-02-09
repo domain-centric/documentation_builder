@@ -1,4 +1,4 @@
-import 'package:documentation_builder/parser/parser.dart';
+import 'package:documentation_builder/src/parser/parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:test/test.dart';
 

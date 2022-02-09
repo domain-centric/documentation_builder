@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:http/http.dart' as http;
 
+import '../project/local_project.dart';
 import 'documentation_model.dart';
 
 /// A [ProjectFilePath] is a reference to a file in your source project

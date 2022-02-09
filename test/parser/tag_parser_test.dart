@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:documentation_builder/builder/template_builder.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/attribute_parser.dart';
-import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/tag_parser.dart';
-import 'package:documentation_builder/project/local_project.dart';
+import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/generic/documentation_model.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
+import 'package:documentation_builder/src/parser/attribute_parser.dart';
+import 'package:documentation_builder/src/parser/parser.dart';
+import 'package:documentation_builder/src/parser/tag_parser.dart';
+import 'package:documentation_builder/src/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:test/test.dart';
 

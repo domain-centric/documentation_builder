@@ -1,8 +1,8 @@
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/project/local_project.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
+import 'package:documentation_builder/src/project/local_project.dart';
 import 'package:test/test.dart';
 
-const String dartFilePath = 'lib/builder/documentation_builder.dart';
+const String dartFilePath = 'lib/src/builder/documentation_builder.dart';
 
 main() {
   group('class: ProjectFilePath', () {
@@ -273,7 +273,7 @@ main() {
     });
     group('method toFile', () {
       test("must return an existing File", () {
-        String path = 'lib/builder/documentation_builder.dart';
+        String path = 'lib/src/builder/documentation_builder.dart';
         expect(DartFilePath(path).toFile().existsSync(), true);
       });
     });

@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:build/build.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/project/local_project.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
+import '../generic/documentation_model.dart';
+import '../generic/paths.dart';
+import '../project/local_project.dart';
 import 'template_builder.dart';
 
 ///  The [OutputBuilder] converts each [Template] in the [DocumentationModel] into a [GeneratedFile]

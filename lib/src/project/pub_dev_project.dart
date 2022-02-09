@@ -1,6 +1,5 @@
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/link_parser.dart';
-
+import '../generic/paths.dart';
+import '../parser/link_parser.dart';
 import 'local_project.dart';
 
 /// Provides uri's of the project on https://github.com

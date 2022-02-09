@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:documentation_builder/builder/template_builder.dart';
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/link_parser.dart';
-import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/project/github_project.dart';
-import 'package:documentation_builder/project/pub_dev_project.dart';
+import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/generic/documentation_model.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
+import 'package:documentation_builder/src/parser/link_parser.dart';
+import 'package:documentation_builder/src/parser/parser.dart';
+import 'package:documentation_builder/src/project/github_project.dart';
+import 'package:documentation_builder/src/project/pub_dev_project.dart';
 import 'package:test/test.dart';
 
 main() {

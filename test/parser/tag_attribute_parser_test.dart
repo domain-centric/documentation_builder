@@ -1,7 +1,7 @@
-import 'package:documentation_builder/generic/documentation_model.dart';
-import 'package:documentation_builder/generic/paths.dart';
-import 'package:documentation_builder/parser/parser.dart';
-import 'package:documentation_builder/parser/attribute_parser.dart';
+import 'package:documentation_builder/src/generic/documentation_model.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
+import 'package:documentation_builder/src/parser/parser.dart';
+import 'package:documentation_builder/src/parser/attribute_parser.dart';
 import 'package:test/test.dart';
 
 main() {

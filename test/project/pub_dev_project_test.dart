@@ -1,5 +1,5 @@
-import 'package:documentation_builder/project/pub_dev_project.dart';
-import 'package:documentation_builder/generic/paths.dart';
+import 'package:documentation_builder/src/project/pub_dev_project.dart';
+import 'package:documentation_builder/src/generic/paths.dart';
 import 'package:test/test.dart';
 
 main() {
