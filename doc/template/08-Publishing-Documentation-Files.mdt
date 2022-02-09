@@ -19,7 +19,7 @@ Before you can publish the Wiki files to [GitHub](https://github.com), you must 
   - Enter command: ```git clone https://github.com/<user_name>/<repository_name>.wiki.git```
     (you can also find the clone url on the bottom right of the github Wiki pages)
 
-You can now generate the documentation files (see...). The Wiki pages will be stored in the doc/<>project_name>.wiki directory.
+You can now generate the documentation files (see [07-Generating-Documentation-Files.mdt]). The Wiki pages will be stored in the doc/<>project_name>.wiki directory.
 
 ## Publishing Wiki pages
 You can push newly generated Wiki pages to GitHub:

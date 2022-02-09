@@ -53,7 +53,9 @@ class TemplateBuilder implements Builder {
 /// - [Link]s
 /// - [Badge]s
 ///
-/// [TemplateFile]s are converted to [GeneratedFile]s
+/// [TemplateFile]s are converted to [GeneratedFile]s.
+/// [TemplateFile]s are stored stored in the doc/template folders in the
+/// root of the project.
 class TemplateFile {}
 
 /// [MarkdownTemplateFile]s are [TemplateFile]s that have a MarkDownTemplate (.mdt) extension.
@@ -190,6 +192,8 @@ class TemplateFactories extends DelegatingList<TemplateFactory> {
 ///
 /// A README.mdt is a [TemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the README.md file in the root of your dart project.
+/// The README.mdt file is stored in the doc/template folders in the root of the
+/// project
 class ReadMeFile extends MarkdownTemplateFile {}
 
 class ReadMeTemplate extends Template {
@@ -222,7 +226,10 @@ class ReadMeTemplateFactory extends TemplateFactory {
 /// to create or override the CHANGELOG.md file in the root of your dart project.
 ///
 /// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
-/// versions assuming you are using GitHub and mark very version as a milestone
+/// versions assuming you are using GitHub and mark very version as a milestone.
+/// The CHANGELOG.mdt file is stored in the doc/template folders in the root
+/// of the project
+
 class ChangeLogFile extends MarkdownTemplateFile {}
 
 class ChangeLogTemplate extends Template {
@@ -249,6 +256,8 @@ class ChangeLogTemplateFactory extends TemplateFactory {
 /// A example.mdt is a [TemplateFile] that is used by the
 /// [DocumentationBuilder] to create or override the example.md file in the
 /// example folder of your dart project.
+/// The example.mdt file is stored in the doc/template folders in the root of
+/// the project
 class ExampleFile extends MarkdownTemplateFile {}
 
 class ExampleTemplate extends Template {
