@@ -42,7 +42,8 @@ class TemplateBuilder implements Builder {
 
       model.add(markdownPage);
     } catch (e, stacktrace) {
-      print('Unknown mark down template file: ${buildStep.inputId.path}\n$e\n$stacktrace');
+      print(
+          'Unknown mark down template file: ${buildStep.inputId.path}\n$e\n$stacktrace');
     }
   }
 }
