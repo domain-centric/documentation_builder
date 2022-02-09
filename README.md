@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-09 14:03:00.324781.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-09 14:09:17.249340.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
@@ -51,19 +51,17 @@ You can view the templates files and the generated output on https://github.com 
 - Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
 - [Install the documentation_builder package](https://pub.dev/packages/documentation_builder/install) in your project
 - Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
-```
-&#35; Read about `build.yaml` at https://pub.dev/packages/build_config
-&#35; The following in needed for documentation_builder, see https://pub.dev/packages/documentation_builder
-targets:
-  $default:
-    sources:
-      - doc/**
-      - lib/**
-      - bin/**
-      - test/**
-      - pubspec.*
-      - $package$
-```
+  ```
+  targets:
+    $default:
+      sources:
+        - doc/**
+        - lib/**
+        - bin/**
+        - test/**
+        - pubspec.*
+        - $package$
+  ```
 - Create 'doc/template' directories in the root of your project
 - [Create markdown template files](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files) in the "doc/template" directory ([see examples](https://github.com/domain-centric/documentation_builder/wiki/09-Examples))
 - [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki/07-Generating-Documentation-Files)
