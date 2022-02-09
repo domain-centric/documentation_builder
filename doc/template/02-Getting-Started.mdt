@@ -2,8 +2,8 @@
 - [PubDevInstall title='Install the documentation_builder package'] in your project
 - Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
 ```
-# Read about `build.yaml` at https://pub.dev/packages/build_config
-# The following in needed for documentation_builder, see https://pub.dev/packages/documentation_builder
+&#35; Read about `build.yaml` at https://pub.dev/packages/build_config
+&#35; The following in needed for documentation_builder, see https://pub.dev/packages/documentation_builder
 targets:
   $default:
     sources:
