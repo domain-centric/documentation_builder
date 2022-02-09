@@ -36,8 +36,6 @@ class TemplateBuilder implements Builder {
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
       var sourceFilePath = ProjectFilePath(buildStep.inputId.path);
-      print(
-          '$DocumentationBuilder reading: ${sourceFilePath.absoluteFilePath}');
       var markdownPage = factory.createTemplate(model, sourceFilePath);
 
       model.add(markdownPage);
