@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:build/build.dart';
+
 import '../generic/documentation_model.dart';
 import '../generic/element.dart';
 import '../generic/paths.dart';
@@ -18,12 +19,16 @@ class DartCodePathBuilder implements Builder {
   /// For each Dart file the [DartCodePathBuilder] will:
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
-    var library = await buildStep.inputLibrary;
-    DartFilePath path = DartFilePath(buildStep.inputId.path);
-    DartCodePathFinder visitor = DartCodePathFinder(path);
-    library.visitChildren(visitor);
-    DocumentationModel model =
-        await buildStep.fetchResource<DocumentationModel>(resource);
-    model.dartCodePaths.addAll(visitor.foundPaths);
+    try {
+      var library = await buildStep.inputLibrary;
+      DartFilePath path = DartFilePath(buildStep.inputId.path);
+      DartCodePathFinder visitor = DartCodePathFinder(path);
+      library.visitChildren(visitor);
+      DocumentationModel model =
+          await buildStep.fetchResource<DocumentationModel>(resource);
+      model.dartCodePaths.addAll(visitor.foundPaths);
+    } catch (e, stacktrace) {
+      print('$e\n$stacktrace');
+    }
   }
 }

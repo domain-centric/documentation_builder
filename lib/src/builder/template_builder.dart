@@ -41,8 +41,8 @@ class TemplateBuilder implements Builder {
       var markdownPage = factory.createTemplate(model, sourceFilePath);
 
       model.add(markdownPage);
-    } on Error {
-      print('Unknown mark down template file: ${buildStep.inputId.path}');
+    } catch (e, stacktrace) {
+      print('Unknown mark down template file: ${buildStep.inputId.path}\n$e\n$stacktrace');
     }
   }
 }
