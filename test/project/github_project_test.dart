@@ -61,11 +61,11 @@ main() {
 
     test('method: dartFile', () async {
       Uri uri = GitHubProject()
-          .dartFile(DartFilePath('lib/parser/link_parser.dart'))!;
+          .dartFile(DartFilePath('lib/src/parser/link_parser.dart'))!;
       expect(
           uri,
           Uri.parse(
-              'https://github.com/domain-centric/documentation_builder/blob/main/lib/parser/link_parser.dart'));
+              'https://github.com/domain-centric/documentation_builder/blob/main/lib/src/parser/link_parser.dart'));
       expect(await uri.canGetWithHttp(), true);
     });
   });
