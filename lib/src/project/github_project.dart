@@ -97,7 +97,11 @@ class GitHubProject {
     }
   }
 
-  List<LinkDefinition> get linkDefinitions => [
+  List<LinkDefinition> get linkDefinitions {
+    if (GitHubProject().uri == null) {
+      return [];
+    } else {
+      return [
         LinkDefinition(
             name: 'GitHub',
             defaultTitle: 'GitHub project',
@@ -131,4 +135,6 @@ class GitHubProject {
             defaultTitle: 'GitHub raw source file',
             uri: GitHubProject().rawUri!),
       ];
+    }
+  }
 }
