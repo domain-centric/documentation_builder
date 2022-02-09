@@ -1,28 +1,28 @@
-{ImportDartDoc path='lib/parser/tag_parser.dart|Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|Tag'}
 
-{ImportDartDoc path='lib/parser/attribute_parser.dart|Attribute' title='## Tag Attributes'}
+{ImportDartDoc path='lib/src/parser/attribute_parser.dart|Attribute' title='## Tag Attributes'}
 The following paragraphs describe common attributes:
 
-{ImportDartDoc path='lib/parser/attribute_parser.dart|TitleAttribute' title='### Title Attribute'}
+{ImportDartDoc path='lib/src/parser/attribute_parser.dart|TitleAttribute' title='### Title Attribute'}
 
-{ImportDartDoc path='lib/generic/paths.dart|ProjectFilePath' title='### Project File Path Attribute'}
+{ImportDartDoc path='lib/src/generic/paths.dart|ProjectFilePath' title='### Project File Path Attribute'}
 
-{ImportDartDoc path='lib/generic/paths.dart|DartCodePath' title='### Dart Code Path Attribute'}
+{ImportDartDoc path='lib/src/generic/paths.dart|DartCodePath' title='### Dart Code Path Attribute'}
 
-{ImportDartDoc path='lib/generic/paths.dart|DartFilePath' title='### Dart File Path Attribute'}
+{ImportDartDoc path='lib/src/generic/paths.dart|DartFilePath' title='### Dart File Path Attribute'}
 
-{ImportDartDoc path='lib/generic/paths.dart|DartMemberPath' title='### Dart Member Path Attribute'}
+{ImportDartDoc path='lib/src/generic/paths.dart|DartMemberPath' title='### Dart Member Path Attribute'}
 
 
 ## Tag types
 The following paragraphs will explain the different tags:
 
-{ImportDartDoc path='lib/parser/tag_parser.dart|ImportFileTag' title='### Import File Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|ImportFileTag' title='### Import File Tag'}
 
-{ImportDartDoc path='lib/parser/tag_parser.dart|ImportCodeTag' title='### Import Code Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|ImportCodeTag' title='### Import Code Tag'}
 
-{ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartCodeTag' title='### Import Dart Code Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|ImportDartCodeTag' title='### Import Dart Code Tag'}
 
-{ImportDartDoc path='lib/parser/tag_parser.dart|ImportDartDocTag' title='### Import Dart Documentation Comments Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|ImportDartDocTag' title='### Import Dart Documentation Comments Tag'}
 
-{ImportDartDoc path='lib/parser/tag_parser.dart|TableOfContentsTag' title='### Table Of Contents Tag'}
+{ImportDartDoc path='lib/src/parser/tag_parser.dart|TableOfContentsTag' title='### Table Of Contents Tag'}

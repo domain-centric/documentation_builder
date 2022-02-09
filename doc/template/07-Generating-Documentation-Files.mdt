@@ -1,4 +1,4 @@
-{importDartDoc path='lib/builder/documentation_builder.dart|DocumentationBuilder.run'}
+{importDartDoc path='lib/src/builder/documentation_builder.dart|DocumentationBuilder.run'}
 
 These commands are cumbersome.
 

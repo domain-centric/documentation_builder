@@ -26,7 +26,7 @@ class DocumentationBuilder {
   /// The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using Android Studio or Intelij):
   /// ```dart run build_runner build --delete-conflicting-outputs```\
   ///
-  /// You’d better clean up before you re-execute [builder_runner]:
+  /// You’d better clean up before you re-execute [build_runner]:
   /// ```dart run build_runner clean```\
   run() async {
     // TODO create shell class, e.g.:
