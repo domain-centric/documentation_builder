@@ -280,13 +280,15 @@ class ExampleTemplateFactory extends TemplateFactory {
 }
 
 /// Project's that are stored in [Github](https://github.com/) can have wiki pages.
-/// [Github](https://github.com/) wiki pages are [WikiTemplateFactory]s.
-/// See [Github Wiki pages](TODO Add link) for more information.
+/// [Github](https://github.com/) wiki pages are [TemplateFile]s.
+/// See [Github Wiki pages](https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis)
+/// for more information.
 ///
-///
-/// Any [TemplateFile] is considered to be a [WikiTemplateFactory] when:
+/// Any [TemplateFile] is considered to be a Wiki Template File when:
 /// - Its name is: Home.mdt This is the wiki landing page which often contains a [TableOfContentTag]
 /// - Its name starts with 2 digits, and has a .mdt extension (e.g.: 02-Getting-Started.mdt)
+///
+/// Note that spaces are replaced with - in the file name, and vice versa for the title.
 ///
 /// All generated [WikiTemplateFactory]s are stored in the doc/<project name&gt;.wiki directory.
 /// This directory is a clone of the [GitHub wiki repository](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages#adding-or-editing-wiki-pages-locally).
