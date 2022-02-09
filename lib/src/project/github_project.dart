@@ -99,7 +99,7 @@ class GitHubProject {
 
   List<LinkDefinition> get linkDefinitions {
     if (GitHubProject().uri == null) {
-      return [];
+      return const [];
     } else {
       return [
         LinkDefinition(
