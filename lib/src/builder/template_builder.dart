@@ -272,7 +272,7 @@ class ExampleTemplate extends Template {
 class ExampleTemplateFactory extends TemplateFactory {
   @override
   FluentRegex get fileNameExpression =>
-      FluentRegex().literal('example.mdt').endOfLine().ignoreCase();
+      FluentRegex().literal('/example.mdt').endOfLine().ignoreCase();
 
   @override
   Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>

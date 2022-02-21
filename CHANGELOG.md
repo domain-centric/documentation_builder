@@ -1,3 +1,5 @@
+# 0.0.9
+[See Github Milestone](https://github.com/domain-centric/documentation_builder/issues?q=is%3Aissue+is%3Aclosed+milestone%3A0.0.9)
 # 0.0.8
 [See Github Milestone](https://github.com/domain-centric/documentation_builder/issues?q=is%3Aissue+is%3Aclosed+milestone%3A0.0.8)
 # 0.0.7
