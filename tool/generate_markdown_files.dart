@@ -1,5 +1,6 @@
 import 'package:documentation_builder/documentation_builder.dart';
 
 main() {
-  DocumentationBuilder().run();
+  // You could remove the publishWikiPagesOnGitHub parameter when not applicable
+  DocumentationBuilder().run(publishWikiPagesOnGitHub: true);
 }
