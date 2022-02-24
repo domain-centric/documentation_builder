@@ -42,7 +42,10 @@ class OutputBuilder extends Builder {
       //   AssetId assetId = markdownPage.destinationFilePath.toAssetId();
       //   buildStep.writeAsString(assetId, contents);
 
-      FutureOr<String> contents = markdownPage.toString();
+      FutureOr<String> contents = markdownPage
+          .toString()
+          .replaceAll('\r\n', '\n')
+          .replaceAll('\n', '\r\n');
       var filePath = markdownPage.destinationFilePath.absoluteFilePath;
       File(filePath).writeAsString(await contents);
     } on Exception catch (e, stacktrace) {
