@@ -290,7 +290,7 @@ class ExampleTemplateFactory extends TemplateFactory {
 ///
 /// Note that spaces are replaced with - in the file name, and vice versa for the title.
 ///
-/// All generated [WikiTemplateFactory]s are stored in the doc/<project name&gt;.wiki directory.
+/// All generated [WikiFile]s are stored in the ../<project name&gt;.wiki directory (next to your project folder).
 /// This directory is a clone of the [GitHub wiki repository](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages#adding-or-editing-wiki-pages-locally).
 class WikiFile extends MarkdownTemplateFile {}
 
@@ -303,11 +303,13 @@ class WikiTemplate extends Template {
           destinationWebUri: createDestinationWebUri(sourceFilePath),
         );
 
+  static String destinationDirectoryPath = '../${LocalProject.name}.wiki';
+
   static ProjectFilePath createDestinationFilePath(
       ProjectFilePath sourceFilePath) {
     String wikiFileName = createFileName(sourceFilePath);
-    return ProjectFilePath(
-        'doc/${LocalProject.name}.wiki/$wikiFileName.md'); //TODO automatically empty directory (except for .git directory) in an earlier builder
+    return ProjectFilePath('$destinationDirectoryPath/$wikiFileName.md',
+        isParentPath: true);
   }
 
   static Uri? createDestinationWebUri(ProjectFilePath sourceFilePath) {

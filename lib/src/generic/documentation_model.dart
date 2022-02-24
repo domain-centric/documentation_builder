@@ -11,6 +11,8 @@ class DocumentationModel extends RootNode {
 
   Set<DartCodePath> dartCodePaths = {};
 
+  bool get hasWikiPages => children.whereType<WikiTemplate>().isNotEmpty;
+
   /// adds a [Template] while verifying that each [Template]
   /// has a unique [Template.destinationFilePath] to prevent overriding generated files
   void add(Template markdownPage) {

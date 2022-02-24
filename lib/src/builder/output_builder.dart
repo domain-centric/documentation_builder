@@ -2,65 +2,73 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:build/build.dart';
-import 'package:fluent_regex/fluent_regex.dart';
 
 import '../generic/documentation_model.dart';
-import '../generic/paths.dart';
-import '../project/local_project.dart';
 import 'template_builder.dart';
 
 ///  The [OutputBuilder] converts each [Template] in the [DocumentationModel] into a [GeneratedFile]
 class OutputBuilder extends Builder {
-  final List<String> outputPaths = _createOutputPathsRelativeToLib();
+  /// '$lib$' makes the build_runner run [OutputBuilder] only one time
+  /// (not for each individual file)
+  static final inputFileExtension = r'$lib$';
 
-  /// '$lib$' makes the build_runner run [OutputBuilder] only one time (not for each individual file)
+  /// We write multiple files directly as file, which is illegal.
+  /// Reason: see [writeFile].
+  /// The outputFileExtensions therefore does not really matter.
+  static final outputFileExtensions = ['.*'];
+
   @override
-  Map<String, List<String>> get buildExtensions => {r'$lib$': outputPaths};
+  Map<String, List<String>> get buildExtensions =>
+      {inputFileExtension: outputFileExtensions};
 
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     DocumentationModel model =
         await buildStep.fetchResource<DocumentationModel>(resource);
+    if (model.hasWikiPages) {
+      _createOrClearWikiPageDirectory();
+    }
+
     for (var markdownPage in model.markdownPages) {
-      try {
-        AssetId assetId = markdownPage.destinationFilePath.toAssetId();
-        FutureOr<String> contents = markdownPage.toString();
-        buildStep.writeAsString(assetId, contents);
-      } on Exception catch (e, stacktrace) {
-        print(
-            'Could not write file: ${markdownPage.destinationFilePath}\n$e\n$stacktrace');
+      await writeFile(markdownPage);
+    }
+  }
+
+  Future<void> writeFile(Template markdownPage) async {
+    try {
+      // [WikiTemplate] files are written in the parent folder.
+      // Therefore not using the 2 following lines because they
+      // do not allow to write outside the project:
+      //   AssetId assetId = markdownPage.destinationFilePath.toAssetId();
+      //   buildStep.writeAsString(assetId, contents);
+
+      FutureOr<String> contents = markdownPage.toString();
+      var filePath = markdownPage.destinationFilePath.absoluteFilePath;
+      File(filePath).writeAsString(await contents);
+    } on Exception catch (e, stacktrace) {
+      print(
+          'Could not write file: ${markdownPage.destinationFilePath}\n$e\n$stacktrace');
+    }
+  }
+
+  void _createOrClearWikiPageDirectory() {
+    var directory = Directory(WikiTemplate.destinationDirectoryPath);
+    if (directory.existsSync()) {
+      _clearWikiPageDirectory(directory);
+    } else {
+      directory.createSync();
+    }
+  }
+
+  void _clearWikiPageDirectory(Directory directory) {
+    List<FileSystemEntity> children = directory.listSync();
+    for (FileSystemEntity child in children) {
+      if (!_isGitFolder(child)) {
+        child.delete();
       }
     }
   }
 
-  static List<String> _createOutputPathsRelativeToLib() {
-    Directory directory = LocalProject.directory;
-    var directorPattern = FluentRegex()
-        .startOfLine()
-        .literal(directory.path)
-        .or([FluentRegex().literal('\\'), FluentRegex().literal('/')]);
-    List<String> templateFilePaths = directory
-        .listSync(recursive: true)
-        .where((FileSystemEntity e) => e.path.toLowerCase().endsWith('.mdt'))
-        .map((FileSystemEntity e) =>
-            e.path.replaceAll(directorPattern, '').replaceAll('\\', '/'))
-        .toList();
-
-    var dummy = DocumentationModel();
-    var factories = TemplateFactories();
-    List<String> outputPathsRelativeToLib = [];
-    templateFilePaths.forEach((String sourcePath) {
-      try {
-        var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
-        String outputPathRelativeToLib = factory
-            .createTemplate(dummy, ProjectFilePath(sourcePath))
-            .destinationFilePath
-            .relativeToLibDirectory;
-        outputPathsRelativeToLib.add(outputPathRelativeToLib);
-      } on Error {
-        // Continue
-      }
-    });
-    return outputPathsRelativeToLib;
-  }
+  bool _isGitFolder(FileSystemEntity child) =>
+      child is Directory && child.path.endsWith('.git');
 }

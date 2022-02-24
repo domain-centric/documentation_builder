@@ -390,8 +390,9 @@ class MarkdownFileLink extends Link {
 class MarkdownFileLinkRule extends InCompleteLinkRule {
   MarkdownFileLinkRule()
       : super([TitleAttributeRule()],
-            nameExpression:
-                ProjectFilePath.expression.startOfLine(false).endOfLine(false));
+            nameExpression: ProjectFilePath.pathInProject
+                .startOfLine(false)
+                .endOfLine(false));
 
   @override
   Future<List<RegExpMatch>> createMatches(TextNode textNode) async =>

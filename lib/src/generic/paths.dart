@@ -21,7 +21,7 @@ class ProjectFilePath {
       .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_'),
           Quantity.oneOrMoreTimes());
 
-  static final expression = FluentRegex()
+  static final pathInProject = FluentRegex()
       .startOfLine()
       .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_'))
       .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_./'),
@@ -29,12 +29,31 @@ class ProjectFilePath {
       .group(_fileExtensionExpression, quantity: Quantity.zeroOrOneTime())
       .endOfLine();
 
-  ProjectFilePath(this.path) {
-    validate();
+  static final pathInParent = FluentRegex()
+      .startOfLine()
+      .literal('../')
+      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_'))
+      .characterSet(CharacterSet().addLetters().addDigits().addLiterals('-_./'),
+          Quantity.zeroOrMoreTimes())
+      .group(_fileExtensionExpression, quantity: Quantity.zeroOrOneTime())
+      .endOfLine();
+
+  ProjectFilePath(this.path, {bool isParentPath = false}) {
+    if (isParentPath) {
+      validateParentPath();
+    } else {
+      validateProjectPath();
+    }
   }
 
-  void validate() {
-    if (expression.hasNoMatch(path)) {
+  void validateProjectPath() {
+    if (pathInProject.hasNoMatch(path)) {
+      throw Exception('Invalid ProjectFilePath format: $path');
+    }
+  }
+
+  void validateParentPath() {
+    if (pathInParent.hasNoMatch(path)) {
       throw Exception('Invalid ProjectFilePath format: $path');
     }
   }
@@ -189,7 +208,7 @@ class DartMemberPath {
 /// Example: lib/my_library.dart
 class DartFilePath extends ProjectFilePath {
   static final expression =
-      FluentRegex(ProjectFilePath.expression.endOfLine(false).toString())
+      FluentRegex(ProjectFilePath.pathInProject.endOfLine(false).toString())
           .literal('.dart')
           .endOfLine()
           .ignoreCase();
@@ -197,7 +216,7 @@ class DartFilePath extends ProjectFilePath {
   DartFilePath(String path) : super(path);
 
   @override
-  void validate() {
+  void validateProjectPath() {
     if (expression.hasNoMatch(path)) {
       throw Exception('Invalid DartFilePath format: $path');
     }
