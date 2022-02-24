@@ -13,6 +13,6 @@
         - $package$
   ```
 - Create 'doc/template' directories in the root of your project
-- [03-Markdown-Template-Files.mdt title='Create markdown template files'] in the "doc/template" directory ([09-Examples.mdt title='see examples'])
-- [07-Generating-Documentation-Files.mdt title='Generate the documentation files']
-- [08-Publishing-Documentation-Files.mdt title='Publish the documentation files']
+- [03-Markdown-Template-Files.mdt title='Create markdown template files'] in the "doc/template" directory ([10-Examples.mdt title='see examples'])
+- [07-Generating.mdt title='Generate the documentation files']
+- [08-Publishing.mdt title='Publish the documentation files']

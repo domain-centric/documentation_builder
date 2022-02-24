@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-24 15:48:15.467330.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-24 16:39:33.261555.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
@@ -63,6 +63,6 @@ You can view the templates files and the generated output on https://github.com 
         - $package$
   ```
 - Create 'doc/template' directories in the root of your project
-- [Create markdown template files](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files) in the "doc/template" directory ([see examples](https://github.com/domain-centric/documentation_builder/wiki/09-Examples))
-- [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki/07-Generating-Documentation-Files)
-- [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki/08-Publishing-Documentation-Files)
+- [Create markdown template files](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files) in the "doc/template" directory ([see examples](https://github.com/domain-centric/documentation_builder/wiki/10-Examples))
+- [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki/07-Generating)
+- [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki/08-Publishing)
