@@ -58,6 +58,7 @@ class AttributeName {
   static const message = 'message';
   static const color = 'color';
   static const link = 'link';
+  static const name = 'name';
 }
 
 /// common [RegExp] group names

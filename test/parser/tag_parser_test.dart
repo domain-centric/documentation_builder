@@ -11,7 +11,7 @@ import 'package:fluent_regex/fluent_regex.dart';
 import 'package:test/test.dart';
 
 main() {
-  group('class: ImportFileTagRule', () {
+  group('class: $ImportFileTagRule', () {
     String pathName = AttributeName.path;
     String pathValue = 'doc/template/README.md';
     String invalidPathValue = 'doc\\template\\README.md';
@@ -45,7 +45,7 @@ main() {
             true);
       });
     });
-    group('class: TagParser', () {
+    group('class: $TagParser', () {
       test('2 valid attributes', () async {
         var parsedNode = await TestParser()
             .parse(TestRootNode("{  TestTag $pathAttribute $titleAttribute}"));
@@ -112,7 +112,7 @@ main() {
       });
     });
   });
-  group('class: Anchor', () {
+  group('class: $Anchor', () {
     group('constructor:', () {
       test('title with special characters', () {
         var title = 'a1@#\$\\/%^&*()_z';
@@ -164,7 +164,7 @@ main() {
       });
     });
   });
-  group('class: Title', () {
+  group('class: $Title', () {
     group('constructor:', () {
       test('Creating a Title ', () {
         var string = Title(TestRootNode(''), '## Paragraph Title').toString();
@@ -175,7 +175,7 @@ main() {
       });
     });
   });
-  group('class: TitleAndOrAnchor', () {
+  group('class: $TitleAndOrAnchor', () {
     group('constructor:', () {
       test(
           'Creating a TitleAndOrAnchor object containing children with a anchor and title',
@@ -198,7 +198,7 @@ main() {
     });
   });
 
-  group('class: ImportFileTag', () {
+  group('class: $ImportFileTag', () {
     group('constructor:', () {
       test(
           'Creating a ImportFileTag results in an object containing children with a anchor, title and markdown text',
@@ -235,7 +235,7 @@ main() {
       });
     });
   });
-  group('class: ImportCodeTag', () {
+  group('class: $ImportCodeTag', () {
     group('constructor:', () {
       test(
           'Creating a ImportCodeTag results in an object containing children with a anchor, title and markdown text',
@@ -282,7 +282,7 @@ main() {
       });
     });
   });
-  group('class: ImportDartCodeTag', () {
+  group('class: $ImportDartCodeTag', () {
     group('constructor:', () {
       // TODO test using shell to get a BuildStep
       // test(
@@ -308,7 +308,7 @@ main() {
     });
   });
 
-  group('class: TableOfContentsTagRule', () {
+  group('class: $TableOfContentsTagRule', () {
     group('field: expression', () {
       test('{tableOfContext}', () {
         expect(
@@ -321,6 +321,48 @@ main() {
                 .expression
                 .hasMatch('{tableOfContents title="Test"}'),
             true);
+      });
+    });
+  });
+
+  group('class: $MitLicenseTagRule', () {
+    group('field: expression', () {
+      test('{mitLicenseTag name="John Doe"}', () {
+        expect(
+            MitLicenseTagRule().expression.hasMatch('{mitLicenseTag name="John Doe"}'),
+            true);
+      });
+    });
+  });
+
+  group('class: $TagParser', () {
+    final  copyRightHolder = 'John Doe';
+    final  expression = '{mitLicense ${AttributeName.name}="$copyRightHolder"}';
+
+    group('method: parse', () {
+      test(expression, () async {
+        var rootNode = RootNode();
+        rootNode.children.add(TextNode(rootNode,expression));
+        var result=await TagParser().parse(rootNode);
+        expect(result.toString(), contains(copyRightHolder));
+        expect(result.toString(), contains(DateTime.now().year.toString()));
+        expect(result.toString(), contains('Copyright'));
+        expect(result.toString(), contains('MIT License'));
+      });
+    });
+  });
+
+
+  group('class: $MitLicenseTag', () {
+    final  copyRightHolder = 'John Doe';
+    group('field: children', () {
+      test('{mitLicenseTag ${AttributeName.name}="$copyRightHolder"}', () async {
+        var tag=MitLicenseTag(null, {AttributeName.name:copyRightHolder});
+        var tagAsString = (await tag.createChildren()).first.toString();
+        expect(tagAsString, contains(copyRightHolder));
+        expect(tagAsString, contains(DateTime.now().year.toString()));
+        expect(tagAsString, contains('Copyright'));
+        expect(tagAsString, contains('MIT License'));
       });
     });
   });

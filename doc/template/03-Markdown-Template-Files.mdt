@@ -8,6 +8,8 @@
 
 {ImportDartDoc path='lib/src/builder/template_builder.dart|ChangeLogFile' title='# CHANGELOG template file'}
 
+{ImportDartDoc path='lib/src/builder/template_builder.dart|LicenseFile' title='# LICENSE template file'}
+
 {ImportDartDoc path='lib/src/builder/template_builder.dart|WikiFile' title='# Wiki template files'}
 
 {ImportDartDoc path='lib/src/builder/template_builder.dart|ExampleFile' title='# example template file'}

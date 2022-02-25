@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
+import 'package:documentation_builder/src/parser/tag_parser.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 import 'package:logging/logging.dart';
 
@@ -180,6 +181,7 @@ class TemplateFactories extends DelegatingList<TemplateFactory> {
           ChangeLogTemplateFactory(),
           ExampleTemplateFactory(),
           WikiTemplateFactory(),
+    LicenseFactory(),
         ]);
 }
 
@@ -227,7 +229,7 @@ class ReadMeTemplateFactory extends TemplateFactory {
 /// A CHANGELOG.mdt is a [TemplateFile] that is used by the [DocumentationBuilder]
 /// to create or override the CHANGELOG.md file in the root of your dart project.
 ///
-/// A CHANGELOG.mdt can use the [TODO CHANGELOG_TAG] which will generate the
+/// A CHANGELOG.mdt file can contain the [TODO CHANGELOG_TAG] which will generate the
 /// versions assuming you are using GitHub and mark very version as a milestone.
 /// The CHANGELOG.mdt file is stored in the doc/template folders in the root
 /// of the project
@@ -361,4 +363,40 @@ class WikiTemplateFactory extends TemplateFactory {
       WikiTemplate(parent, sourceFilePath);
 }
 
-//TODO LicenseFactory + LicenseTags + Year tag
+/// Public repositories on GitHub are often used to share open source software.
+/// For your repository to truly be open source, you'll need to license it so
+/// that others are free to use, change, and distribute the software.
+///
+/// Public repositories on GitHub are often used to share open source software.
+/// For your repository to truly be open source, you'll need to license it so
+/// that others are free to use, change, and distribute the software.
+///
+/// A LICENSE.mdt is a [TemplateFile] that is used by the [DocumentationBuilder]
+/// to create or override the LICENSE.md file in the root of your dart project.
+///
+/// A LICENSE.mdt file can contain the [MitLicenseTag] which will generate
+/// a [MIT License](https://opensource.org/licenses/MIT) with up to date year.
+
+class LicenseFile extends MarkdownTemplateFile {}
+
+class LicenseTemplate extends Template {
+  LicenseTemplate(ParentNode parent, ProjectFilePath sourceFilePath)
+      : super(
+    parent: parent,
+    sourceFilePath: sourceFilePath,
+    destinationFilePath: ProjectFilePath('LICENSE.md'),
+    destinationWebUri: PubDevProject().licenseUri,
+  );
+}
+
+
+class LicenseFactory extends TemplateFactory{
+  @override
+  FluentRegex get fileNameExpression =>
+      FluentRegex().literal('/LICENSE.mdt').endOfLine().ignoreCase();
+
+  @override
+  Template createTemplate(ParentNode parent, ProjectFilePath sourceFilePath) =>
+      LicenseTemplate(parent, sourceFilePath);
+}
+

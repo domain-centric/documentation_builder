@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-25 10:18:31.813936.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-25 14:56:27.016428.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
@@ -31,19 +31,22 @@ The [DocumentationBuilder](https://github.com/domain-centric/documentation_build
 You can view the templates files and the generated output on https://github.com and https://pub.dev:
 
 - README
-  - [Markdown Template File](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/doc/template/README.mdt)
-  - [Generated Markdown File Raw](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/README.md)
+  - [GitHubRaw suffix='/main/doc/template/README.mdt' title='Markdown Template File']
+  - [GitHubRaw suffix='/main/README.md' title='Generated Markdown File Raw']
   - [Generated Markdown File Rendered](https://pub.dev/packages/documentation_builder)
+- LICENSE
+  - [GitHubRaw suffix='/main/doc/template/LICENSE.mdt' title='Markdown Template File']
+  - [GitHubRaw suffix='/main/LICENSE.md' title='Generated Markdown File Raw']
 - CHANGELOG
   - TODO (GitHubRaw suffix='/main/doc/template/CHANGELOG.mdt' title='Markdown Template File']
   - TODO (GitHubRaw suffix='/main/CHANGELOG.md' title='Generated Markdown File Raw']
   - [Generated Markdown Rendered](https://pub.dev/packages/documentation_builder/versions)
 - Wiki pages
-  - [Markdown Template Files](https://github.com/domain-centric/documentation_builder/tree/main/doc/template) (select a file and select raw to see the source)
-  - [Generated Markdown Files Rendered](https://github.com/domain-centric/documentation_builder/wiki)
+  - [GitHub suffix='/tree/main/doc/template' title='Markdown Template Files'] (select a file and select raw to see the source)
+  - [GitHubWiki title='Generated Markdown Files Rendered']
 - example
-  - [Markdown Template File](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/doc/template/example.mdt)
-  - [Generated Markdown File Raw](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/example/example.md)
+  - [GitHubRaw suffix='/main/doc/template/example.mdt' title='Markdown Template File']
+  - [GitHubRaw suffix='/main/example/example.md' title='Generated Markdown File Raw']
   - [Generated Markdown Page Rendered](https://pub.dev/packages/documentation_builder/example)
 
 <a id='getting-started'></a>
