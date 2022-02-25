@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:build/build.dart';
 import 'package:fluent_regex/fluent_regex.dart';
+import 'package:logging/logging.dart';
 
 import '../generic/paths.dart';
 import '../parser/link_parser.dart';
@@ -27,14 +29,15 @@ class GitHubProject {
     }
     String configText = projectGitConfigFile.readAsStringSync();
     if (!_configExpression.hasMatch(configText)) {
-      print(
+      log.log(Level.INFO,
           'Unknown format or not a github project in: ${projectGitConfigFile.path}');
       return null;
     }
     Map<String, String?> found =
         _configExpression.findCapturedGroups(configText);
     if (found.isEmpty || found.values.first == null) {
-      print('Could not find github path in: ${projectGitConfigFile.path}');
+      log.log(Level.INFO,
+          'Could not find github path in: ${projectGitConfigFile.path}');
       return null;
     }
     String path = found.values.first!;

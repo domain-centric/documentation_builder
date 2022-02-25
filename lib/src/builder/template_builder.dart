@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
 import 'package:fluent_regex/fluent_regex.dart';
+import 'package:logging/logging.dart';
 
 import '../generic/documentation_model.dart';
 import '../generic/paths.dart';
@@ -39,9 +40,11 @@ class TemplateBuilder implements Builder {
       var markdownPage = factory.createTemplate(model, sourceFilePath);
 
       model.add(markdownPage);
-    } catch (e, stacktrace) {
-      print(
-          'Unknown mark down template file: ${buildStep.inputId.path}\n$e\n$stacktrace');
+    } catch (e, stackTrace) {
+      log.log(
+          Level.SEVERE,
+          'Unknown mark down template file: ${buildStep.inputId.path}. Error: \n$e',
+          stackTrace);
     }
   }
 }

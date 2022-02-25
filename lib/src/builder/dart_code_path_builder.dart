@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:build/build.dart';
+import 'package:logging/logging.dart';
 
 import '../generic/documentation_model.dart';
 import '../generic/element.dart';
@@ -27,8 +28,8 @@ class DartCodePathBuilder implements Builder {
       DocumentationModel model =
           await buildStep.fetchResource<DocumentationModel>(resource);
       model.dartCodePaths.addAll(visitor.foundPaths);
-    } catch (e, stacktrace) {
-      print('$e\n$stacktrace');
+    } catch (e, stackTrace) {
+      log.log(Level.SEVERE, e, stackTrace);
     }
   }
 }

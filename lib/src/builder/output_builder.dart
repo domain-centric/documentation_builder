@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:build/build.dart';
+import 'package:documentation_builder/documentation_builder.dart';
+import 'package:logging/logging.dart';
 
 import '../generic/documentation_model.dart';
 import 'template_builder.dart';
@@ -48,9 +50,12 @@ class OutputBuilder extends Builder {
           .replaceAll('\n', '\r\n');
       var filePath = markdownPage.destinationFilePath.absoluteFilePath;
       File(filePath).writeAsString(await contents);
-    } on Exception catch (e, stacktrace) {
-      print(
-          'Could not write file: ${markdownPage.destinationFilePath}\n$e\n$stacktrace');
+      log.log(Level.INFO, 'Wrote file: $filePath');
+    } on Exception catch (e, stackTrace) {
+      log.log(
+          Level.SEVERE,
+          'Could not write file: ${markdownPage.destinationFilePath}. Error: \n$e',
+          stackTrace);
     }
   }
 
