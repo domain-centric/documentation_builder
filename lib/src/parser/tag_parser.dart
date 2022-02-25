@@ -428,7 +428,8 @@ class TitleAndOrAnchor extends ParentNode {
 /// Recognizes and creates a [MitLicenseTag]
 class MitLicenseTagRule extends TagRule {
   MitLicenseTagRule()
-      : super('mitLicense', [StringAttributeRule(AttributeName.name, required: true)]);
+      : super('mitLicense',
+            [StringAttributeRule(AttributeName.name, required: true)]);
 
   @override
   Tag createTagNode(ParentNode parent, Map<String, dynamic> attributes) {
@@ -444,8 +445,7 @@ class MitLicenseTag extends Tag {
   MitLicenseTag(ParentNode? parent, Map<String, dynamic> attributes)
       : super(parent, attributes);
 
-  String mitLicenseText(String name) =>
-      'MIT License:\n\n'
+  String mitLicenseText(String name) => 'MIT License:\n\n'
       'Copyright (c) ${DateTime.now().year} $name\n\n'
       'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\n'
       'The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\n'

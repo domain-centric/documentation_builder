@@ -329,21 +329,23 @@ main() {
     group('field: expression', () {
       test('{mitLicenseTag name="John Doe"}', () {
         expect(
-            MitLicenseTagRule().expression.hasMatch('{mitLicenseTag name="John Doe"}'),
+            MitLicenseTagRule()
+                .expression
+                .hasMatch('{mitLicenseTag name="John Doe"}'),
             true);
       });
     });
   });
 
   group('class: $TagParser', () {
-    final  copyRightHolder = 'John Doe';
-    final  expression = '{mitLicense ${AttributeName.name}="$copyRightHolder"}';
+    final copyRightHolder = 'John Doe';
+    final expression = '{mitLicense ${AttributeName.name}="$copyRightHolder"}';
 
     group('method: parse', () {
       test(expression, () async {
         var rootNode = RootNode();
-        rootNode.children.add(TextNode(rootNode,expression));
-        var result=await TagParser().parse(rootNode);
+        rootNode.children.add(TextNode(rootNode, expression));
+        var result = await TagParser().parse(rootNode);
         expect(result.toString(), contains(copyRightHolder));
         expect(result.toString(), contains(DateTime.now().year.toString()));
         expect(result.toString(), contains('Copyright'));
@@ -352,12 +354,12 @@ main() {
     });
   });
 
-
   group('class: $MitLicenseTag', () {
-    final  copyRightHolder = 'John Doe';
+    final copyRightHolder = 'John Doe';
     group('field: children', () {
-      test('{mitLicenseTag ${AttributeName.name}="$copyRightHolder"}', () async {
-        var tag=MitLicenseTag(null, {AttributeName.name:copyRightHolder});
+      test('{mitLicenseTag ${AttributeName.name}="$copyRightHolder"}',
+          () async {
+        var tag = MitLicenseTag(null, {AttributeName.name: copyRightHolder});
         var tagAsString = (await tag.createChildren()).first.toString();
         expect(tagAsString, contains(copyRightHolder));
         expect(tagAsString, contains(DateTime.now().year.toString()));
