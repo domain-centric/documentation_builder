@@ -153,6 +153,16 @@ class ElementFinder implements ElementVisitor {
     }
   }
 
+  @override
+  visitAugmentationImportElement(AugmentationImportElement element) {
+    throw UnimplementedError();
+  }
+
+  @override
+  visitLibraryAugmentationElement(LibraryAugmentationElement element) {
+    throw UnimplementedError();
+  }
+
 // TODO extension element???
 // String _memberPath(Element element, List<String> path) {
 //   String pathSegment = element.displayName;
@@ -290,6 +300,16 @@ class DartCodePathFinder implements ElementVisitor {
 
   @override
   visitSuperFormalParameterElement(SuperFormalParameterElement element) {
+    throw UnimplementedError();
+  }
+
+  @override
+  visitAugmentationImportElement(AugmentationImportElement element) {
+    throw UnimplementedError();
+  }
+
+  @override
+  visitLibraryAugmentationElement(LibraryAugmentationElement element) {
     throw UnimplementedError();
   }
 }
