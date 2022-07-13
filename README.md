@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-02-25 15:39:13.416189.)
+[//]: # (This file was generated from: doc/template/README.mdt using the documentation_builder package on: 2022-07-13 14:15:10.315795.)
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Code Repository](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 [![Github Wiki](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
@@ -6,6 +6,8 @@
 [![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)
+
+![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
 
 <a id='documentation-builder'></a>
 # documentation_builder
@@ -18,7 +20,7 @@ It can generate the following files:
 - [ReadMeFile](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files#readme-template-file)
 - [ChangeLogFile](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files#changelog-template-file)
 - [ExampleFile](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files#example-template-file)
-- GitHub [WikiFile](https://github.com/domain-centric/documentation_builder/wiki/03-Markdown-Template-Files#wiki-template-files)s
+- GitHub [WikiTemplateFile]s
 
 [documentation_builder](https://pub.dev/packages/documentation_builder) is not intended to generate API documentation.
 Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
@@ -36,7 +38,7 @@ You can view the templates files and the generated output on https://github.com 
   - [Generated Markdown File Rendered](https://pub.dev/packages/documentation_builder)
 - LICENSE
   - [Markdown Template File](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/doc/template/LICENSE.mdt)
-  - [Generated Markdown File Raw](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/LICENSE.md)
+  - [Generated Markdown File Raw](https://raw.githubusercontent.com/domain-centric/documentation_builder/main/LICENSE)
 - CHANGELOG
   - TODO (GitHubRaw suffix='/main/doc/template/CHANGELOG.mdt' title='Markdown Template File']
   - TODO (GitHubRaw suffix='/main/CHANGELOG.md' title='Generated Markdown File Raw']

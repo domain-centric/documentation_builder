@@ -1,6 +1,6 @@
 import 'package:fluent_regex/fluent_regex.dart';
 
-import '../builder/template_builder.dart';
+import '../builder/documentation_model_builder.dart';
 import '../generic/documentation_model.dart';
 import '../generic/paths.dart';
 import '../project/github_project.dart';

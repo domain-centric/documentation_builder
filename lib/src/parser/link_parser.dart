@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import '../builder/documentation_builder.dart';
-import '../builder/template_builder.dart';
+import '../builder/documentation_model_builder.dart';
 import '../generic/documentation_model.dart';
 import '../generic/paths.dart';
 import '../project/github_project.dart';
@@ -138,19 +138,11 @@ class Link extends ParentNode {
     ParentNode? parent,
     required this.title,
     required this.uri,
-  }) : super(parent) {
-    validateTitle();
-  }
+  }) : super(parent);
 
   @override
   String toString() {
     return '[$title]($uri)';
-  }
-
-  void validateTitle() {
-    if (title.trim().isEmpty) {
-      throw ParserWarning('The title attribute may not be empty');
-    }
   }
 
   /// This method is called by [CompleteLink.createReplacementNodes]

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/builder/documentation_model_builder.dart';
 import 'package:documentation_builder/src/generic/documentation_model.dart';
 import 'package:documentation_builder/src/generic/paths.dart';
 import 'package:documentation_builder/src/parser/attribute_parser.dart';
@@ -399,7 +399,7 @@ main() {
 Anchor createTestAnchor(String title) {
   RootNode rootNode = RootNode();
   var markdownPage = ReadMeTemplateFactory()
-      .createTemplate(rootNode, ProjectFilePath('doc/template/README.mdt'));
+      .createDocument(rootNode, ProjectFilePath('doc/template/README.mdt'));
   var anchor = Anchor(markdownPage, title);
   markdownPage.children.add(anchor);
   return anchor;
@@ -422,12 +422,12 @@ DocumentationModel createModelFromTemplateFiles() {
 
   if (templateFilePaths.isEmpty) throw Exception('No template files found!');
 
-  var factories = TemplateFactories();
+  var factories = DocumentationFileFactories();
   templateFilePaths.forEach((String sourcePath) {
     try {
       var factory = factories.firstWhere((f) => f.canCreateFor(sourcePath));
       var markdownPage =
-          factory.createTemplate(model, ProjectFilePath(sourcePath));
+          factory.createDocument(model, ProjectFilePath(sourcePath));
       model.add(markdownPage);
     } on Error {
       // Continue

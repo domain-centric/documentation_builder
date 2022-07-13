@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
-import '../builder/template_builder.dart';
+import '../builder/documentation_model_builder.dart';
 
 /// A [Parser] checks if any of its rules can replace nodes in the model.
 abstract class Parser {

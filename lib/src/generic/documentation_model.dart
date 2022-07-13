@@ -1,6 +1,6 @@
 import 'package:build/build.dart';
 
-import '../builder/template_builder.dart';
+import '../builder/documentation_model_builder.dart';
 import '../parser/parser.dart';
 import 'paths.dart';
 
@@ -15,23 +15,28 @@ class DocumentationModel extends RootNode {
 
   /// adds a [Template] while verifying that each [Template]
   /// has a unique [Template.destinationFilePath] to prevent overriding generated files
-  void add(Template markdownPage) {
-    verifyUniqueDestinationPath(markdownPage);
-    children.add(markdownPage);
+  void add(DocumentationFile documentationFile) {
+    verifyUniqueDestinationPath(documentationFile);
+    children.add(documentationFile);
   }
 
   /// all [Template]s should be stored into the [DocumentationModel.children]
   /// This accessor gets all the [Template]s
   List<Template> get markdownPages => children.whereType<Template>().toList();
 
-  void verifyUniqueDestinationPath(Template newMarkdownPage) {
+  List<DocumentationFile> get otharThanTempateFiles => children
+      .where((child) => child is! Template)
+      .cast<DocumentationFile>()
+      .toList();
+
+  void verifyUniqueDestinationPath(DocumentationFile documentationFile) {
     try {
       Template existingMarkDownPageWithSameDestination =
           markdownPages.firstWhere((existingMarkDownPage) =>
-              newMarkdownPage.destinationFilePath ==
+              documentationFile.destinationFilePath ==
               existingMarkDownPage.destinationFilePath);
       throw Exception(
-          '${newMarkdownPage.sourceFilePath} and ${existingMarkDownPageWithSameDestination.sourceFilePath} both have the same destination path: ${newMarkdownPage.destinationFilePath}');
+          '${documentationFile.sourceFilePath} and ${existingMarkDownPageWithSameDestination.sourceFilePath} both have the same destination path: ${documentationFile.destinationFilePath}');
     } on StateError {
       // No double destination paths found. Perfect!
     }

@@ -8,7 +8,7 @@ You can view the templates files and the generated output on https://github.com 
   - [PubDev title='Generated Markdown File Rendered']
 - LICENSE
   - [GitHubRaw suffix='/main/doc/template/LICENSE.mdt' title='Markdown Template File']
-  - [GitHubRaw suffix='/main/LICENSE.md' title='Generated Markdown File Raw']
+  - [GitHubRaw suffix='/main/LICENSE' title='Generated Markdown File Raw']
 - CHANGELOG
   - TODO (GitHubRaw suffix='/main/doc/template/CHANGELOG.mdt' title='Markdown Template File']
   - TODO (GitHubRaw suffix='/main/CHANGELOG.md' title='Generated Markdown File Raw']

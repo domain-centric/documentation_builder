@@ -1,4 +1,4 @@
-import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/builder/documentation_model_builder.dart';
 import 'package:documentation_builder/src/generic/documentation_model.dart';
 import 'package:documentation_builder/src/generic/paths.dart';
 import 'package:test/test.dart';
@@ -24,8 +24,8 @@ class TestDocumentationModel extends DocumentationModel {
   }
 
   Template createReadMeTemplate() => ReadMeTemplateFactory()
-      .createTemplate(this, ProjectFilePath('doc/template/README.mdt'));
+      .createDocument(this, ProjectFilePath('doc/template/README.mdt'));
 
-  Template createWikiTemplate() => WikiTemplateFactory().createTemplate(
+  Template createWikiTemplate() => WikiTemplateFactory().createDocument(
       this, ProjectFilePath('doc/template/01-Documentation-Builder.md'));
 }

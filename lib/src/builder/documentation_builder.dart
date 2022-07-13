@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'template_builder.dart';
+import 'documentation_model_builder.dart';
 
 /// Generates markdown documentation files from markdown template files.
 /// This can be useful when you write documentation for a
@@ -12,7 +12,7 @@ import 'template_builder.dart';
 /// - [ReadMeFile]
 /// - [ChangeLogFile]
 /// - [ExampleFile]
-/// - GitHub [WikiFile]s
+/// - GitHub [WikiTemplateFile]s
 ///
 /// [documentation_builder] is not intended to generate API documentation.
 /// Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
@@ -22,9 +22,12 @@ import 'template_builder.dart';
 // - a convenient way to run the shell commands to start the builder,
 //   using the build_runner package
 class DocumentationBuilder {
-  /// The [documentation_builder] uses several builders that are run with the [build_runner] package.
+  /// The [documentation_builder] uses several builders that are run with
+  /// the [build_runner] package.
   ///
-  /// The [build_runner] is started with the following command in the root of the project (ALT+F12 if you are using [Android Studio](https://developer.android.com/studio) or [Intellij](https://www.jetbrains.com/idea/)):\
+  /// The [build_runner] is started with the following command in the root of
+  /// the project (ALT+F12 if you are using
+  /// [Android Studio](https://developer.android.com/studio) or [Intellij](https://www.jetbrains.com/idea/)):\
   /// ```dart run build_runner build --delete-conflicting-outputs```
   ///
   /// You’d better clean up before you re-execute [build_runner]:\

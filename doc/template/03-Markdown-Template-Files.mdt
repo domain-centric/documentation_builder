@@ -1,15 +1,15 @@
-{ImportDartDoc path='lib/src/builder/template_builder.dart|TemplateFile'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|TemplateFile'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|MarkdownTemplateFile'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|MarkdownTemplateFile'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|GeneratedFile'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|GeneratedFile'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|ReadMeFile' title='# README template file'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|ReadMeFile' title='# README template file'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|ChangeLogFile' title='# CHANGELOG template file'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|ChangeLogFile' title='# CHANGELOG template file'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|LicenseFile' title='# LICENSE template file'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|LicenseFile' title='# LICENSE template file'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|WikiFile' title='# Wiki template files'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|WikiFile' title='# Wiki template files'}
 
-{ImportDartDoc path='lib/src/builder/template_builder.dart|ExampleFile' title='# example template file'}
+{ImportDartDoc path='lib/src/builder/documentation_model_builder.dart|ExampleFile' title='# example template file'}

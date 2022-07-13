@@ -6,7 +6,7 @@ import 'package:documentation_builder/documentation_builder.dart';
 import 'package:logging/logging.dart';
 
 import '../generic/documentation_model.dart';
-import 'template_builder.dart';
+import 'documentation_model_builder.dart';
 
 ///  The [OutputBuilder] converts each [Template] in the [DocumentationModel] into a [GeneratedFile]
 class OutputBuilder extends Builder {
@@ -27,8 +27,10 @@ class OutputBuilder extends Builder {
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     DocumentationModel model =
         await buildStep.fetchResource<DocumentationModel>(resource);
+
     if (model.hasWikiPages) {
       _createOrClearWikiPageDirectory();
+      _copyOtherThanTemplateFiles(model);
     }
 
     for (var markdownPage in model.markdownPages) {
@@ -79,4 +81,13 @@ class OutputBuilder extends Builder {
 
   bool _isGitFolder(FileSystemEntity child) =>
       child is Directory && child.path.endsWith('.git');
+
+  void _copyOtherThanTemplateFiles(DocumentationModel model) {
+    for (var file in model.otharThanTempateFiles) {
+      var sourceFile = File(file.sourceFilePath.absoluteFilePath);
+      sourceFile.copy(file.destinationFilePath.absoluteFilePath);
+      log.log(Level.INFO,
+          'Wrote file: ${file.destinationFilePath.absoluteFilePath}');
+    }
+  }
 }

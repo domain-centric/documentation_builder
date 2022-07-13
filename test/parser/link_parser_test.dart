@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:documentation_builder/src/builder/template_builder.dart';
+import 'package:documentation_builder/src/builder/documentation_model_builder.dart';
 import 'package:documentation_builder/src/generic/documentation_model.dart';
 import 'package:documentation_builder/src/generic/paths.dart';
 import 'package:documentation_builder/src/parser/link_parser.dart';
@@ -29,15 +29,6 @@ main() {
         expect(link.title, titleValue);
         expect(link.uri, Uri.parse(uri));
         expect(link.toString(), '[$titleValue]($uri)');
-      });
-      test("Link without title", () {
-        expect(
-            () => Link(parent: null, title: '  ', uri: Uri.parse(uri)),
-            throwsA(isA<ParserWarning>().having(
-              (e) => e.toString(),
-              'toString()',
-              equals('The title attribute may not be empty'),
-            )));
       });
       test("Link with empty url", () {
         var emptyUri = '';
@@ -452,9 +443,9 @@ class TestDocumentationModel extends DocumentationModel {
       TextNode(this, markdownFilePath);
 
   Template createReadMeTemplate() => ReadMeTemplateFactory()
-      .createTemplate(this, ProjectFilePath('doc/template/README.mdt'));
+      .createDocument(this, ProjectFilePath('doc/template/README.mdt'));
 
-  Template createWikiTemplate() => WikiTemplateFactory().createTemplate(
+  Template createWikiTemplate() => WikiTemplateFactory().createDocument(
       this, ProjectFilePath('doc/template/01-Documentation-Builder.mdt'));
 
   Node get link => children[2];

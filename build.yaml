@@ -9,7 +9,7 @@ targets:
       - pubspec.*
       - $package$
     builders:
-      documentation_builder|template_builder:
+      documentation_builder|documentation_model_builder:
         enabled: True
       documentation_builder|dart_code_path_builder:
         enabled: True
@@ -19,9 +19,9 @@ targets:
         enabled: True
 
 builders:
-  template_builder:
+  documentation_model_builder:
     import: 'package:documentation_builder/builder.dart'
-    builder_factories: ['markdownTemplateBuilder']
+    builder_factories: ['documentationModelBuilder']
     build_extensions:
       .mdt: # Note that this is ignored because its overridden by the Builder.buildExtensions method
         - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method

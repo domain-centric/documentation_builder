@@ -6,7 +6,7 @@ import 'package:build/build.dart';
 import 'package:fluent_regex/fluent_regex.dart';
 
 import '../builder/documentation_builder.dart';
-import '../builder/template_builder.dart';
+import '../builder/documentation_model_builder.dart';
 import '../generic/documentation_model.dart';
 import '../generic/element.dart';
 import '../generic/paths.dart';
