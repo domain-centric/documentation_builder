@@ -60,7 +60,6 @@ class ToolTipAttributeRule extends AttributeRule {
   }
 }
 
-
 /// A [GitHubLicenseBadge] can have a licenseType attribute.
 /// This text is displayed on the [Badge].
 /// By default this value is 'MIT'.
@@ -84,7 +83,6 @@ class LicenseTypeAttribute extends Attribute<String> {
     }
   }
 }
-
 
 class LicenseTypeAttributeRule extends AttributeRule {
   LicenseTypeAttributeRule()

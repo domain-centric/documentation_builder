@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 const green = 'green';
 const toolTip = 'tooltip';
-const licenseType='licenseType';
+const licenseType = 'licenseType';
 const label = 'label';
 const message = 'message';
 const defaultColor = 'informational';
@@ -516,15 +516,15 @@ main() {
         test("lowercase badge name has match", () {
           var rule = GitHubLicenseBadgeRule();
           expect(
-              rule.expression
-                  .hasMatch("[!githublicensebadge $toolTip='$toolTip' $licenseType='$licenseType']"),
+              rule.expression.hasMatch(
+                  "[!githublicensebadge $toolTip='$toolTip' $licenseType='$licenseType']"),
               true);
         });
         test("lowercase and uppercase badge name has match", () {
           var rule = GitHubLicenseBadgeRule();
           expect(
-              rule.expression
-                  .hasMatch("[!GitHubLicenseBadge  $toolTip='$toolTip' $licenseType='$licenseType' ]"),
+              rule.expression.hasMatch(
+                  "[!GitHubLicenseBadge  $toolTip='$toolTip' $licenseType='$licenseType' ]"),
               true);
         });
         test("lowercase and uppercase badge name with spaces has match", () {
@@ -536,7 +536,6 @@ main() {
         });
       });
     });
-
 
     group('class: BadgeParser', () {
       group('class: GitHubPullRequestsBadge', () {

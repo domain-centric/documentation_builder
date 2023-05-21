@@ -268,7 +268,8 @@ main() {
         Map<String, dynamic> attributes = {
           AttributeName.path: filePath,
         };
-        var expected = '<a id=\'test-src-parser-import-test-code-file-dart\'></a>\n'
+        var expected =
+            '<a id=\'test-src-parser-import-test-code-file-dart\'></a>\n'
             '```\n'
             'main() {\r\n'
             '  print(\'test\');\r\n'
