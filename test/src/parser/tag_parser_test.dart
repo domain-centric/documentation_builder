@@ -241,7 +241,7 @@ main() {
           'Creating a ImportCodeTag results in an object containing children with a anchor, title and markdown text',
           () async {
         ProjectFilePath filePath =
-            ProjectFilePath('test/parser/import_test_code_file.dart');
+            ProjectFilePath('test/src/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
           AttributeName.path: filePath,
           AttributeName.title: '## Paragraph Title'
@@ -264,11 +264,11 @@ main() {
           'Creating a ImportCodeTag results in an object containing children with a anchor and markdown text',
           () async {
         ProjectFilePath filePath =
-            ProjectFilePath('test/parser/import_test_code_file.dart');
+            ProjectFilePath('test/src/parser/import_test_code_file.dart');
         Map<String, dynamic> attributes = {
           AttributeName.path: filePath,
         };
-        var expected = '<a id=\'test-parser-import-test-code-file-dart\'></a>\n'
+        var expected = '<a id=\'test-src-parser-import-test-code-file-dart\'></a>\n'
             '```\n'
             'main() {\r\n'
             '  print(\'test\');\r\n'

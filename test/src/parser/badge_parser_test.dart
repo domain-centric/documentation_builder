@@ -7,6 +7,7 @@ import 'package:test/test.dart';
 
 const green = 'green';
 const toolTip = 'tooltip';
+const licenseType='licenseType';
 const label = 'label';
 const message = 'message';
 const defaultColor = 'informational';
@@ -509,6 +510,33 @@ main() {
         });
       });
     });
+
+    group('class: GitHubLicenseBadgeRule', () {
+      group('field: expression', () {
+        test("lowercase badge name has match", () {
+          var rule = GitHubLicenseBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!githublicensebadge $toolTip='$toolTip' $licenseType='$licenseType']"),
+              true);
+        });
+        test("lowercase and uppercase badge name has match", () {
+          var rule = GitHubLicenseBadgeRule();
+          expect(
+              rule.expression
+                  .hasMatch("[!GitHubLicenseBadge  $toolTip='$toolTip' $licenseType='$licenseType' ]"),
+              true);
+        });
+        test("lowercase and uppercase badge name with spaces has match", () {
+          var rule = GitHubLicenseBadgeRule();
+          expect(
+              rule.expression.hasMatch(
+                  "[ ! GitHubLicenseBadge   $toolTip='$toolTip'   $licenseType='$licenseType']"),
+              true);
+        });
+      });
+    });
+
 
     group('class: BadgeParser', () {
       group('class: GitHubPullRequestsBadge', () {
