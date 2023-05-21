@@ -92,6 +92,8 @@ class GitHubProject {
 
   Uri? dartFile(DartFilePath path) => _createUriWithSuffix('blob/main/$path');
 
+  Uri? license() => _createUriWithSuffix('blob/main/LICENSE');
+
   _createUriWithSuffix(String suffix) {
     if (uri == null) {
       return null;

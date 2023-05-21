@@ -27,3 +27,5 @@
 {ImportDartDoc path='lib/src/parser/badge_parser.dart|GitHubIssuesBadge' title='### GitHubIssuesBadge'}
 
 {ImportDartDoc path='lib/src/parser/badge_parser.dart|GitHubPullRequestsBadge' title='### GitHubPullRequestsBadge'}
+
+{ImportDartDoc path='lib/src/parser/badge_parser.dart|GitHubLicenseBadge' title='### GitHubLicenseBadge'}

@@ -13,7 +13,6 @@ The following paragraphs describe common attributes:
 
 {ImportDartDoc path='lib/src/generic/paths.dart|DartMemberPath' title='### Dart Member Path Attribute'}
 
-
 ## Tag types
 The following paragraphs will explain the different tags:
 

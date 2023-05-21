@@ -83,7 +83,7 @@ class OutputBuilder extends Builder {
       child is Directory && child.path.endsWith('.git');
 
   void _copyOtherThanTemplateFiles(DocumentationModel model) {
-    for (var file in model.otharThanTempateFiles) {
+    for (var file in model.otherThanTemplateFiles) {
       var sourceFile = File(file.sourceFilePath.absoluteFilePath);
       sourceFile.copy(file.destinationFilePath.absoluteFilePath);
       log.log(Level.INFO,

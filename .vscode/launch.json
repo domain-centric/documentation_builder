@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Dart (tool\\documentation_builder.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "tool\\documentation_builder.dart"
+        }
+    ]
+}

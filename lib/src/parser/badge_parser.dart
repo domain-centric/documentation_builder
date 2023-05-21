@@ -21,6 +21,7 @@ class BadgeParser extends Parser {
           GitHubStarsBadgeRule(),
           GitHubIssuesBadgeRule(),
           GitHubPullRequestsBadgeRule(),
+          GitHubLicenseBadgeRule(),
         ]);
 }
 
@@ -55,6 +56,45 @@ class ToolTipAttributeRule extends AttributeRule {
     return Future.value(ToolTipAttribute(
       parent: parent,
       toolTip: stringValueFor(match),
+    ));
+  }
+}
+
+
+/// A [GitHubLicenseBadge] can have a licenseType attribute.
+/// This text is displayed on the [Badge].
+/// By default this value is 'MIT'.
+///
+/// [LicenseTypeAttribute] example: licenseType='GNU'
+class LicenseTypeAttribute extends Attribute<String> {
+  LicenseTypeAttribute({
+    required ParentNode parent,
+    required String licenseType,
+  }) : super(
+          parent: parent,
+          name: AttributeName.licenseType,
+          value: licenseType,
+        ) {
+    validate(licenseType);
+  }
+
+  validate(String text) {
+    if (text.trim().isEmpty) {
+      throw Exception('LicenseType may not be empty');
+    }
+  }
+}
+
+
+class LicenseTypeAttributeRule extends AttributeRule {
+  LicenseTypeAttributeRule()
+      : super(AttributeName.licenseType, required: false);
+
+  @override
+  Future<Node> createReplacementNode(ParentNode parent, RegExpMatch match) {
+    return Future.value(LicenseTypeAttribute(
+      parent: parent,
+      licenseType: stringValueFor(match),
     ));
   }
 }
@@ -216,7 +256,7 @@ class LinkAttributeRule extends AttributeRule {
 
 /// [Badge]s are images with text that inform the user on the technology used in a project and other relevant information such as links to
 /// - code repository
-/// - project licence
+/// - project license
 /// - documentation
 /// - application stores
 /// - ect...
@@ -536,5 +576,42 @@ class GitHubPullRequestsBadgeRule extends BadgeRule {
   Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
     String? toolTip = attributes[AttributeName.toolTip];
     return GitHubPullRequestsBadge(parent: parent, toolTip: toolTip);
+  }
+}
+
+/// - **[GitHubLicenseBadge&rsqb;**
+/// - Creates a [GitHubLicenseBadge] that is defined with customizable [Attribute]s.
+/// - E.g.: [![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
+/// - Attributes:
+///   - optional [ToolTipAttribute]
+///   - optional [LicenseTypeAttributeRule]
+class GitHubLicenseBadge extends Badge {
+  GitHubLicenseBadge({
+    ParentNode? parent,
+
+    /// See [ToolTipAttribute]
+    String? toolTip,
+    String? licenseType,
+  }) : super(
+            parent: parent,
+            toolTip: toolTip ?? 'GitHub License',
+            image: Badge.imgShieldIoUri.withPathSuffix(
+                'badge/license-${licenseType ?? 'MIT'}-informational'),
+            link: GitHubProject().license()!);
+}
+
+class GitHubLicenseBadgeRule extends BadgeRule {
+  GitHubLicenseBadgeRule()
+      : super('GitHubLicenseBadge', [
+          ToolTipAttributeRule(),
+          LicenseTypeAttributeRule(),
+        ]);
+
+  @override
+  Badge createBadgeNode(ParentNode parent, Map<String, dynamic> attributes) {
+    String? toolTip = attributes[AttributeName.toolTip];
+    String? licenseType = attributes[AttributeName.licenseType];
+    return GitHubLicenseBadge(
+        parent: parent, toolTip: toolTip, licenseType: licenseType);
   }
 }

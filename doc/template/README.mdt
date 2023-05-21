@@ -1,10 +1,4 @@
-[!PubPackageBadge]
-[!GitHubBadge]
-[!GithubWikiBadge]
-[!GitHubStarsBadge]
-[!CustomBadge tooltip='GitHub License' label='license' message='MIT' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE']
-[!GitHubIssuesBadge]
-[!GitHubPullRequestsBadge]
+{ImportFile path='doc/template/badges.mdt'}
 
 ![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
 

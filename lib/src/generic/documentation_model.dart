@@ -24,7 +24,7 @@ class DocumentationModel extends RootNode {
   /// This accessor gets all the [Template]s
   List<Template> get markdownPages => children.whereType<Template>().toList();
 
-  List<DocumentationFile> get otharThanTempateFiles => children
+  List<DocumentationFile> get otherThanTemplateFiles => children
       .where((child) => child is! Template)
       .cast<DocumentationFile>()
       .toList();
@@ -64,6 +64,7 @@ class AttributeName {
   static const color = 'color';
   static const link = 'link';
   static const name = 'name';
+  static const licenseType = 'licenseType';
 }
 
 /// common [RegExp] group names

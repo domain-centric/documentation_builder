@@ -5,7 +5,7 @@ import 'paths.dart';
 extension UriExtension on Element {
   String get path {
     String childPath = displayName;
-    var parent = enclosingElement3;
+    var parent = enclosingElement;
     if (parent != null) {
       String parentPath = parent.path;
       if (parentPath.isEmpty && childPath.isEmpty) {
