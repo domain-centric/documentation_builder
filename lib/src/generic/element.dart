@@ -177,6 +177,11 @@ class ElementFinder implements ElementVisitor {
   visitPartElement(PartElement element) {
     checkElementRecursively(element);
   }
+
+  @override
+  visitExtensionTypeElement(ExtensionTypeElement element) {
+    checkElementRecursively(element);
+  }
 }
 
 /// An [ElementVisitor] for finding all [DartCodePath]s
@@ -331,6 +336,11 @@ class DartCodePathFinder implements ElementVisitor {
 
   @override
   visitPartElement(PartElement element) {
+    checkElementRecursively(element);
+  }
+
+  @override
+  visitExtensionTypeElement(ExtensionTypeElement element) {
     checkElementRecursively(element);
   }
 }

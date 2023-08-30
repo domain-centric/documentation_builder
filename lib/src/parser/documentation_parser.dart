@@ -5,9 +5,6 @@ import 'parser.dart';
 import 'tag_parser.dart';
 
 /// Parses the [DocumentationModel]:
-/// See:
-/// - [TagParser]
-/// - [LinkParser]
 class DocumentationParser {
   Future<DocumentationModel> parse(DocumentationModel model) async {
     String warnings = '';
