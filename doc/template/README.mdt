@@ -1,9 +1,0 @@
-{ImportFile path='doc/template/badges.mdt'}
-
-![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
-
-{ImportDartDoc path='lib/src/builder/documentation_builder.dart|DocumentationBuilder' title='# documentation_builder'}
-
-{ImportFile path='doc/template/example.mdt' title='## Examples'}
-
-{ImportFile path='doc/template/02-Getting-Started.mdt' title='## Getting Started'}

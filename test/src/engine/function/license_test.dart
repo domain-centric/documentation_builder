@@ -1,17 +1,45 @@
+import 'package:documentation_builder/src/engine/function/generator.dart';
 import 'package:documentation_builder/src/engine/template_engine.dart';
 import 'package:shouldly/shouldly.dart';
-import 'package:template_engine/template_engine.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('license.mit function should render a correct MIT license text', () {
-    var engine = DocumentationTemplateEngine();
-    var parseResult = engine.parse(TextTemplate('{{license.mit("John Doe")}}'));
-    var renderResult = engine.render(parseResult);
-    renderResult.text.should.be('MIT License:\n\n'
-        'Copyright (c) ${DateTime.now().year} John Doe\n\n'
-        'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\n'
-        'The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\n'
-        'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.');
+  group('License', () {
+    final engine = DocumentationTemplateEngine();
+
+    test('should generate MIT license text', () async {
+      final parseResult = await engine
+          .parseText("{{ license(type='MIT', name='John Doe', year=2023)}}");
+      final renderResult = await engine.render(parseResult);
+      renderResult.errorMessage.should.beNullOrEmpty();
+      renderResult.text.should.be(MitLicense().text(2023, 'John Doe'));
+    });
+
+    test('should generate BSD3 license text', () async {
+      final parseResult = await engine
+          .parseText("{{ license( name='John Doe', type='BSD3', year=2020 )}}");
+      final renderResult = await engine.render(parseResult);
+      renderResult.errorMessage.should.beNullOrEmpty();
+      renderResult.text.should.be(Bsd3License().text(2020, 'John Doe'));
+    });
+
+    test('should use current year if year is not provided', () async {
+      final parseResult =
+          await engine.parseText('{{license(type= "MIT", name= "Jane Doe") }}');
+      final renderResult = await engine.render(parseResult);
+      renderResult.errorMessage.should.beNullOrEmpty();
+      renderResult.text.should
+          .be(MitLicense().text(DateTime.now().year, 'Jane Doe'));
+    });
+
+    test('should throw error for unsupported license type', () async {
+      var parseResult = await engine
+          .parseText('{{ license(type="INVALID", name="John Doe") }}');
+      final renderResult = await engine.render(parseResult);
+      renderResult.errorMessage.should.contain(
+          "Render error in: '{{ license(type=\"INVALID\", name=\"John Do...':");
+      renderResult.errorMessage.should.contain(
+          "1:4: 'INVALID' is not on of the supported license types: MIT, BSD3.");
+    });
   });
 }

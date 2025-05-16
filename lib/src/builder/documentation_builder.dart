@@ -1,77 +1,223 @@
-import 'dart:convert';
-import 'dart:io';
+// ignore_for_file: deprecated_member_use
 
-import 'documentation_model_builder.dart';
+import 'dart:async';
 
-/// Generates markdown documentation files from markdown template files.
+import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
+import 'package:documentation_builder/src/builder/build_option_parameter.dart';
+import 'package:documentation_builder/src/builder/new_line.dart';
+import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
+import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
+import 'package:documentation_builder/src/engine/function/util/path_parsers.dart';
+import 'package:documentation_builder/src/engine/template_engine.dart';
+import 'package:template_engine/template_engine.dart';
+
+/// Generates documentation files from template files.
 /// This can be useful when you write documentation for a
 /// [Dart](https://dart.dev/) or [Flutter](https://flutter.dev/) project
 /// and want to reuse/import Dart code or Dart documentation comments.
 ///
-/// It can generate the following files:
-/// - [ReadMeFile]
-/// - [ChangeLogFile]
-/// - [ExampleFile]
-/// - GitHub [WikiTemplateFile]s
+/// It can generate any type of text file e.g.:
+/// * README.md
+/// * CHANGELOG.md
+/// * LICENSE.md
+/// * Example files
+/// * GitHub wiki files
+/// * or any other text file
 ///
 /// [documentation_builder] is not intended to generate API documentation.
 /// Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
+///
+/// # Features
+/// [documentation_builder] uses the [template_engine] package with additional functions for documentation.
+/// The most commonly used functions for documentation are:
+/// * [Import Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions)
+/// * [Generator Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#generator-functions)
+/// * [Path Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#path-functions)
+/// * [Link Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions)
+/// * [Badge Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions)
+///
+/// # Breaking Changes
+/// [documentation_builder] 1.0.0 has had major improvements over earlier versions:
+/// * It uses the [DocumentationTemplateEngine] which is an extended version of the [TemplateEngine] from the [template_engine] package
+///   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
+///   * better error messages with the position within a template file.
+///   * expressions in template file tags can be nested
+///   * More features: The [DocumentationTemplateEngine] can be extended with custom:
+///     * dataTypes
+///     * constants
+///     * functionGroups
+///     * operatorGroups
+///   * more consistent template syntax: now all functions
+/// * The input and output file is determined by parameters in the build.yaml file, which is:
+///   * easier to understand than the old DocumentationBuilder conventions
+///   * more flexible: It can now be configured in the build.yaml file
+/// * Each generated file can have an optional text header which can be configured in the build.yaml per output file suffix.
+///
+/// This resulted in the following breaking changes:
+/// * Tags
+///   | old syntax                                                                      | new syntax |
+///   |---------------------------------------------------------------------------------|------------|
+///   | {ImportFile file:'OtherTemplateFile.md.template' title='# Other Template File'} | # Other Template File<br>{{importTemplate('OtherTemplateFile.md.template')}} |
+///   | {ImportCode file:'file_to_import.txt' title='# Code example'}                   | # Code example<br>{{importCode('file_to_import.txt')}} |
+///   | {ImportDartCode file:'file_to_import.dart' title='# Dart code example'}         | # Dart code example<br>{{importDartCode('file_to_import.dart')}} |
+///   | {ImportDartDoc path='lib\my_lib.dart&#124;MyClass' title='# My Class'}          | # My Class<br>{{importDartDoc('lib\my_lib.dart&#124;MyClass')}} |
+///   | {TableOfContents title='# Table of contents example'}                           | # Table of contents<br>{{tableOfContents(path='doc/template/doc/wiki')}} |
+///   | {MitLicense name='John Doe'}                                                    | {{license(type='MIT', name='John Doe')}} |
+///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions) for more details on these and new functions
+/// * Links
+///   | old syntax               | new syntax |
+///   |--------------------------|------------|
+///   | &#91;GitHub]             | {{gitHubLink()}} |
+///   | &#91;GitHubWiki]         | {{gitHubWikiLink()}} |
+///   | &#91;GitHubStars]        | {{gitHubStarsLink()}} |
+///   | &#91;GitHubIssues]       | {{gitHubIssuesLink()}} |
+///   | &#91;GitHubMilestones]   | {{gitHubMilestonesLink()}} |
+///   | &#91;GitHubReleases]     | {{gitHubReleasesLink()}} |
+///   | &#91;GitHubPullRequests] | {{gitHubPullRequestsLink()}} |
+///   | &#91;GitHubRaw]          | {{referenceLink('ref')}} or{{gitHubRawLink()}} |
+///   | &#91;PubDev]             | {{pubDevLink()}} |
+///   | &#91;PubDevChangeLog]    | {{pubDevChangeLogLink()}} |
+///   | &#91;PubDevVersions]     | {{pubDevVersionsLink()}} |
+///   | &#91;PubDevExample]      | {{pubDevExampleLink()}} |
+///   | &#91;PubDevInstall]      | {{pubDevInstallLink()}} |
+///   | &#91;PubDevScore]        | {{pubDevScoreLink()}} |
+///   | &#91;PubDevLicense]      | {{pubDevLicenseLink()}} |
+///   | PubDev package links     | {{referenceLink()}} |
+///   | Dart code links          | {{referenceLink('ref')}} |
+///   | Markdown file links      | &#91;title](URI) |
+///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions) for more details on these and new functions
+/// * Badges
+///   | old syntax                                  | new syntax                    |
+///   |---------------------------------------------|-------------------------------|
+///   | &#91;CustomBadge title='title' ...]         | &#91;title]({{customBadge()}})             |
+///   | &#91;PubPackageBadge title='title']         | &#91;title]({{pubPackageBadge()}})         |
+///   | &#91;GitHubBadge title='title']             | &#91;title]({{gitHubBadge()}})             |
+///   | &#91;GitHubWikiBadge title='title']         | &#91;title]({{gitHubWikiBadge()}})         |
+///   | &#91;GitHubStarsBadge title='title']        | &#91;title]({{gitHubStarsBadge()}})        |
+///   | &#91;GitHubIssuesBadge title='title']       | &#91;title]({{gitHubIssuesBadge()}})       |
+///   | &#91;GitHubPullRequestsBadge title='title'] | &#91;title]({{gitHubPullRequestsBadge()}}) |
+///   | &#91;GitHubLicenseBadge title='title']      | &#91;title]({{gitHubLicenseBadge()}})      |
+///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions) for more details on these and new functions
+/// * Github-Wiki pages are now generated somewhere in the project folder (e.g. doc\wiki) and need to be copied to GitHub.
+///   This could be done using GitHub actions (e.g. after each commit).
+///   For more information see [Automatically Publishing Wiki pages](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing.md#automatically-publishing-wiki-pages)
 
-// [DocumentationBuilder] isn't actually a builder. Its purpose:
-// - for documentation
-// - a convenient way to run the shell commands to start the builder,
-//   using the build_runner package
-class DocumentationBuilder {
-  /// The [documentation_builder] uses several builders that are run with
-  /// the [build_runner] package.
-  ///
-  /// The [build_runner] is started with the following command in the root of
-  /// the project (ALT+F12 if you are using
-  /// [Android Studio](https://developer.android.com/studio) or [Intellij](https://www.jetbrains.com/idea/)):\
-  /// ```dart run build_runner build --delete-conflicting-outputs```
-  ///
-  /// You’d better clean up before you re-execute [build_runner]:\
-  /// ```dart run build_runner clean```
-  run({bool publishWikiPagesOnGitHub = false}) async {
-    // TODO create shell class, e.g.:
-    // e.g. Shell.run('''
-    // flutter packages pub run build_runner clean
-    // flutter packages pub run build_runner build --delete-conflicting-outputs
-    // ''', StopMode.onErrorOrWarning);
-    //  or maybe there is an existing shell package?
+class DocumentationBuilder implements Builder {
+  final BuilderOptions options;
+  final engine = DocumentationTemplateEngine();
+  VariableMap? _cachedVariables;
 
-    await runInShell('dart', ['run', 'build_runner', 'clean']);
+  late String inputPath = InputPath().getValue(options);
+  late String outputPath = OutputPath().getValue(options);
+  late FileHeaderMap fileHeaders = FileHeaders().getValue(options);
 
-    await runInShell('dart',
-        ['run', 'build_runner', 'build', '--delete-conflicting-outputs']);
+  DocumentationBuilder(this.options);
 
-    if (publishWikiPagesOnGitHub) {
-      var directory = WikiTemplate.destinationDirectoryPath
-          .replaceAll('/', Platform.pathSeparator);
+  /// Every template file that matches the [inputPath] expression
+  /// will be read, parsed, rendered and the results will be
+  /// stored according to the [outputPath] expression.
+  @override
+  Map<String, List<String>> get buildExtensions => {
+        inputPath: [outputPath]
+      };
 
-      await runInShell('git', ['add', '.'], workingDirectory: directory);
-      await runInShell(
-          'git', ['commit', '-m', '"Generated by documentation_builder"'],
-          workingDirectory: directory);
-      await runInShell('git', ['push'], workingDirectory: directory);
+  @override
+  Future<FutureOr<void>> build(BuildStep buildStep) async {
+    try {
+      DocumentationTemplateEngine engine = DocumentationTemplateEngine();
+      var template = BuildStepFileTemplate(buildStep);
+      var parseResult = await engine.parseTemplate(template);
+
+      var variables = await createVariables(buildStep);
+      var renderResult = await engine.render(parseResult, variables);
+      if (renderResult.errorMessage.isNotEmpty) {
+        log.warning('${template.source}: ${renderResult.errorMessage}');
+      } else {
+        /// Convention: each input will have 1 output
+        var outputId = buildStep.allowedOutputs.first;
+        var result = normalizeNewLines(await addOptionalHeader(
+            buildStep, variables, outputId, renderResult.text));
+        buildStep.writeAsString(outputId, result);
+      }
+    } catch (e, stackTrace) {
+      log.severe(e, stackTrace);
     }
   }
 
-  runInShell(String executable, List<String> arguments,
-      {String? workingDirectory,
-      Map<String, String>? environment,
-      Encoding? stdoutEncoding = systemEncoding,
-      Encoding? stderrEncoding = systemEncoding}) async {
-    var result = await Process.run(
-      executable,
-      arguments,
-      workingDirectory: workingDirectory,
-      environment: environment,
-      stdoutEncoding: stdoutEncoding,
-      stderrEncoding: stderrEncoding,
-    );
+  Future<Map<String, dynamic>> getVariables(BuildStep buildStep) async {
+    if (_cachedVariables == null) {}
+    return _cachedVariables!;
+  }
 
-    stdout.write(result.stdout);
-    stderr.write(result.stderr);
+  Future<String> addOptionalHeader(BuildStep buildStep, VariableMap variables,
+      AssetId outputId, String text) async {
+    var headerTemplate = fileHeaders.findFor(outputId);
+    if (headerTemplate == null) {
+      return text;
+    }
+    var parseResult = await engine.parseTemplate(headerTemplate);
+    var renderResult = await engine.render(parseResult, variables);
+    if (renderResult.errorMessage.isNotEmpty) {
+      log.warning(
+          'Error while processing file header: ${renderResult.errorMessage}');
+      return text;
+    }
+    return '${renderResult.text}$newLine$text';
+  }
+
+  Future<VariableMap> createVariables(BuildStep buildStep) async => {
+        BuilderVariable.id: this,
+        BuildStepVariable.id: buildStep,
+        LibraryCacheVariable.id:
+            await buildStep.fetchResource<LibraryCache>(libraryCacheResource),
+        GitHubProject.id:
+            await buildStep.fetchResource<GitHubProject>(gitHubProjectResource),
+        PubDevProject.id:
+            await buildStep.fetchResource<PubDevProject>(pubDevProjectResource),
+      };
+}
+
+class BuildStepFileTemplate extends Template {
+  final BuildStep buildStep;
+
+  BuildStepFileTemplate(this.buildStep) {
+    source = buildStep.inputId.path;
+    sourceTitle = buildStep.inputId.path;
+    text = buildStep.readAsString(buildStep.inputId);
   }
 }
+
+/// Helper class
+class BuildStepVariable {
+  static const String id = 'buildStep';
+
+  /// gets the [BuildStep] from [RenderContext.variables] assuming it was put there first
+  static BuildStep of(RenderContext context) => context.variables[id];
+}
+
+class BuilderVariable {
+  static const String id = 'builder';
+
+  /// gets the [Builder] from [RenderContext.variables] assuming it was put there first
+  static Builder of(RenderContext context) => context.variables[id];
+}
+
+class LibraryCacheVariable {
+  static const String id = 'libraryCache';
+
+  /// gets a [Map] where key = [ProjectFilePath] and value = a [LibraryElement] from the analyzer project.
+  /// We cache these because creating them (parsing) takes time.
+  static LibraryCache of(RenderContext context) => context.variables[id];
+}
+
+/// gets a [Map] where key = [ProjectFilePath]
+/// and value = a [LibraryElement] which is parser tree from the dart source code file.
+/// We cache these because creating them (parsing) takes time.
+typedef LibraryCache = Map<ProjectFilePath2, LibraryElement>;
+
+final libraryCacheResource = Resource<LibraryCache>(() => {});
+final gitHubProjectResource = Resource<GitHubProject>(
+    () async => await GitHubProject.createForThisProject());
+final pubDevProjectResource = Resource<PubDevProject>(
+    () async => await PubDevProject.createForThisProject());

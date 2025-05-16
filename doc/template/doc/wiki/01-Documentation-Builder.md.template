@@ -1,0 +1,3 @@
+![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
+
+{{importDartDoc('lib/src/builder/documentation_builder.dart#DocumentationBuilder')}}

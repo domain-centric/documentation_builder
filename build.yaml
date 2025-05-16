@@ -9,48 +9,13 @@ targets:
       - pubspec.*
       - $package$
     builders:
-      documentation_builder|documentation_model_builder:
+      documentation_builder|documentation_builder:
         enabled: True
-      documentation_builder|dart_code_path_builder:
-        enabled: True
-      documentation_builder|parse_builder:
-        enabled: True
-      documentation_builder|output_builder:
-        enabled: True
-
+      
 builders:
-  documentation_model_builder:
+  documentation_builder:
     import: 'package:documentation_builder/builder.dart'
-    builder_factories: ['documentationModelBuilder']
-    build_extensions:
-      .mdt: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
-    build_to: cache
-    auto_apply: dependents
-    runs_before: [documentation_builder|dart_code_path_builder]
-  dart_code_path_builder:
-    import: 'package:documentation_builder/builder.dart'
-    builder_factories: [ 'dartCodePathBuilder' ]
-    build_extensions:
-      .dart: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
-    build_to: source
-    auto_apply: dependents
-    runs_before: [documentation_builder|parse_builder]
-  parse_builder:
-    import: 'package:documentation_builder/builder.dart'
-    builder_factories: [ 'parseBuilder' ]
-    build_extensions:
-      $lib$: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
-    build_to: source
-    auto_apply: dependents
-    runs_before: [documentation_builder|output_builder]
-  output_builder:
-    import: 'package:documentation_builder/builder.dart'
-    builder_factories: ['outputBuilder']
-    build_extensions:
-      $lib$: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - .* # Note that this is ignored because its overridden by the Builder.buildExtensions method
+    builder_factories: [ 'documentationBuilder' ]
+    build_extensions: {"doc/template/{{fileName}}.mdt": ["{{fileName}}.md"]}
     build_to: source
     auto_apply: dependents

@@ -1,9 +1,0 @@
-You can [07-Generating.mdt title='generate'] and [08-Publishing.mdt title='publish'] the documentation
-files by typing several commands in the command line, but this is cumbersome.
-
-You can therefore also create a tool folder in the root of your project and add the following
-'documentation_builder.dart' file in this folder:
-{ImportDartCode path='tool/documentation_builder.dart'}
-
-You can now run these commands by running the 'documentation_builder.dart' file from your
-favourite IDE.

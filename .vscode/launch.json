@@ -5,6 +5,12 @@
             "type": "dart",
             "request": "launch",
             "program": "tool\\documentation_builder.dart"
+        },
+        {
+            "name": "Dart (test\\src\\engine\\path\\temp_test.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "test\\src\\engine\\path\\temp_test.dart"
         }
     ]
 }

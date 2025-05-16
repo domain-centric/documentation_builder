@@ -1,0 +1,12 @@
+{{allPubGitHubBadges()}}
+ 
+![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
+
+# documentation_builder
+{{importDartDoc('lib/src/builder/documentation_builder.dart#DocumentationBuilder')}}
+
+## Examples
+{{importTemplate('doc/template/example/example.md.template')}}
+
+## Getting Started
+{{importTemplate('doc/template/doc/wiki/02-Getting-Started.md.template')}}

@@ -1,3 +1,0 @@
-{importDartDoc path='lib/src/builder/documentation_builder.dart|DocumentationBuilder.run'}
-
-See also the [09-Generate-and-Publish-Tool.mdt title='Generate and Publish Tool']
