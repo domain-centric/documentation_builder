@@ -41,17 +41,17 @@ import 'package:template_engine/template_engine.dart';
 /// [documentation_builder] 1.0.0 has had major improvements over earlier versions:
 /// * It uses the [DocumentationTemplateEngine] which is an extended version of the [TemplateEngine] from the [template_engine] package
 ///   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
-///   * better error messages with the position within a template file.
-///   * expressions in template file tags can be nested
+///   * Better error messages with the position within a template file.
+///   * Expressions in template file tags can be nested
 ///   * More features: The [DocumentationTemplateEngine] can be extended with custom:
 ///     * dataTypes
 ///     * constants
 ///     * functionGroups
 ///     * operatorGroups
-///   * more consistent template syntax: now all functions
+///   * More consistent template syntax: now all functions
 /// * The input and output file is determined by parameters in the build.yaml file, which is:
-///   * easier to understand than the old DocumentationBuilder conventions
-///   * more flexible: It can now be configured in the build.yaml file
+///   * Easier to understand than the old DocumentationBuilder conventions
+///   * More flexible: It can now be configured in the build.yaml file
 /// * Each generated file can have an optional text header which can be configured in the build.yaml per output file suffix.
 ///
 /// This resulted in the following breaking changes:

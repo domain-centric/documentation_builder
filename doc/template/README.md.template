@@ -5,8 +5,8 @@
 # documentation_builder
 {{importDartDoc('lib/src/builder/documentation_builder.dart#DocumentationBuilder')}}
 
-## Examples
+# Examples
 {{importTemplate('doc/template/example/example.md.template')}}
 
-## Getting Started
+# Getting Started
 {{importTemplate('doc/template/doc/wiki/02-Getting-Started.md.template')}}

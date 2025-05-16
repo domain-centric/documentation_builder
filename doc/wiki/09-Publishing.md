@@ -3,12 +3,12 @@
 You need to publish the [GeneratedMarkdownFile]s to make them available for reading on web pages.
 The following paragraphs will explain how.
 
-# Publishing none Wiki pages
+### Publishing none Wiki pages
 The generated documentation files will become directly available:
 - on https://github.com: by committing and pushing the files to [GitHub](https://github.com) using ```git commit``` and ```git push``` commands
 - on https://pub.dev: by publishing your project to [PubDev](https://pub.dev) using ```dart pub publish``` or ```flutter pub publish``` commands
 
-# Cloning Wiki pages
+### Cloning Wiki pages
 Before you can publish the Wiki files to [GitHub](https://github.com), you must first clone the Wiki pages into your local project. You only have to do this the first time:
 - Create a Wiki page on your github project:
   - Open in browser: ```https://github.com/<user_name>/<repository_name>/wiki```
@@ -21,7 +21,7 @@ Before you can publish the Wiki files to [GitHub](https://github.com), you must 
     (you can also find the clone url on the bottom right of the github Wiki pages)
   - This will create a local repository and folder: ../<repository_name>.wiki (next to your project folder)
 
-# Manually Publishing Wiki pages
+### Manually Publishing Wiki pages
 * Now remove all the wiki pages in the cloned wiki project, because some might no longer exist.
 * Copy the generated wiki files to the cloned wiki project.
 * Commit the local wiki project to GitHub:
@@ -33,7 +33,7 @@ Before you can publish the Wiki files to [GitHub](https://github.com), you must 
     - ```git push```
   - A pop up page may appear for authorization
 
-# Automatically Publishing Wiki pages
+### Automatically Publishing Wiki pages
 Most of the steps above could be automated with help of GitHub action script that is executed every time the generated files of a project are committed:
 On a remote server the script will:
 * Clone the project with generated wiki files

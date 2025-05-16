@@ -11,8 +11,8 @@ import 'package:collection/collection.dart';
 ///     builders:
 ///       documentation_builder:
 ///         options:
-///           input: #your input expression, see the default value for inspiration
-///           output: #your output expression, see the default value for inspiration
+///           inputPath: #your input expression, see the default value for inspiration
+///           outputPath: #your output expression, see the default value for inspiration
 ///           fileHeaders: #your fileHeaders expression, see the default value for inspiration
 /// ```
 /// For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
@@ -73,7 +73,7 @@ class BuildOptionParameterException implements Exception {
 
 /// Build option parameter: inputPath
 /// * Description: An expression where to find template files
-/// * Default value: 'doc/template/{{filePath}}.template'
+/// * Default value: `'doc/template/{{filePath}}.template'`
 class InputPath extends BuildOptionParameter<String> {
   InputPath()
       : super(
@@ -85,7 +85,7 @@ class InputPath extends BuildOptionParameter<String> {
 
 /// Build option parameter: outputPath
 /// * Description: An expression where to store the result files
-/// * Default value: '{{filePath}}'
+/// * Default value: `'{{filePath}}'`
 class OutputPath extends BuildOptionParameter<String> {
   OutputPath()
       : super(
@@ -96,15 +96,18 @@ class OutputPath extends BuildOptionParameter<String> {
 }
 
 /// Build option parameter: fileHeaders
-/// * Description: A map of file suffices and the file header template to be added (which can be null)
-/// * Default value: {
+/// * Description: A map of file suffixes and the file header template to be added (which can be null)
+/// * Default value:
+///   ```
+///   {
 ///   'LICENSE': null,
 ///   'LICENSE.md': null,
 ///   '.md':
 ///       '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)&#92;n&#92;r',
 ///   '.dart':
 ///       '/// This file was generated from: {{inputPath()}} using the documentation_builder package&#92;n&#92;r'
-///    }
+///   }
+///   ```
 class FileHeaders extends BuildOptionParameter<FileHeaderMap> {
   FileHeaders()
       : super(
