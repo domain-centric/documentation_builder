@@ -105,7 +105,10 @@ class GitHubLink extends LinkFunction {
       : super(
           namePrefix: 'gitHub',
           descriptionSuffix: "a web page of your project on github.com",
-          parameters: [SuffixParameter(), TextParameter(),],
+          parameters: [
+            SuffixParameter(),
+            TextParameter(),
+          ],
           function: (
             String position,
             RenderContext renderContext,
@@ -126,7 +129,10 @@ class GitHubWikiLink extends LinkFunction {
       : super(
           namePrefix: 'gitHubWiki',
           descriptionSuffix: "a wiki page of your project on github.com",
-          parameters: [SuffixParameter(), TextParameter(),],
+          parameters: [
+            SuffixParameter(),
+            TextParameter(),
+          ],
           function: (
             String position,
             RenderContext renderContext,
@@ -148,7 +154,6 @@ class GitHubStarsLink extends LinkFunction {
           namePrefix: 'gitHubStars',
           descriptionSuffix: "a stars page of your project on github.com",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -172,7 +177,10 @@ class GitHubIssuesLink extends LinkFunction {
       : super(
           namePrefix: 'gitHubIssues',
           descriptionSuffix: "an issue page of your project on github.com",
-          parameters: [SuffixParameter(), TextParameter(),],
+          parameters: [
+            SuffixParameter(),
+            TextParameter(),
+          ],
           function: (
             String position,
             RenderContext renderContext,
@@ -193,7 +201,10 @@ class GitHubMilestonesLink extends LinkFunction {
       : super(
           namePrefix: 'gitHubMilestones',
           descriptionSuffix: "a milestone page of your project on github.com",
-          parameters: [SuffixParameter(), TextParameter(),],
+          parameters: [
+            SuffixParameter(),
+            TextParameter(),
+          ],
           function: (
             String position,
             RenderContext renderContext,
@@ -215,7 +226,6 @@ class GitHubReleasesLink extends LinkFunction {
           namePrefix: 'gitHubReleases',
           descriptionSuffix: "a releases page of your project on github.com",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -241,7 +251,6 @@ class GitHubPullRequestsLink extends LinkFunction {
           descriptionSuffix:
               "a pull request page of your project on github.com",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -319,7 +328,6 @@ class PubDevChangeLogLink extends LinkFunction {
           namePrefix: 'pubDevChangeLog',
           descriptionSuffix: "the change log page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -344,7 +352,6 @@ class PubDevVersionsLink extends LinkFunction {
           namePrefix: 'pubDevVersions',
           descriptionSuffix: "the version page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -369,7 +376,6 @@ class PubDevExampleLink extends LinkFunction {
           namePrefix: 'pubDevExample',
           descriptionSuffix: "the example page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -394,7 +400,6 @@ class PubDevInstallLink extends LinkFunction {
           namePrefix: 'pubDevInstall',
           descriptionSuffix: "the install page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -419,7 +424,6 @@ class PubDevScoreLink extends LinkFunction {
           namePrefix: 'pubDevScore',
           descriptionSuffix: "the score page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],
@@ -444,7 +448,6 @@ class PubDevLicenseLink extends LinkFunction {
           namePrefix: 'pubDevLicense',
           descriptionSuffix: "the license page of your project on pub.dev",
           parameters: [
-            
             SuffixParameter(),
             TextParameter(),
           ],

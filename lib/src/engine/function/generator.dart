@@ -31,7 +31,6 @@ class GitHubMileStones extends ExpressionFunction {
                       'The state of the milestones, either: ${GitHubMileStonesStates.toValuesString()}',
                   presence: Presence.optionalWithDefaultValue('all')),
             ],
-            //TODO in general template engine should catch exceptions during rendering, so we can throw normal exceptions here
             function: (position, renderContext, parameters) async {
               var stateParameterValue = parameters[stateId] as String;
               var state =
@@ -86,7 +85,6 @@ class TableOfContents extends ExpressionFunction {
                 presence: Presence.optionalWithDefaultValue(true),
               ),
             ],
-            //TODO in general template engine should catch exceptions during rendering, so we can throw normal exceptions here
             function: (position, renderContext, parameters) async {
               var factory = TableOfContentsFactory();
               var relativePath = parameters[pathId] as String;

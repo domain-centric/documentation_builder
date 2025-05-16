@@ -39,11 +39,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/7845b3bbce69884d3eb6dc9482294d910cc67ead/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/7845b3bbce69884d3eb6dc9482294d910cc67ead/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/8b10b6208bfb4b745e09b7d922ac8775eeb5ec01/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/8b10b6208bfb4b745e09b7d922ac8775eeb5ec01/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * better error messages with the position within a template file.
   * expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/7845b3bbce69884d3eb6dc9482294d910cc67ead/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/8b10b6208bfb4b745e09b7d922ac8775eeb5ec01/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups

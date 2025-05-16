@@ -130,14 +130,16 @@ class EndOfInputOrPreviousFailureParser extends Parser<void> {
 /// - lib/my_library.dart#MyExtension.myFieldName.set
 /// - lib/my_library.dart#MyExtension.myMethod
 class SourcePath {
-   late ProjectFilePath2 projectFilePath;
+  late ProjectFilePath2 projectFilePath;
   late DartMemberPath? dartLibraryMemberPath;
 
   static pathParser() => (ProjectFilePath2._pathParser()
               .map((values) => ProjectFilePath2(values.join('/'))) &
-          (char('#') & DartMemberPath._pathParser().map((values) => DartMemberPath(values.join('.'))))
-              .repeat(0, 1)
-              ) .endOrPreviousFailure();
+          (char('#') &
+                  DartMemberPath._pathParser()
+                      .map((values) => DartMemberPath(values.join('.'))))
+              .repeat(0, 1))
+      .endOrPreviousFailure();
 
   SourcePath(String path) {
     var result = pathParser().parse(path);
@@ -147,9 +149,9 @@ class SourcePath {
     }
     var values = result.value;
     projectFilePath = values.first;
-    dartLibraryMemberPath = values.last.isEmpty ? null : result.value.last.first.last;
+    dartLibraryMemberPath =
+        values.last.isEmpty ? null : result.value.last.first.last;
   }
- 
 }
 
 /// A [DartMemberPath] is a dot separated path to a member inside the Dart file.

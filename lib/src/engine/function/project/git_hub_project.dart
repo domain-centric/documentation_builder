@@ -144,7 +144,8 @@ class GitHubProject {
     return latestCommitSha.trim();
   }
 
-  late Uri rawUri = Uri.https('raw.githubusercontent.com', '${uri.path}/refs/heads/main');
+  late Uri rawUri =
+      Uri.https('raw.githubusercontent.com', '${uri.path}/refs/heads/main');
 }
 
 enum GitHubMileStonesStates {

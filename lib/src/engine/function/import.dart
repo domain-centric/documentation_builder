@@ -8,11 +8,10 @@ import 'package:template_engine/template_engine.dart';
 import 'package:documentation_builder/src/engine/function/util/path_parsers.dart'
     as p;
 
-/// [Function]s from the [template_engine] package and this package 
+/// [Function]s from the [template_engine] package and this package
 /// in an order that makes most sense for documentation_builder
 class MergedImportFunctions extends FunctionGroup {
-  MergedImportFunctions()
-      : super('Import Functions', createFunctions());
+  MergedImportFunctions() : super('Import Functions', createFunctions());
 
   static List<ExpressionFunction> createFunctions() {
     var functions = <ExpressionFunction>[
@@ -185,7 +184,8 @@ class ImportDartDoc extends ExpressionFunction {
     var path = SourcePath(parameters[sourceName] as String);
     var library = await resolveLibrary(renderContext, path.projectFilePath);
 
-    var foundElement = findElementRecursively(library, path.dartLibraryMemberPath!);
+    var foundElement =
+        findElementRecursively(library, path.dartLibraryMemberPath!);
     validateIfMemberFound(foundElement, path);
 
     var docComments = foundElement!.documentationComment ?? '';

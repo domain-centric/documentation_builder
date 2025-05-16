@@ -35,7 +35,7 @@ class TableOfContentsFactory {
         String markDown = await parseAndRender(file, renderContext);
         var newTitleLinks =
             findTitles(outputFileName: outputFileName, markDown: markDown);
-        newTitleLinks=toListWithoutLevelGabs(newTitleLinks);    
+        newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
         titleLinks.addAll(newTitleLinks);
       }
       return titleLinks.map((t) => t.markDown).join(newLine);
@@ -133,56 +133,68 @@ class TableOfContentsFactory {
     var normalizedRelativePath = convertSeparators(nativeRelativePath, '/');
     return normalizedRelativePath;
   }
-  
+
   List<TitleLink> toListWithoutLevelGabs(List<TitleLink> titleLinks) {
-    var tree=createTitleNodes(titleLinks);
-    return tree.map((titleNode) => titleNode.createTitleLinks(1)).flattened.toList();
+    var tree = createTitleNodes(titleLinks);
+    return tree
+        .map((titleNode) => titleNode.createTitleLinks(1))
+        .flattened
+        .toList();
   }
-  
+
   List<TitleNode> createTitleNodes(List<TitleLink> titleLinks) {
-      var root=<TitleNode>[];
-      TitleLink? current;
-      var children=<TitleLink>[];
-      for (var titleLink in titleLinks) {
-        if (current==null) {
-          current=titleLink;
+    var root = <TitleNode>[];
+    TitleLink? current;
+    var children = <TitleLink>[];
+    for (var titleLink in titleLinks) {
+      if (current == null) {
+        current = titleLink;
+      } else {
+        if (titleLink.level <= current.level) {
+          var titleNode = createTitleNode(current, children);
+          root.add(titleNode);
+          current = titleLink;
+          children.clear();
         } else {
-          if (titleLink.level <=current.level) {
-            var titleNode = createTitleNode(current, children);
-            root.add(titleNode);
-            current=titleLink;
-            children.clear();
-          } else {
-            children.add(titleLink);
-          }
+          children.add(titleLink);
         }
       }
-      if (current==null) return [];
-            var titleNode = createTitleNode(current, children);
-            root.add(titleNode);
-      return root;
+    }
+    if (current == null) return [];
+    var titleNode = createTitleNode(current, children);
+    root.add(titleNode);
+    return root;
   }
-  
-  TitleNode createTitleNode(TitleLink parent, List<TitleLink> children) => TitleNode(relativePath: parent.relativePath, title: parent.title, fragment: parent.fragment, children: createTitleNodes(children));
+
+  TitleNode createTitleNode(TitleLink parent, List<TitleLink> children) =>
+      TitleNode(
+          relativePath: parent.relativePath,
+          title: parent.title,
+          fragment: parent.fragment,
+          children: createTitleNodes(children));
 }
 
-
 class TitleNode {
-   final String relativePath;
+  final String relativePath;
   final String title;
   final String fragment;
   final List<TitleNode> children;
 
-  TitleNode({required this.relativePath, required this.title, required this.fragment, required this.children});
+  TitleNode(
+      {required this.relativePath,
+      required this.title,
+      required this.fragment,
+      required this.children});
 
-   List<TitleLink> createTitleLinks(int level) {
-    var links=<TitleLink>[];
+  List<TitleLink> createTitleLinks(int level) {
+    var links = <TitleLink>[];
     links.add(createTitleLink(level));
-    links.addAll(children.map((c)=> c.createTitleLink(level+1)));
+    links.addAll(children.map((c) => c.createTitleLink(level + 1)));
     return links;
-   }
-   
-     TitleLink createTitleLink(int level) => TitleLink(relativePath: relativePath, title: title, level: level);
+  }
+
+  TitleLink createTitleLink(int level) =>
+      TitleLink(relativePath: relativePath, title: title, level: level);
 }
 
 /// dummy function to prevent round trips.

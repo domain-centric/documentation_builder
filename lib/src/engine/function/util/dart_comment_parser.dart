@@ -124,7 +124,7 @@ class ReferenceConverter extends RenderFunction {
       return MarkDownLink(linkText, libraryUri).toString();
     }
 
-    /// not a recognized so return as is. TODO log as warning?
+    /// not recognized so return as is.
     return Future.value('[$linkText]');
   }
 
@@ -136,11 +136,7 @@ class ReferenceConverter extends RenderFunction {
     Element docCommentsOwner,
     String reference,
   ) async {
-    //TODO reference can be something related to the element or the library or could be a DartType. for now we use the docCommentsOwner
-
     try {
-      //TODO if reference is a type: check if there is a anchor for this path inside the other templates (look in wiki first?). if so, return a url to the anchor in the output file
-
       final library = docCommentsOwner.library;
       final sourceUri = library?.source.uri;
       if (sourceUri == null) {
@@ -242,16 +238,15 @@ class ValidateLink extends RenderFunction {
       final uri = Uri.parse(linkUrl);
 
       if (!uri.hasScheme || !uri.hasAuthority) {
-        log.warning('Invalid URL: $linkUrl'); //TODO add dartCodePath
+        log.warning('Invalid URL: $linkUrl');
       }
       if (uri.scheme == 'http' || uri.scheme == 'https') {
         if (!await uri.canGetWithHttp()) {
-          log.warning(
-              'URL did not return a successful response: $linkUrl'); //TODO add dartCodePath
+          log.warning('URL did not return a successful response: $linkUrl');
         }
       }
     } catch (e) {
-      log.warning('Invalid URL: $linkUrl, Error: $e'); //TODO add dartCodePath
+      log.warning('Invalid URL: $linkUrl, Error: $e');
     }
   }
 }
