@@ -92,9 +92,8 @@ class TableOfContentsFactory {
   List<TitleLink> findTitles(
       {required String outputFileName, required String markDown}) {
     var parser = _markdownTitleParser();
-    markDown =
-        newLine + markDown; // hack to ensure we find a title on the first line
-    var matches = parser.allMatches(markDown);
+    var matches = parser.allMatches(
+        '\n\r\n$markDown'); // \n\r\n are added to ensure the parser also matched the first line
     var titleLinks = <TitleLink>[];
     for (var match in matches) {
       var titleLink = TitleLink(
@@ -214,11 +213,11 @@ Some paragraph text.
 ### Sub-subtitle
 Another paragraph.
 # Another Title
-This is a hashtag: #, not a title
+This is a hashtag: # not a title
 ''';
 
   var parser = _markdownTitleParser();
-  var matches = parser.allMatches(markdownText);
+  var matches = parser.allMatches('\n$markdownText');
   for (var match in matches) {
     print('title: ${match.title}, level: ${match.hashes.length}');
   }
@@ -273,16 +272,18 @@ class TitleLink {
       .replaceFirst(RegExp(r'\..*'), ''); // remove file extensions
 }
 
+//FIXME does not capture 2 titles in a row in 06-Functions.md.template
 Parser<({String hashes, String title})> _markdownTitleParser() {
+  final Parser<String> newLine = (string('\n\r') | char('\n')).flatten();
   final Parser<String> hash = char('#');
   final Parser<String> hashes = hash.plus().flatten(); // One or more #
   final Parser<String> optionalWhiteSpace =
-      anyOf(" \t").star().flatten(); // One or more non-newline whitespace
+      anyOf(" \t").star().flatten(); // Zero or more non-newline whitespaces
   final Parser<String> whitespace =
-      anyOf(" \t").plus().flatten(); // One or more non-newline whitespace
-  final Parser<String> titleText = any().starLazy(newline()).flatten().trim();
+      anyOf(" \t").plus().flatten(); // One or more none newline whitespace
+  final Parser<String> titleText = any().starLazy(newline()).flatten();
   return SequenceParser([
-    newline(),
+    newLine,
     optionalWhiteSpace,
     hashes,
     whitespace,

@@ -14,7 +14,7 @@ You can view the templates files and the generated output on https://github.com 
 ### CHANGELOG.md
 * {{referenceLink('doc/template/CHANGELOG.md.template', 'Template example')}}
 * {{gitHubRawLink('/CHANGELOG.md', 'Generated example')}}
-* {{pubDevVersionsLink(text='Rendered example')}}
+* {{pubDevChangeLogLink(text='Rendered example')}}
 
 ### Barrel (dart library file containing export statements)
 * TODO
