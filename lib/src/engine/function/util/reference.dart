@@ -106,10 +106,10 @@ class SourceLinkFactory implements MarkDownLinkFactory {
     var dartLibraryMemberPath = path.dartLibraryMemberPath;
     if (dartLibraryMemberPath == null) {
       var uri = GitHubProject.of(context).sourceFileUri(path.projectFilePath);
-    //FIXME  if (await uri.canGetWithHttp()) {
+      if (await uri.canGetWithHttp()) {
         return MarkDownLink(text ?? uri.toString(), uri);
-      // }
-      // return null;
+      }
+      return null;
     }
 
     var library = await resolveLibrary(context, path.projectFilePath);

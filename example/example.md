@@ -18,11 +18,11 @@ You can view the templates files and the generated output on https://github.com 
 * [Generated example](https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/main/CHANGELOG.md)
 * [Rendered example](https://pub.dev/packages/documentation_builder/versions)
 
-### Barrel File (containing export statements)
+### Barrel (dart library file containing export statements)
 * TODO
 
-### example
-* [Template example](https://github.com/domain-centric/documentation_builder/blob/main/doc/template/example.md.template)
+### example.md
+* [Template example](https://github.com/domain-centric/documentation_builder/blob/main/doc/template/example/example.md.template)
 * [Generated example](https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/mainexample/example.md)
 * [Rendered example](https://pub.dev/packages/documentation_builder/example)
 

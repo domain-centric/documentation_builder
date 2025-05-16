@@ -20,7 +20,7 @@ You can view the templates files and the generated output on https://github.com 
 * TODO
 
 ### example.md
-* {{referenceLink('doc/template/example.md.template', 'Template example')}}
+* {{referenceLink('doc/template/example/example.md.template', 'Template example')}}
 * {{gitHubRawLink('example/example.md', 'Generated example')}}
 * {{pubDevExampleLink(text='Rendered example')}}
 
