@@ -16,7 +16,10 @@ jobs:
     steps:
       - name: Checkout main repository
         uses: actions/checkout@v3
-
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Clone the wiki repository
         run: |
           git clone "https://github.com/domain-centric/documentation_builder.wiki.git" /tmp/wiki
