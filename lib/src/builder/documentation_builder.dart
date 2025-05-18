@@ -211,7 +211,7 @@ class BuildStepFileTemplate extends Template {
     try {
       await text;
       return true;
-    } on FormatException catch (e) {
+    } on FormatException  {
       return false;
     }
   }
