@@ -124,9 +124,19 @@ class DocumentationBuilder implements Builder {
 
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
+    var template = BuildStepFileTemplate(buildStep);
+    if (await template.isTextFile) {
+      await parseAndRenderTextTemplate(template, buildStep);
+    } else {
+      await copyFile(buildStep);
+    }
+  }
+
+  Future<void> parseAndRenderTextTemplate(
+      BuildStepFileTemplate template, BuildStep buildStep) async {
     try {
       DocumentationTemplateEngine engine = DocumentationTemplateEngine();
-      var template = BuildStepFileTemplate(buildStep);
+
       var parseResult = await engine.parseTemplate(template);
 
       var variables = await createVariables(buildStep);
@@ -142,6 +152,16 @@ class DocumentationBuilder implements Builder {
       }
     } catch (e, stackTrace) {
       log.severe(e, stackTrace);
+    }
+  }
+
+  Future<void> copyFile(BuildStep buildStep) async {
+    // Read the binary content of the image
+    final bytes = await buildStep.readAsBytes(buildStep.inputId);
+
+    for (var outputId in buildStep.allowedOutputs) {
+      // Write the binary content to the new location
+      await buildStep.writeAsBytes(outputId, bytes);
     }
   }
 
@@ -185,6 +205,15 @@ class BuildStepFileTemplate extends Template {
     source = buildStep.inputId.path;
     sourceTitle = buildStep.inputId.path;
     text = buildStep.readAsString(buildStep.inputId);
+  }
+
+  Future<bool> get isTextFile async {
+    try {
+      await text;
+      return true;
+    } on FormatException catch (e) {
+      return false;
+    }
   }
 }
 

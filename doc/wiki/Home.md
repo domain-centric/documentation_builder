@@ -10,7 +10,7 @@
 [![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE.md)
 
 **Table of contents**
-* [**01 Documentation Builder**](01-Documentation-Builderdart)
+* [**01 Documentation Builder**](01-Documentation-Builder)
   * [Features](01-Documentation-Builder#features)
   * [Breaking Changes](01-Documentation-Builder#breaking-changes)
 * [**02 Getting Started**](02-Getting-Started)
@@ -151,4 +151,5 @@
   * [CHANGELOG.md](10-Examples#changelogmd)
   * [example.md](10-Examples#examplemd)
   * [Wiki pages](10-Examples#wiki-pages)
+* [**documentation builder**](documentation_builder.jpeg)
 * [**Home**](Home)
