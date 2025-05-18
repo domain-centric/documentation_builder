@@ -123,6 +123,7 @@ Examples:
 <tr><td>expression example:</td><td colspan="4">{{ tableOfContents('path value') }}</td></tr>
 <tr><td>parameter:</td><td>path</td><td>String</td><td>mandatory</td><td>A relative project path (always with slash forward) to a template file (e.g.: doc/template/README.md.template) or a folder with template files (e.g.: doc/template/doc/wiki)</td></tr>
 <tr><td>parameter:</td><td>includeFileLink</td><td>boolean</td><td>optional (default=true)</td><td>If the title links should be preceded with a link to the file</td></tr>
+<tr><td>parameter:</td><td>gitHubWiki</td><td>boolean</td><td>optional (default=false)</td><td>Will remove the .md extension from the links so that they work correctly inside gitHub wiki pages</td></tr>
 </table>
 
 ## gitHubMileStones Function

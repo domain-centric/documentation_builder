@@ -11,8 +11,11 @@ import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
 class TableOfContentsFactory {
-  createMarkDown(RenderContext renderContext, String relativePath,
-      bool includeFileLink) async {
+  createMarkDown(
+      {required RenderContext renderContext,
+      required String relativePath,
+      required bool includeFileLink,
+      required bool gitHubWiki}) async {
     try {
       var titleLinks = <TitleLink>[];
       var path = convertSeparators(
@@ -29,12 +32,15 @@ class TableOfContentsFactory {
         }
         var outputFileName = outputs.first.pathSegments.last;
         if (includeFileLink) {
-          var titleLink = TitleLink.fromFileName(outputFileName);
+          var titleLink = TitleLink.fromFileName(
+              relativePath: outputFileName, removeMdExtension: gitHubWiki);
           titleLinks.add(titleLink);
         }
         String markDown = await parseAndRender(file, renderContext);
-        var newTitleLinks =
-            findTitles(outputFileName: outputFileName, markDown: markDown);
+        var newTitleLinks = findTitles(
+            outputFileName: outputFileName,
+            markDown: markDown,
+            removeMdExtension: gitHubWiki);
         newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
         titleLinks.addAll(newTitleLinks);
       }
@@ -90,14 +96,18 @@ class TableOfContentsFactory {
   }
 
   List<TitleLink> findTitles(
-      {required String outputFileName, required String markDown}) {
+      {required String outputFileName,
+      required String markDown,
+      required bool removeMdExtension}) {
     var parser = _markdownTitleParser();
     var matches = parser.allMatches(
         '\n\r\n$markDown'); // \n\r\n are added to ensure the parser also matched the first line
     var titleLinks = <TitleLink>[];
     for (var match in matches) {
       var titleLink = TitleLink(
-          relativePath: outputFileName,
+          relativePath: removeMdExtension
+              ? outputFileName.replaceFirst(RegExp(r'\.md$'), '')
+              : outputFileName,
           title: match.title,
           level: match.hashes.length);
       titleLinks.add(titleLink);
@@ -234,8 +244,12 @@ class TitleLink {
       {required this.relativePath, required this.title, required this.level})
       : fragment = createFragmentFromTitle(title);
 
-  TitleLink.fromFileName(this.relativePath)
+  TitleLink.fromFileName(
+      {required String relativePath, required bool removeMdExtension})
       : title = toBold(createTitleFromRelativePath(relativePath)),
+        relativePath = removeMdExtension
+            ? relativePath.replaceFirst(RegExp(r'\.md$'), '')
+            : relativePath,
         level = 0,
         fragment = '';
 

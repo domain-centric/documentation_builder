@@ -60,6 +60,7 @@ class GitHubMileStones extends ExpressionFunction {
 class TableOfContents extends ExpressionFunction {
   static const pathId = 'path';
   static const includeFileLinkId = 'includeFileLink';
+  static const gitHubWikiId = 'gitHubWiki';
   static const nameId = 'tableOfContents';
 
   TableOfContents()
@@ -84,13 +85,23 @@ class TableOfContents extends ExpressionFunction {
                     'If the title links should be preceded with a link to the file',
                 presence: Presence.optionalWithDefaultValue(true),
               ),
+              Parameter<bool>(
+                name: gitHubWikiId,
+                description:
+                    'Will remove the .md extension from the links so that they work correctly inside gitHub wiki pages',
+                presence: Presence.optionalWithDefaultValue(false),
+              )
             ],
             function: (position, renderContext, parameters) async {
               var factory = TableOfContentsFactory();
               var relativePath = parameters[pathId] as String;
               var includeFileLink = parameters[includeFileLinkId] as bool;
+              var gitHubWiki = parameters[gitHubWikiId] as bool;
               return factory.createMarkDown(
-                  renderContext, relativePath, includeFileLink);
+                  renderContext: renderContext,
+                  relativePath: relativePath,
+                  includeFileLink: includeFileLink,
+                  gitHubWiki: gitHubWiki);
             });
 }
 

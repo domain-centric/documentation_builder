@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/doc/wiki/Home.template using the documentation_builder package)
+[//]: # (This file was generated from: doc/template/doc/wiki/Home.md.template using the documentation_builder package)
 
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
@@ -7,10 +7,10 @@
 [![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/stargazers)
 [![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)
 [![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)
-[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
+[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE.md)
 
 **Table of contents**
-* [**01 Documentation Builder**](01-Documentation-Builder)
+* [**01 Documentation Builder**](01-Documentation-Builderdart)
   * [Features](01-Documentation-Builder#features)
   * [Breaking Changes](01-Documentation-Builder#breaking-changes)
 * [**02 Getting Started**](02-Getting-Started)
@@ -146,9 +146,9 @@
   * [Manually Publishing Wiki pages](09-Publishing#manually-publishing-wiki-pages)
   * [Automatically Publishing Wiki pages](09-Publishing#automatically-publishing-wiki-pages)
 * [**10 Examples**](10-Examples)
-  * [README](10-Examples#readmemd)
-  * [LICENSE](10-Examples#licensemd)
-  * [CHANGELOG](10-Examples#changelogmd)
-  * [example](10-Examples#examplemd)
+  * [README.md](10-Examples#readmemd)
+  * [LICENSE.md](10-Examples#licensemd)
+  * [CHANGELOG.md](10-Examples#changelogmd)
+  * [example.md](10-Examples#examplemd)
   * [Wiki pages](10-Examples#wiki-pages)
 * [**Home**](Home)
