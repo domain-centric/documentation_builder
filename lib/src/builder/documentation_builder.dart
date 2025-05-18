@@ -101,7 +101,7 @@ import 'package:template_engine/template_engine.dart';
 ///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions) for more details on these and new functions
 /// * Github-Wiki pages are now generated somewhere in the project folder (e.g. doc\wiki) and need to be copied to GitHub.
 ///   This could be done using GitHub actions (e.g. after each commit).
-///   For more information see [Automatically Publishing Wiki pages](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing.md#automatically-publishing-wiki-pages)
+///   For more information see [Automatically Publishing Wiki pages](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing#automatically-publishing-wiki-pages)
 
 class DocumentationBuilder implements Builder {
   final BuilderOptions options;
