@@ -1,11 +1,15 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:build/build.dart';
+import 'package:documentation_builder/src/engine/function/project/local_project.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// Alternative [ProjectFilePath2] other than [template_engine] package, because we need to do without endWithBetterFailure() for [SourcePath];
 class ProjectFilePath2 {
   final String relativePath;
+
+
 
   static Parser<String> _fileOrFolderName() => (ChoiceParser([
         letter(),
@@ -27,7 +31,7 @@ class ProjectFilePath2 {
           .map<List<String>>((values) => [values[0], ...values[1]]);
   //.endWithBetterFailure();
 
-  ProjectFilePath2(this.relativePath) {
+  ProjectFilePath2(String relativePath) :this.relativePath=normalize(relativePath) {
     validate(relativePath);
   }
 
@@ -44,15 +48,6 @@ class ProjectFilePath2 {
     return value2.last;
   }
 
-  File get file {
-    var projectPath = Directory.current.path;
-    var filePath = [
-      ...projectPath.split(Platform.pathSeparator),
-      ...relativePath.split('/'),
-    ].join(Platform.pathSeparator);
-    return File(filePath);
-  }
-
   Uri get githubUri =>
       Uri.parse('https://github.com/domain-centric/template_engine/blob/main/'
           '$relativePath');
@@ -61,6 +56,27 @@ class ProjectFilePath2 {
 
   @override
   String toString() => relativePath;
+  
+  /// when [AssetId] is used as relative path, it could be missing the lib folder.
+  /// if so the lib folder is added
+  static String normalize(String relativePath) {
+       var filePath = [
+      ...LocalProject.directory.path.split(Platform.pathSeparator),
+      ...relativePath.split('/'),
+    ].join(Platform.pathSeparator);
+    if (File(filePath).existsSync()) {
+        return relativePath;
+    }
+    filePath = [
+      ...LocalProject.directory.path.split(Platform.pathSeparator),
+      'lib',
+      ...relativePath.split('/'),
+      ].join(Platform.pathSeparator);
+     if (File(filePath).existsSync()) {
+        return 'lib/$relativePath';
+    } 
+    return relativePath;
+  }
 }
 
 extension EndOrPreviousFailureExtension<R> on Parser<R> {
@@ -152,6 +168,7 @@ class SourcePath {
     dartLibraryMemberPath =
         values.last.isEmpty ? null : result.value.last.first.last;
   }
+
 }
 
 /// A [DartMemberPath] is a dot separated path to a member inside the Dart file.
@@ -205,4 +222,5 @@ class DartMemberPath extends UnmodifiableListView<String> {
 
   @override
   String toString() => join('.');
+
 }

@@ -115,7 +115,7 @@ class ReferenceConverter extends RenderFunction {
       Uri packageUri = (await PubDevProject.createForProject(linkText)).uri;
       return MarkDownLink(linkText, packageUri).toString();
     } catch (e) {
-      // failed, try to get a code reference
+      // failed, try to get a package reference on pub.dev
     }
 
     Uri? libraryUri =
@@ -143,7 +143,7 @@ class ReferenceConverter extends RenderFunction {
         return null;
       }
       var path = ProjectFilePath2(sourceUri.pathSegments.skip(1).join('/'));
-
+      print('444 $path');
       var gitHubProject = GitHubProject.of(renderContext);
 
       String? commitSHA = gitHubProject.getLatestCommitSHA();
