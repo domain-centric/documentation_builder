@@ -52,7 +52,6 @@ class UriFunction extends ExpressionFunction<Uri> {
   }
 }
 
-/// TODO change the type to [File] so we can later we can use function chaining
 class InputPath extends ExpressionFunction<String> {
   InputPath()
       : super(
@@ -72,7 +71,6 @@ class InputPath extends ExpressionFunction<String> {
         );
 }
 
-/// TODO change the type to [File] so we can later we can use function chaining
 class OutputPath extends ExpressionFunction<String> {
   OutputPath()
       : super(

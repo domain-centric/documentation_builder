@@ -18,11 +18,11 @@ import 'package:template_engine/template_engine.dart';
 /// and want to reuse/import Dart code or Dart documentation comments.
 ///
 /// It can generate any type of text file e.g.:
-/// * README.md
-/// * CHANGELOG.md
-/// * LICENSE.md
-/// * Example files
-/// * GitHub wiki files
+/// * [README.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#readmemd)
+/// * [LICENSE.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#licensemd)
+/// * [CHANGELOG.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#changelogmd)
+/// * [Example files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#examplemd)
+/// * [GitHub wiki files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#pages)
 /// * or any other text file
 ///
 /// [documentation_builder] is not intended to generate API documentation.
@@ -49,10 +49,10 @@ import 'package:template_engine/template_engine.dart';
 ///     * functionGroups
 ///     * operatorGroups
 ///   * More consistent template syntax: now all functions
-/// * The input and output file is determined by parameters in the build.yaml file, which is:
+/// * The [input and output file is determined by parameters in the build.yaml file](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-inputpath), which is:
 ///   * Easier to understand than the old DocumentationBuilder conventions
 ///   * More flexible: It can now be configured in the build.yaml file
-/// * Each generated file can have an optional text header which can be configured in the build.yaml per output file suffix.
+/// * Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders). 
 ///
 /// This resulted in the following breaking changes:
 /// * Tags

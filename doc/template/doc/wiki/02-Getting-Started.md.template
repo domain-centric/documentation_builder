@@ -1,4 +1,4 @@
-### Step by step
+## Step by step
 * Read the [Wiki documentation]({{gitHubWikiUri()}})
 * [Install the documentation_builder package]({{pubDevInstallUri()}}) in your project
 * Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
@@ -19,11 +19,14 @@
 * [Generate the documentation files]({{gitHubWikiUri('08-Generating.md')}})
 * [Publish the documentation files]({{gitHubWikiUri('09-Publishing.md')}})
 
-### Build configuration
+## Build configuration
 {{importDartDoc('lib/src/builder/build_option_parameter.dart#BuildOptionParameter')}}
 
+### Build option parameter: inputPath
 {{importDartDoc('lib/src/builder/build_option_parameter.dart#InputPath')}}
 
+### Build option parameter: outputPath
 {{importDartDoc('lib/src/builder/build_option_parameter.dart#OutputPath')}}
 
+### Build option parameter: fileHeaders
 {{importDartDoc('lib/src/builder/build_option_parameter.dart#FileHeaders')}}

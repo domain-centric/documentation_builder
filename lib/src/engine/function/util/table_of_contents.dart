@@ -286,7 +286,6 @@ class TitleLink {
       .replaceFirst(RegExp(r'\..*'), ''); // remove file extensions
 }
 
-//FIXME does not capture 2 titles in a row in 06-Functions.md.template
 Parser<({String hashes, String title})> _markdownTitleParser() {
   final Parser<String> newLine = (string('\n\r') | char('\n')).flatten();
   final Parser<String> hash = char('#');

@@ -71,7 +71,6 @@ class BuildOptionParameterException implements Exception {
             'build.yaml: Builder option parameter ${parameterName} $message';
 }
 
-/// Build option parameter: inputPath
 /// * Description: An expression where to find template files
 /// * Default value: `'doc/template/{{filePath}}.template'`
 class InputPath extends BuildOptionParameter<String> {
@@ -83,7 +82,6 @@ class InputPath extends BuildOptionParameter<String> {
         );
 }
 
-/// Build option parameter: outputPath
 /// * Description: An expression where to store the result files
 /// * Default value: `'{{filePath}}'`
 class OutputPath extends BuildOptionParameter<String> {
@@ -95,7 +93,6 @@ class OutputPath extends BuildOptionParameter<String> {
         );
 }
 
-/// Build option parameter: fileHeaders
 /// * Description: A map of file suffixes and the file header template to be added (which can be null)
 /// * Default value:
 ///   ```

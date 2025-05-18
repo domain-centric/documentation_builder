@@ -18,11 +18,11 @@ This can be useful when you write documentation for a
 and want to reuse/import Dart code or Dart documentation comments.
 
 It can generate any type of text file e.g.:
-* README.md
-* CHANGELOG.md
-* LICENSE.md
-* Example files
-* GitHub wiki files
+* [README.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#readmemd)
+* [LICENSE.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#licensemd)
+* [CHANGELOG.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#changelogmd)
+* [Example files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#examplemd)
+* [GitHub wiki files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#pages)
 * or any other text file
 
 [documentation_builder](https://pub.dev/packages/documentation_builder) is not intended to generate API documentation.
@@ -39,20 +39,20 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/2d38b711c3802450f3874f42791a27639ab0944b/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/2d38b711c3802450f3874f42791a27639ab0944b/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/6b5bcd97c99af5e8d0a4602fb4f68fce1dd03b22/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/6b5bcd97c99af5e8d0a4602fb4f68fce1dd03b22/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/2d38b711c3802450f3874f42791a27639ab0944b/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/6b5bcd97c99af5e8d0a4602fb4f68fce1dd03b22/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
     * operatorGroups
   * More consistent template syntax: now all functions
-* The input and output file is determined by parameters in the build.yaml file, which is:
+* The [input and output file is determined by parameters in the build.yaml file](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-inputpath), which is:
   * Easier to understand than the old DocumentationBuilder conventions
   * More flexible: It can now be configured in the build.yaml file
-* Each generated file can have an optional text header which can be configured in the build.yaml per output file suffix.
+* Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders). 
 
 This resulted in the following breaking changes:
 * Tags
@@ -132,7 +132,7 @@ You can view the templates files and the generated output on https://github.com 
 * [Rendered examples](https://github.com/domain-centric/documentation_builder/wiki)
 
 # Getting Started
-### Step by step
+## Step by step
 * Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
 * [Install the documentation_builder package](https://pub.dev/packages/documentation_builder/install) in your project
 * Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
@@ -153,7 +153,7 @@ You can view the templates files and the generated output on https://github.com 
 * [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki08-Generating.md)
 * [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki09-Publishing.md)
 
-### Build configuration
+## Build configuration
 [documentation_builder](https://pub.dev/packages/documentation_builder) build options have default values.
 You can override these default values by adding the following lines to the defaults section of a build.yaml file (merge these lines if build.yaml file already exists):
 ```
@@ -168,15 +168,15 @@ targets:
 ```
 For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 
-Build option parameter: inputPath
+### Build option parameter: inputPath
 * Description: An expression where to find template files
 * Default value: `'doc/template/{{filePath}}.template'`
 
-Build option parameter: outputPath
+### Build option parameter: outputPath
 * Description: An expression where to store the result files
 * Default value: `'{{filePath}}'`
 
-Build option parameter: fileHeaders
+### Build option parameter: fileHeaders
 * Description: A map of file suffixes and the file header template to be added (which can be null)
 * Default value:
   ```
