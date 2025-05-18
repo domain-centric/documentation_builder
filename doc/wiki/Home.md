@@ -149,7 +149,6 @@
   * [README.md](10-Examples.md#readmemd)
   * [LICENSE.md](10-Examples.md#licensemd)
   * [CHANGELOG.md](10-Examples.md#changelogmd)
-  * [Barrel (dart library file containing export statements)](10-Examples.md#barrel-dart-library-file-containing-export-statements)
   * [example.md](10-Examples.md#examplemd)
   * [Wiki pages](10-Examples.md#wiki-pages)
 * [**Home**](Home.md)

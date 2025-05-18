@@ -34,14 +34,11 @@ Before you can publish the Wiki files to [GitHub](https://github.com), you must 
   - A pop up page may appear for authorization
 
 ### Automatically Publishing Wiki pages
-Most of the steps above could be automated with help of GitHub action script that is executed every time the generated files of a project are committed:
+Most of the steps above could be automated with help of GitHub workflow script that is executed every time the generated files of a project are pushed:
 On a remote server the script will:
-* Clone the project with generated wiki files
-* Clone the wiki pages project
-* Remove all wiki page files in the wiki pages project
+* Clone the wiki page project
+* Remove all wiki page files in the wiki page project
 * Copy the generated files to the wiki pages project
 * Git add, commit and push the wiki pages project
 
-TODO explain how to do this
-* e.g. something like this: https://github.com/orgs/community/discussions/25929
-* e.g. something like this: https://github.com/marketplace/actions/github-wiki-action
+See the workflow script for this project for inspiration in: [.github/workflows/publish-wiki.yml](https://github.com/domain-centric/documentation_builder/blob/main/.github/workflows/publish-wiki.yml)
