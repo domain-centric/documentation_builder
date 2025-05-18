@@ -1,18 +1,32 @@
-name: Publish wiki
+name: Publish Wiki
+
 on:
   push:
     branches: [main]
     paths:
       - doc/wiki/**
       - .github/workflows/publish-wiki.yml
-concurrency:
-  group: publish-wiki
-  cancel-in-progress: true
+
 permissions:
   contents: write
+
 jobs:
   publish-wiki:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: Andrew-Chen-Wang/github-wiki-action@v4
+      - name: Checkout main repository
+        uses: actions/checkout@v3
+
+      - name: Clone the wiki repository
+        run: |
+          git clone "https://github.com/domain-centric/documentation_builder/wiki.git" /tmp/wiki
+      - name: Copy wiki files
+        run: |
+          cp -r doc/wiki/* /tmp/wiki/
+
+      - name: Commit and push changes to wiki
+        run: |
+          cd /tmp/wiki
+          git add .
+          git commit -m "Update wiki from main repo" || echo "No changes to commit"
+          git push
