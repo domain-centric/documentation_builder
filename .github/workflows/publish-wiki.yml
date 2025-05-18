@@ -19,7 +19,7 @@ jobs:
 
       - name: Clone the wiki repository
         run: |
-          git clone "https://github.com/domain-centric/documentation_builder/wiki.git" /tmp/wiki
+          git clone "https://github.com/domain-centric/documentation_builder.wiki.git" /tmp/wiki
       - name: Copy wiki files
         run: |
           cp -r doc/wiki/* /tmp/wiki/
