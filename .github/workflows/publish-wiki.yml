@@ -26,10 +26,15 @@ jobs:
       - name: Copy wiki files
         run: |
           cp -r doc/wiki/* /tmp/wiki/
-
       - name: Commit and push changes to wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd /tmp/wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git
           git add .
-          git commit -m "Update wiki from main repo" || echo "No changes to commit"
-          git push
+          git commit -m "Update wiki from main repo [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:master
+
