@@ -20,6 +20,7 @@ dependencies:
   template_engine: ^1.5.1
   shouldly: ^0.5.0+1
   petitparser: ^6.1.0
+  process_run: ^1.2.4
   
 dev_dependencies:
   lints: ^5.1.1

@@ -143,7 +143,6 @@ class ReferenceConverter extends RenderFunction {
         return null;
       }
       var path = ProjectFilePath2(sourceUri.pathSegments.skip(1).join('/'));
-      print('444 $path');
       var gitHubProject = GitHubProject.of(renderContext);
 
       String? commitSHA = gitHubProject.getLatestCommitSHA();

@@ -11,6 +11,15 @@
             "type": "dart",
             "request": "launch",
             "program": "test\\src\\engine\\path\\temp_test.dart"
+        },
+        {
+            "name": "Dart (lib\\src\\cli\\documentation_builder.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib\\src\\cli\\documentation_builder.dart",
+            "args": [
+                "build"
+            ]
         }
     ]
 }
