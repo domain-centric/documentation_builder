@@ -1,6 +1,6 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/09-Publishing.md.template using the documentation_builder package)
 
-You need to publish the [GeneratedMarkdownFile]s to make them available for reading on web pages.
+You need to publish the generated files to make them available for reading on web pages.
 The following paragraphs will explain how.
 
 ### Publishing none Wiki pages

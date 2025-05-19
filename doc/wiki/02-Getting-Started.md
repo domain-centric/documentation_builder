@@ -2,7 +2,12 @@
 
 ## Step by step
 * Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
-* [Install the documentation_builder package](https://pub.dev/packages/documentation_builder/install) in your project
+* Install [documentation_builder](https://pub.dev/packages/documentation_builder) developer dependencies in  in your project:
+  ```
+  dart pub add --dev build_runner
+  dart pub add --dev documentation_builder
+  ```
+  [build_runner](https://pub.dev/packages/build_runner) is a tool to run file generators like [documentation_builder](https://pub.dev/packages/documentation_builder)
 * Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
   ```
   targets:
