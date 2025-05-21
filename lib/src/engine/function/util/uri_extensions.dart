@@ -2,7 +2,9 @@ import 'package:http/http.dart' as http;
 
 extension UriExtension on Uri {
   Map<String, String>? _appendQueryParameters(
-      Map<String, String> original, Map<String, String>? additional) {
+    Map<String, String> original,
+    Map<String, String>? additional,
+  ) {
     final result = Map<String, String>.from(original);
     if (additional != null) {
       result.addAll(additional);
@@ -15,11 +17,12 @@ extension UriExtension on Uri {
     return '$original$additional';
   }
 
-  Uri append(
-      {String? path,
-      Map<String, String>? query,
-      String? fragment,
-      String? suffix}) {
+  Uri append({
+    String? path,
+    Map<String, String>? query,
+    String? fragment,
+    String? suffix,
+  }) {
     var uri = Uri(
       scheme: scheme,
       userInfo: userInfo,

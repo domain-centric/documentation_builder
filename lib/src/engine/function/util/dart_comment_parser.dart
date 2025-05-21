@@ -35,18 +35,21 @@ class DartDocCommentParser {
 
     final Parser<RenderFunction> linkWithUrl =
         (openBracket & text & closeBracket & openParen & link & closeParen).map(
-            ((values) =>
-                ValidateLink(linkText: values[1], linkUrl: values[4])));
-    final Parser<RenderFunction> linkWithoutUrl =
-        (openBracket & text & closeBracket)
-            .map((values) => ReferenceConverter(values[1]));
-    final Parser<String> commentPrefix =
-        (pattern(' \t').star() & string('///') & char(' ').repeat(0, 1))
-            .map(replaceWithNothing);
+          ((values) => ValidateLink(linkText: values[1], linkUrl: values[4])),
+        );
+    final Parser<RenderFunction> linkWithoutUrl = (openBracket &
+            text &
+            closeBracket)
+        .map((values) => ReferenceConverter(values[1]));
+    final Parser<String> commentPrefix = (pattern(' \t').star() &
+            string('///') &
+            char(' ').repeat(0, 1))
+        .map(replaceWithNothing);
 
     final Parser<String> otherCharacter =
-        ((commentPrefix | linkWithUrl | linkWithoutUrl).not() & any())
-            .map((values) => values[1]);
+        ((commentPrefix | linkWithUrl | linkWithoutUrl).not() & any()).map(
+          (values) => values[1],
+        );
 
     return ((commentPrefix | linkWithUrl | linkWithoutUrl | otherCharacter)
             .star())
@@ -70,13 +73,19 @@ class DartDocCommentParser {
       var renderResult = await render(renderContext, element, parseResult);
       return Success(dartDocComments, dartDocComments.length, renderResult);
     } on Exception catch (e) {
-      return Failure(dartDocComments, dartDocComments.length,
-          'Render exception: ${e.toString()}');
+      return Failure(
+        dartDocComments,
+        dartDocComments.length,
+        'Render exception: ${e.toString()}',
+      );
     }
   }
 
-  Future<String> render(RenderContext renderContext, Element element,
-      Result<dynamic> parseResult) async {
+  Future<String> render(
+    RenderContext renderContext,
+    Element element,
+    Result<dynamic> parseResult,
+  ) async {
     var renderResult = <String>[];
     if (parseResult.value is Iterable) {
       for (var item in parseResult.value) {
@@ -118,8 +127,11 @@ class ReferenceConverter extends RenderFunction {
       // failed, try to get a package reference on pub.dev
     }
 
-    Uri? libraryUri =
-        await createLibraryReferenceUri(renderContext, element, linkText);
+    Uri? libraryUri = await createLibraryReferenceUri(
+      renderContext,
+      element,
+      linkText,
+    );
     if (libraryUri != null) {
       return MarkDownLink(linkText, libraryUri).toString();
     }
@@ -156,8 +168,11 @@ class ReferenceConverter extends RenderFunction {
       }
 
       //e.g.: https://github.com/domain-centric/documentation_builder/blob/9e5bd3f6eb6da1dc107faa2fe3a2d19b7c043a8d/lib/src/builder/documentation_builder.dart#L24
-      return gitHubProject.sourceFileUri(path,
-          tagName: commitSHA, lineNr: lineNr);
+      return gitHubProject.sourceFileUri(
+        path,
+        tagName: commitSHA,
+        lineNr: lineNr,
+      );
     } catch (e) {}
     return null;
   }
@@ -169,7 +184,7 @@ class ReferenceConverter extends RenderFunction {
       '',
       'bin/',
       'web/',
-      'example/'
+      'example/',
     ];
     for (var potentialParentFolder in potentialParentFolders) {
       var potentialPath = '$potentialParentFolder$sourcePath';

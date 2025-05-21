@@ -14,15 +14,19 @@ void main() {
     setUp(() {
       parser = DartDocCommentParser();
       renderContext = RenderContext(
-          engine: DocumentationTemplateEngine(),
-          parsedTemplates: [],
-          templateBeingRendered: TextTemplate('dummy'));
+        engine: DocumentationTemplateEngine(),
+        parsedTemplates: [],
+        templateBeingRendered: TextTemplate('dummy'),
+      );
     });
 
     test('should parse valid links with URLs', () async {
       final input = '/// [Google](https://google.com)';
-      final result =
-          await parser.parseAndRender(renderContext, DummyElement(), input);
+      final result = await parser.parseAndRender(
+        renderContext,
+        DummyElement(),
+        input,
+      );
 
       result.should.beOfType<Success<String>>();
       result.value.should.be('[Google](https://google.com)');
@@ -30,18 +34,25 @@ void main() {
 
     test('should parse links without URLs and resolve them', () async {
       final input = '/// [documentation_builder]';
-      final result =
-          await parser.parseAndRender(renderContext, DummyElement(), input);
+      final result = await parser.parseAndRender(
+        renderContext,
+        DummyElement(),
+        input,
+      );
 
       result.should.beOfType<Success<String>>();
       result.value.should.be(
-          '[documentation_builder](https://pub.dev/packages/documentation_builder)');
+        '[documentation_builder](https://pub.dev/packages/documentation_builder)',
+      );
     });
 
     test('should handle invalid links gracefully', () async {
       final input = '/// [InvalidLink](invalid_url)';
-      final result =
-          await parser.parseAndRender(renderContext, DummyElement(), input);
+      final result = await parser.parseAndRender(
+        renderContext,
+        DummyElement(),
+        input,
+      );
 
       result.should.beOfType<Success<String>>();
       result.value.should.be('[InvalidLink](invalid_url)');
@@ -49,24 +60,33 @@ void main() {
 
     test('should remove comment prefixes', () async {
       final input = '/// This is a comment.';
-      final result =
-          await parser.parseAndRender(renderContext, DummyElement(), input);
+      final result = await parser.parseAndRender(
+        renderContext,
+        DummyElement(),
+        input,
+      );
 
       result.should.beOfType<Success<String>>();
       result.value.should.be('This is a comment.');
     });
 
     test('should handle mixed content', () async {
-      final input = 'Here is some text.\n'
+      final input =
+          'Here is some text.\n'
           '[Google](https://google.com)\n'
           '[documentation_builder]\n';
-      final result =
-          await parser.parseAndRender(renderContext, DummyElement(), input);
+      final result = await parser.parseAndRender(
+        renderContext,
+        DummyElement(),
+        input,
+      );
 
       result.should.beOfType<Success<String>>();
-      result.value.should.be('Here is some text.\n'
-          '[Google](https://google.com)\n'
-          '[documentation_builder](https://pub.dev/packages/documentation_builder)\n');
+      result.value.should.be(
+        'Here is some text.\n'
+        '[Google](https://google.com)\n'
+        '[documentation_builder](https://pub.dev/packages/documentation_builder)\n',
+      );
     });
   });
 
@@ -74,16 +94,18 @@ void main() {
     late RenderContext renderContext;
     setUp(() {
       renderContext = RenderContext(
-          engine: DocumentationTemplateEngine(),
-          parsedTemplates: [],
-          templateBeingRendered: TextTemplate('dummy'));
+        engine: DocumentationTemplateEngine(),
+        parsedTemplates: [],
+        templateBeingRendered: TextTemplate('dummy'),
+      );
     });
     test('should resolve valid pub.dev links', () async {
       final converter = ReferenceConverter('documentation_builder');
       final result = await converter.render(renderContext, DummyElement());
 
       result.should.be(
-          '[documentation_builder](https://pub.dev/packages/documentation_builder)');
+        '[documentation_builder](https://pub.dev/packages/documentation_builder)',
+      );
     });
 
     test('should return unresolved link if not found', () async {
@@ -98,9 +120,10 @@ void main() {
     late RenderContext renderContext;
     setUp(() {
       renderContext = RenderContext(
-          engine: DocumentationTemplateEngine(),
-          parsedTemplates: [],
-          templateBeingRendered: TextTemplate('dummy'));
+        engine: DocumentationTemplateEngine(),
+        parsedTemplates: [],
+        templateBeingRendered: TextTemplate('dummy'),
+      );
     });
     test('should validate and render valid links', () async {
       final validator = ValidateLink(

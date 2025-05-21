@@ -64,33 +64,31 @@ class BuildOptionParameterException implements Exception {
   final String parameterName;
   final String message;
 
-  BuildOptionParameterException(
-    this.parameterName,
-    String message,
-  ) : message =
-            'build.yaml: Builder option parameter ${parameterName} $message';
+  BuildOptionParameterException(this.parameterName, String message)
+    : message =
+          'build.yaml: Builder option parameter ${parameterName} $message';
 }
 
 /// * Description: An expression where to find template files
 /// * Default value: `'doc/template/{{filePath}}.template'`
 class InputPath extends BuildOptionParameter<String> {
   InputPath()
-      : super(
-          name: 'inputPath',
-          description: 'An expression where to find template files',
-          defaultValue: 'doc/template/{{filePath}}.template',
-        );
+    : super(
+        name: 'inputPath',
+        description: 'An expression where to find template files',
+        defaultValue: 'doc/template/{{filePath}}.template',
+      );
 }
 
 /// * Description: An expression where to store the result files
 /// * Default value: `'{{filePath}}'`
 class OutputPath extends BuildOptionParameter<String> {
   OutputPath()
-      : super(
-          name: 'outputPath',
-          description: 'An expression where to store the result files',
-          defaultValue: '{{filePath}}',
-        );
+    : super(
+        name: 'outputPath',
+        description: 'An expression where to store the result files',
+        defaultValue: '{{filePath}}',
+      );
 }
 
 /// * Description: A map of file suffixes and the file header template to be added (which can be null)
@@ -107,19 +105,19 @@ class OutputPath extends BuildOptionParameter<String> {
 ///   ```
 class FileHeaders extends BuildOptionParameter<FileHeaderMap> {
   FileHeaders()
-      : super(
-          name: 'fileHeaders',
-          description:
-              'A map of file suffices and the file header template to be added (which can be null)',
-          defaultValue: FileHeaderMap({
-            'LICENSE': null,
-            'LICENSE.md': null,
-            '.md':
-                '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)$newLine',
-            '.dart':
-                '/// This file was generated from: {{inputPath()}} using the documentation_builder package$newLine'
-          }),
-        );
+    : super(
+        name: 'fileHeaders',
+        description:
+            'A map of file suffices and the file header template to be added (which can be null)',
+        defaultValue: FileHeaderMap({
+          'LICENSE': null,
+          'LICENSE.md': null,
+          '.md':
+              '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)$newLine',
+          '.dart':
+              '/// This file was generated from: {{inputPath()}} using the documentation_builder package$newLine',
+        }),
+      );
 
   @override
   FileHeaderMap getValue(BuilderOptions builderOptions) {
@@ -130,7 +128,9 @@ class FileHeaders extends BuildOptionParameter<FileHeaderMap> {
     var map = config[name];
     if (map is! Map<String, String>) {
       throw BuildOptionParameterException(
-          name, 'is not of type: Map<String, String>');
+        name,
+        'is not of type: Map<String, String>',
+      );
     }
     return FileHeaderMap(map);
   }
@@ -147,8 +147,9 @@ class FileHeaderMap {
 
   TextTemplate? findFor(AssetId outputId) {
     var outputFilePath = outputId.path;
-    String? found = fileSuffixes
-        .firstWhereOrNull((suffix) => outputFilePath.endsWith(suffix));
+    String? found = fileSuffixes.firstWhereOrNull(
+      (suffix) => outputFilePath.endsWith(suffix),
+    );
     if (found == null) {
       return null;
     }

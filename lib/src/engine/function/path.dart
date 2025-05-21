@@ -10,16 +10,17 @@ class MergedPathFunctions extends FunctionGroup {
   static const String groupName = 'Path Functions';
 
   MergedPathFunctions()
-      : super(groupName, [
-          ...pathFunctionsFromTemplateEnginePackage(),
-          InputPath(),
-          OutputPath(),
-          for (var link in LinkFunctions().whereType<LinkFunction>())
-            UriFunction.createFromLinkFunction(link)
-        ]);
+    : super(groupName, [
+        ...pathFunctionsFromTemplateEnginePackage(),
+        InputPath(),
+        OutputPath(),
+        for (var link in LinkFunctions().whereType<LinkFunction>())
+          UriFunction.createFromLinkFunction(link),
+      ]);
 
   static Iterable<ExpressionFunction<Object>> pathFunctionsFrom(
-          List<FunctionGroup> functionGroupsFromTemplateEnginePackage) =>
+    List<FunctionGroup> functionGroupsFromTemplateEnginePackage,
+  ) =>
       functionGroupsFromTemplateEnginePackage
           .where((g) => g.name == groupName)
           .flattened;
@@ -29,64 +30,74 @@ class MergedPathFunctions extends FunctionGroup {
 }
 
 class UriFunction extends ExpressionFunction<Uri> {
-  UriFunction(
-      {required super.name,
-      super.description,
-      super.parameters,
-      required super.function});
+  UriFunction({
+    required super.name,
+    super.description,
+    super.parameters,
+    required super.function,
+  });
 
   factory UriFunction.createFromLinkFunction(LinkFunction link) {
-    var name =
-        link.name.replaceFirst(RegExp('${LinkFunction.nameSuffix}\$'), 'Uri');
+    var name = link.name.replaceFirst(
+      RegExp('${LinkFunction.nameSuffix}\$'),
+      'Uri',
+    );
     var description = link.description!.replaceFirst(
-        RegExp('^${LinkFunction.descriptionPreFix}'), 'Returns a URI of ');
+      RegExp('^${LinkFunction.descriptionPreFix}'),
+      'Returns a URI of ',
+    );
     var parameters = link.parameters.where((p) => p is! TextParameter).toList();
-    var function = (String position, RenderContext renderContext,
-            Map<String, Object> parameters) async =>
-        (await link.function(position, renderContext, parameters)).uri;
+    var function =
+        (
+          String position,
+          RenderContext renderContext,
+          Map<String, Object> parameters,
+        ) async =>
+            (await link.function(position, renderContext, parameters)).uri;
     return UriFunction(
-        name: name,
-        description: description,
-        parameters: parameters,
-        function: function);
+      name: name,
+      description: description,
+      parameters: parameters,
+      function: function,
+    );
   }
 }
 
 class InputPath extends ExpressionFunction<String> {
   InputPath()
-      : super(
-          name: 'inputPath',
-          description: "Returns the path of the template file being used.\n"
-              "Prefer to use this function over the 'templateSource' because 'inputPath' always resolves to a path",
-          exampleExpression: "{{inputPath()}}",
-          exampleResult: "doc/example.md",
-          function: (
-            String position,
-            RenderContext renderContext,
-            Map<String, Object> parameters,
-          ) async {
-            BuildStep? buildStep = BuildStepVariable.of(renderContext);
-            return buildStep.inputId.path;
-          },
-        );
+    : super(
+        name: 'inputPath',
+        description:
+            "Returns the path of the template file being used.\n"
+            "Prefer to use this function over the 'templateSource' because 'inputPath' always resolves to a path",
+        exampleExpression: "{{inputPath()}}",
+        exampleResult: "doc/example.md",
+        function: (
+          String position,
+          RenderContext renderContext,
+          Map<String, Object> parameters,
+        ) async {
+          BuildStep? buildStep = BuildStepVariable.of(renderContext);
+          return buildStep.inputId.path;
+        },
+      );
 }
 
 class OutputPath extends ExpressionFunction<String> {
   OutputPath()
-      : super(
-          name: 'outputPath',
-          description:
-              'Returns the path of the file being created from the template',
-          exampleExpression: "{{outputPath()}}",
-          exampleResult: "doc/example.md",
-          function: (
-            String position,
-            RenderContext renderContext,
-            Map<String, Object> parameters,
-          ) async {
-            BuildStep? buildStep = BuildStepVariable.of(renderContext);
-            return buildStep.allowedOutputs.first.path;
-          },
-        );
+    : super(
+        name: 'outputPath',
+        description:
+            'Returns the path of the file being created from the template',
+        exampleExpression: "{{outputPath()}}",
+        exampleResult: "doc/example.md",
+        function: (
+          String position,
+          RenderContext renderContext,
+          Map<String, Object> parameters,
+        ) async {
+          BuildStep? buildStep = BuildStepVariable.of(renderContext);
+          return buildStep.allowedOutputs.first.path;
+        },
+      );
 }
-

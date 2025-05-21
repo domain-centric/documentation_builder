@@ -1,4 +1,3 @@
-
 import 'package:documentation_builder/src/engine/function/util/table_of_contents.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:shouldly/shouldly.dart';
@@ -130,7 +129,6 @@ void main() {
       nodes[0].children[1].children[0].children.length.should.be(0);
       nodes[1].title.should.be('E');
       nodes[1].children.length.should.be(0);
-      
     });
   });
   group('_markdownTitleParser', () {

@@ -11,39 +11,30 @@ import 'package:template_engine/template_engine.dart';
 ///
 /// It has some addition functionality on top of the [TemplateEngine]
 class DocumentationTemplateEngine extends TemplateEngine {
-  
-   DocumentationTemplateEngine() :super(
-      functionGroups: createDocumentationFunctionGroups()
-    );
-
-  
+  DocumentationTemplateEngine()
+    : super(functionGroups: createDocumentationFunctionGroups());
 }
 
 /// merges [FunctionGroup]s that come pre-packaged as part of the template_engine package
-  /// with additional [FunctionGroup]s specific for documentation_builder
-  /// where the most important documentation_builder [FunctionGroup]s are ordered first.
-   List<FunctionGroup> createDocumentationFunctionGroups(
-    
-  ) {
+/// with additional [FunctionGroup]s specific for documentation_builder
+/// where the most important documentation_builder [FunctionGroup]s are ordered first.
+List<FunctionGroup> createDocumentationFunctionGroups() {
+  /// new function groups in order of importance for [DocumentationTemplateEngine]
+  var newGroups = <FunctionGroup>[
+    MergedImportFunctions(),
+    GeneratorFunctions(),
+    MergedPathFunctions(),
+    LinkFunctions(),
+    BadgeFunctions(),
+  ];
+  newGroups.addAll(_remainingGroups(newGroups));
 
-    /// new function groups in order of importance for [DocumentationTemplateEngine]
-    var newGroups = <FunctionGroup>[
-      MergedImportFunctions(),
-      GeneratorFunctions(),
-      MergedPathFunctions(),
-      LinkFunctions(),
-      BadgeFunctions(),
-    ];
-    newGroups.addAll(_remainingGroups(newGroups));
+  return newGroups;
+}
 
-    return newGroups;
-  }
-
-   Iterable<FunctionGroup> _remainingGroups(
-    List<FunctionGroup> newGroups,
-  ) {
-    var newGroupNames = newGroups.map((g) => g.name);
-    return DefaultFunctionGroups().where(
-      (original) => !newGroupNames.contains(original.name),
-    );
-  }
+Iterable<FunctionGroup> _remainingGroups(List<FunctionGroup> newGroups) {
+  var newGroupNames = newGroups.map((g) => g.name);
+  return DefaultFunctionGroups().where(
+    (original) => !newGroupNames.contains(original.name),
+  );
+}

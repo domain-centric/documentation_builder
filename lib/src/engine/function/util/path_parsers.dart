@@ -9,9 +9,8 @@ import 'package:petitparser/petitparser.dart';
 class ProjectFilePath2 {
   final String relativePath;
 
-
-
-  static Parser<String> _fileOrFolderName() => (ChoiceParser([
+  static Parser<String> _fileOrFolderName() =>
+      (ChoiceParser([
         letter(),
         digit(),
         char('('),
@@ -19,9 +18,7 @@ class ProjectFilePath2 {
         char('_'),
         char('-'),
         char('.'),
-      ], failureJoiner: selectFarthestJoined))
-          .plus()
-          .flatten();
+      ], failureJoiner: selectFarthestJoined)).plus().flatten();
 
   static Parser<String> _slashAndFileOrFolderName() =>
       (char('/') & _fileOrFolderName()).map((values) => values[1]);
@@ -31,15 +28,18 @@ class ProjectFilePath2 {
           .map<List<String>>((values) => [values[0], ...values[1]]);
   //.endWithBetterFailure();
 
-  ProjectFilePath2(String relativePath) :this.relativePath=normalize(relativePath) {
+  ProjectFilePath2(String relativePath)
+    : this.relativePath = normalize(relativePath) {
     validate(relativePath);
   }
 
   void validate(String path) {
     var result = _pathParser().parse(path);
     if (result is Failure) {
-      throw Exception("Invalid project file path: '$path': ${result.message} "
-          "at position: ${result.position + 1}");
+      throw Exception(
+        "Invalid project file path: '$path': ${result.message} "
+        "at position: ${result.position + 1}",
+      );
     }
   }
 
@@ -48,33 +48,34 @@ class ProjectFilePath2 {
     return value2.last;
   }
 
-  Uri get githubUri =>
-      Uri.parse('https://github.com/domain-centric/template_engine/blob/main/'
-          '$relativePath');
+  Uri get githubUri => Uri.parse(
+    'https://github.com/domain-centric/template_engine/blob/main/'
+    '$relativePath',
+  );
 
   String get githubMarkdownLink => '<a href="$githubUri">$fileName</a>';
 
   @override
   String toString() => relativePath;
-  
+
   /// when [AssetId] is used as relative path, it could be missing the lib folder.
   /// if so the lib folder is added
   static String normalize(String relativePath) {
-       var filePath = [
+    var filePath = [
       ...LocalProject.directory.path.split(Platform.pathSeparator),
       ...relativePath.split('/'),
     ].join(Platform.pathSeparator);
     if (File(filePath).existsSync()) {
-        return relativePath;
+      return relativePath;
     }
     filePath = [
       ...LocalProject.directory.path.split(Platform.pathSeparator),
       'lib',
       ...relativePath.split('/'),
-      ].join(Platform.pathSeparator);
-     if (File(filePath).existsSync()) {
-        return 'lib/$relativePath';
-    } 
+    ].join(Platform.pathSeparator);
+    if (File(filePath).existsSync()) {
+      return 'lib/$relativePath';
+    }
     return relativePath;
   }
 }
@@ -149,26 +150,30 @@ class SourcePath {
   late ProjectFilePath2 projectFilePath;
   late DartMemberPath? dartLibraryMemberPath;
 
-  static pathParser() => (ProjectFilePath2._pathParser()
-              .map((values) => ProjectFilePath2(values.join('/'))) &
-          (char('#') &
-                  DartMemberPath._pathParser()
-                      .map((values) => DartMemberPath(values.join('.'))))
-              .repeat(0, 1))
-      .endOrPreviousFailure();
+  static pathParser() =>
+      (ProjectFilePath2._pathParser().map(
+                (values) => ProjectFilePath2(values.join('/')),
+              ) &
+              (char('#') &
+                      DartMemberPath._pathParser().map(
+                        (values) => DartMemberPath(values.join('.')),
+                      ))
+                  .repeat(0, 1))
+          .endOrPreviousFailure();
 
   SourcePath(String path) {
     var result = pathParser().parse(path);
     if (result is Failure) {
-      throw Exception("Invalid Dart code path: '$path': ${result.message} "
-          "at position: ${result.position}");
+      throw Exception(
+        "Invalid Dart code path: '$path': ${result.message} "
+        "at position: ${result.position}",
+      );
     }
     var values = result.value;
     projectFilePath = values.first;
     dartLibraryMemberPath =
         values.last.isEmpty ? null : result.value.last.first.last;
   }
-
 }
 
 /// A [DartMemberPath] is a dot separated path to a member inside the Dart file.
@@ -195,8 +200,10 @@ class DartMemberPath extends UnmodifiableListView<String> {
   factory DartMemberPath(String path) {
     var result = _pathParser().parse(path);
     if (result is Failure) {
-      throw Exception("Invalid Dart member path: '$path': ${result.message} "
-          "at position: ${result.position + 1}");
+      throw Exception(
+        "Invalid Dart member path: '$path': ${result.message} "
+        "at position: ${result.position + 1}",
+      );
     }
     return DartMemberPath._(result.value);
   }
@@ -222,8 +229,7 @@ class DartMemberPath extends UnmodifiableListView<String> {
 
   @override
   String toString() => join('.');
-
 }
 
 String normalizePathSeparators(String path, String pathSeparator) =>
-      path.replaceAll('\\', pathSeparator).replaceAll('/', pathSeparator);
+    path.replaceAll('\\', pathSeparator).replaceAll('/', pathSeparator);

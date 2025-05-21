@@ -20,8 +20,8 @@ void main() {
     test('generates correct GitHub URI', () {
       var path = ProjectFilePath2('lib/my_library.dart');
       path.githubUri.toString().should.be(
-            'https://github.com/domain-centric/template_engine/blob/main/lib/my_library.dart',
-          );
+        'https://github.com/domain-centric/template_engine/blob/main/lib/my_library.dart',
+      );
     });
 
     test('generates correct GitHub markdown link', () {
@@ -45,28 +45,32 @@ void main() {
   group('SourcePath', () {
     test('parses valid code paths', () {
       Should.notThrowException(
-          () => SourcePath('lib/my_library.dart|MyClass.myMethod'));
+        () => SourcePath('lib/my_library.dart|MyClass.myMethod'),
+      );
     });
 
     test('throws exception for invalid code paths', () {
-      Should.throwException<Exception>(() =>
-          SourcePath(
-              'lib\\my_library.dart|MyClass.myMethod')).toString().should.be(
-          "Exception: Invalid Dart code path: 'lib\\my_library.dart|MyClass.myMethod'"
-          ': letter expected OR digit expected OR "(" expected OR ")" expected OR '
-          '"_" expected OR "-" expected OR "." expected at position: 3');
-      Should.throwException<Exception>(() =>
-          SourcePath(
-              'lib/my_library.dart|MyClass..myMethod')).toString().should.be(
-            "Exception: Invalid Dart code path: 'lib/my_library.dart|MyClass..myMethod':"
-            ' letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
-            ' expected OR "-" expected OR "." expected at position: 19');
-      Should.throwException<Exception>(() =>
-          SourcePath(
-              'lib/my_library.dart#MyClass..myMethod')).toString().should.be(
-          "Exception: Invalid Dart code path: 'lib/my_library.dart#MyClass..myMethod'"
-          ': letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
-          ' expected OR "-" expected OR "." expected at position: 19');
+      Should.throwException<Exception>(
+        () => SourcePath('lib\\my_library.dart|MyClass.myMethod'),
+      ).toString().should.be(
+        "Exception: Invalid Dart code path: 'lib\\my_library.dart|MyClass.myMethod'"
+        ': letter expected OR digit expected OR "(" expected OR ")" expected OR '
+        '"_" expected OR "-" expected OR "." expected at position: 3',
+      );
+      Should.throwException<Exception>(
+        () => SourcePath('lib/my_library.dart|MyClass..myMethod'),
+      ).toString().should.be(
+        "Exception: Invalid Dart code path: 'lib/my_library.dart|MyClass..myMethod':"
+        ' letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
+        ' expected OR "-" expected OR "." expected at position: 19',
+      );
+      Should.throwException<Exception>(
+        () => SourcePath('lib/my_library.dart#MyClass..myMethod'),
+      ).toString().should.be(
+        "Exception: Invalid Dart code path: 'lib/my_library.dart#MyClass..myMethod'"
+        ': letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
+        ' expected OR "-" expected OR "." expected at position: 19',
+      );
     });
 
     test('extracts file path correctly', () {

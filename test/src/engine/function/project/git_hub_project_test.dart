@@ -12,49 +12,76 @@ main() {
     });
 
     test('get method: uri', () async {
-      gitHubProject.uri.toString().should.be('https://github.com/domain-centric/documentation_builder');
+      gitHubProject.uri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder',
+      );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
 
     test('get method: roadMapUri', () async {
-      gitHubProject.milestonesUri.toString().should.be('https://github.com/domain-centric/documentation_builder/milestones');
+      gitHubProject.milestonesUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/milestones',
+      );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
 
     test('get method: versionsUri', () async {
-      gitHubProject.releasesUri.toString().should.be('https://github.com/domain-centric/documentation_builder/releases');
+      gitHubProject.releasesUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/releases',
+      );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
 
     test('get method: pullRequestsUri', () async {
-      gitHubProject.pullRequestsUri.toString().should.be('https://github.com/domain-centric/documentation_builder/pulls');
+      gitHubProject.pullRequestsUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/pulls',
+      );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
 
     test('get method: wikiUri', () async {
-      gitHubProject.wikiUri.toString().should.be('https://github.com/domain-centric/documentation_builder/wiki');
+      gitHubProject.wikiUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/wiki',
+      );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
     test('method: searchUri', () async {
-      gitHubProject.searchUri('Test').toString().should.be('https://github.com/domain-centric/documentation_builder/search?q=Test');
+      gitHubProject
+          .searchUri('Test')
+          .toString()
+          .should
+          .be(
+            'https://github.com/domain-centric/documentation_builder/search?q=Test',
+          );
       (await gitHubProject.uri.canGetWithHttp()).should.beTrue();
     });
     test('method: rawUri', () async {
-      gitHubProject.rawUri.toString().should.be('https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/main');
+      gitHubProject.rawUri.toString().should.be(
+        'https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/main',
+      );
     });
     test('method: stargazersUri', () async {
-      gitHubProject.starGazersUri.toString().should.be('https://github.com/domain-centric/documentation_builder/stargazers');
+      gitHubProject.starGazersUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/stargazers',
+      );
       (await gitHubProject.starGazersUri.canGetWithHttp()).should.beTrue();
     });
     test('method: issuesUri', () async {
-      gitHubProject.issuesUri.toString().should.be('https://github.com/domain-centric/documentation_builder/issues');
+      gitHubProject.issuesUri.toString().should.be(
+        'https://github.com/domain-centric/documentation_builder/issues',
+      );
       (await gitHubProject.issuesUri.canGetWithHttp()).should.beTrue();
     });
 
     test('method: dartFile', () async {
-      Uri uri = gitHubProject
-          .sourceFileUri(ProjectFilePath2('lib/src/parser/link_parser.dart'));
-      uri.should.be(Uri.parse('https://github.com/domain-centric/documentation_builder/blob/main/lib/src/parser/link_parser.dart'));
+      Uri uri = gitHubProject.sourceFileUri(
+        ProjectFilePath2('lib/src/parser/link_parser.dart'),
+      );
+      uri.should.be(
+        Uri.parse(
+          'https://github.com/domain-centric/documentation_builder/blob/main/lib/src/parser/link_parser.dart',
+        ),
+      );
       (await uri.canGetWithHttp()).should.beTrue();
     });
   });

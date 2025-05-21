@@ -52,7 +52,7 @@ import 'package:template_engine/template_engine.dart';
 /// * The [input and output file is determined by parameters in the build.yaml file](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-inputpath), which is:
 ///   * Easier to understand than the old DocumentationBuilder conventions
 ///   * More flexible: It can now be configured in the build.yaml file
-/// * Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders). 
+/// * Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders).
 ///
 /// This resulted in the following breaking changes:
 /// * Tags
@@ -119,8 +119,8 @@ class DocumentationBuilder implements Builder {
   /// stored according to the [outputPath] expression.
   @override
   Map<String, List<String>> get buildExtensions => {
-        inputPath: [outputPath]
-      };
+    inputPath: [outputPath],
+  };
 
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
@@ -133,7 +133,9 @@ class DocumentationBuilder implements Builder {
   }
 
   Future<void> parseAndRenderTextTemplate(
-      BuildStepFileTemplate template, BuildStep buildStep) async {
+    BuildStepFileTemplate template,
+    BuildStep buildStep,
+  ) async {
     try {
       DocumentationTemplateEngine engine = DocumentationTemplateEngine();
 
@@ -146,8 +148,14 @@ class DocumentationBuilder implements Builder {
       } else {
         /// Convention: each input will have 1 output
         var outputId = buildStep.allowedOutputs.first;
-        var result = normalizeNewLines(await addOptionalHeader(
-            buildStep, variables, outputId, renderResult.text));
+        var result = normalizeNewLines(
+          await addOptionalHeader(
+            buildStep,
+            variables,
+            outputId,
+            renderResult.text,
+          ),
+        );
         buildStep.writeAsString(outputId, result);
       }
     } catch (e, stackTrace) {
@@ -170,8 +178,12 @@ class DocumentationBuilder implements Builder {
     return _cachedVariables!;
   }
 
-  Future<String> addOptionalHeader(BuildStep buildStep, VariableMap variables,
-      AssetId outputId, String text) async {
+  Future<String> addOptionalHeader(
+    BuildStep buildStep,
+    VariableMap variables,
+    AssetId outputId,
+    String text,
+  ) async {
     var headerTemplate = fileHeaders.findFor(outputId);
     if (headerTemplate == null) {
       return text;
@@ -180,22 +192,26 @@ class DocumentationBuilder implements Builder {
     var renderResult = await engine.render(parseResult, variables);
     if (renderResult.errorMessage.isNotEmpty) {
       log.warning(
-          'Error while processing file header: ${renderResult.errorMessage}');
+        'Error while processing file header: ${renderResult.errorMessage}',
+      );
       return text;
     }
     return '${renderResult.text}$newLine$text';
   }
 
   Future<VariableMap> createVariables(BuildStep buildStep) async => {
-        BuilderVariable.id: this,
-        BuildStepVariable.id: buildStep,
-        LibraryCacheVariable.id:
-            await buildStep.fetchResource<LibraryCache>(libraryCacheResource),
-        GitHubProject.id:
-            await buildStep.fetchResource<GitHubProject>(gitHubProjectResource),
-        PubDevProject.id:
-            await buildStep.fetchResource<PubDevProject>(pubDevProjectResource),
-      };
+    BuilderVariable.id: this,
+    BuildStepVariable.id: buildStep,
+    LibraryCacheVariable.id: await buildStep.fetchResource<LibraryCache>(
+      libraryCacheResource,
+    ),
+    GitHubProject.id: await buildStep.fetchResource<GitHubProject>(
+      gitHubProjectResource,
+    ),
+    PubDevProject.id: await buildStep.fetchResource<PubDevProject>(
+      pubDevProjectResource,
+    ),
+  };
 }
 
 class BuildStepFileTemplate extends Template {
@@ -211,7 +227,7 @@ class BuildStepFileTemplate extends Template {
     try {
       await text;
       return true;
-    } on FormatException  {
+    } on FormatException {
       return false;
     }
   }
@@ -247,6 +263,8 @@ typedef LibraryCache = Map<ProjectFilePath2, LibraryElement>;
 
 final libraryCacheResource = Resource<LibraryCache>(() => {});
 final gitHubProjectResource = Resource<GitHubProject>(
-    () async => await GitHubProject.createForThisProject());
+  () async => await GitHubProject.createForThisProject(),
+);
 final pubDevProjectResource = Resource<PubDevProject>(
-    () async => await PubDevProject.createForThisProject());
+  () async => await PubDevProject.createForThisProject(),
+);

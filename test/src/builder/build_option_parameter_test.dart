@@ -16,8 +16,9 @@ void main() {
 
     test('should return configured value when provided', () {
       final inputPath = InputPath();
-      final builderOptions =
-          BuilderOptions({'inputPath': 'custom/path/{{filePath}}.template'});
+      final builderOptions = BuilderOptions({
+        'inputPath': 'custom/path/{{filePath}}.template',
+      });
       final value = inputPath.getValue(builderOptions);
 
       value.should.be('custom/path/{{filePath}}.template');
@@ -28,7 +29,8 @@ void main() {
       final builderOptions = BuilderOptions({'inputPath': 123});
 
       Should.throwException<BuildOptionParameterException>(
-          () => inputPath.getValue(builderOptions));
+        () => inputPath.getValue(builderOptions),
+      );
     });
   });
 
@@ -43,8 +45,9 @@ void main() {
 
     test('should return configured value when provided', () {
       final outputPath = OutputPath();
-      final builderOptions =
-          BuilderOptions({'outputPath': 'custom/output/{{filePath}}'});
+      final builderOptions = BuilderOptions({
+        'outputPath': 'custom/output/{{filePath}}',
+      });
       final value = outputPath.getValue(builderOptions);
 
       value.should.be('custom/output/{{filePath}}');
@@ -55,7 +58,8 @@ void main() {
       final builderOptions = BuilderOptions({'outputPath': 123});
 
       Should.throwException<BuildOptionParameterException>(
-          () => outputPath.getValue(builderOptions));
+        () => outputPath.getValue(builderOptions),
+      );
     });
   });
 
@@ -70,15 +74,11 @@ void main() {
     test('should return configured value when provided', () {
       final fileHeaders = FileHeaders();
       final builderOptions = BuilderOptions({
-        'fileHeaders': {
-          '.txt': 'Generated from {{inputFile()}}',
-        }
+        'fileHeaders': {'.txt': 'Generated from {{inputFile()}}'},
       });
       final value = fileHeaders.getValue(builderOptions);
 
-      value.map.should.be({
-        '.txt': 'Generated from {{inputFile()}}',
-      });
+      value.map.should.be({'.txt': 'Generated from {{inputFile()}}'});
     });
 
     test('should throw exception for invalid type', () {
@@ -86,7 +86,8 @@ void main() {
       final builderOptions = BuilderOptions({'fileHeaders': 'invalid'});
 
       Should.throwException<BuildOptionParameterException>(
-          () => fileHeaders.getValue(builderOptions));
+        () => fileHeaders.getValue(builderOptions),
+      );
     });
 
     test('should find correct template for file extension', () async {
@@ -96,7 +97,8 @@ void main() {
       template.should.not.beNull();
       final text = await template!.text;
       text.should.be(
-          '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)$newLine');
+        '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)$newLine',
+      );
     });
 
     test('should return null for unsupported file extension', () {

@@ -131,17 +131,17 @@ class SetupCommand extends Command {
 
   @override
   Future<void> run() async {
-  var variables = await _createVariables();
-  
-  var yamlMap = await readPubSpecYaml();
-  
-  await addBuildRunnerDependencyIfNeeded(yamlMap);
-  
-  await addDocumentationBuilderDependencyIfNeeded(yamlMap);
-  
-  await addTemplateFilesIfNeeded(variables);
-  
-  await addGitHubWorkflowPublishWikiIfNeeded(variables);
+    var variables = await _createVariables();
+
+    var yamlMap = await readPubSpecYaml();
+
+    await addBuildRunnerDependencyIfNeeded(yamlMap);
+
+    await addDocumentationBuilderDependencyIfNeeded(yamlMap);
+
+    await addTemplateFilesIfNeeded(variables);
+
+    await addGitHubWorkflowPublishWikiIfNeeded(variables);
   }
 
   Future<void> addDocumentationBuilderDependencyIfNeeded(yamlMap) async {
@@ -263,29 +263,29 @@ class SetupCommand extends Command {
     SetupTemplate template,
     VariableMap variables,
   ) async {
-  var parseResult = await engine.parseTemplate(template);
-  var renderResult = await engine.render(parseResult, variables);
-  if (renderResult.errorMessage.isNotEmpty) {
-    print('  Error: ${renderResult.errorMessage}');
-    return;
-  }
-  if (packageIsDocumentationBuilder()) {
-    // we are not overriding any files in the documentation_builder package
-    // so we just print the result to the console
-    print(
-      '${template.output}:\n'
-      '$renderResult.text}\n',
-    );
-    return;
-  }
-  await template.output.create(recursive: true);
-  await template.output.writeAsString(renderResult.text);
+    var parseResult = await engine.parseTemplate(template);
+    var renderResult = await engine.render(parseResult, variables);
+    if (renderResult.errorMessage.isNotEmpty) {
+      print('  Error: ${renderResult.errorMessage}');
+      return;
+    }
+    if (packageIsDocumentationBuilder()) {
+      // we are not overriding any files in the documentation_builder package
+      // so we just print the result to the console
+      print(
+        '${template.output}:\n'
+        '$renderResult.text}\n',
+      );
+      return;
+    }
+    await template.output.create(recursive: true);
+    await template.output.writeAsString(renderResult.text);
   }
 
   Future<void> copyFile(SetupTemplate template) async {
-  final bytes = await template.input.readAsBytes();
-  await template.output.create(recursive: true);
-  await template.output.writeAsBytes(bytes);
+    final bytes = await template.input.readAsBytes();
+    await template.output.create(recursive: true);
+    await template.output.writeAsBytes(bytes);
   }
 }
 

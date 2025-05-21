@@ -32,11 +32,11 @@ abstract class MarkDownLinkFactory {
 class MarkDownLinkFactories extends UnmodifiableListView<MarkDownLinkFactory>
     implements MarkDownLinkFactory {
   MarkDownLinkFactories()
-      : super([
-          UrlMarkDownLinkFactory(),
-          PubDevPackageLinkFactory(),
-          SourceLinkFactory(),
-        ]);
+    : super([
+        UrlMarkDownLinkFactory(),
+        PubDevPackageLinkFactory(),
+        SourceLinkFactory(),
+      ]);
 
   @override
   Future<MarkDownLink?> create({
@@ -46,7 +46,10 @@ class MarkDownLinkFactories extends UnmodifiableListView<MarkDownLinkFactory>
   }) async {
     for (var factory in this) {
       var markdownLink = await factory.create(
-          context: context, reference: reference, text: text);
+        context: context,
+        reference: reference,
+        text: text,
+      );
       if (markdownLink != null) {
         return markdownLink;
       }
@@ -129,7 +132,9 @@ class SourceLinkFactory implements MarkDownLinkFactory {
       Future.value('[$linkText]($linkUri)');
 
   Future<Uri?> createDartReferenceUri(
-      RenderContext renderContext, Element element) async {
+    RenderContext renderContext,
+    Element element,
+  ) async {
     try {
       final library = element.library;
       final sourceUri = library?.source.uri;
@@ -151,8 +156,10 @@ class SourceLinkFactory implements MarkDownLinkFactory {
       }
 
       //e.g.: https://github.com/domain-centric/documentation_builder/blob/9e5bd3f6eb6da1dc107faa2fe3a2d19b7c043a8d/lib/src/builder/documentation_builder.dart#L24
-      return gitHubProject.uri
-          .append(path: 'blob/$commitSHA/$path', fragment: 'L$lineNr');
+      return gitHubProject.uri.append(
+        path: 'blob/$commitSHA/$path',
+        fragment: 'L$lineNr',
+      );
     } catch (e) {}
     return null;
   }

@@ -47,6 +47,7 @@ Element? findElementRecursively(Element element, p.DartMemberPath path) {
 void validateIfMemberFound(Element? foundElement, p.SourcePath path) {
   if (foundElement == null) {
     throw ArgumentError(
-        'Dart member: ${path.dartLibraryMemberPath} not found in: ${path.projectFilePath}');
+      'Dart member: ${path.dartLibraryMemberPath} not found in: ${path.projectFilePath}',
+    );
   }
 }

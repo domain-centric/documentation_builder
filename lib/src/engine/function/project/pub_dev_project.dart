@@ -35,8 +35,11 @@ class PubDevProject {
   /// returns a [Uri] to a project (package) on https://pub.dev
   /// returns null if the project can not be found
   static Future<Uri?> _createUri(String projectName) async {
-    var uri =
-        Uri(scheme: 'https', host: 'pub.dev', path: '/packages/$projectName');
+    var uri = Uri(
+      scheme: 'https',
+      host: 'pub.dev',
+      path: '/packages/$projectName',
+    );
     if (await uri.canGetWithHttp()) {
       return uri;
     }
