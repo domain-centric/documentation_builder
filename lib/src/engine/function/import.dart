@@ -61,7 +61,7 @@ class ImportCode extends ExpressionFunction {
               Parameter<bool>(
                   name: 'sourceHeader',
                   description: 'Adds the source path as a header',
-                  presence: Presence.optionalWithDefaultValue('true'))
+                  presence: Presence.optionalWithDefaultValue(true))
             ],
             function: (position, renderContext, parameters) async {
               try {
@@ -109,7 +109,7 @@ class ImportDartCode extends ExpressionFunction {
               Parameter<bool>(
                   name: 'sourceHeader',
                   description: 'Adds the source path as a header',
-                  presence: Presence.optionalWithDefaultValue('true'))
+                  presence: Presence.optionalWithDefaultValue(true))
             ],
             function: (position, renderContext, parameters) async {
               parameters[languageName] = 'dart';

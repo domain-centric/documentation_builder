@@ -74,7 +74,7 @@ packages:
     source: hosted
     version: "2.4.4"
   build_runner:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: build_runner
       sha256: "058fe9dce1de7d69c4b84fada934df3e0153dd000758c4d65964d0166779aa99"
@@ -377,6 +377,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  resource_portable:
+    dependency: "direct main"
+    description:
+      name: resource_portable
+      sha256: "8ffa33b0769645e26d82c8f4e79adde3dd34b9e0bba981166d4e3798f39cffd9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
   shelf:
     dependency: transitive
     description:
@@ -410,7 +418,7 @@ packages:
     source: hosted
     version: "3.0.0"
   shouldly:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: shouldly
       sha256: b65d1f24bc5625bab1b264b3cb59e1d88682618540d8d315a54e9a4375a3cab8
@@ -498,29 +506,29 @@ packages:
     source: hosted
     version: "1.2.2"
   test:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: test
-      sha256: f1665eeffe3b6b193548b5f515e8d1b54ccd9a6e0e7721a417e134e7ed7f06a1
+      sha256: "0561f3a2cfd33d10232360f16dfcab9351cfb7ad9b23e6cd6e8c7fb0d62c7ac3"
       url: "https://pub.dev"
     source: hosted
-    version: "1.26.0"
+    version: "1.26.1"
   test_api:
     dependency: transitive
     description:
       name: test_api
-      sha256: "6c7653816b1c938e121b69ff63a33c9dc68102b65a5fb0a5c0f9786256ed33e6"
+      sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.5"
+    version: "0.7.6"
   test_core:
     dependency: transitive
     description:
       name: test_core
-      sha256: "3caa7c3956b366643b2dedecff764cc32030317b2a15252aed845570df6bcc0f"
+      sha256: "8619a9a45be044b71fe2cd6b77b54fd60f1c67904c38d48706e2852a2bda1c60"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.9"
+    version: "0.6.10"
   timing:
     dependency: transitive
     description:
@@ -594,7 +602,7 @@ packages:
     source: hosted
     version: "6.5.0"
   yaml:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: yaml
       sha256: b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce
@@ -602,4 +610,4 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.7.0 <4.0.0"
+  dart: ">=3.7.2 <4.0.0"

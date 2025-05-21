@@ -6,21 +6,24 @@ import 'package:documentation_builder/documentation_builder.dart';
 import 'package:documentation_builder/src/builder/new_line.dart';
 import 'package:documentation_builder/src/engine/function/generator.dart';
 import 'package:documentation_builder/src/engine/function/project/local_project.dart';
+import 'package:documentation_builder/src/engine/function/util/path_parsers.dart';
 import 'package:documentation_builder/src/engine/template_engine.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
 class TableOfContentsFactory {
-  createMarkDown(
-      {required RenderContext renderContext,
-      required String relativePath,
-      required bool includeFileLink,
-      required bool gitHubWiki}) async {
+  createMarkDown({
+    required RenderContext renderContext,
+    required String relativePath,
+    required bool includeFileLink,
+    required bool gitHubWiki,
+  }) async {
     try {
       var titleLinks = <TitleLink>[];
-      var path = convertSeparators(
-          "${LocalProject.directory.path}/$relativePath",
-          Platform.pathSeparator);
+      var path = normalizePathSeparators(
+        "${LocalProject.directory.path}/$relativePath",
+        Platform.pathSeparator,
+      );
       var builder = BuilderVariable.of(renderContext);
       var files = findFiles(path);
       for (var file in files) {
@@ -33,14 +36,17 @@ class TableOfContentsFactory {
         var outputFileName = outputs.first.pathSegments.last;
         if (includeFileLink) {
           var titleLink = TitleLink.fromFileName(
-              relativePath: outputFileName, removeMdExtension: gitHubWiki);
+            relativePath: outputFileName,
+            removeMdExtension: gitHubWiki,
+          );
           titleLinks.add(titleLink);
         }
         String markDown = await parseAndRender(file, renderContext);
         var newTitleLinks = findTitles(
-            outputFileName: outputFileName,
-            markDown: markDown,
-            removeMdExtension: gitHubWiki);
+          outputFileName: outputFileName,
+          markDown: markDown,
+          removeMdExtension: gitHubWiki,
+        );
         newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
         titleLinks.addAll(newTitleLinks);
       }
@@ -54,8 +60,10 @@ class TableOfContentsFactory {
     try {
       var template = FileTemplate(file);
       var parseResult = await engine.parseTemplate(template);
-      var renderResult =
-          await engine.render(parseResult, renderContext.variables);
+      var renderResult = await engine.render(
+        parseResult,
+        renderContext.variables,
+      );
       var markDown = renderResult.text;
       return markDown;
     } on Exception {
@@ -95,28 +103,29 @@ class TableOfContentsFactory {
     return files;
   }
 
-  List<TitleLink> findTitles(
-      {required String outputFileName,
-      required String markDown,
-      required bool removeMdExtension}) {
-    var parser = _markdownTitleParser();
+  List<TitleLink> findTitles({
+    required String outputFileName,
+    required String markDown,
+    required bool removeMdExtension,
+  }) {
+    var parser = markdownTitleParser();
     var matches = parser.allMatches(
-        '\n\r\n$markDown'); // \n\r\n are added to ensure the parser also matched the first line
+      '\n\r\n$markDown',
+    ); // \n\r\n are added to ensure the parser also matched the first line
     var titleLinks = <TitleLink>[];
     for (var match in matches) {
       var titleLink = TitleLink(
-          relativePath: removeMdExtension
-              ? outputFileName.replaceFirst(RegExp(r'\.md$'), '')
-              : outputFileName,
-          title: match.title,
-          level: match.hashes.length);
+        relativePath:
+            removeMdExtension
+                ? outputFileName.replaceFirst(RegExp(r'\.md$'), '')
+                : outputFileName,
+        title: match.title,
+        level: match.hashes.length,
+      );
       titleLinks.add(titleLink);
     }
     return titleLinks;
   }
-
-  convertSeparators(String path, String pathSeparator) =>
-      path.replaceAll('\\', pathSeparator).replaceAll('/', pathSeparator);
 
   static DocumentationTemplateEngine _createEngine() {
     var engine = DocumentationTemplateEngine();
@@ -125,7 +134,8 @@ class TableOfContentsFactory {
   }
 
   static void replaceTocFunctionToPreventRoundTrips(
-      DocumentationTemplateEngine engine) {
+    DocumentationTemplateEngine engine,
+  ) {
     for (var functionGroup in engine.functionGroups) {
       for (var function in functionGroup) {
         if (function is TableOfContents) {
@@ -138,8 +148,13 @@ class TableOfContentsFactory {
 
   String createRelativePath(File file) {
     var nativeRelativePath = file.path.replaceFirst(
-        '${LocalProject.directory.path}${Platform.pathSeparator}', '');
-    var normalizedRelativePath = convertSeparators(nativeRelativePath, '/');
+      '${LocalProject.directory.path}${Platform.pathSeparator}',
+      '',
+    );
+    var normalizedRelativePath = normalizePathSeparators(
+      nativeRelativePath,
+      '/',
+    );
     return normalizedRelativePath;
   }
 
@@ -177,10 +192,11 @@ class TableOfContentsFactory {
 
   TitleNode createTitleNode(TitleLink parent, List<TitleLink> children) =>
       TitleNode(
-          relativePath: parent.relativePath,
-          title: parent.title,
-          fragment: parent.fragment,
-          children: createTitleNodes(children));
+        relativePath: parent.relativePath,
+        title: parent.title,
+        fragment: parent.fragment,
+        children: createTitleNodes(children),
+      );
 }
 
 class TitleNode {
@@ -189,11 +205,12 @@ class TitleNode {
   final String fragment;
   final List<TitleNode> children;
 
-  TitleNode(
-      {required this.relativePath,
-      required this.title,
-      required this.fragment,
-      required this.children});
+  TitleNode({
+    required this.relativePath,
+    required this.title,
+    required this.fragment,
+    required this.children,
+  });
 
   List<TitleLink> createTitleLinks(int level) {
     var links = <TitleLink>[];
@@ -209,28 +226,10 @@ class TitleNode {
 /// dummy function to prevent round trips.
 class TableOfContentsDummy extends ExpressionFunction {
   TableOfContentsDummy()
-      : super(
-            name: TableOfContents.nameId,
-            function: (position, renderContext, parameters) async => '');
-}
-
-///TODO move to test
-void main() {
-  final markdownText = '''
-# Title One
-Some paragraph text.
-## Subtitle One
-### Sub-subtitle
-Another paragraph.
-# Another Title
-This is a hashtag: # not a title
-''';
-
-  var parser = _markdownTitleParser();
-  var matches = parser.allMatches('\n$markdownText');
-  for (var match in matches) {
-    print('title: ${match.title}, level: ${match.hashes.length}');
-  }
+    : super(
+        name: TableOfContents.nameId,
+        function: (position, renderContext, parameters) async => '',
+      );
 }
 
 class TitleLink {
@@ -240,18 +239,22 @@ class TitleLink {
   final int level;
   final String fragment;
 
-  TitleLink(
-      {required this.relativePath, required this.title, required this.level})
-      : fragment = createFragmentFromTitle(title);
+  TitleLink({
+    required this.relativePath,
+    required this.title,
+    required this.level,
+  }) : fragment = createFragmentFromTitle(title);
 
-  TitleLink.fromFileName(
-      {required String relativePath, required bool removeMdExtension})
-      : title = toBold(createTitleFromRelativePath(relativePath)),
-        relativePath = removeMdExtension
-            ? relativePath.replaceFirst(RegExp(r'\.md$'), '')
-            : relativePath,
-        level = 0,
-        fragment = '';
+  TitleLink.fromFileName({
+    required String relativePath,
+    required bool removeMdExtension,
+  }) : title = toBold(createTitleFromRelativePath(relativePath)),
+       relativePath =
+           removeMdExtension
+               ? relativePath.replaceFirst(RegExp(r'\.md$'), '')
+               : relativePath,
+       level = 0,
+       fragment = '';
 
   /// Markdown will be translated to HTML by converters.
   /// These normally add a anchor or id to a title so that they can be called with a Uri fragment, e.g.:
@@ -286,7 +289,7 @@ class TitleLink {
       .replaceFirst(RegExp(r'\..*'), ''); // remove file extensions
 }
 
-Parser<({String hashes, String title})> _markdownTitleParser() {
+Parser<({String hashes, String title})> markdownTitleParser() {
   final Parser<String> newLine = (string('\n\r') | char('\n')).flatten();
   final Parser<String> hash = char('#');
   final Parser<String> hashes = hash.plus().flatten(); // One or more #

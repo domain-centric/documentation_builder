@@ -43,7 +43,7 @@ class LinkFunctions extends FunctionGroup {
         ]);
 }
 
-class TextParameter extends Parameter {
+class TextParameter extends Parameter<String> {
   static const String id = 'text';
 
   TextParameter()
@@ -54,7 +54,7 @@ class TextParameter extends Parameter {
             presence: Presence.optional());
 }
 
-class SuffixParameter extends Parameter {
+class SuffixParameter extends Parameter<String> {
   static const String id = 'suffix';
 
   SuffixParameter([Presence presence = const Presence.optional()])

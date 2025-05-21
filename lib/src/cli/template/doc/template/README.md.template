@@ -1,0 +1,18 @@
+{{allPubGitHubBadges()}}
+ 
+![]([[gitHubWikiUri('/package.jpeg')]])
+
+# Features
+{{importDartDoc('doc/template/doc/wiki/1-Features.md.template')}}
+
+# Examples
+{{importTemplate('doc/template/example/example.md.template')}}
+
+# Getting Started
+{{importTemplate('doc/template/doc/wiki/2-Getting-Started.md.template')}}
+
+# Usage
+{{importTemplate('doc/template/doc/wiki/3-Usage.md.template')}}
+
+# Documentation
+For more information read the {{gitHubWikiLink()}}

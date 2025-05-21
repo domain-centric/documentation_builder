@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:documentation_builder/src/engine/function/generator.dart';
 import 'package:documentation_builder/src/engine/function/project/local_project.dart';
 import 'package:documentation_builder/src/engine/function/util/path_parsers.dart';
 import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
@@ -15,7 +16,7 @@ class GitHubProject {
   Uri get uri {
     if (_uri == null)
       throw Exception('Could not find the project on github.com');
-    return _uri!;
+    return _uri;
   }
 
   GitHubProject._(this._uri);
@@ -28,7 +29,8 @@ class GitHubProject {
   static Future<Uri?> _createUri() async {
     try {
       var gitConfigFile = File(
-          '${LocalProject.directory.path}${Platform.pathSeparator}.git${Platform.pathSeparator}config');
+        '${LocalProject.directory.path}${Platform.pathSeparator}.git${Platform.pathSeparator}config',
+      );
       if (!gitConfigFile.existsSync()) {
         return null;
       }
@@ -79,38 +81,43 @@ class GitHubProject {
       uri.append(path: 'search', query: {'q': query});
 
   //e.g.: https://github.com/domain-centric/documentation_builder/blob/9e5bd3f6eb6da1dc107faa2fe3a2d19b7c043a8d/lib/src/builder/documentation_builder.dart#L24
-  Uri blobUri(ProjectFilePath2 path,
-          {
-          /// Tag can be:
-          /// * a branch name, e.g. main
-          /// * a tag name
-          /// * a commitHSA, See https://graphite.dev/guides/git-hash
-          String tagName = 'main',
-          int? lineNr}) =>
-      uri.append(
-          path: 'blob/$tagName/${path.relativePath}',
-          fragment: lineNr == null ? null : 'L$lineNr');
+  Uri blobUri(
+    ProjectFilePath2 path, {
 
-  Uri sourceFileUri(ProjectFilePath2 path,
-          {
-          /// See https://graphite.dev/guides/git-hash
-          String tagName = 'main',
-          int? lineNr}) =>
-      blobUri(path, tagName: tagName, lineNr: lineNr);
+    /// Tag can be:
+    /// * a branch name, e.g. main
+    /// * a tag name
+    /// * a commitHSA, See https://graphite.dev/guides/git-hash
+    String tagName = 'main',
+    int? lineNr,
+  }) => uri.append(
+    path: 'blob/$tagName/${path.relativePath}',
+    fragment: lineNr == null ? null : 'L$lineNr',
+  );
 
-  Uri licenseUri(
-          {
-          /// See https://graphite.dev/guides/git-hash
-          String tagName = 'main',
-          int? lineNr}) =>
+  Uri sourceFileUri(
+    ProjectFilePath2 path, {
+
+    /// See https://graphite.dev/guides/git-hash
+    String tagName = 'main',
+    int? lineNr,
+  }) => blobUri(path, tagName: tagName, lineNr: lineNr);
+
+  Uri licenseUri({
+    /// See https://graphite.dev/guides/git-hash
+    String tagName = 'main',
+    int? lineNr,
+  }) =>
       blobUri(ProjectFilePath2('LICENSE.md'), tagName: tagName, lineNr: lineNr);
 
   Future<Map<String, Uri>> getMilestones(String stateParameterValue) async {
     var restApiUri = Uri.parse(
-        'https://api.github.com/repos${uri.path}/milestones?state=$stateParameterValue&sort=closed_at&direction=desc');
-    var response = await http.get(restApiUri, headers: {
-      'Accept': 'application/vnd.github.v3+json',
-    });
+      'https://api.github.com/repos${uri.path}/milestones?state=$stateParameterValue&sort=closed_at&direction=desc',
+    );
+    var response = await http.get(
+      restApiUri,
+      headers: {'Accept': 'application/vnd.github.v3+json'},
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch milestones: ${response.statusCode}');
@@ -144,8 +151,28 @@ class GitHubProject {
     return latestCommitSha.trim();
   }
 
-  late Uri rawUri =
-      Uri.https('raw.githubusercontent.com', '${uri.path}/refs/heads/main');
+  late Uri rawUri = Uri.https(
+    'raw.githubusercontent.com',
+    '${uri.path}/refs/heads/main',
+  );
+
+  LicenseText? get localLicense {
+    final licenseDir = Directory(LocalProject.directory.path);
+    final licenseFile = licenseDir
+        .listSync()
+        .whereType<File>()
+        .firstWhereOrNull(
+          (file) => RegExp(
+            r'^LICENSE(\..+)?$',
+            caseSensitive: false,
+          ).hasMatch(file.uri.pathSegments.last),
+        );
+    if (licenseFile == null) {
+      return null;
+    }
+    var licenseText = licenseFile.readAsStringSync();
+    return Licenses().findLicenseOnText(licenseText);
+  }
 }
 
 enum GitHubMileStonesStates {

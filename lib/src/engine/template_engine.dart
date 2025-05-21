@@ -11,21 +11,21 @@ import 'package:template_engine/template_engine.dart';
 ///
 /// It has some addition functionality on top of the [TemplateEngine]
 class DocumentationTemplateEngine extends TemplateEngine {
-  DocumentationTemplateEngine._() : super();
+  
+   DocumentationTemplateEngine() :super(
+      functionGroups: createDocumentationFunctionGroups()
+    );
 
-  factory DocumentationTemplateEngine() {
-    var engine = DocumentationTemplateEngine._();
-    var mergedFunctionGroups = _createFunctionGroups(engine);
-    engine.functionGroups.clear();
-    engine.functionGroups.addAll(mergedFunctionGroups);
-    return engine;
-  }
+  
+}
 
-  /// merges [FunctionGroup]s that come pre-packaged as part of the template_engine package
+/// merges [FunctionGroup]s that come pre-packaged as part of the template_engine package
   /// with additional [FunctionGroup]s specific for documentation_builder
   /// where the most important documentation_builder [FunctionGroup]s are ordered first.
-  static List<FunctionGroup> _createFunctionGroups(
-      DocumentationTemplateEngine engine) {
+   List<FunctionGroup> createDocumentationFunctionGroups(
+    
+  ) {
+
     /// new function groups in order of importance for [DocumentationTemplateEngine]
     var newGroups = <FunctionGroup>[
       MergedImportFunctions(),
@@ -39,10 +39,11 @@ class DocumentationTemplateEngine extends TemplateEngine {
     return newGroups;
   }
 
-  static Iterable<FunctionGroup> _remainingGroups(
-      List<FunctionGroup> newGroups) {
+   Iterable<FunctionGroup> _remainingGroups(
+    List<FunctionGroup> newGroups,
+  ) {
     var newGroupNames = newGroups.map((g) => g.name);
-    return DefaultFunctionGroups()
-        .where((original) => !newGroupNames.contains(original.name));
+    return DefaultFunctionGroups().where(
+      (original) => !newGroupNames.contains(original.name),
+    );
   }
-}

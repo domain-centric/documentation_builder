@@ -224,3 +224,6 @@ class DartMemberPath extends UnmodifiableListView<String> {
   String toString() => join('.');
 
 }
+
+String normalizePathSeparators(String path, String pathSeparator) =>
+      path.replaceAll('\\', pathSeparator).replaceAll('/', pathSeparator);

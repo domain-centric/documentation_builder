@@ -14,7 +14,7 @@ class PubDevProject {
     if (_uri == null) {
       throw Exception('Could not find the project on pub.dev');
     }
-    return _uri!;
+    return _uri;
   }
 
   PubDevProject._(this.packageName, this._uri);
