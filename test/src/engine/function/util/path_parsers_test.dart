@@ -52,18 +52,21 @@ void main() {
       Should.throwException<Exception>(() =>
           SourcePath(
               'lib\\my_library.dart|MyClass.myMethod')).toString().should.be(
-          "Exception: Invalid Dart code path: 'lib\\my_library.dart|MyClass.myMethod':"
-          " \"#\" expected at position: 3");
+          "Exception: Invalid Dart code path: 'lib\\my_library.dart|MyClass.myMethod'"
+          ': letter expected OR digit expected OR "(" expected OR ")" expected OR '
+          '"_" expected OR "-" expected OR "." expected at position: 3');
       Should.throwException<Exception>(() =>
           SourcePath(
               'lib/my_library.dart|MyClass..myMethod')).toString().should.be(
-          "Exception: Invalid Dart code path: 'lib/my_library.dart|MyClass..myMethod':"
-          " \"#\" expected at position: 19");
+            "Exception: Invalid Dart code path: 'lib/my_library.dart|MyClass..myMethod':"
+            ' letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
+            ' expected OR "-" expected OR "." expected at position: 19');
       Should.throwException<Exception>(() =>
           SourcePath(
               'lib/my_library.dart#MyClass..myMethod')).toString().should.be(
-          "Exception: Invalid Dart code path: 'lib/my_library.dart#MyClass..myMethod':"
-          " \"_\" expected at position: 27");
+          "Exception: Invalid Dart code path: 'lib/my_library.dart#MyClass..myMethod'"
+          ': letter expected OR digit expected OR "(" expected OR ")" expected OR "_"'
+          ' expected OR "-" expected OR "." expected at position: 19');
     });
 
     test('extracts file path correctly', () {

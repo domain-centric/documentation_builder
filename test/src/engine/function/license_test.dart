@@ -39,7 +39,7 @@ void main() {
       renderResult.errorMessage.should.contain(
           "Render error in: '{{ license(type=\"INVALID\", name=\"John Do...':");
       renderResult.errorMessage.should.contain(
-          "1:4: 'INVALID' is not on of the supported license types: MIT, BSD3.");
+          "1:4: Invalid argument(s) (type): 'INVALID' is not on of the supported license types: MIT, BSD3.");
     });
   });
 }

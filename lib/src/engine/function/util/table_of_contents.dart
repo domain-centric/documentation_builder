@@ -166,37 +166,39 @@ class TableOfContentsFactory {
         .toList();
   }
 
+  /// Creates a tree of TitleNodes from a list of TitleLinks.
+  /// each titleLinks is converted to a TitleNode.
+  /// The first TitleLink is added to the list of root nodes.
+  /// The following TitleLinks are added based on their level compared to the last leaf node.
+  /// * when higher than : add it as a child to the last leaf node.
+  /// * when equal than: add it as a child of the parent of the last leaf node.
+  /// * when less than: add it to the list of root nodes.
   List<TitleNode> createTitleNodes(List<TitleLink> titleLinks) {
     var root = <TitleNode>[];
-    TitleLink? current;
-    var children = <TitleLink>[];
+    TitleLink? previousLink;
     for (var titleLink in titleLinks) {
-      if (current == null) {
-        current = titleLink;
-      } else {
-        if (titleLink.level <= current.level) {
-          var titleNode = createTitleNode(current, children);
-          root.add(titleNode);
-          current = titleLink;
-          children.clear();
+      var node = TitleNode(
+        relativePath: titleLink.relativePath,
+        title: titleLink.title,
+        fragment: titleLink.fragment,
+        children: [],
+      );
+      if (previousLink == null || titleLink.level < previousLink.level) {
+        root.add(node);
+      } else if (titleLink.level == previousLink.level) {
+        var parentOfLastLeafNode = root.last.parentOfLastLeafNode;
+        if (parentOfLastLeafNode == null) {
+          root.add(node);
         } else {
-          children.add(titleLink);
+          parentOfLastLeafNode.children.add(node);
         }
+      } else if (titleLink.level > previousLink.level) {
+        root.last.lastLeafNode.children.add(node);
       }
+      previousLink = titleLink;
     }
-    if (current == null) return [];
-    var titleNode = createTitleNode(current, children);
-    root.add(titleNode);
     return root;
   }
-
-  TitleNode createTitleNode(TitleLink parent, List<TitleLink> children) =>
-      TitleNode(
-        relativePath: parent.relativePath,
-        title: parent.title,
-        fragment: parent.fragment,
-        children: createTitleNodes(children),
-      );
 }
 
 class TitleNode {
@@ -212,10 +214,30 @@ class TitleNode {
     required this.children,
   });
 
+  TitleNode get lastLeafNode {
+    if (children.isEmpty) {
+      return this;
+    } else {
+      return children.last.lastLeafNode;
+    }
+  }
+
+  TitleNode? get parentOfLastLeafNode {
+    if (children.isEmpty) {
+      return null;
+    }
+    var lastChild = children.last;
+    if (lastChild.children.isEmpty) {
+      return this;
+    } else {
+      return lastChild.parentOfLastLeafNode;
+    }
+  }
+
   List<TitleLink> createTitleLinks(int level) {
     var links = <TitleLink>[];
     links.add(createTitleLink(level));
-    links.addAll(children.map((c) => c.createTitleLink(level + 1)));
+    links.addAll(children.map((c) => c.createTitleLinks(level + 1)).flattened);
     return links;
   }
 
