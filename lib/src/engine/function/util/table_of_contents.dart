@@ -163,35 +163,40 @@ class TableOfContentsFactory {
       return [];
     }
     var newTitleLinks = <TitleLink>[];
-    int perviousOldLevel=titleLinks.first.level;
+    int perviousOldLevel = titleLinks.first.level;
     for (var titleLink in titleLinks) {
-      var currentOldLevel=titleLink.level;
-      var perviousNewLevel=newTitleLinks.isEmpty?1: newTitleLinks.last.level;
-      var newLevel = _newLevel(currentOldLevel, perviousOldLevel, perviousNewLevel);
-      var newTitleLink = titleLink.copyWith(level:newLevel);
+      var currentOldLevel = titleLink.level;
+      var perviousNewLevel =
+          newTitleLinks.isEmpty ? 1 : newTitleLinks.last.level;
+      var newLevel = _newLevel(
+        currentOldLevel,
+        perviousOldLevel,
+        perviousNewLevel,
+      );
+      var newTitleLink = titleLink.copyWith(level: newLevel);
       newTitleLinks.add(newTitleLink);
-      perviousOldLevel=currentOldLevel;
+      perviousOldLevel = currentOldLevel;
     }
     return newTitleLinks;
   }
-  
+
   _newLevel(int currentOldLevel, int perviousOldLevel, int perviousNewLevel) {
-    if (currentOldLevel==0) {
+    if (currentOldLevel == 0) {
       // old level is 0 is the root level
       // all levels must start with 1
       return 1;
     }
-    if (currentOldLevel<perviousOldLevel) {
+    if (currentOldLevel < perviousOldLevel) {
       // reduce the level, but not below 2
-      return max(perviousNewLevel-1,2);
+      return max(perviousNewLevel - 1, 2);
     }
-    if (currentOldLevel==perviousOldLevel) {
+    if (currentOldLevel == perviousOldLevel) {
       // keep the level
       return perviousNewLevel;
     }
-    if (currentOldLevel>perviousOldLevel) {
+    if (currentOldLevel > perviousOldLevel) {
       // increase the level
-      return perviousNewLevel+1;
+      return perviousNewLevel + 1;
     }
   }
 }
@@ -259,14 +264,13 @@ class TitleLink {
       .replaceAll('-', ' ') // replace hyphens with spaces
       .replaceAll('_', ' ') // replace under scores with spaces
       .replaceAll('  ', ' ') // replace double spaces with single space
-      .replaceFirst(RegExp(r'\..*'), '');// remove the file extension
-      
-      TitleLink copyWith({required int level}) => 
-          TitleLink(
-            relativePath: this.relativePath,
-            title: this.title,
-            level: level,
-          );
+      .replaceFirst(RegExp(r'\..*'), ''); // remove the file extension
+
+  TitleLink copyWith({required int level}) => TitleLink(
+    relativePath: this.relativePath,
+    title: this.title,
+    level: level,
+  );
 }
 
 Parser<({String hashes, String title})> markdownTitleParser() {
