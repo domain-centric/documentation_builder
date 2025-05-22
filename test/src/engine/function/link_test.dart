@@ -15,8 +15,9 @@ void main() {
         TextParameter.id: 'GitHub',
         SuffixParameter.id: '/issues',
       });
-      result.text.should.be('GitHub');
-      result.uri.toString().should.be('https://github.com/domain-centric/documentation_builder/issues');
+      result.toString().should.be(
+        '[GitHub](https://github.com/domain-centric/documentation_builder/issues)',
+      );
     });
 
     test('GitHubWikiLink returns correct MarkDownLink', () async {
@@ -26,8 +27,9 @@ void main() {
         TextParameter.id: 'Wiki',
         SuffixParameter.id: '/Home',
       });
-      result.text.should.be('Wiki');
-      result.uri.toString().should.be('https://github.com/domain-centric/documentation_builder/wiki/Home');
+      result.toString().should.be(
+        '[Wiki](https://github.com/domain-centric/documentation_builder/wiki/Home)',
+      );
     });
 
     test('parsing {{gitHubRawLink()}} should report: suffix missing', () async {
@@ -46,8 +48,9 @@ void main() {
         TextParameter.id: 'PubDev',
         SuffixParameter.id: '/changelog',
       });
-      result.text.should.be('PubDev');
-      result.uri.toString().should.be('https://pub.dev/packages/documentation_builder/changelog');
+      result.toString().should.be(
+        '[PubDev](https://pub.dev/packages/documentation_builder/changelog)',
+      );
     });
 
     test('ReferenceLink throws on unknown reference', () async {
@@ -71,8 +74,7 @@ void main() {
         ReferenceLink.refId: 'https://www.google.com',
         TextParameter.id: 'Google',
       });
-      result.text.should.be('Google');
-      result.uri.toString().should.be('https://www.google.com');
+      result.toString().should.be('[Google](https://www.google.com)');
     });
 
     test('PubDevLicenseLink returns correct MarkDownLink', () async {
@@ -81,8 +83,9 @@ void main() {
       final result = await func.function('', FakeRenderContext(variableMap), {
         TextParameter.id: 'License',
       });
-      result.text.should.be('License');
-      result.uri.toString().should.be('https://pub.dev/packages/documentation_builder/license');
+      result.toString().should.be(
+        '[License](https://pub.dev/packages/documentation_builder/license)',
+      );
     });
   });
 }
