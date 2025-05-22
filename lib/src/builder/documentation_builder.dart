@@ -31,11 +31,11 @@ import 'package:template_engine/template_engine.dart';
 /// # Features
 /// [documentation_builder] uses the [template_engine] package with additional functions for documentation.
 /// The most commonly used functions for documentation are:
-/// * [Import Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions)
-/// * [Generator Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#generator-functions)
-/// * [Path Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#path-functions)
-/// * [Link Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions)
-/// * [Badge Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions)
+/// * [Import Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#import-functions)
+/// * [Generator Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#generator-functions)
+/// * [Path Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#path-functions)
+/// * [Link Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#link-functions)
+/// * [Badge Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#badge-functions)
 ///
 /// # Breaking Changes
 /// [documentation_builder] 1.0.0 has had major improvements over earlier versions:
@@ -64,6 +64,7 @@ import 'package:template_engine/template_engine.dart';
 ///   | {ImportDartDoc path='lib\my_lib.dart&#124;MyClass' title='# My Class'}          | # My Class<br>{{importDartDoc('lib\my_lib.dart&#124;MyClass')}} |
 ///   | {TableOfContents title='# Table of contents example'}                           | # Table of contents<br>{{tableOfContents(path='doc/template/doc/wiki')}} |
 ///   | {MitLicense name='John Doe'}                                                    | {{license(type='MIT', name='John Doe')}} |
+///
 ///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions) for more details on these and new functions
 /// * Links
 ///   | old syntax               | new syntax |
@@ -86,6 +87,7 @@ import 'package:template_engine/template_engine.dart';
 ///   | PubDev package links     | {{referenceLink()}} |
 ///   | Dart code links          | {{referenceLink('ref')}} |
 ///   | Markdown file links      | &#91;title](URI) |
+///
 ///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions) for more details on these and new functions
 /// * Badges
 ///   | old syntax                                  | new syntax                    |
@@ -98,6 +100,7 @@ import 'package:template_engine/template_engine.dart';
 ///   | &#91;GitHubIssuesBadge title='title']       | &#91;title]({{gitHubIssuesBadge()}})       |
 ///   | &#91;GitHubPullRequestsBadge title='title'] | &#91;title]({{gitHubPullRequestsBadge()}}) |
 ///   | &#91;GitHubLicenseBadge title='title']      | &#91;title]({{gitHubLicenseBadge()}})      |
+///
 ///   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions) for more details on these and new functions
 /// * Github-Wiki pages are now generated somewhere in the project folder (e.g. doc\wiki) and need to be copied to GitHub.
 ///   This could be done using GitHub actions (e.g. after each commit).

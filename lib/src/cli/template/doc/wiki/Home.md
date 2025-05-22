@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/doc/wiki/Home.md.template using the documentation_builder package)
+[//]: # (This file was generated from: lib/src/cli/template/doc/template/doc/wiki/Home.md.template using the documentation_builder package)
 
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)

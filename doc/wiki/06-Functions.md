@@ -26,7 +26,7 @@
 <tr><td>expression example:</td><td colspan="4">{{importCode('test/src/template_engine_template_example_test.dart')}}</td></tr>
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the code file to importThis path can be a absolute or relative file path or URI.</td></tr>
 <tr><td>parameter:</td><td>language</td><td>String</td><td>optional (default="")</td><td>You can specify the language to optimize syntax highlighting, e.g. html, dart, ruby</td></tr>
-<tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default="true")</td><td>Adds the source path as a header</td></tr>
+<tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default=true)</td><td>Adds the source path as a header</td></tr>
 </table>
 
 ## importDartCode Function
@@ -35,7 +35,7 @@
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{importDartCode('test/src/template_engine_template_example_test.dart')}}</td></tr>
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the dart code file to import.This path can be a absolute or relative file path or URI.</td></tr>
-<tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default="true")</td><td>Adds the source path as a header</td></tr>
+<tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default=true)</td><td>Adds the source path as a header</td></tr>
 </table>
 
 ## importDartDoc Function
@@ -175,7 +175,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a web page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubWikiUri Function
@@ -183,7 +183,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a wiki page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubWikiUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubStarsUri Function
@@ -191,7 +191,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a stars page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubStarsUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubIssuesUri Function
@@ -199,7 +199,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of an issue page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubIssuesUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubMilestonesUri Function
@@ -207,7 +207,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a milestone page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubMilestonesUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubReleasesUri Function
@@ -215,7 +215,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a releases page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubReleasesUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubPullRequestsUri Function
@@ -223,15 +223,15 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of a pull request page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubPullRequestsUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## gitHubRawUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a raw code page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
-<tr><td>expression example:</td><td colspan="4">{{ gitHubRawUri(???) }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>mandatory</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>expression example:</td><td colspan="4">{{ gitHubRawUri('suffix value') }}</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>mandatory</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevUri Function
@@ -239,7 +239,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the home page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevChangeLogUri Function
@@ -247,7 +247,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the change log page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevChangeLogUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevVersionsUri Function
@@ -255,7 +255,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the version page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevVersionsUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevExampleUri Function
@@ -263,7 +263,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the example page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevExampleUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevInstallUri Function
@@ -271,7 +271,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the install page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevInstallUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevScoreUri Function
@@ -279,7 +279,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the score page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevScoreUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 ## pubDevLicenseUri Function
@@ -287,7 +287,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a URI of the license page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevLicenseUri() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
 # Link Functions
@@ -301,7 +301,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 * a package name on pub.dev, e.g.: 'documentation_builder'
 * reference to a source file, e.g.: 'example/example.md' or 'lib/src/my_library.dart'
 * a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubLink Function
@@ -309,8 +309,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a web page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubWikiLink Function
@@ -318,8 +318,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a wiki page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubWikiLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubStarsLink Function
@@ -327,8 +327,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a stars page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubStarsLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubIssuesLink Function
@@ -336,8 +336,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of an issue page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubIssuesLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubMilestonesLink Function
@@ -345,8 +345,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a milestone page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubMilestonesLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubReleasesLink Function
@@ -354,8 +354,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a releases page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubReleasesLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubPullRequestsLink Function
@@ -363,17 +363,17 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a pull request page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ gitHubPullRequestsLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## gitHubRawLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a raw code page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
-<tr><td>expression example:</td><td colspan="4">{{ gitHubRawLink(???) }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>mandatory</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>expression example:</td><td colspan="4">{{ gitHubRawLink('suffix value') }}</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>mandatory</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevLink Function
@@ -381,8 +381,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the home page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevChangeLogLink Function
@@ -390,8 +390,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the change log page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevChangeLogLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevVersionsLink Function
@@ -399,8 +399,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the version page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevVersionsLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevExampleLink Function
@@ -408,8 +408,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the example page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevExampleLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevInstallLink Function
@@ -417,8 +417,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the install page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevInstallLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevScoreLink Function
@@ -426,8 +426,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the score page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevScoreLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 ## pubDevLicenseLink Function
@@ -435,8 +435,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the license page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ pubDevLicenseLink() }}</td></tr>
-<tr><td>parameter:</td><td>suffix</td><td>dynamic</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
-<tr><td>parameter:</td><td>text</td><td>dynamic</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
+<tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
+<tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
 # Badge Functions

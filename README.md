@@ -7,7 +7,7 @@
 [![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/stargazers)
 [![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)
 [![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)
-[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE.md)
+[![Project License](https://img.shields.io/badge/license-BSD3-blue)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE.md)
  
 ![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
 
@@ -31,19 +31,19 @@ Use [dartdoc](https://dart.dev/tools/dartdoc) instead.
 # Features
 [documentation_builder](https://pub.dev/packages/documentation_builder) uses the [template_engine](https://pub.dev/packages/template_engine) package with additional functions for documentation.
 The most commonly used functions for documentation are:
-* [Import Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions)
-* [Generator Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#generator-functions)
-* [Path Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#path-functions)
-* [Link Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions)
-* [Badge Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions)
+* [Import Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#import-functions)
+* [Generator Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#generator-functions)
+* [Path Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#path-functions)
+* [Link Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#link-functions)
+* [Badge Functions](https://github.com/domain-centric/documentation_builder/wiki/06-Functions#badge-functions)
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/b9d54a5fed92f866a0f5ae2ba993749f0332a64d/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/b9d54a5fed92f866a0f5ae2ba993749f0332a64d/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/744f15bc68506f18f9542a304bbe01a93d145771/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/744f15bc68506f18f9542a304bbe01a93d145771/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/b9d54a5fed92f866a0f5ae2ba993749f0332a64d/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/744f15bc68506f18f9542a304bbe01a93d145771/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -52,7 +52,7 @@ The most commonly used functions for documentation are:
 * The [input and output file is determined by parameters in the build.yaml file](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-inputpath), which is:
   * Easier to understand than the old DocumentationBuilder conventions
   * More flexible: It can now be configured in the build.yaml file
-* Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders). 
+* Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders).
 
 This resulted in the following breaking changes:
 * Tags
@@ -64,6 +64,7 @@ This resulted in the following breaking changes:
   | {ImportDartDoc path='lib\my_lib.dart&#124;MyClass' title='# My Class'}          | # My Class<br>{{importDartDoc('lib\my_lib.dart&#124;MyClass')}} |
   | {TableOfContents title='# Table of contents example'}                           | # Table of contents<br>{{tableOfContents(path='doc/template/doc/wiki')}} |
   | {MitLicense name='John Doe'}                                                    | {{license(type='MIT', name='John Doe')}} |
+
   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions) for more details on these and new functions
 * Links
   | old syntax               | new syntax |
@@ -86,6 +87,7 @@ This resulted in the following breaking changes:
   | PubDev package links     | {{referenceLink()}} |
   | Dart code links          | {{referenceLink('ref')}} |
   | Markdown file links      | &#91;title](URI) |
+
   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions) for more details on these and new functions
 * Badges
   | old syntax                                  | new syntax                    |
@@ -98,6 +100,7 @@ This resulted in the following breaking changes:
   | &#91;GitHubIssuesBadge title='title']       | &#91;title]({{gitHubIssuesBadge()}})       |
   | &#91;GitHubPullRequestsBadge title='title'] | &#91;title]({{gitHubPullRequestsBadge()}}) |
   | &#91;GitHubLicenseBadge title='title']      | &#91;title]({{gitHubLicenseBadge()}})      |
+
   See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions) for more details on these and new functions
 * Github-Wiki pages are now generated somewhere in the project folder (e.g. doc\wiki) and need to be copied to GitHub.
   This could be done using GitHub actions (e.g. after each commit).
