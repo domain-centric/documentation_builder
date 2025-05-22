@@ -75,11 +75,11 @@ main() {
 
     test('method: dartFile', () async {
       Uri uri = gitHubProject.sourceFileUri(
-        ProjectFilePath2('lib/src/parser/link_parser.dart'),
+        ProjectFilePath2('lib/src/builder/documentation_builder.dart'),
       );
       uri.should.be(
         Uri.parse(
-          'https://github.com/domain-centric/documentation_builder/blob/main/lib/src/parser/link_parser.dart',
+          'https://github.com/domain-centric/documentation_builder/blob/main/lib/src/builder/documentation_builder.dart',
         ),
       );
       (await uri.canGetWithHttp()).should.beTrue();

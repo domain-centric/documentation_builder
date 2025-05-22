@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:build/build.dart';
-import 'package:collection/collection.dart';
 import 'package:documentation_builder/documentation_builder.dart';
 import 'package:documentation_builder/src/builder/new_line.dart';
 import 'package:documentation_builder/src/engine/function/generator.dart';
@@ -159,90 +159,41 @@ class TableOfContentsFactory {
   }
 
   List<TitleLink> toListWithoutLevelGabs(List<TitleLink> titleLinks) {
-    var tree = createTitleNodes(titleLinks);
-    return tree
-        .map((titleNode) => titleNode.createTitleLinks(1))
-        .flattened
-        .toList();
-  }
-
-  /// Creates a tree of TitleNodes from a list of TitleLinks.
-  /// each titleLinks is converted to a TitleNode.
-  /// The first TitleLink is added to the list of root nodes.
-  /// The following TitleLinks are added based on their level compared to the last leaf node.
-  /// * when higher than : add it as a child to the last leaf node.
-  /// * when equal than: add it as a child of the parent of the last leaf node.
-  /// * when less than: add it to the list of root nodes.
-  List<TitleNode> createTitleNodes(List<TitleLink> titleLinks) {
-    var root = <TitleNode>[];
-    TitleLink? previousLink;
+    if (titleLinks.isEmpty) {
+      return [];
+    }
+    var newTitleLinks = <TitleLink>[];
+    int perviousOldLevel=titleLinks.first.level;
     for (var titleLink in titleLinks) {
-      var node = TitleNode(
-        relativePath: titleLink.relativePath,
-        title: titleLink.title,
-        fragment: titleLink.fragment,
-        children: [],
-      );
-      if (previousLink == null || titleLink.level < previousLink.level) {
-        root.add(node);
-      } else if (titleLink.level == previousLink.level) {
-        var parentOfLastLeafNode = root.last.parentOfLastLeafNode;
-        if (parentOfLastLeafNode == null) {
-          root.add(node);
-        } else {
-          parentOfLastLeafNode.children.add(node);
-        }
-      } else if (titleLink.level > previousLink.level) {
-        root.last.lastLeafNode.children.add(node);
-      }
-      previousLink = titleLink;
+      var currentOldLevel=titleLink.level;
+      var perviousNewLevel=newTitleLinks.isEmpty?1: newTitleLinks.last.level;
+      var newLevel = _newLevel(currentOldLevel, perviousOldLevel, perviousNewLevel);
+      var newTitleLink = titleLink.copyWith(level:newLevel);
+      newTitleLinks.add(newTitleLink);
+      perviousOldLevel=currentOldLevel;
     }
-    return root;
+    return newTitleLinks;
   }
-}
-
-class TitleNode {
-  final String relativePath;
-  final String title;
-  final String fragment;
-  final List<TitleNode> children;
-
-  TitleNode({
-    required this.relativePath,
-    required this.title,
-    required this.fragment,
-    required this.children,
-  });
-
-  TitleNode get lastLeafNode {
-    if (children.isEmpty) {
-      return this;
-    } else {
-      return children.last.lastLeafNode;
+  
+  _newLevel(int currentOldLevel, int perviousOldLevel, int perviousNewLevel) {
+    if (currentOldLevel==0) {
+      // old level is 0 is the root level
+      // all levels must start with 1
+      return 1;
+    }
+    if (currentOldLevel<perviousOldLevel) {
+      // reduce the level, but not below 2
+      return max(perviousNewLevel-1,2);
+    }
+    if (currentOldLevel==perviousOldLevel) {
+      // keep the level
+      return perviousNewLevel;
+    }
+    if (currentOldLevel>perviousOldLevel) {
+      // increase the level
+      return perviousNewLevel+1;
     }
   }
-
-  TitleNode? get parentOfLastLeafNode {
-    if (children.isEmpty) {
-      return null;
-    }
-    var lastChild = children.last;
-    if (lastChild.children.isEmpty) {
-      return this;
-    } else {
-      return lastChild.parentOfLastLeafNode;
-    }
-  }
-
-  List<TitleLink> createTitleLinks(int level) {
-    var links = <TitleLink>[];
-    links.add(createTitleLink(level));
-    links.addAll(children.map((c) => c.createTitleLinks(level + 1)).flattened);
-    return links;
-  }
-
-  TitleLink createTitleLink(int level) =>
-      TitleLink(relativePath: relativePath, title: title, level: level);
 }
 
 /// dummy function to prevent round trips.
@@ -308,7 +259,14 @@ class TitleLink {
       .replaceAll('-', ' ') // replace hyphens with spaces
       .replaceAll('_', ' ') // replace under scores with spaces
       .replaceAll('  ', ' ') // replace double spaces with single space
-      .replaceFirst(RegExp(r'\..*'), ''); // remove file extensions
+      .replaceFirst(RegExp(r'\..*'), '');// remove the file extension
+      
+      TitleLink copyWith({required int level}) => 
+          TitleLink(
+            relativePath: this.relativePath,
+            title: this.title,
+            level: level,
+          );
 }
 
 Parser<({String hashes, String title})> markdownTitleParser() {
