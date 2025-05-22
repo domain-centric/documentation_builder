@@ -13,11 +13,10 @@ void main() {
       var variableMap = await createFakeVariables();
       final result = await func.function('', FakeRenderContext(variableMap), {
         TextParameter.id: 'GitHub',
-        SuffixParameter.id: 'issues',
+        SuffixParameter.id: '/issues',
       });
       result.text.should.be('GitHub');
-      result.uri.toString().should.contain('github.com');
-      result.uri.toString().should.contain('issues');
+      result.uri.toString().should.be('https://github.com/domain-centric/documentation_builder/issues');
     });
 
     test('GitHubWikiLink returns correct MarkDownLink', () async {
@@ -25,11 +24,10 @@ void main() {
       var variableMap = await createFakeVariables();
       final result = await func.function('', FakeRenderContext(variableMap), {
         TextParameter.id: 'Wiki',
-        SuffixParameter.id: 'Home',
+        SuffixParameter.id: '/Home',
       });
       result.text.should.be('Wiki');
-      result.uri.toString().should.contain('wiki');
-      result.uri.toString().should.contain('Home');
+      result.uri.toString().should.be('https://github.com/domain-centric/documentation_builder/wiki/Home');
     });
 
     test('parsing {{gitHubRawLink()}} should report: suffix missing', () async {
@@ -46,11 +44,10 @@ void main() {
       var variableMap = await createFakeVariables();
       final result = await func.function('', FakeRenderContext(variableMap), {
         TextParameter.id: 'PubDev',
-        SuffixParameter.id: 'changelog',
+        SuffixParameter.id: '/changelog',
       });
       result.text.should.be('PubDev');
-      result.uri.toString().should.contain('pub.dev');
-      result.uri.toString().should.contain('changelog');
+      result.uri.toString().should.be('https://pub.dev/packages/documentation_builder/changelog');
     });
 
     test('ReferenceLink throws on unknown reference', () async {
@@ -85,7 +82,7 @@ void main() {
         TextParameter.id: 'License',
       });
       result.text.should.be('License');
-      result.uri.toString().should.contain('license');
+      result.uri.toString().should.be('https://pub.dev/packages/documentation_builder/license');
     });
   });
 }
