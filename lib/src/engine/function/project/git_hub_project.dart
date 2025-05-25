@@ -156,23 +156,24 @@ class GitHubProject {
     '${uri.path}/refs/heads/main',
   );
 
-  LicenseText? get localLicense {
-    final licenseDir = Directory(LocalProject.directory.path);
-    final licenseFile = licenseDir
-        .listSync()
-        .whereType<File>()
-        .firstWhereOrNull(
-          (file) => RegExp(
-            r'^LICENSE(\..+)?$',
-            caseSensitive: false,
-          ).hasMatch(file.uri.pathSegments.last),
-        );
-    if (licenseFile == null) {
-      return null;
-    }
-    var licenseText = licenseFile.readAsStringSync();
-    return Licenses().findLicenseOnText(licenseText);
-  }
+// FIXME
+  // LicenseText? get localLicense {
+  //   final licenseDir = Directory(LocalProject.directory.path);
+  //   final licenseFile = licenseDir
+  //       .listSync()
+  //       .whereType<File>()
+  //       .firstWhereOrNull(
+  //         (file) => RegExp(
+  //           r'^LICENSE(\..+)?$',
+  //           caseSensitive: false,
+  //         ).hasMatch(file.uri.pathSegments.last),
+  //       );
+  //   if (licenseFile == null) {
+  //     return null;
+  //   }
+  //   var licenseText = licenseFile.readAsStringSync();
+  //   return Licenses().findLicenseOnText(licenseText);
+  // }
 }
 
 enum GitHubMileStonesStates {
