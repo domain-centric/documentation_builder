@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:collection/collection.dart';
-import 'package:documentation_builder/src/engine/function/generator.dart';
 import 'package:documentation_builder/src/engine/function/project/local_project.dart';
 import 'package:documentation_builder/src/engine/function/util/path_parsers.dart';
 import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
@@ -155,25 +154,6 @@ class GitHubProject {
     'raw.githubusercontent.com',
     '${uri.path}/refs/heads/main',
   );
-
-// FIXME
-  // LicenseText? get localLicense {
-  //   final licenseDir = Directory(LocalProject.directory.path);
-  //   final licenseFile = licenseDir
-  //       .listSync()
-  //       .whereType<File>()
-  //       .firstWhereOrNull(
-  //         (file) => RegExp(
-  //           r'^LICENSE(\..+)?$',
-  //           caseSensitive: false,
-  //         ).hasMatch(file.uri.pathSegments.last),
-  //       );
-  //   if (licenseFile == null) {
-  //     return null;
-  //   }
-  //   var licenseText = licenseFile.readAsStringSync();
-  //   return Licenses().findLicenseOnText(licenseText);
-  // }
 }
 
 enum GitHubMileStonesStates {

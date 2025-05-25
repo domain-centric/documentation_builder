@@ -71,31 +71,10 @@ void main() {
       licenses.findLicenseOnType('bsd3').should.beOfType<Bsd3License>();
       licenses.findLicenseOnType('unknown').should.beNull();
     });
-
-// FIXME
-    // test('findLicenseOnText returns correct license', () {
-    //   licenses.findLicenseOnText('MIT License').should.beOfType<MitLicense>();
-    //   licenses
-    //       .findLicenseOnText('3-Clause BSD License')
-    //       .should
-    //       .beOfType<Bsd3License>();
-    //   licenses.findLicenseOnText('Some other text').should.beNull();
-    // });
   });
 
   group('MitLicense', () {
     final mit = MitLicense();
-
-// FIXME 
-    // test('containsType matches MIT', () {
-    //   Should.satisfyAllConditions([
-    //     () => mit.containsType('MIT License').should.beTrue(),
-    //     () => mit.containsType('mit license').should.beFalse(),
-    //     () => mit.containsType('MIT').should.beTrue(),
-    //     () => mit.containsType('mit').should.beFalse(),
-    //     () => mit.containsType('BSD').should.beFalse(),
-    //   ]);
-    // });
 
     test('text returns correct format', () {
       final text = mit.text(2023, 'TestName');
@@ -108,13 +87,6 @@ void main() {
 
   group('Bsd3License', () {
     final bsd = Bsd3License();
-
-// FIXME 
-    // test('containsType matches BSD3', () {
-    //   bsd.containsType('3-Clause BSD License').should.beTrue();
-    //   bsd.containsType('BSD').should.beFalse();
-    //   bsd.containsType('MIT').should.beFalse();
-    // });
 
     test('text returns correct format', () {
       final text = bsd.text(2024, 'John Doe');

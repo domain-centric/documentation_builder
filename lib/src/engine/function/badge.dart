@@ -423,17 +423,6 @@ class GitHubLicenseBadge extends ExpressionFunction {
           Map<String, Object> parameterValues,
         ) async {
           var gitHubProject = GitHubProject.of(renderContext);
-          // FIXME
-          // var licenseText = gitHubProject.localLicense;
-          // if (licenseText != null) {
-          //   return Badge.custom(
-          //     toolTip: parameterValues[ToolTipParameter.id] as String,
-          //     label: 'license',
-          //     message: licenseText.licenseType,
-          //     color: 'blue',
-          //     link: gitHubProject.licenseUri(),
-          //   ).toString();
-          // }
 
           return Badge(
             toolTip: parameterValues[ToolTipParameter.id] as String,
