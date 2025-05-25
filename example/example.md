@@ -10,8 +10,8 @@ You can view the templates files and the generated output on https://github.com 
 * [Rendered example](https://pub.dev/packages/documentation_builder)
 
 ### LICENSE
-* [Template example](https://github.com/domain-centric/documentation_builder/blob/main/doc/template/LICENSE.md.template)
-* [Generated example](https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/main/LICENSE.md)
+* [Template example](https://github.com/domain-centric/documentation_builder/blob/main/doc/template/LICENSE.template)
+* [Generated example](https://raw.githubusercontent.com/domain-centric/documentation_builder/refs/heads/main/LICENSE)
 
 ### CHANGELOG.md
 * [Template example](https://github.com/domain-centric/documentation_builder/blob/main/doc/template/CHANGELOG.md.template)

@@ -150,7 +150,7 @@
   * [Automatically Publishing Wiki pages](09-Publishing#automatically-publishing-wiki-pages)
 * [**10 Examples**](10-Examples)
   * [README.md](10-Examples#readmemd)
-  * [LICENSE.md](10-Examples#licensemd)
+  * [LICENSE](10-Examples#license)
   * [CHANGELOG.md](10-Examples#changelogmd)
   * [example.md](10-Examples#examplemd)
   * [Wiki pages](10-Examples#wiki-pages)
