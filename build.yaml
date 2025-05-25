@@ -1,4 +1,16 @@
 # Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    sources:
+      - doc/**
+      - lib/**
+      - bin/**
+      - test/**
+      - pubspec.*
+      - $package$
+    builders:
+      documentation_builder|documentation_builder:
+        enabled: True
       
 builders:
   documentation_builder:

@@ -3,7 +3,7 @@ export 'src/builder/documentation_builder.dart';
 export 'src/builder/new_line.dart';
 export 'src/cli/cli_template_engine.dart';
 export 'src/cli/documentation_builder.dart';
-export 'src/cli/template/template.dart';
+export 'src/cli/setup_template.dart';
 export 'src/engine/function/badge.dart';
 export 'src/engine/function/generator.dart';
 export 'src/engine/function/import.dart';

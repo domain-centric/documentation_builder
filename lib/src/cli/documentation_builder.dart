@@ -1,11 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:documentation_builder/src/cli/cli_template_engine.dart';
-import 'package:documentation_builder/src/cli/template/template.dart';
-import 'package:documentation_builder/src/engine/function/project/local_project.dart';
-import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
-import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
+import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:yaml/yaml.dart';
 
