@@ -15,7 +15,7 @@ Future<LibraryElement> resolveLibrary(
   var buildStep = BuildStepVariable.of(context);
   var libraryCache = LibraryCacheVariable.of(context);
   if (libraryCache.containsKey(dartFile)) {
-    return libraryCache[dartFile.relativePath]!;
+    return libraryCache[dartFile]!;
   }
 
   var resolver = buildStep.resolver;
@@ -32,7 +32,7 @@ Element? findElementRecursively(Element element, p.DartMemberPath path) {
   if (element.displayName.isNotEmpty) {
     path = path.withoutParent();
   }
-  if (path.length == 0) {
+  if (path.isEmpty) {
     return null;
   }
   for (var child in element.children) {

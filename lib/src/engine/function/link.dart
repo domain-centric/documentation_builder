@@ -59,12 +59,12 @@ class TextParameter extends Parameter<String> {
 class SuffixParameter extends Parameter<String> {
   static const String id = 'suffix';
 
-  SuffixParameter([Presence presence = const Presence.optional()])
+  SuffixParameter([Presence? presence])
     : super(
         name: id,
         description:
             'A suffix to append to the URI (e.g. path, query, fragment, etc)',
-        presence: presence,
+        presence: presence ?? Presence.optional(),
       );
 }
 
@@ -113,18 +113,19 @@ class GitHubLink extends LinkFunction {
         namePrefix: 'gitHub',
         descriptionSuffix: "a web page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ?? LocalProject.name;
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.uri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ?? LocalProject.name;
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.uri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -134,19 +135,20 @@ class GitHubWikiLink extends LinkFunction {
         namePrefix: 'gitHubWiki',
         descriptionSuffix: "a wiki page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} wiki';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.wikiUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} wiki';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.wikiUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -156,19 +158,20 @@ class GitHubStarsLink extends LinkFunction {
         namePrefix: 'gitHubStars',
         descriptionSuffix: "a stars page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} stars';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.starGazersUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} stars';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.starGazersUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -178,19 +181,20 @@ class GitHubIssuesLink extends LinkFunction {
         namePrefix: 'gitHubIssues',
         descriptionSuffix: "an issue page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} issues';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.issuesUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} issues';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.issuesUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -200,19 +204,20 @@ class GitHubMilestonesLink extends LinkFunction {
         namePrefix: 'gitHubMilestones',
         descriptionSuffix: "a milestone page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} milestones';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.milestonesUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} milestones';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.milestonesUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -222,19 +227,20 @@ class GitHubReleasesLink extends LinkFunction {
         namePrefix: 'gitHubReleases',
         descriptionSuffix: "a releases page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} releases';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.releasesUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} releases';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.releasesUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -244,19 +250,20 @@ class GitHubPullRequestsLink extends LinkFunction {
         namePrefix: 'gitHubPullRequests',
         descriptionSuffix: "a pull request page of your project on github.com",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} pull requests';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = gitHubProject.pullRequestsUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} pull requests';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = gitHubProject.pullRequestsUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -271,19 +278,20 @@ class GitHubRawLink extends LinkFunction {
         namePrefix: 'gitHubRaw',
         descriptionSuffix: "a raw code page of your project on github.com",
         parameters: [SuffixParameter(Presence.mandatory()), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} raw';
-          var gitHubProject = GitHubProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          Uri uri = gitHubProject.rawUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} raw';
+              var gitHubProject = GitHubProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              Uri uri = gitHubProject.rawUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -293,18 +301,19 @@ class PubDevLink extends LinkFunction {
         namePrefix: 'pubDev',
         descriptionSuffix: "the home page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ?? '${LocalProject.name}';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.uri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ?? LocalProject.name;
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.uri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -314,19 +323,20 @@ class PubDevChangeLogLink extends LinkFunction {
         namePrefix: 'pubDevChangeLog',
         descriptionSuffix: "the change log page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} change log';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.changeLogUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} change log';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.changeLogUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -336,19 +346,20 @@ class PubDevVersionsLink extends LinkFunction {
         namePrefix: 'pubDevVersions',
         descriptionSuffix: "the version page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} versions';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.versionsUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} versions';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.versionsUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -358,19 +369,20 @@ class PubDevExampleLink extends LinkFunction {
         namePrefix: 'pubDevExample',
         descriptionSuffix: "the example page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} example';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.exampleUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} example';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.exampleUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -380,19 +392,20 @@ class PubDevInstallLink extends LinkFunction {
         namePrefix: 'pubDevInstall',
         descriptionSuffix: "the install page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} installation';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.installUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} installation';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.installUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -402,19 +415,20 @@ class PubDevScoreLink extends LinkFunction {
         namePrefix: 'pubDevScore',
         descriptionSuffix: "the score page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} score';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.scoreUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} score';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.scoreUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }
 
@@ -424,18 +438,19 @@ class PubDevLicenseLink extends LinkFunction {
         namePrefix: 'pubDevLicense',
         descriptionSuffix: "the license page of your project on pub.dev",
         parameters: [SuffixParameter(), TextParameter()],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          var text =
-              parameters[TextParameter.id] as String? ??
-              '${LocalProject.name} license';
-          var pubDevProject = PubDevProject.of(renderContext);
-          var suffix = parameters[SuffixParameter.id] as String?;
-          var uri = pubDevProject.licenseUri.append(suffix: suffix);
-          return MarkDownLink(text, uri);
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              var text =
+                  parameters[TextParameter.id] as String? ??
+                  '${LocalProject.name} license';
+              var pubDevProject = PubDevProject.of(renderContext);
+              var suffix = parameters[SuffixParameter.id] as String?;
+              var uri = pubDevProject.licenseUri.append(suffix: suffix);
+              return MarkDownLink(text, uri);
+            },
       );
 }

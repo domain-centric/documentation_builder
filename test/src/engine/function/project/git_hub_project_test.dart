@@ -4,7 +4,7 @@ import 'package:documentation_builder/src/engine/function/util/uri_extensions.da
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
-main() {
+void main() {
   group('class: GitHubProject', () {
     late GitHubProject gitHubProject;
     setUp(() async {

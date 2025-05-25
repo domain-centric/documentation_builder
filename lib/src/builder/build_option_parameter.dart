@@ -42,7 +42,7 @@ abstract class BuildOptionParameter<T> {
     return value;
   }
 
-  void _validate(value) {
+  void _validate(dynamic value) {
     _validateValueType(value);
     if (validator != null) {
       try {
@@ -53,7 +53,7 @@ abstract class BuildOptionParameter<T> {
     }
   }
 
-  void _validateValueType(value) {
+  void _validateValueType(dynamic value) {
     if (value is! T) {
       throw BuildOptionParameterException(name, 'is not of type: $T');
     }
@@ -65,8 +65,7 @@ class BuildOptionParameterException implements Exception {
   final String message;
 
   BuildOptionParameterException(this.parameterName, String message)
-    : message =
-          'build.yaml: Builder option parameter ${parameterName} $message';
+    : message = 'build.yaml: Builder option parameter $parameterName $message';
 }
 
 /// * Description: An expression where to find template files

@@ -41,7 +41,7 @@
 ## importDartDoc Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown code block that imports dat documentation comments for a given library member from a dart code file.:
-* \ will be removed.* Text between [] in the Dart documentation could represent references.* These references will be replaced to links if possible or nessasary. This is done in the following order:  * hyper links, e.g. [Google](https://google.com)
+* /// will be removed.* Text between [] in the Dart documentation could represent references.* These references will be replaced to links if possible or nessasary. This is done in the following order:  * hyper links, e.g. [Google](https://google.com)
   * links to pub.dev packages, e.g. [documentation_builder]
   * links to dart members, e.g. [MyClass] or [myField] or [MyClass.myField]
 * Note that tags have no place in dart documentation comments and will therefore not be resolved. Use references or links instead (see above)</td></tr>

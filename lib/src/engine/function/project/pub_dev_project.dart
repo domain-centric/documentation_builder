@@ -60,8 +60,8 @@ class PubDevProject {
 
   /// Fetches the pubspec.yaml content for a given package name.
   Future<String?> fetchPubspecYaml() async {
-    final String _baseUrl = 'https://pub.dev/api/packages';
-    final restApiUri = Uri.parse('$_baseUrl/$packageName');
+    final String baseUrl = 'https://pub.dev/api/packages';
+    final restApiUri = Uri.parse('$baseUrl/$packageName');
     try {
       final response = await http.get(restApiUri);
 

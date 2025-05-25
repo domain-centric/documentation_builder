@@ -140,7 +140,9 @@ class SetupCommand extends Command {
     await addGitHubWorkflowPublishWikiIfNeeded(variables);
   }
 
-  Future<void> addDocumentationBuilderDependencyIfNeeded(yamlMap) async {
+  Future<void> addDocumentationBuilderDependencyIfNeeded(
+    dynamic yamlMap,
+  ) async {
     if (hasDependency(yamlMap, documentationBuilder)) {
       print('$documentationBuilder is already a dev dependency.');
       return;
@@ -158,7 +160,7 @@ class SetupCommand extends Command {
   bool packageIsDocumentationBuilder() =>
       LocalProject.name == 'documentation_builder';
 
-  Future<void> addBuildRunnerDependencyIfNeeded(yamlMap) async {
+  Future<void> addBuildRunnerDependencyIfNeeded(dynamic yamlMap) async {
     if (hasDependency(yamlMap, buildRunner)) {
       print('$buildRunner is already a dev dependency.');
     } else {

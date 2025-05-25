@@ -20,10 +20,9 @@ class MergedPathFunctions extends FunctionGroup {
 
   static Iterable<ExpressionFunction<Object>> pathFunctionsFrom(
     List<FunctionGroup> functionGroupsFromTemplateEnginePackage,
-  ) =>
-      functionGroupsFromTemplateEnginePackage
-          .where((g) => g.name == groupName)
-          .flattened;
+  ) => functionGroupsFromTemplateEnginePackage
+      .where((g) => g.name == groupName)
+      .flattened;
 
   static List<ExpressionFunction> pathFunctionsFromTemplateEnginePackage() =>
       PathFunctions();
@@ -47,18 +46,17 @@ class UriFunction extends ExpressionFunction<Uri> {
       'Returns a URI of ',
     );
     var parameters = link.parameters.where((p) => p is! TextParameter).toList();
-    var function =
-        (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async =>
-            (await link.function(position, renderContext, parameters)).uri;
     return UriFunction(
       name: name,
       description: description,
       parameters: parameters,
-      function: function,
+      function:
+          (
+            String position,
+            RenderContext renderContext,
+            Map<String, Object> parameters,
+          ) async =>
+              (await link.function(position, renderContext, parameters)).uri,
     );
   }
 }
@@ -72,14 +70,15 @@ class InputPathFunction extends ExpressionFunction<String> {
             "Prefer to use this function over the 'templateSource' because 'inputPath' always resolves to a path",
         exampleExpression: "{{inputPath()}}",
         exampleResult: "doc/example.md",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          BuildStep? buildStep = BuildStepVariable.of(renderContext);
-          return buildStep.inputId.path;
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              BuildStep? buildStep = BuildStepVariable.of(renderContext);
+              return buildStep.inputId.path;
+            },
       );
 }
 
@@ -91,13 +90,14 @@ class OutputPathFunction extends ExpressionFunction<String> {
             'Returns the path of the file being created from the template',
         exampleExpression: "{{outputPath()}}",
         exampleResult: "doc/example.md",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameters,
-        ) async {
-          BuildStep? buildStep = BuildStepVariable.of(renderContext);
-          return buildStep.allowedOutputs.first.path;
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameters,
+            ) async {
+              BuildStep? buildStep = BuildStepVariable.of(renderContext);
+              return buildStep.allowedOutputs.first.path;
+            },
       );
 }

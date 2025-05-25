@@ -29,7 +29,7 @@ extension UriExtension on Uri {
       host: host,
       port: port,
       path: path != null ? '${this.path}/$path' : this.path,
-      queryParameters: _appendQueryParameters(this.queryParameters, query),
+      queryParameters: _appendQueryParameters(queryParameters, query),
       fragment: _appendFragment(this.fragment, fragment),
     );
     if (suffix == null) {

@@ -3,7 +3,7 @@ import 'package:documentation_builder/src/engine/function/project/pub_dev_projec
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
-main() {
+void main() {
   group('class: PubDevProject', () {
     late PubDevProject pubDevProject;
     setUp(() async {

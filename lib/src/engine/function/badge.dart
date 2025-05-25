@@ -169,16 +169,13 @@ class CustomBadge extends ExpressionFunction<String> {
               String position,
               RenderContext renderContext,
               Map<String, Object> parameterValues,
-            ) async =>
-                Badge.custom(
-                  toolTip: parameterValues[ToolTipParameter.id] as String?,
-                  label: parameterValues[LabelParameter.id] as String,
-                  message: parameterValues[MessageParameter.id] as String,
-                  color: parameterValues[MessageParameter.id] as String,
-                  link: Uri.parse(
-                    (parameterValues[LinkParameter.id] as String),
-                  ),
-                ).toString(),
+            ) async => Badge.custom(
+              toolTip: parameterValues[ToolTipParameter.id] as String?,
+              label: parameterValues[LabelParameter.id] as String,
+              message: parameterValues[MessageParameter.id] as String,
+              color: parameterValues[MessageParameter.id] as String,
+              link: Uri.parse((parameterValues[LinkParameter.id] as String)),
+            ).toString(),
       );
 }
 
@@ -193,20 +190,21 @@ class PubPackageBadge extends ExpressionFunction<String> {
             'Creates markdown for a badge of an existing Dart or Flutter package on pub.dev',
         exampleResult:
             "[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var uri = PubDevProject.of(renderContext).uri;
-          return Badge(
-            toolTip: parameterValues[ToolTipParameter.id] as String,
-            image: Badge.imgShieldIoUri.append(
-              path: 'pub/v/${LocalProject.name}',
-            ),
-            link: uri,
-          ).toString();
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var uri = PubDevProject.of(renderContext).uri;
+              return Badge(
+                toolTip: parameterValues[ToolTipParameter.id] as String,
+                image: Badge.imgShieldIoUri.append(
+                  path: 'pub/v/${LocalProject.name}',
+                ),
+                link: uri,
+              ).toString();
+            },
       );
 }
 
@@ -225,14 +223,13 @@ class PubScoreBadge extends ExpressionFunction<String> {
               String position,
               RenderContext renderContext,
               Map<String, Object> parameterValues,
-            ) async =>
-                Badge(
-                  toolTip: parameterValues[ToolTipParameter.id] as String,
-                  image: Badge.imgShieldIoUri.append(
-                    path: 'pub/likes/${LocalProject.name}',
-                  ),
-                  link: PubDevProject.of(renderContext).scoreUri,
-                ).toString(),
+            ) async => Badge(
+              toolTip: parameterValues[ToolTipParameter.id] as String,
+              image: Badge.imgShieldIoUri.append(
+                path: 'pub/likes/${LocalProject.name}',
+              ),
+              link: PubDevProject.of(renderContext).scoreUri,
+            ).toString(),
       );
 }
 
@@ -270,14 +267,13 @@ class GitHubBadge extends ExpressionFunction {
               String position,
               RenderContext renderContext,
               Map<String, Object> parameterValues,
-            ) async =>
-                Badge(
-                  toolTip: parameterValues[ToolTipParameter.id] as String,
-                  image: Badge.imgShieldIoUri.append(
-                    path: 'badge/repository-git%20hub-informational',
-                  ),
-                  link: GitHubProject.of(renderContext).uri,
-                ).toString(),
+            ) async => Badge(
+              toolTip: parameterValues[ToolTipParameter.id] as String,
+              image: Badge.imgShieldIoUri.append(
+                path: 'badge/repository-git%20hub-informational',
+              ),
+              link: GitHubProject.of(renderContext).uri,
+            ).toString(),
       );
 }
 
@@ -301,14 +297,13 @@ class GitHubWikiBadge extends ExpressionFunction {
               String position,
               RenderContext renderContext,
               Map<String, Object> parameterValues,
-            ) async =>
-                Badge(
-                  toolTip: parameterValues[ToolTipParameter.id] as String,
-                  image: Badge.imgShieldIoUri.replace(
-                    path: 'badge/documentation-wiki-informational',
-                  ),
-                  link: GitHubProject.of(renderContext).wikiUri,
-                ).toString(),
+            ) async => Badge(
+              toolTip: parameterValues[ToolTipParameter.id] as String,
+              image: Badge.imgShieldIoUri.replace(
+                path: 'badge/documentation-wiki-informational',
+              ),
+              link: GitHubProject.of(renderContext).wikiUri,
+            ).toString(),
       );
 }
 
@@ -325,21 +320,22 @@ class GitHubStarsBadge extends ExpressionFunction {
         ],
         exampleResult:
             "[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var gitHubProject = GitHubProject.of(renderContext);
-          return Badge(
-            toolTip: parameterValues[ToolTipParameter.id] as String,
-            image: Badge.imgShieldIoUri.append(
-              path: 'github/stars${gitHubProject.uri.path}',
-              query: {'style': 'flat'},
-            ),
-            link: gitHubProject.starGazersUri,
-          ).toString();
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var gitHubProject = GitHubProject.of(renderContext);
+              return Badge(
+                toolTip: parameterValues[ToolTipParameter.id] as String,
+                image: Badge.imgShieldIoUri.append(
+                  path: 'github/stars${gitHubProject.uri.path}',
+                  query: {'style': 'flat'},
+                ),
+                link: gitHubProject.starGazersUri,
+              ).toString();
+            },
       );
 }
 
@@ -356,20 +352,21 @@ class GitHubIssuesBadge extends ExpressionFunction {
         ],
         exampleResult:
             "[![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var gitHubProject = GitHubProject.of(renderContext);
-          return Badge(
-            toolTip: parameterValues[ToolTipParameter.id] as String,
-            image: Badge.imgShieldIoUri.append(
-              path: 'github/issues${gitHubProject.uri.path}',
-            ),
-            link: gitHubProject.issuesUri,
-          ).toString();
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var gitHubProject = GitHubProject.of(renderContext);
+              return Badge(
+                toolTip: parameterValues[ToolTipParameter.id] as String,
+                image: Badge.imgShieldIoUri.append(
+                  path: 'github/issues${gitHubProject.uri.path}',
+                ),
+                link: gitHubProject.issuesUri,
+              ).toString();
+            },
       );
 }
 
@@ -388,20 +385,21 @@ class GitHubPullRequestsBadge extends ExpressionFunction {
         ],
         exampleResult:
             "[![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pull)",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var gitHubProject = GitHubProject.of(renderContext);
-          return Badge(
-            toolTip: parameterValues[ToolTipParameter.id] as String,
-            image: Badge.imgShieldIoUri.append(
-              path: 'github/issues-pr${gitHubProject.uri.path}',
-            ),
-            link: gitHubProject.pullRequestsUri,
-          ).toString();
-        },
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var gitHubProject = GitHubProject.of(renderContext);
+              return Badge(
+                toolTip: parameterValues[ToolTipParameter.id] as String,
+                image: Badge.imgShieldIoUri.append(
+                  path: 'github/issues-pr${gitHubProject.uri.path}',
+                ),
+                link: gitHubProject.pullRequestsUri,
+              ).toString();
+            },
       );
 }
 
@@ -418,21 +416,22 @@ class GitHubLicenseBadge extends ExpressionFunction {
         ],
         exampleResult:
             "[![Project License](https://img.shields.io/github/license/domain-centric/documentation_buider)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var gitHubProject = GitHubProject.of(renderContext);
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var gitHubProject = GitHubProject.of(renderContext);
 
-          return Badge(
-            toolTip: parameterValues[ToolTipParameter.id] as String,
-            image: Badge.imgShieldIoUri.append(
-              path: 'github/license${gitHubProject.uri.path}',
-            ),
-            link: gitHubProject.licenseUri(),
-          ).toString();
-        },
+              return Badge(
+                toolTip: parameterValues[ToolTipParameter.id] as String,
+                image: Badge.imgShieldIoUri.append(
+                  path: 'github/license${gitHubProject.uri.path}',
+                ),
+                link: gitHubProject.licenseUri(),
+              ).toString();
+            },
       );
 }
 

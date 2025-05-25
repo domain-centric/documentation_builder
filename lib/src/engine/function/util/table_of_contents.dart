@@ -7,48 +7,44 @@ import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
 class TableOfContentsFactory {
-  createMarkDown({
+  Future<String> createMarkDown({
     required RenderContext renderContext,
     required String relativePath,
     required bool includeFileLink,
     required bool gitHubWiki,
   }) async {
-    try {
-      var titleLinks = <TitleLink>[];
-      var path = normalizePathSeparators(
-        "${LocalProject.directory.path}/$relativePath",
-        Platform.pathSeparator,
-      );
-      var builder = BuilderVariable.of(renderContext);
-      var files = findFiles(path);
-      for (var file in files) {
-        var relativeInputPath = createRelativePath(file);
-        var input = AssetId(LocalProject.name, relativeInputPath);
-        var outputs = await expectedOutputs(builder, input);
-        if (outputs.isEmpty) {
-          continue;
-        }
-        var outputFileName = outputs.first.pathSegments.last;
-        if (includeFileLink) {
-          var titleLink = TitleLink.fromFileName(
-            relativePath: outputFileName,
-            removeMdExtension: gitHubWiki,
-          );
-          titleLinks.add(titleLink);
-        }
-        String markDown = await parseAndRender(file, renderContext);
-        var newTitleLinks = findTitles(
-          outputFileName: outputFileName,
-          markDown: markDown,
+    var titleLinks = <TitleLink>[];
+    var path = normalizePathSeparators(
+      "${LocalProject.directory.path}/$relativePath",
+      Platform.pathSeparator,
+    );
+    var builder = BuilderVariable.of(renderContext);
+    var files = findFiles(path);
+    for (var file in files) {
+      var relativeInputPath = createRelativePath(file);
+      var input = AssetId(LocalProject.name, relativeInputPath);
+      var outputs = expectedOutputs(builder, input);
+      if (outputs.isEmpty) {
+        continue;
+      }
+      var outputFileName = outputs.first.pathSegments.last;
+      if (includeFileLink) {
+        var titleLink = TitleLink.fromFileName(
+          relativePath: outputFileName,
           removeMdExtension: gitHubWiki,
         );
-        newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
-        titleLinks.addAll(newTitleLinks);
+        titleLinks.add(titleLink);
       }
-      return titleLinks.map((t) => t.markDown).join(newLine);
-    } on Exception catch (e, s) {
-      log.warning('failed $e $s');
+      String markDown = await parseAndRender(file, renderContext);
+      var newTitleLinks = findTitles(
+        outputFileName: outputFileName,
+        markDown: markDown,
+        removeMdExtension: gitHubWiki,
+      );
+      newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
+      titleLinks.addAll(newTitleLinks);
     }
+    return titleLinks.map((t) => t.markDown).join(newLine);
   }
 
   Future<String> parseAndRender(File file, RenderContext renderContext) async {
@@ -110,10 +106,9 @@ class TableOfContentsFactory {
     var titleLinks = <TitleLink>[];
     for (var match in matches) {
       var titleLink = TitleLink(
-        relativePath:
-            removeMdExtension
-                ? outputFileName.replaceFirst(RegExp(r'\.md$'), '')
-                : outputFileName,
+        relativePath: removeMdExtension
+            ? outputFileName.replaceFirst(RegExp(r'\.md$'), '')
+            : outputFileName,
         title: match.title,
         level: match.hashes.length,
       );
@@ -161,8 +156,9 @@ class TableOfContentsFactory {
     int perviousOldLevel = titleLinks.first.level;
     for (var titleLink in titleLinks) {
       var currentOldLevel = titleLink.level;
-      var perviousNewLevel =
-          newTitleLinks.isEmpty ? 1 : newTitleLinks.last.level;
+      var perviousNewLevel = newTitleLinks.isEmpty
+          ? 1
+          : newTitleLinks.last.level;
       var newLevel = _newLevel(
         currentOldLevel,
         perviousOldLevel,
@@ -175,7 +171,11 @@ class TableOfContentsFactory {
     return newTitleLinks;
   }
 
-  _newLevel(int currentOldLevel, int perviousOldLevel, int perviousNewLevel) {
+  int _newLevel(
+    int currentOldLevel,
+    int perviousOldLevel,
+    int perviousNewLevel,
+  ) {
     if (currentOldLevel == 0) {
       // old level is 0 is the root level
       // all levels must start with 1
@@ -189,10 +189,9 @@ class TableOfContentsFactory {
       // keep the level
       return perviousNewLevel;
     }
-    if (currentOldLevel > perviousOldLevel) {
-      // increase the level
-      return perviousNewLevel + 1;
-    }
+    //currentOldLevel > perviousOldLevel
+    // increase the level
+    return perviousNewLevel + 1;
   }
 }
 
@@ -222,10 +221,9 @@ class TitleLink {
     required String relativePath,
     required bool removeMdExtension,
   }) : title = toBold(createTitleFromRelativePath(relativePath)),
-       relativePath =
-           removeMdExtension
-               ? relativePath.replaceFirst(RegExp(r'\.md$'), '')
-               : relativePath,
+       relativePath = removeMdExtension
+           ? relativePath.replaceFirst(RegExp(r'\.md$'), '')
+           : relativePath,
        level = 0,
        fragment = '';
 
@@ -261,21 +259,20 @@ class TitleLink {
       .replaceAll('  ', ' ') // replace double spaces with single space
       .replaceFirst(RegExp(r'\..*'), ''); // remove the file extension
 
-  TitleLink copyWith({required int level}) => TitleLink(
-    relativePath: this.relativePath,
-    title: this.title,
-    level: level,
-  );
+  TitleLink copyWith({required int level}) =>
+      TitleLink(relativePath: relativePath, title: title, level: level);
 }
 
 Parser<({String hashes, String title})> markdownTitleParser() {
   final Parser<String> newLine = (string('\n\r') | char('\n')).flatten();
   final Parser<String> hash = char('#');
   final Parser<String> hashes = hash.plus().flatten(); // One or more #
-  final Parser<String> optionalWhiteSpace =
-      anyOf(" \t").star().flatten(); // Zero or more non-newline whitespaces
-  final Parser<String> whitespace =
-      anyOf(" \t").plus().flatten(); // One or more none newline whitespace
+  final Parser<String> optionalWhiteSpace = anyOf(
+    " \t",
+  ).star().flatten(); // Zero or more non-newline whitespaces
+  final Parser<String> whitespace = anyOf(
+    " \t",
+  ).plus().flatten(); // One or more none newline whitespace
   final Parser<String> titleText = any().starLazy(newline()).flatten();
   return SequenceParser([
     newLine,

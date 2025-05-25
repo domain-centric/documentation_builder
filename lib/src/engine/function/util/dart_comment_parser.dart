@@ -16,7 +16,7 @@ import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
 /// [DartDocCommentParser] parses dart documentation comments:
-/// * It removes leading comment headers: <whitespace>///<space>
+/// * It removes leading comment headers: [whitespace]///[space]
 /// * It will validate links with a uri, e.g. [Google](https://google.com)
 /// * It tries to resolve links without a uri to links with a uri, e.g. [my_package] or [MyClass] or [MyClass.member]
 ///
@@ -37,14 +37,14 @@ class DartDocCommentParser {
         (openBracket & text & closeBracket & openParen & link & closeParen).map(
           ((values) => ValidateLink(linkText: values[1], linkUrl: values[4])),
         );
-    final Parser<RenderFunction> linkWithoutUrl = (openBracket &
-            text &
-            closeBracket)
-        .map((values) => ReferenceConverter(values[1]));
-    final Parser<String> commentPrefix = (pattern(' \t').star() &
-            string('///') &
-            char(' ').repeat(0, 1))
-        .map(replaceWithNothing);
+    final Parser<RenderFunction> linkWithoutUrl =
+        (openBracket & text & closeBracket).map(
+          (values) => ReferenceConverter(values[1]),
+        );
+    final Parser<String> commentPrefix =
+        (pattern(' \t').star() & string('///') & char(' ').repeat(0, 1)).map(
+          replaceWithNothing,
+        );
 
     final Parser<String> otherCharacter =
         ((commentPrefix | linkWithUrl | linkWithoutUrl).not() & any()).map(
@@ -116,7 +116,7 @@ abstract class RenderFunction {
 /// * a [DartType]
 class ReferenceConverter extends RenderFunction {
   String linkText;
-  ReferenceConverter(String linkText) : this.linkText = linkText.trim();
+  ReferenceConverter(String linkText) : linkText = linkText.trim();
 
   @override
   Future<String> render(RenderContext renderContext, Element element) async {
@@ -173,7 +173,9 @@ class ReferenceConverter extends RenderFunction {
         tagName: commitSHA,
         lineNr: lineNr,
       );
-    } catch (e) {}
+    } catch (e) {
+      // If we can't resolve the reference, we return null.
+    }
     return null;
   }
 

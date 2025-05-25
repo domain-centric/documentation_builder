@@ -1,5 +1,3 @@
-library documentation_builder.builder;
-
 import 'package:build/build.dart';
 import 'package:documentation_builder/src/builder/documentation_builder.dart';
 

@@ -9,16 +9,15 @@ import 'package:petitparser/petitparser.dart';
 class ProjectFilePath2 {
   final String relativePath;
 
-  static Parser<String> _fileOrFolderName() =>
-      (ChoiceParser([
-        letter(),
-        digit(),
-        char('('),
-        char(')'),
-        char('_'),
-        char('-'),
-        char('.'),
-      ], failureJoiner: selectFarthestJoined)).plus().flatten();
+  static Parser<String> _fileOrFolderName() => (ChoiceParser([
+    letter(),
+    digit(),
+    char('('),
+    char(')'),
+    char('_'),
+    char('-'),
+    char('.'),
+  ], failureJoiner: selectFarthestJoined)).plus().flatten();
 
   static Parser<String> _slashAndFileOrFolderName() =>
       (char('/') & _fileOrFolderName()).map((values) => values[1]);
@@ -29,7 +28,7 @@ class ProjectFilePath2 {
   //.endWithBetterFailure();
 
   ProjectFilePath2(String relativePath)
-    : this.relativePath = normalize(relativePath) {
+    : relativePath = normalize(relativePath) {
     validate(relativePath);
   }
 
@@ -150,7 +149,7 @@ class SourcePath {
   late ProjectFilePath2 projectFilePath;
   late DartMemberPath? dartLibraryMemberPath;
 
-  static pathParser() =>
+  static Parser<List> pathParser() =>
       (ProjectFilePath2._pathParser().map(
                 (values) => ProjectFilePath2(values.join('/')),
               ) &
@@ -171,8 +170,9 @@ class SourcePath {
     }
     var values = result.value;
     projectFilePath = values.first;
-    dartLibraryMemberPath =
-        values.last.isEmpty ? null : result.value.last.first.last;
+    dartLibraryMemberPath = values.last.isEmpty
+        ? null
+        : result.value.last.first.last;
   }
 }
 

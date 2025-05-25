@@ -173,7 +173,7 @@ class ImportDartDoc extends ExpressionFunction {
         name: 'importDartDoc',
         description:
             'A markdown code block that imports dat documentation comments for a given library member from a dart code file.:$newLine'
-            '* \\\ will be removed.'
+            '* /// will be removed.'
             '* Text between [] in the Dart documentation could represent references.'
             '* These references will be replaced to links if possible or nessasary. This is done in the following order:'
             '  * hyper links, e.g. [Google](https://google.com)$newLine'

@@ -13,8 +13,9 @@ class GitHubProject {
 
   /// we throw an [Exception] every time because that way we get exceptions where we want them
   Uri get uri {
-    if (_uri == null)
+    if (_uri == null) {
       throw Exception('Could not find the project on github.com');
+    }
     return _uri;
   }
 
@@ -106,8 +107,7 @@ class GitHubProject {
     /// See https://graphite.dev/guides/git-hash
     String tagName = 'main',
     int? lineNr,
-  }) =>
-      blobUri(ProjectFilePath2('LICENSE'), tagName: tagName, lineNr: lineNr);
+  }) => blobUri(ProjectFilePath2('LICENSE'), tagName: tagName, lineNr: lineNr);
 
   Future<Map<String, Uri>> getMilestones(String stateParameterValue) async {
     var restApiUri = Uri.parse(

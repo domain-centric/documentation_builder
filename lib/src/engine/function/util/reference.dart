@@ -160,7 +160,9 @@ class SourceLinkFactory implements MarkDownLinkFactory {
         path: 'blob/$commitSHA/$path',
         fragment: 'L$lineNr',
       );
-    } catch (e) {}
+    } catch (e) {
+      // If we can't resolve the reference, we return null.
+    }
     return null;
   }
 

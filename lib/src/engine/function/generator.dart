@@ -136,24 +136,26 @@ class License extends ExpressionFunction<String> {
             presence: Presence.optional(),
           ),
         ],
-        function: (
-          String position,
-          RenderContext renderContext,
-          Map<String, Object> parameterValues,
-        ) async {
-          var type = parameterValues['type'] as String;
-          var name = parameterValues['name'] as String;
-          int year = (parameterValues['year'] ?? DateTime.now().year) as int;
+        function:
+            (
+              String position,
+              RenderContext renderContext,
+              Map<String, Object> parameterValues,
+            ) async {
+              var type = parameterValues['type'] as String;
+              var name = parameterValues['name'] as String;
+              int year =
+                  (parameterValues['year'] ?? DateTime.now().year) as int;
 
-          var license = licenses.findLicenseOnType(type);
-          if (license == null) {
-            throw ArgumentError(
-              "'$type' is not on of the supported license types: ${licenses.supportedTypes}.",
-              'type',
-            );
-          }
-          return license.text(year, name);
-        },
+              var license = licenses.findLicenseOnType(type);
+              if (license == null) {
+                throw ArgumentError(
+                  "'$type' is not on of the supported license types: ${licenses.supportedTypes}.",
+                  'type',
+                );
+              }
+              return license.text(year, name);
+            },
       );
 }
 
@@ -180,7 +182,7 @@ abstract class LicenseText {
 
 class MitLicense extends LicenseText {
   @override
-  final String licenseType = 'MIT';
+  String get licenseType => 'MIT';
 
   @override
   String text(int year, String name) =>
@@ -192,7 +194,7 @@ class MitLicense extends LicenseText {
 
 class Bsd3License extends LicenseText {
   @override
-  final String licenseType = 'BSD3';
+  String get licenseType => 'BSD3';
 
   @override
   String text(int year, String name) =>
@@ -201,5 +203,5 @@ class Bsd3License extends LicenseText {
       '1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.$newLine$newLine'
       '2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.$newLine$newLine'
       '3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.$newLine$newLine'
-      'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.';
+      'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.';
 }
