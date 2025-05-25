@@ -19,7 +19,7 @@ import 'package:template_engine/template_engine.dart';
 ///
 /// It can generate any type of text file e.g.:
 /// * [README.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#readmemd)
-/// * [LICENSE.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#licensemd)
+/// * [LICENSE](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#license)
 /// * [CHANGELOG.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#changelogmd)
 /// * [Example files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#examplemd)
 /// * [GitHub wiki files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#pages)

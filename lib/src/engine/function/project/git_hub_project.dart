@@ -107,7 +107,7 @@ class GitHubProject {
     String tagName = 'main',
     int? lineNr,
   }) =>
-      blobUri(ProjectFilePath2('LICENSE.md'), tagName: tagName, lineNr: lineNr);
+      blobUri(ProjectFilePath2('LICENSE'), tagName: tagName, lineNr: lineNr);
 
   Future<Map<String, Uri>> getMilestones(String stateParameterValue) async {
     var restApiUri = Uri.parse(

@@ -7,9 +7,9 @@ You can view the templates files and the generated output on https://github.com 
 * {{gitHubRawLink('/README.md', 'Generated example')}}
 * {{pubDevLink(text='Rendered example')}}
 
-### LICENSE.md
-* {{referenceLink('doc/template/LICENSE.md.template', 'Template example')}}
-* {{gitHubRawLink('/LICENSE.md', 'Generated example')}}
+### LICENSE
+* {{referenceLink('doc/template/LICENSE.template', 'Template example')}}
+* {{gitHubRawLink('/LICENSE', 'Generated example')}}
 
 ### CHANGELOG.md
 * {{referenceLink('doc/template/CHANGELOG.md.template', 'Template example')}}

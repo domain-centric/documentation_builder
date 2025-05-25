@@ -7,7 +7,7 @@
 [![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)
 [![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)
 [![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)
-[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE.md)
+[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
  
 ![](https://github.com/domain-centric/documentation_builder/wiki/documentation_builder.jpeg)
 
@@ -19,7 +19,7 @@ and want to reuse/import Dart code or Dart documentation comments.
 
 It can generate any type of text file e.g.:
 * [README.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#readmemd)
-* [LICENSE.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#licensemd)
+* [LICENSE](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#licensemd)
 * [CHANGELOG.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#changelogmd)
 * [Example files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#examplemd)
 * [GitHub wiki files](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#pages)
@@ -39,11 +39,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f0c54ac70a2554def3327621e4ce54d367f84115/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f0c54ac70a2554def3327621e4ce54d367f84115/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/a453296da61d1297050d4febd1d261a8e04e01c7/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/a453296da61d1297050d4febd1d261a8e04e01c7/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f0c54ac70a2554def3327621e4ce54d367f84115/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/a453296da61d1297050d4febd1d261a8e04e01c7/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
