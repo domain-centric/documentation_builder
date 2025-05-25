@@ -12,8 +12,8 @@ class MergedPathFunctions extends FunctionGroup {
   MergedPathFunctions()
     : super(groupName, [
         ...pathFunctionsFromTemplateEnginePackage(),
-        InputPath(),
-        OutputPath(),
+        InputPathFunction(),
+        OutputPathFunction(),
         for (var link in LinkFunctions().whereType<LinkFunction>())
           UriFunction.createFromLinkFunction(link),
       ]);
@@ -63,8 +63,8 @@ class UriFunction extends ExpressionFunction<Uri> {
   }
 }
 
-class InputPath extends ExpressionFunction<String> {
-  InputPath()
+class InputPathFunction extends ExpressionFunction<String> {
+  InputPathFunction()
     : super(
         name: 'inputPath',
         description:
@@ -83,8 +83,8 @@ class InputPath extends ExpressionFunction<String> {
       );
 }
 
-class OutputPath extends ExpressionFunction<String> {
-  OutputPath()
+class OutputPathFunction extends ExpressionFunction<String> {
+  OutputPathFunction()
     : super(
         name: 'outputPath',
         description:

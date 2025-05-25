@@ -3,11 +3,6 @@ import 'dart:math';
 
 import 'package:build/build.dart';
 import 'package:documentation_builder/documentation_builder.dart';
-import 'package:documentation_builder/src/builder/new_line.dart';
-import 'package:documentation_builder/src/engine/function/generator.dart';
-import 'package:documentation_builder/src/engine/function/project/local_project.dart';
-import 'package:documentation_builder/src/engine/function/util/path_parsers.dart';
-import 'package:documentation_builder/src/engine/template_engine.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 

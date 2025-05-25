@@ -1,9 +1,4 @@
 import 'package:documentation_builder/documentation_builder.dart';
-import 'package:documentation_builder/src/engine/function/badge.dart';
-import 'package:documentation_builder/src/engine/function/generator.dart';
-import 'package:documentation_builder/src/engine/function/import.dart';
-import 'package:documentation_builder/src/engine/function/link.dart';
-import 'package:documentation_builder/src/engine/function/path.dart';
 import 'package:template_engine/template_engine.dart';
 
 /// The [DocumentationBuilder] uses the [DocumentationTemplateEngine] to parse

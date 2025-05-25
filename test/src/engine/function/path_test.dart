@@ -4,13 +4,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:documentation_builder/src/engine/template_engine.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:build/build.dart';
 import 'package:template_engine/template_engine.dart';
-import 'package:documentation_builder/src/builder/documentation_builder.dart';
-import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
-import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
 import 'package:test/test.dart';
 import 'package:crypto/src/digest.dart';
 import 'package:documentation_builder/documentation_builder.dart';
