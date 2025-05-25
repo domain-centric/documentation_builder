@@ -324,7 +324,7 @@ class GitHubStarsBadge extends ExpressionFunction {
           ),
         ],
         exampleResult:
-            "[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/stargazers)",
+            "[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)",
         function: (
           String position,
           RenderContext renderContext,
@@ -335,6 +335,7 @@ class GitHubStarsBadge extends ExpressionFunction {
             toolTip: parameterValues[ToolTipParameter.id] as String,
             image: Badge.imgShieldIoUri.append(
               path: 'github/stars${gitHubProject.uri.path}',
+              query: {'style': 'flat'},
             ),
             link: gitHubProject.starGazersUri,
           ).toString();

@@ -516,7 +516,7 @@ As code:
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge with the amount of stars on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
-<tr><td>expression example:</td><td colspan="4">{{ gitHubStarsBadge() }} should render: [![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/stargazers)</td></tr>
+<tr><td>expression example:</td><td colspan="4">{{ gitHubStarsBadge() }} should render: [![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)</td></tr>
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Stars ranking on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
