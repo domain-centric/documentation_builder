@@ -155,9 +155,8 @@ class GitHubProject {
     '${uri.path}/refs/heads/main',
   );
 
-/// Fetches the list of raw files in a given path from the GitHub repository.
+  /// Recursively Fetches the list of raw files in a given path from the GitHub repository.
   Future<List<Uri>> findFilesInPath(String path) async {
-    // Construct the GitHub API URL for listing files in a directory
     final apiUrl = Uri.https(
       'api.github.com',
       '/repos${uri.path}/contents/$path',
@@ -173,19 +172,19 @@ class GitHubProject {
     }
 
     final List<dynamic> jsonList = jsonDecode(response.body);
-    final List<Uri> fileUris = [];
+    List<Uri> files = [];
 
     for (var item in jsonList) {
-      if (item['type'] == 'file' && item['download_url'] != null) {
-        fileUris.add(Uri.parse(item['download_url']));
+      if (item['type'] == 'file') {
+        files.add(Uri.parse(item['download_url']));
+      } else if (item['type'] == 'dir') {
+        final subFiles = await findFilesInPath(item['path']);
+        files.addAll(subFiles);
       }
     }
-
-    return fileUris;
+    return files;
   }
-    
-  }
-
+}
 
 enum GitHubMileStonesStates {
   open,

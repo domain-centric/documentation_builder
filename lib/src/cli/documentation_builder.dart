@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:yaml/yaml.dart';
@@ -144,7 +144,7 @@ class SetupCommand extends Command {
 
     await addDocumentationBuilderDependencyIfNeeded(yamlMap);
 
-    await addTemplateFilesIfNeeded(variables);
+    await addDocumentationTemplateFilesIfNeeded(variables);
 
     await addGitHubWorkflowFilesIfNeeded(variables);
   }
@@ -194,19 +194,24 @@ class SetupCommand extends Command {
   static const String buildRunner = 'build_runner';
   static const String documentationBuilder = 'documentation_builder';
 
-  Future<void> addTemplateFilesIfNeeded(VariableMap variables) async {
-    if (projectHasTemplateFiles()) {
-      print('Project already has template files.');
+  Future<void> addDocumentationTemplateFilesIfNeeded(
+    VariableMap variables,
+  ) async {
+    if (projectHasDocumentationTemplateFiles()) {
+      print('Project already has documentation template files.');
     } else {
-      var setupTemplateFactory = SetupTemplateFactory.of(variables);
-      for (var template in setupTemplateFactory.documentationTemplates) {
+      var gitHubProject = variables[GitHubProject.id] as GitHubProject;
+      var documentationTemplates = await createDocumentationTemplates(
+        gitHubProject,
+      );
+      for (var template in documentationTemplates) {
         await addFileIfNeeded(template, variables);
       }
     }
   }
 
   /// Checks if the project already has template files in the expected output locations.
-  bool projectHasTemplateFiles() {
+  bool projectHasDocumentationTemplateFiles() {
     var templateDir = Directory('doc/template');
     if (!templateDir.existsSync()) {
       return false;
@@ -224,8 +229,12 @@ class SetupCommand extends Command {
     if (hasGitWorkflowFiles()) {
       print('Project already has GitHub Workflow files.');
     } else {
-      var setupTemplateFactory = SetupTemplateFactory.of(variables);
-      for (var template in setupTemplateFactory.gitHubWorkflowTemplates) {
+      GitHubProject gitHubProject =
+          variables[GitHubProject.id] as GitHubProject;
+      var workflowTemplates = await createGitHubWorkflowTemplates(
+        gitHubProject,
+      );
+      for (var template in workflowTemplates) {
         await addFileIfNeeded(template, variables);
       }
     }
@@ -250,9 +259,6 @@ class SetupCommand extends Command {
       // check if the project is on github.com
       gitHubProject.uri;
       variables[GitHubProject.id] = gitHubProject;
-
-      var setupTemplateFactory = await SetupTemplateFactory.create(gitHubProject);
-      variables[SetupTemplateFactory.id] = setupTemplateFactory;
     } catch (e) {
       print('Error: Could not find the project on github.com');
       exit(65);
@@ -282,10 +288,7 @@ class SetupCommand extends Command {
     if (packageIsDocumentationBuilder()) {
       // we are not overriding any files in the documentation_builder package
       // so we just print the result to the console
-      print(
-        '${template.output}:\n'
-        '$renderResult.text}\n',
-      );
+      print(renderResult.text);
       return;
     }
     await template.output.create(recursive: true);
@@ -293,13 +296,13 @@ class SetupCommand extends Command {
   }
 
   Future<void> copyFile(SetupTemplate template) async {
-    final bytes = await template.input.readAsBytes();
+    final bytes = await readAsBytesFromHttps(template.input);
     await template.output.create(recursive: true);
     await template.output.writeAsBytes(bytes);
   }
 
   bool hasGitWorkflowFiles() {
-    var gitWorkflowsDir = Directory('.git/workflows');
+    var gitWorkflowsDir = Directory('.github/workflows');
     if (!gitWorkflowsDir.existsSync()) {
       return false;
     }
@@ -309,6 +312,19 @@ class SetupCommand extends Command {
         .whereType<File>()
         .isNotEmpty;
     return hasFiles;
+  }
+
+  Future readAsBytesFromHttps(Uri input) async {
+    if (!input.isAbsolute || input.scheme != 'https') {
+      throw ArgumentError('Input URI must be an absolute HTTPS URI.');
+    }
+    final response = await http.get(input);
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to download file: ${input.toString()} (status: ${response.statusCode})',
+      );
+    }
+    return response.bodyBytes;
   }
 }
 

@@ -1,72 +1,44 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
 
-class SetupTemplateFactory {
-  final List<SetupTemplate> gitHubWorkflowTemplates;
-  // FIXME remove:
-  // SetupTemplate(
-  //   '.github/workflows/publish-wiki.yml',
-  // );
-  final List<SetupTemplate> documentationTemplates;
+const String _cliTemplates = 'cli_templates';
 
-  static var id = 'setupTemplateFactory';
-  // FIXME remove:
-  // <SetupTemplate>[
-  //   SetupTemplate('doc/template/CHANGELOG.md.template'),
-  //   SetupTemplate('doc/template/LICENSE.md.template'),
-  //   SetupTemplate('doc/template/README.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/1-Features.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/2-Getting-Started.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/3-Usage.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/4-Examples.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/Home.md.template'),
-  //   SetupTemplate('doc/template/doc/wiki/package.jpg'),
-  //   SetupTemplate('doc/template/example/example.md.template'),
-  // ];
-  SetupTemplateFactory._({
-    required this.gitHubWorkflowTemplates,
-    required this.documentationTemplates,
-  });
+Future<List<SetupTemplate>> createGitHubWorkflowTemplates(
+  GitHubProject gitHubProject,
+) async => await findAllCliTemplatesFromGitHub(
+  gitHubProject,
+  '$_cliTemplates/.github',
+);
 
-  static Future<SetupTemplateFactory> create(GitHubProject gitHubProject) async {
-    var gitHubWorkflowTemplates = await findAllCliTemplatesFromGitHub(
-      gitHubProject,
-      'cli_templates/.github',
-    );
-    var documentationTemplates = await findAllCliTemplatesFromGitHub(
-      gitHubProject,
-      'cli_templates/doc',
-    );
-    return SetupTemplateFactory._(
-      gitHubWorkflowTemplates: gitHubWorkflowTemplates,
-      documentationTemplates: documentationTemplates,
-    );
+Future<List<SetupTemplate>> createDocumentationTemplates(
+  GitHubProject gitHubProject,
+) async =>
+    await findAllCliTemplatesFromGitHub(gitHubProject, '$_cliTemplates/doc');
+
+Future<List<SetupTemplate>> findAllCliTemplatesFromGitHub(
+  GitHubProject gitHubProject,
+  String path,
+) async {
+  final List<SetupTemplate> templates = <SetupTemplate>[];
+  final List<Uri> gitHubResourceUris = await gitHubProject.findFilesInPath(
+    path,
+  );
+
+  for (final Uri gitHubResourceUri in gitHubResourceUris) {
+    var input = gitHubResourceUri;
+    var index =
+        gitHubResourceUri.toString().indexOf(_cliTemplates) +
+        _cliTemplates.length +
+        1;
+    var outputPath = gitHubResourceUri.toString().substring(index);
+    var output = File(outputPath);
+    templates.add(SetupTemplate(input: input, output: output));
   }
 
-  static Future<List<SetupTemplate>> findAllCliTemplatesFromGitHub(
-    GitHubProject gitHubProject,
-    String path,
-  ) async {
-    final List<SetupTemplate> templates = <SetupTemplate>[];
-    final List<Uri> gitHubResourceUris = await gitHubProject.findFilesInPath(
-      path,
-    );
-
-    for (final Uri gitHubResourceUri in gitHubResourceUris) {
-      var input = File.fromUri(gitHubResourceUri);
-      var outputPath = gitHubResourceUri
-          .toString(); //FIXME remove first part of the path
-      var output = File(outputPath);
-      templates.add(SetupTemplate(input: input, output: output));
-    }
-
-    return templates;
-  }
-
-  static SetupTemplateFactory of(VariableMap variables) =>
-      variables[id] as SetupTemplateFactory;
+  return templates;
 }
 
 /// A [Template] for setting up the project with the [documentation_builder] CLI.
@@ -76,7 +48,7 @@ class SetupTemplateFactory {
 /// - parsed and rendered by the [CliTemplateEngine]
 /// - stored in the project that is been setup.
 class SetupTemplate extends Template {
-  final File input;
+  final Uri input;
   final File output;
   SetupTemplate({required this.input, required this.output}) {
     super.source = input.toString();
@@ -84,7 +56,26 @@ class SetupTemplate extends Template {
   }
 
   @override
-  Future<String> get text async => await input.readAsString();
+  Future<String> get text async {
+    if (input.isScheme('https')) {
+      final client = HttpClient();
+      try {
+        final request = await client.getUrl(input);
+        final response = await request.close();
+        if (response.statusCode == 200) {
+          return await response.transform(const Utf8Decoder()).join();
+        } else {
+          throw Exception(
+            'Failed to load template from $input (status: ${response.statusCode})',
+          );
+        }
+      } finally {
+        client.close();
+      }
+    } else {
+      return await File.fromUri(input).readAsString();
+    }
+  }
 
   Future<bool> get isTextFile async {
     try {
