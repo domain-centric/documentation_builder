@@ -146,7 +146,7 @@ class SetupCommand extends Command {
 
     await addTemplateFilesIfNeeded(variables);
 
-    await addGitHubWorkflowPublishWikiIfNeeded(variables);
+    await addGitHubWorkflowFilesIfNeeded(variables);
   }
 
   Future<void> addDocumentationBuilderDependencyIfNeeded(
@@ -198,7 +198,8 @@ class SetupCommand extends Command {
     if (projectHasTemplateFiles()) {
       print('Project already has template files.');
     } else {
-      for (var template in templates) {
+      var setupTemplateFactory = SetupTemplateFactory.of(variables);
+      for (var template in setupTemplateFactory.documentationTemplates) {
         await addFileIfNeeded(template, variables);
       }
     }
@@ -219,15 +220,14 @@ class SetupCommand extends Command {
     return hasTemplateFiles;
   }
 
-  Future<void> addGitHubWorkflowPublishWikiIfNeeded(
-    VariableMap variables,
-  ) async {
-    var template = gitHubWorkflowPublishWiki;
-
-    if (await template.output.exists()) {
-      print('GitHub Workflow file: ${template.output.path} already exists.');
+  Future<void> addGitHubWorkflowFilesIfNeeded(VariableMap variables) async {
+    if (hasGitWorkflowFiles()) {
+      print('Project already has GitHub Workflow files.');
     } else {
-      await addFileIfNeeded(template, variables);
+      var setupTemplateFactory = SetupTemplateFactory.of(variables);
+      for (var template in setupTemplateFactory.gitHubWorkflowTemplates) {
+        await addFileIfNeeded(template, variables);
+      }
     }
   }
 
@@ -250,6 +250,9 @@ class SetupCommand extends Command {
       // check if the project is on github.com
       gitHubProject.uri;
       variables[GitHubProject.id] = gitHubProject;
+
+      var setupTemplateFactory = await SetupTemplateFactory.create(gitHubProject);
+      variables[SetupTemplateFactory.id] = setupTemplateFactory;
     } catch (e) {
       print('Error: Could not find the project on github.com');
       exit(65);
@@ -293,6 +296,19 @@ class SetupCommand extends Command {
     final bytes = await template.input.readAsBytes();
     await template.output.create(recursive: true);
     await template.output.writeAsBytes(bytes);
+  }
+
+  bool hasGitWorkflowFiles() {
+    var gitWorkflowsDir = Directory('.git/workflows');
+    if (!gitWorkflowsDir.existsSync()) {
+      return false;
+    }
+
+    final hasFiles = gitWorkflowsDir
+        .listSync(recursive: true)
+        .whereType<File>()
+        .isNotEmpty;
+    return hasFiles;
   }
 }
 

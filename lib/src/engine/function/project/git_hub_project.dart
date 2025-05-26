@@ -154,7 +154,38 @@ class GitHubProject {
     'raw.githubusercontent.com',
     '${uri.path}/refs/heads/main',
   );
-}
+
+/// Fetches the list of raw files in a given path from the GitHub repository.
+  Future<List<Uri>> findFilesInPath(String path) async {
+    // Construct the GitHub API URL for listing files in a directory
+    final apiUrl = Uri.https(
+      'api.github.com',
+      '/repos${uri.path}/contents/$path',
+    );
+
+    final response = await http.get(
+      apiUrl,
+      headers: {'Accept': 'application/vnd.github.v3+json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch files: ${response.statusCode}');
+    }
+
+    final List<dynamic> jsonList = jsonDecode(response.body);
+    final List<Uri> fileUris = [];
+
+    for (var item in jsonList) {
+      if (item['type'] == 'file' && item['download_url'] != null) {
+        fileUris.add(Uri.parse(item['download_url']));
+      }
+    }
+
+    return fileUris;
+  }
+    
+  }
+
 
 enum GitHubMileStonesStates {
   open,
