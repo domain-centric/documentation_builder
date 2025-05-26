@@ -8,6 +8,9 @@ import 'package:yaml/yaml.dart';
 import 'package:collection/collection.dart';
 import 'package:process_run/shell.dart';
 
+/// You can also run the [DocumentationBuilder] with
+/// the Command Line Interface (CLI)
+/// See [Commands] for available commands.
 Future<void> main(List<String> args) async {
   var result = Commands().find(args);
 
@@ -33,6 +36,7 @@ abstract class Command {
 class Commands extends UnmodifiableListView<Command> {
   Commands() : super([HelpCommand(), BuildCommand(), SetupCommand()]);
 
+  /// Returns a string with all available commands and their descriptions.
   String get availableCommandsText {
     var buffer = StringBuffer('Available commands:\n');
     int firstColumnWidth = map(
@@ -50,6 +54,7 @@ class Commands extends UnmodifiableListView<Command> {
     return buffer.toString();
   }
 
+  /// Finds a command by its name in the provided list of arguments.
   CommandLineResult? find(List<String> args) {
     if (args.isEmpty) {
       return CommandLineFailure('No command argument provided.');
@@ -69,6 +74,7 @@ class Commands extends UnmodifiableListView<Command> {
   }
 }
 
+/// Represents the result of [Commands.find].
 abstract class CommandLineResult {}
 
 class CommandLineFailure implements CommandLineResult {
@@ -82,6 +88,7 @@ class CommandLineSuccess implements CommandLineResult {
   CommandLineSuccess(this.command);
 }
 
+/// A command that shows the available commands.
 class HelpCommand extends Command {
   @override
   final String name = 'help';
@@ -95,6 +102,7 @@ class HelpCommand extends Command {
   }
 }
 
+/// Builds the documentation files from template files by starting build_runner build.
 class BuildCommand extends Command {
   @override
   final String name = 'build';
@@ -112,6 +120,7 @@ class BuildCommand extends Command {
   }
 }
 
+/// Sets up a project to use the documentation_builder package.
 class SetupCommand extends Command {
   final engine = CliTemplateEngine();
   @override

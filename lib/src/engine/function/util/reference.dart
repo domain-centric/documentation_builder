@@ -11,6 +11,7 @@ import 'package:documentation_builder/src/engine/function/project/pub_dev_projec
 import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
 import 'package:template_engine/template_engine.dart';
 
+/// Represents a Markdown hyperlink with text and a URI.
 class MarkDownLink {
   final String text;
   final Uri uri;
@@ -21,6 +22,7 @@ class MarkDownLink {
   String toString() => '[$text]($uri)';
 }
 
+/// Factory interface for creating Markdown links from references.
 abstract class MarkDownLinkFactory {
   Future<MarkDownLink?> create({
     required RenderContext context,
@@ -29,6 +31,8 @@ abstract class MarkDownLinkFactory {
   });
 }
 
+/// A collection of Markdown link factories that can
+/// create [MarkDownLink]s for different reference types.
 class MarkDownLinkFactories extends UnmodifiableListView<MarkDownLinkFactory>
     implements MarkDownLinkFactory {
   MarkDownLinkFactories()
@@ -58,6 +62,7 @@ class MarkDownLinkFactories extends UnmodifiableListView<MarkDownLinkFactory>
   }
 }
 
+/// Creates a [MarkDownLink] for a URL reference.
 class UrlMarkDownLinkFactory implements MarkDownLinkFactory {
   @override
   Future<MarkDownLink?> create({
@@ -80,6 +85,7 @@ class UrlMarkDownLinkFactory implements MarkDownLinkFactory {
       uri.path.isEmpty ? uri.host : uri.pathSegments.last;
 }
 
+/// Creates a [MarkDownLink] for a package on pub.dev.
 class PubDevPackageLinkFactory implements MarkDownLinkFactory {
   @override
   Future<MarkDownLink?> create({
@@ -96,6 +102,7 @@ class PubDevPackageLinkFactory implements MarkDownLinkFactory {
   }
 }
 
+/// Creates a [MarkDownLink] to a Dart source file or one of its members on github.com
 class SourceLinkFactory implements MarkDownLinkFactory {
   @override
   @override
@@ -127,9 +134,6 @@ class SourceLinkFactory implements MarkDownLinkFactory {
 
     return null;
   }
-
-  Future<String> createLink(String linkText, Uri linkUri) =>
-      Future.value('[$linkText]($linkUri)');
 
   Future<Uri?> createDartReferenceUri(
     RenderContext renderContext,

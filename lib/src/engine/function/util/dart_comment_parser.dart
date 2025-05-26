@@ -118,6 +118,7 @@ class ReferenceConverter extends RenderFunction {
   String linkText;
   ReferenceConverter(String linkText) : linkText = linkText.trim();
 
+  /// creates a [MarkDownLink] for what ever it refers to.
   @override
   Future<String> render(RenderContext renderContext, Element element) async {
     try {

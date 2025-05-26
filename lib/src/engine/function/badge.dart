@@ -62,6 +62,7 @@ class Badge {
   }
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] toolTip.
 class ToolTipParameter extends Parameter<String> {
   static const id = 'toolTip';
   ToolTipParameter(Presence presence)
@@ -72,6 +73,7 @@ class ToolTipParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] label.
 class LabelParameter extends Parameter<String> {
   static const id = 'label';
   LabelParameter(Presence presence)
@@ -84,6 +86,7 @@ class LabelParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] message.
 class MessageParameter extends Parameter<String> {
   static const id = 'message';
   MessageParameter(Presence presence)
@@ -96,6 +99,7 @@ class MessageParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] color.
 class ColorParameter extends Parameter<String> {
   static const id = 'color';
   ColorParameter(Presence presence)
@@ -127,6 +131,7 @@ class ColorParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] link.
 class LinkParameter extends Parameter<String> {
   static const id = 'link';
   LinkParameter(Presence presence)
@@ -137,6 +142,7 @@ class LinkParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] for the [Badge] license type.
 class LicenseTypeParameter extends Parameter<String> {
   static const id = 'licenseType';
   LicenseTypeParameter(Presence presence)
@@ -148,6 +154,7 @@ class LicenseTypeParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction] that creates a customizable badge image in markdown format.
 class CustomBadge extends ExpressionFunction<String> {
   CustomBadge()
     : super(
@@ -179,6 +186,7 @@ class CustomBadge extends ExpressionFunction<String> {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge of an existing Dart or Flutter package on pub.dev.
 class PubPackageBadge extends ExpressionFunction<String> {
   PubPackageBadge()
     : super(
@@ -208,6 +216,7 @@ class PubPackageBadge extends ExpressionFunction<String> {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge of the scores on pub.dev.
 class PubScoreBadge extends ExpressionFunction<String> {
   PubScoreBadge()
     : super(
@@ -233,6 +242,7 @@ class PubScoreBadge extends ExpressionFunction<String> {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for all pub.dev badges.
 class AllPubBadges extends ExpressionFunction {
   AllPubBadges()
     : super(
@@ -250,6 +260,7 @@ class AllPubBadges extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge of a project on github.com.
 class GitHubBadge extends ExpressionFunction {
   GitHubBadge()
     : super(
@@ -277,6 +288,7 @@ class GitHubBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge of the Wiki pages of a project on github.com.
 class GitHubWikiBadge extends ExpressionFunction {
   GitHubWikiBadge()
     : super(
@@ -307,6 +319,7 @@ class GitHubWikiBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge with the amount of stars on github.com.
 class GitHubStarsBadge extends ExpressionFunction {
   GitHubStarsBadge()
     : super(
@@ -339,6 +352,7 @@ class GitHubStarsBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge with the amount of open issues on github.com.
 class GitHubIssuesBadge extends ExpressionFunction {
   GitHubIssuesBadge()
     : super(
@@ -370,6 +384,7 @@ class GitHubIssuesBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge with the amount of open pull requests on github.com.
 class GitHubPullRequestsBadge extends ExpressionFunction {
   GitHubPullRequestsBadge()
     : super(
@@ -403,6 +418,7 @@ class GitHubPullRequestsBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for a badge with the project license on github.com.
 class GitHubLicenseBadge extends ExpressionFunction {
   GitHubLicenseBadge()
     : super(
@@ -435,6 +451,7 @@ class GitHubLicenseBadge extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for all github.com badges.
 class AllGitHubBadges extends ExpressionFunction {
   AllGitHubBadges()
     : super(
@@ -456,6 +473,7 @@ class AllGitHubBadges extends ExpressionFunction {
       );
 }
 
+/// A [ExpressionFunction] that creates markdown for all pub.dev and github.com badges.
 class AllPubGitHubBadges extends ExpressionFunction {
   AllPubGitHubBadges()
     : super(

@@ -14,6 +14,8 @@ class MergedPathFunctions extends FunctionGroup {
         ...pathFunctionsFromTemplateEnginePackage(),
         InputPathFunction(),
         OutputPathFunction(),
+
+        /// copy [LinkFunction]s to [UriFunction]s
         for (var link in LinkFunctions().whereType<LinkFunction>())
           UriFunction.createFromLinkFunction(link),
       ]);
@@ -28,6 +30,8 @@ class MergedPathFunctions extends FunctionGroup {
       PathFunctions();
 }
 
+/// This class is used to create a [ExpressionFunction]s
+/// that return a [Uri] by copying [LinkFunction]s.
 class UriFunction extends ExpressionFunction<Uri> {
   UriFunction({
     required super.name,
@@ -61,6 +65,7 @@ class UriFunction extends ExpressionFunction<Uri> {
   }
 }
 
+/// Returns the path of the template file being used.
 class InputPathFunction extends ExpressionFunction<String> {
   InputPathFunction()
     : super(
@@ -82,6 +87,7 @@ class InputPathFunction extends ExpressionFunction<String> {
       );
 }
 
+/// Returns the path of the file being created from the template.
 class OutputPathFunction extends ExpressionFunction<String> {
   OutputPathFunction()
     : super(

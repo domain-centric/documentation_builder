@@ -7,6 +7,7 @@ final gitHubWorkflowPublishWiki = SetupTemplate(
   '.github/workflows/publish-wiki.yml',
 );
 
+/// All available [SetupTemplate]s.
 final templates = <SetupTemplate>[
   SetupTemplate('doc/template/CHANGELOG.md.template'),
   SetupTemplate('doc/template/LICENSE.md.template'),
@@ -20,6 +21,10 @@ final templates = <SetupTemplate>[
   SetupTemplate('doc/template/example/example.md.template'),
 ];
 
+/// A [Template] for setting up the project with the [documentation_builder] CLI.
+/// This template is used to create the necessary files and configurations
+/// The [Template] is stored inside the package, updated by the [CliTemplateEngine]
+/// and stored in the project that is been setup.
 class SetupTemplate extends Template {
   late Resource input;
   late File output;

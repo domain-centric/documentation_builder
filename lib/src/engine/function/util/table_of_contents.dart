@@ -6,6 +6,7 @@ import 'package:documentation_builder/documentation_builder.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
+///
 class TableOfContentsFactory {
   Future<String> createMarkDown({
     required RenderContext renderContext,
@@ -65,8 +66,10 @@ class TableOfContentsFactory {
 
   static final engine = _createEngine();
 
-  /// returns a list of files based on source.
-  /// [path]  is a relative project path to a template file (e.g.: doc/template/README.md.template) or a folder with template files (e.g.: doc/template/wiki)
+  /// returns a list of files in the given [path].
+  /// [path] is a relative project path to a template file
+  /// (e.g.: doc/template/README.md.template)
+  /// or a folder with template files (e.g.: doc/template/wiki)
   List<File> findFiles(String path) {
     var entityType = FileSystemEntity.typeSync(path);
 
@@ -148,6 +151,8 @@ class TableOfContentsFactory {
     return normalizedRelativePath;
   }
 
+  /// Converts a list of [TitleLink]s to a new list without gaps in the levels.
+  /// so that it is correctly rendered in Markdown.
   List<TitleLink> toListWithoutLevelGabs(List<TitleLink> titleLinks) {
     if (titleLinks.isEmpty) {
       return [];
@@ -171,6 +176,7 @@ class TableOfContentsFactory {
     return newTitleLinks;
   }
 
+  /// Calculates the new level to prevent gaps in the levels.
   int _newLevel(
     int currentOldLevel,
     int perviousOldLevel,
@@ -204,6 +210,7 @@ class TableOfContentsDummy extends ExpressionFunction {
       );
 }
 
+/// Represents a Markdown hyperlink to a title in some Markdown file.
 class TitleLink {
   final String relativePath;
   final String title;

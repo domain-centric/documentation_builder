@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
 
+//// Extension methods for [Uri] to append path, query parameters, and fragment.
+/// This allows for more flexible URI manipulation without creating a new Uri object each time.
 extension UriExtension on Uri {
   Map<String, String>? _appendQueryParameters(
     Map<String, String> original,
@@ -17,6 +19,11 @@ extension UriExtension on Uri {
     return '$original$additional';
   }
 
+  /// Returns a new Uri. You can optionally appended
+  /// * [path]
+  /// * [query]
+  /// * [fragment]
+  /// * or a [suffix] to the end of the Uri.
   Uri append({
     String? path,
     Map<String, String>? query,
@@ -38,6 +45,7 @@ extension UriExtension on Uri {
     return Uri.parse('$uri$suffix');
   }
 
+  /// Checks if the URI can be accessed via HTTP GET request.
   Future<bool> canGetWithHttp() async {
     var response = await http.get(this);
     var success = response.statusCode >= 200 && response.statusCode < 400;

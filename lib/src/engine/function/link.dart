@@ -22,6 +22,7 @@ abstract class LinkFunction extends ExpressionFunction<MarkDownLink> {
        );
 }
 
+/// A group [ExpressionFunction]s that create markdown hyperlinks.
 class LinkFunctions extends FunctionGroup {
   LinkFunctions()
     : super('Link Functions', [
@@ -44,6 +45,7 @@ class LinkFunctions extends FunctionGroup {
       ]);
 }
 
+/// A [ExpressionFunction]-[Parameter] that represents the text of a hyperlink.
 class TextParameter extends Parameter<String> {
   static const String id = 'text';
 
@@ -56,6 +58,7 @@ class TextParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction]-[Parameter] that represents a suffix to append to the URI.
 class SuffixParameter extends Parameter<String> {
   static const String id = 'suffix';
 
@@ -68,6 +71,8 @@ class SuffixParameter extends Parameter<String> {
       );
 }
 
+/// A [ExpressionFunction] that creates a markdown hyperlink to a reference.
+/// The reference can be a URL, a package name on pub.dev, a source file, or a Dart library member.
 class ReferenceLink extends LinkFunction {
   static const refId = 'ref';
   static final factories = MarkDownLinkFactories();
@@ -107,6 +112,7 @@ class ReferenceLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub project page.
 class GitHubLink extends LinkFunction {
   GitHubLink()
     : super(
@@ -129,6 +135,7 @@ class GitHubLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub wiki page.
 class GitHubWikiLink extends LinkFunction {
   GitHubWikiLink()
     : super(
@@ -152,6 +159,7 @@ class GitHubWikiLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub wiki page.
 class GitHubStarsLink extends LinkFunction {
   GitHubStarsLink()
     : super(
@@ -175,6 +183,7 @@ class GitHubStarsLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub issues page.
 class GitHubIssuesLink extends LinkFunction {
   GitHubIssuesLink()
     : super(
@@ -198,6 +207,7 @@ class GitHubIssuesLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub milestones page.
 class GitHubMilestonesLink extends LinkFunction {
   GitHubMilestonesLink()
     : super(
@@ -221,6 +231,7 @@ class GitHubMilestonesLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub releases page.
 class GitHubReleasesLink extends LinkFunction {
   GitHubReleasesLink()
     : super(
@@ -244,6 +255,7 @@ class GitHubReleasesLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a GitHub pull requests page.
 class GitHubPullRequestsLink extends LinkFunction {
   GitHubPullRequestsLink()
     : super(
@@ -271,7 +283,6 @@ class GitHubPullRequestsLink extends LinkFunction {
 /// e.g. if you open the [uri] and click on a markdown file in github,
 /// it will show the rendered markdown file
 /// You can use this link instead to see the un-rendered (source) file.
-
 class GitHubRawLink extends LinkFunction {
   GitHubRawLink()
     : super(
@@ -295,6 +306,7 @@ class GitHubRawLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to a pub.dev package.
 class PubDevLink extends LinkFunction {
   PubDevLink()
     : super(
@@ -317,6 +329,7 @@ class PubDevLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the change log page of a pub.dev package.
 class PubDevChangeLogLink extends LinkFunction {
   PubDevChangeLogLink()
     : super(
@@ -340,6 +353,7 @@ class PubDevChangeLogLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the versions page of a pub.dev package.
 class PubDevVersionsLink extends LinkFunction {
   PubDevVersionsLink()
     : super(
@@ -363,6 +377,7 @@ class PubDevVersionsLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the example page of a pub.dev package.
 class PubDevExampleLink extends LinkFunction {
   PubDevExampleLink()
     : super(
@@ -386,6 +401,7 @@ class PubDevExampleLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the install page of a pub.dev package.
 class PubDevInstallLink extends LinkFunction {
   PubDevInstallLink()
     : super(
@@ -409,6 +425,7 @@ class PubDevInstallLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the score page of a pub.dev package.
 class PubDevScoreLink extends LinkFunction {
   PubDevScoreLink()
     : super(
@@ -432,6 +449,7 @@ class PubDevScoreLink extends LinkFunction {
       );
 }
 
+/// A [LinkFunction] that creates a markdown hyperlink to the license page of a pub.dev package.
 class PubDevLicenseLink extends LinkFunction {
   PubDevLicenseLink()
     : super(

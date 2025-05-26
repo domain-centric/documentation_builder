@@ -8,6 +8,7 @@ import 'package:documentation_builder/src/engine/function/util/path_parsers.dart
     as p;
 import 'package:template_engine/template_engine.dart';
 
+/// Resolves the [LibraryElement] for the given [dartFile].
 Future<LibraryElement> resolveLibrary(
   RenderContext context,
   p.ProjectFilePath2 dartFile,
@@ -25,6 +26,8 @@ Future<LibraryElement> resolveLibrary(
   return library;
 }
 
+/// Finds a Dart member element by its [path]
+/// in the given [element] so we do not need a visitor.
 Element? findElementRecursively(Element element, p.DartMemberPath path) {
   if (element.displayName == path.first && path.length == 1) {
     return element;

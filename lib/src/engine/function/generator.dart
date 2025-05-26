@@ -5,6 +5,7 @@ import 'package:documentation_builder/src/engine/function/project/git_hub_projec
 import 'package:documentation_builder/src/engine/function/util/table_of_contents.dart';
 import 'package:template_engine/template_engine.dart';
 
+//// A group of functions related to generator functions that create (markdown) text
 class GeneratorFunctions extends FunctionGroup {
   GeneratorFunctions()
     : super('Generator Functions', [
@@ -14,6 +15,7 @@ class GeneratorFunctions extends FunctionGroup {
       ]);
 }
 
+/// A function that generates a markdown text of GitHub milestones
 class GitHubMileStones extends ExpressionFunction {
   static const String stateId = 'state';
 
@@ -60,6 +62,7 @@ class GitHubMileStones extends ExpressionFunction {
       );
 }
 
+/// A function that generates a markdown table of contents for a template file or folder
 class TableOfContents extends ExpressionFunction {
   static const pathId = 'path';
   static const includeFileLinkId = 'includeFileLink';
@@ -110,6 +113,7 @@ class TableOfContents extends ExpressionFunction {
       );
 }
 
+/// A function that generates a license text for a given type, year and copyright holder
 class License extends ExpressionFunction<String> {
   static Licenses licenses = Licenses();
   License()
@@ -159,6 +163,7 @@ class License extends ExpressionFunction<String> {
       );
 }
 
+/// A collection of licenses that can be used to generate license texts
 class Licenses extends DelegatingList<LicenseText> {
   Licenses() : super([MitLicense(), Bsd3License()]);
 
@@ -175,11 +180,13 @@ class Licenses extends DelegatingList<LicenseText> {
   }
 }
 
+/// An abstract class that defines the structure for license texts
 abstract class LicenseText {
   late String licenseType;
   String text(int year, String name);
 }
 
+/// A concrete implementation of a license text for the MIT License
 class MitLicense extends LicenseText {
   @override
   String get licenseType => 'MIT';
@@ -192,6 +199,7 @@ class MitLicense extends LicenseText {
       'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.';
 }
 
+/// A concrete implementation of a license text for the BSD 3-Clause License
 class Bsd3License extends LicenseText {
   @override
   String get licenseType => 'BSD3';

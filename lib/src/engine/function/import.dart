@@ -37,6 +37,8 @@ class MergedImportFunctions extends FunctionGroup {
   ) => ImportFunctions().where((f) => !functionNames.contains(f.name));
 }
 
+/// Imports a file (e.g. html, json, or any other programming related file)
+/// from this projects and puts it in a Markdown code block.
 class ImportCode extends ExpressionFunction {
   static const String sourceName = 'source';
   static const String sourceHeaderName = 'sourceHeader';
@@ -94,6 +96,7 @@ class ImportCode extends ExpressionFunction {
       );
 }
 
+/// Reads the source file from the given path and puts it in a Markdown code block.
 class ImportDartCode extends ExpressionFunction {
   static const String sourceName = 'source';
   static const String sourceHeaderName = 'sourceHeader';
@@ -126,6 +129,7 @@ class ImportDartCode extends ExpressionFunction {
       );
 }
 
+/// An [ExpressionFunction]-[Parameter] for a Dart code path.
 class DartCodePathParameter extends Parameter<String> {
   DartCodePathParameter(String name)
     : super(
@@ -163,6 +167,8 @@ class DartCodePathParameter extends Parameter<String> {
       );
 }
 
+/// Imports Dart documentation comments for a given library member from a dart code file
+/// And converts them to a Markdown
 class ImportDartDoc extends ExpressionFunction {
   static const String sourceName = 'source';
   static const String sourceHeaderName = 'sourceHeader';
