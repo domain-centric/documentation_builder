@@ -78,11 +78,12 @@ class SetupTemplate extends Template {
   }
 
   Future<bool> get isTextFile async {
+    // Simple check: try to read the file as text, return true if successful, false otherwise.
     try {
       await text;
       return true;
-    } catch (e) {
-      return !e.toString().contains('Failed to decode data using encoding');
+    } catch (_) {
+      return false;
     }
   }
 }

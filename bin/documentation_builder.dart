@@ -204,6 +204,7 @@ class SetupCommand extends Command {
 
   static const String buildRunner = 'build_runner';
   static const String documentationBuilder = 'documentation_builder';
+  static final Uri _documentationBuilderGitHubUri=Uri.https('github.com', 'domain-centric/documentation_builder');
 
   Future<void> addDocumentationTemplateFilesIfNeeded(
     VariableMap variables,
@@ -211,7 +212,8 @@ class SetupCommand extends Command {
     if (projectHasDocumentationTemplateFiles()) {
       print('Project already has documentation template files.');
     } else {
-      var gitHubProject = variables[GitHubProject.id] as GitHubProject;
+      // We need a GitHubProject for documentation_builder not the local project!
+      var gitHubProject = await GitHubProject.createForUri(_documentationBuilderGitHubUri);
       var documentationTemplates = await createDocumentationTemplates(
         gitHubProject,
       );
@@ -240,8 +242,8 @@ class SetupCommand extends Command {
     if (hasGitWorkflowFiles()) {
       print('Project already has GitHub Workflow files.');
     } else {
-      GitHubProject gitHubProject =
-          variables[GitHubProject.id] as GitHubProject;
+      // We need a GitHubProject for documentation_builder not the local project!
+      var gitHubProject = await GitHubProject.createForUri(_documentationBuilderGitHubUri);
       var workflowTemplates = await createGitHubWorkflowTemplates(
         gitHubProject,
       );
@@ -257,8 +259,10 @@ class SetupCommand extends Command {
   ) async {
     print('Adding ${template.output}...');
     if (await template.isTextFile) {
+      print('-text');//FIXME
       await parseRenderAndWrite(template, variables);
     } else {
+      print('-bytes');//FIXME
       await copyFile(template);
     }
   }

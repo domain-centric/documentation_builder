@@ -24,6 +24,13 @@ class GitHubProject {
   static Future<GitHubProject> createForThisProject() async =>
       GitHubProject._(await _createUri());
 
+  static Future<GitHubProject> createForUri(Uri gitHubProjectUri) async {
+    if (!await gitHubProjectUri.canGetWithHttp()) {
+      return GitHubProject._(null);
+    }
+    return GitHubProject._(gitHubProjectUri);
+  }
+
   /// returns a [Uri] to the where the project is stored on https://github.com
   /// or null when no github information was found
   static Future<Uri?> _createUri() async {
