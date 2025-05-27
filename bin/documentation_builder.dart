@@ -8,9 +8,20 @@ import 'package:yaml/yaml.dart';
 import 'package:collection/collection.dart';
 import 'package:process_run/shell.dart';
 
-/// You can also run the [DocumentationBuilder] with
-/// the Command Line Interface (CLI)
-/// See [Commands] for available commands.
+/// The simplest way to use the [documentation_builder] package 
+/// is to use it as a command line tool.  
+///
+/// To install it, run `dart pub global activate documentation_builder` from the command line.
+///
+/// After installation you can use the following commands:  
+/// * `documentation_builder help`
+///   Shows available commands.
+/// * `documentation_builder setup`
+///   Sets up a project to use the documentation_builder package 
+///   by adding dependencies, template files, and GitHub workflow files.
+/// * `documentation_builder `build`
+///   Builds the documentation files from template files 
+///   by starting `build_runner build`.
 Future<void> main(List<String> args) async {
   var result = Commands().find(args);
 
@@ -182,7 +193,7 @@ class SetupCommand extends Command {
     final pubspec = File('pubspec.yaml');
     if (!await pubspec.exists()) {
       print(
-        'pubspec.yaml not found. Please run this command in the root of your project.',
+        'pubspec.yaml not found. Run this command in the root of your project.',
       );
       exit(65);
     }
@@ -260,7 +271,7 @@ class SetupCommand extends Command {
       gitHubProject.uri;
       variables[GitHubProject.id] = gitHubProject;
     } catch (e) {
-      print('Error: Could not find the project on github.com');
+      print('Error: Could not find this project on github.com');
       exit(65);
     }
 
