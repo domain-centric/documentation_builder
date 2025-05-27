@@ -1,6 +1,6 @@
 {{allPubGitHubBadges()}}
  
-![]([[gitHubWikiUri('/package.jpeg')]])
+![]({{gitHubWikiUri('/package.jpeg')}})
 
 # Features
 {{importDartDoc('doc/template/doc/wiki/1-Features.md.template')}}

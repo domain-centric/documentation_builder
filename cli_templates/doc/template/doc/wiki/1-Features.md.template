@@ -1,4 +1,4 @@
-![]([[gitHubWikiUri('/package.jpeg')]])
+![]({{gitHubWikiUri('/package.jpeg')}})
 
 TODO write a small description of your package or use {{importDartDoc()}} to import Dart doc comments
 
