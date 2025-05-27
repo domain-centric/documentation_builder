@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/03-Tags.md.template using the documentation_builder package)
-
 # Expression Tag
 <table>
 <tr><td>description:</td><td>Evaluates an expression that can contain:<br>* Data Types (e.g. boolean, number or String)<br>* Constants (e.g. pi)<br>* Variables (e.g. person.name )<br>* Operators (e.g. + - * /)<br>* Functions (e.g. cos(7) )<br>* or any combination of the above</td></tr>

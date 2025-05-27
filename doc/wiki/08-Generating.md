@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/08-Generating.md.template using the documentation_builder package)
-
 The [documentation_builder](https://pub.dev/packages/documentation_builder) is a builder that is run with the [build_runner](https://pub.dev/packages/build_runner) package.
 
 The [build_runner](https://pub.dev/packages/build_runner) can be started from the command line in the root of the project:

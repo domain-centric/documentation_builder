@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:documentation_builder/src/builder/build_option_parameter.dart';
+import 'package:documentation_builder/src/builder/build_config.dart';
 import 'package:documentation_builder/src/builder/new_line.dart';
 import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
 import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';

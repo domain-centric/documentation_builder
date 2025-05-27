@@ -1,4 +1,6 @@
 # Read about `build.yaml` at https://pub.dev/packages/build_config
+
+# Optional for your package that uses the documentation_builder package
 targets:
   $default:
     sources:
@@ -11,11 +13,37 @@ targets:
     builders:
       documentation_builder|documentation_builder:
         enabled: True
-      
+        # options:
+          # input_path: An expression where to find template files, defaults to 'doc/template/{{filePath}}.template'
+          # output_path: An expression where to store the result files, defaults to '{{filePath}}'
+          # file_headers: A map of file output suffixes and the file header template to be added (which can be null),
+          #   defaults to:
+          #   {
+          #    'LICENSE': null,
+          #    'LICENSE.md': null,
+          #    '.md': '[//](https://pub.dev/packages///): # (This file was generated from: {{inputPath()}} using the documentation_builder package)\n\r',
+          #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package\n\r'
+          #   }
+
+
+# For this package
 builders:
   documentation_builder:
     import: 'package:documentation_builder/builder.dart'
     builder_factories: [ 'documentationBuilder' ]
-    build_extensions: {"doc/template/{{fileName}}.mdt": ["{{fileName}}.md"]}
+    build_extensions: {'doc/template/{{fileName}}.mdt': ['{{fileName}}.md']} # This is not used. See input_path and output_path options
     build_to: source
     auto_apply: dependents
+    defaults:
+      options:
+        # input_path: An expression where to find template files
+        input_path: 'doc/template/{{filePath}}.template'
+        # output_path: An expression where to store the result files
+        output_path: '{{filePath}}'
+        # file_headers: A map of file output suffixes and the file header template to be added (which can be null)
+        file_headers: {
+          'LICENSE': null,
+          'LICENSE.md': null,
+          '.md': '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
+          '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
+        }

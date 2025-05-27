@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/README.md.template using the documentation_builder package)
-
 [![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)
 [![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)
 [![Project Wiki pages on github.com](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)
@@ -39,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5acb98fec0c735165994eed429096231de154452/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5acb98fec0c735165994eed429096231de154452/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5acb98fec0c735165994eed429096231de154452/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -143,57 +142,34 @@ You can view the templates files and the generated output on https://github.com 
   dart pub add --dev documentation_builder
   ```
   [build_runner](https://pub.dev/packages/build_runner) is a tool to run file generators like [documentation_builder](https://pub.dev/packages/documentation_builder)
-* Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
+* Configure the documentation_builder (optionally)  
+The following is only needed when your project already has a build.yaml file or when you want to override the options:  
+Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):  
   ```
   targets:
     $default:
-      sources:
-        - doc/**
-        - lib/**
-        - bin/**
-        - test/**
-        - pubspec.*
-        - $package$
+      builders:
+        documentation_builder|documentation_builder:
+          enabled: True
+          # options:
+            # input_path:  
+              # An expression where to find template files
+              # Defaults to 'doc/template/{{filePath}}.template'
+            # output_path:  
+              # An expression where to store the result files
+              # Defaults to '{{filePath}}'
+            # file_headers:  
+              # A map of file output suffixes and the file header template to be added (which can be null), 
+              # Defaults to:
+              #   {
+              #    'LICENSE': null,
+              #    'LICENSE.md': null,
+              #    '.md': '[//](https://pub.dev/packages///): # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
+              #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
+              #   }
   ```
   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 * Create 'doc/template' folders in the root of your project
 * Create template files in the "doc/template" folder. See [examples](https://pub.dev/packages/documentation_builder/example)
 * [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki08-Generating.md)
 * [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki09-Publishing.md)
-
-## Build configuration
-[documentation_builder](https://pub.dev/packages/documentation_builder) build options have default values.
-You can override these default values by adding the following lines to the defaults section of a build.yaml file (merge these lines if build.yaml file already exists):
-```
-targets:
-  $default:
-    builders:
-      documentation_builder:
-        options:
-          inputPath: #your input expression, see the default value for inspiration
-          outputPath: #your output expression, see the default value for inspiration
-          fileHeaders: #your fileHeaders expression, see the default value for inspiration
-```
-For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
-
-### Build option parameter: inputPath
-* Description: An expression where to find template files
-* Default value: `'doc/template/{{filePath}}.template'`
-
-### Build option parameter: outputPath
-* Description: An expression where to store the result files
-* Default value: `'{{filePath}}'`
-
-### Build option parameter: fileHeaders
-* Description: A map of file suffixes and the file header template to be added (which can be null)
-* Default value:
-  ```
-  {
-  'LICENSE': null,
-  'LICENSE.md': null,
-  '.md':
-      '[//](https://pub.dev/packages///): # (This file was generated from: {{inputPath()}} using the documentation_builder package)&#92;n&#92;r',
-  '.dart':
-      'This file was generated from: {{inputPath()}} using the documentation_builder package&#92;n&#92;r'
-  }
-  ```

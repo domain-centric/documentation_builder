@@ -1,4 +1,4 @@
-export 'src/builder/build_option_parameter.dart';
+export 'src/builder/build_config.dart';
 export 'src/builder/documentation_builder.dart';
 export 'src/builder/new_line.dart';
 export 'src/cli/cli_template_engine.dart';

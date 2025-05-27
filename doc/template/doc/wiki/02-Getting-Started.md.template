@@ -6,32 +6,8 @@
   dart pub add --dev documentation_builder
   ```
   {{referenceLink('build_runner')}} is a tool to run file generators like {{referenceLink('documentation_builder')}}
-* Add a build.yaml file to the root of your project with the following lines (merge lines if build.yaml file already exists):
-  ```
-  targets:
-    $default:
-      sources:
-        - doc/**
-        - lib/**
-        - bin/**
-        - test/**
-        - pubspec.*
-        - $package$
-  ```
-  For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
+* {{importDartDoc('lib/src/builder/build_config.dart#DocumentationBuilderBuildConfig')}}
 * Create 'doc/template' folders in the root of your project
 * Create template files in the "doc/template" folder. See [examples]({{pubDevExampleUri()}})
 * [Generate the documentation files]({{gitHubWikiUri('08-Generating.md')}})
 * [Publish the documentation files]({{gitHubWikiUri('09-Publishing.md')}})
-
-## Build configuration
-{{importDartDoc('lib/src/builder/build_option_parameter.dart#BuildOptionParameter')}}
-
-### Build option parameter: inputPath
-{{importDartDoc('lib/src/builder/build_option_parameter.dart#InputPath')}}
-
-### Build option parameter: outputPath
-{{importDartDoc('lib/src/builder/build_option_parameter.dart#OutputPath')}}
-
-### Build option parameter: fileHeaders
-{{importDartDoc('lib/src/builder/build_option_parameter.dart#FileHeaders')}}

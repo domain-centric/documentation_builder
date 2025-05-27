@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/05-Constants.md.template using the documentation_builder package)
-
 ## e Constant
 <table>
 <tr><td>description:</td><td>Base of the natural logarithms.</td></tr>

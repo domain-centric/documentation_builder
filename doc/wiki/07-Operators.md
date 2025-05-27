@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/07-Operators.md.template using the documentation_builder package)
-
 ## Parentheses
 ### Parentheses Operator ()
 <table>

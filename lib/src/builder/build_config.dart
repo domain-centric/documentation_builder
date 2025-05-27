@@ -1,41 +1,51 @@
 import 'package:build/build.dart';
-import 'package:documentation_builder/src/builder/new_line.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:collection/collection.dart';
 
-/// [documentation_builder] build options have default values.
-/// You can override these default values by adding the following lines to the defaults section of a build.yaml file (merge these lines if build.yaml file already exists):
-/// ```
-/// targets:
-///   $default:
-///     builders:
-///       documentation_builder:
-///         options:
-///           inputPath: #your input expression, see the default value for inspiration
-///           outputPath: #your output expression, see the default value for inspiration
-///           fileHeaders: #your fileHeaders expression, see the default value for inspiration
-/// ```
-/// For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
+/// Configure the documentation_builder (optionally)
+/// The following is only needed when your project already has a build.yaml file or when you want to override the options:
+/// Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
+///   ```
+///   targets:
+///     $default:
+///       builders:
+///         documentation_builder|documentation_builder:
+///           enabled: True
+///           # options:
+///             # input_path:
+///               # An expression where to find template files
+///               # Defaults to 'doc/template/{{filePath}}.template'
+///             # output_path:
+///               # An expression where to store the result files
+///               # Defaults to '{{filePath}}'
+///             # file_headers:
+///               # A map of file output suffixes and the file header template to be added (which can be null),
+///               # Defaults to:
+///               #   {
+///               #    'LICENSE': null,
+///               #    'LICENSE.md': null,
+///               #    '.md': '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
+///               #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
+///               #   }
+///   ```
+///   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
+class DocumentationBuilderBuildConfig {
+  // For documentation only.
+}
+
 abstract class BuildOptionParameter<T> {
   final String name;
-  final T defaultValue;
-  final String description;
 
   /// A function that throws an explanatory exception
   /// when the value is not valid.
   final Function(T value)? validator;
 
-  BuildOptionParameter({
-    required this.name,
-    required this.description,
-    required this.defaultValue,
-    this.validator,
-  });
+  BuildOptionParameter({required this.name, this.validator});
 
   T getValue(BuilderOptions builderOptions) {
     var config = builderOptions.config;
     if (!config.containsKey(name)) {
-      return defaultValue;
+      throw BuildOptionParameterException.isNotDefined(name);
     }
     var value = config[name];
     _validate(value);
@@ -65,29 +75,25 @@ class BuildOptionParameterException implements Exception {
   final String message;
 
   BuildOptionParameterException(this.parameterName, String message)
-    : message = 'build.yaml: Builder option parameter $parameterName $message';
+    : message = 'build.yaml: Builder option $parameterName $message';
+
+  factory BuildOptionParameterException.isNotDefined(String parameterName) =>
+      BuildOptionParameterException(parameterName, 'is not defined');
+
+  @override
+  toString() => message;
 }
 
 /// * Description: An expression where to find template files
 /// * Default value: `'doc/template/{{filePath}}.template'`
 class InputPath extends BuildOptionParameter<String> {
-  InputPath()
-    : super(
-        name: 'inputPath',
-        description: 'An expression where to find template files',
-        defaultValue: 'doc/template/{{filePath}}.template',
-      );
+  InputPath() : super(name: 'input_path');
 }
 
 /// * Description: An expression where to store the result files
 /// * Default value: `'{{filePath}}'`
 class OutputPath extends BuildOptionParameter<String> {
-  OutputPath()
-    : super(
-        name: 'outputPath',
-        description: 'An expression where to store the result files',
-        defaultValue: '{{filePath}}',
-      );
+  OutputPath() : super(name: 'output_path');
 }
 
 /// * Description: A map of file suffixes and the file header template to be added (which can be null)
@@ -103,35 +109,34 @@ class OutputPath extends BuildOptionParameter<String> {
 ///   }
 ///   ```
 class FileHeaders extends BuildOptionParameter<FileHeaderMap> {
-  FileHeaders()
-    : super(
-        name: 'fileHeaders',
-        description:
-            'A map of file suffices and the file header template to be added (which can be null)',
-        defaultValue: FileHeaderMap({
-          'LICENSE': null,
-          'LICENSE.md': null,
-          '.md':
-              '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)$newLine',
-          '.dart':
-              '/// This file was generated from: {{inputPath()}} using the documentation_builder package$newLine',
-        }),
-      );
+  FileHeaders() : super(name: 'file_headers');
 
   @override
   FileHeaderMap getValue(BuilderOptions builderOptions) {
     var config = builderOptions.config;
     if (!config.containsKey(name)) {
-      return defaultValue;
+      throw BuildOptionParameterException.isNotDefined(name);
     }
     var map = config[name];
-    if (map is! Map<String, String>) {
+    if (map is! Map) {
+      throw BuildOptionParameterException(name, 'is not of type: Map');
+    }
+    if (map.keys.any((key) => key is! String)) {
       throw BuildOptionParameterException(
         name,
-        'is not of type: Map<String, String>',
+        'contains keys that are not of type: String',
       );
     }
-    return FileHeaderMap(map);
+    if (map.values.any((value) => value is! String?)) {
+      throw BuildOptionParameterException(
+        name,
+        'contains values that are not of type: String or null',
+      );
+    }
+    var stringMap = map.map(
+      (key, value) => MapEntry(key as String, value as String?),
+    );
+    return FileHeaderMap(stringMap);
   }
 }
 

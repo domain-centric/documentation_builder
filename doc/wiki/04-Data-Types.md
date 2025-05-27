@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/04-Data-Types.md.template using the documentation_builder package)
-
 ## String Data Type
 <table>
 <tr><td>description:</td><td>A form of data containing a sequence of characters</td></tr>

@@ -1,5 +1,4 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/06-Functions.md.template using the documentation_builder package)
-
 # Import Functions
 ## importTemplate Function
 <table>
