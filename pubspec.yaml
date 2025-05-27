@@ -1,5 +1,5 @@
 name: documentation_builder
-description: Generates markdown documentation files from markdown template files.
+description: Generates documentation files that can import other files or Dart documentation comments.
 version: 0.0.14
 repository: https://github.com/domain-centric/documentation_builder
 issue_tracker: https://github.com/domain-centric/documentation_builder/pulls

@@ -15,7 +15,7 @@ import 'package:template_engine/template_engine.dart';
 /// Generates documentation files from template files.
 /// This can be useful when you write documentation for a
 /// [Dart](https://dart.dev/) or [Flutter](https://flutter.dev/) project
-/// and want to reuse/import Dart code or Dart documentation comments.
+/// and want to reuse/import files or Dart documentation comments.
 ///
 /// It can generate any type of text file e.g.:
 /// * [README.md](https://github.com/domain-centric/documentation_builder/wiki/10-Examples#readmemd)
