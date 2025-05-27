@@ -8,19 +8,19 @@ import 'package:yaml/yaml.dart';
 import 'package:collection/collection.dart';
 import 'package:process_run/shell.dart';
 
-/// The simplest way to use the [documentation_builder] package 
-/// is to use it as a command line tool.  
+/// The simplest way to use the [documentation_builder] package
+/// is to use it as a command line tool.
 ///
 /// To install it, run `dart pub global activate documentation_builder` from the command line.
 ///
-/// After installation you can use the following commands:  
+/// After installation you can use the following commands:
 /// * `documentation_builder help`
 ///   Shows available commands.
 /// * `documentation_builder setup`
-///   Sets up a project to use the documentation_builder package 
+///   Sets up a project to use the documentation_builder package
 ///   by adding dependencies, template files, and GitHub workflow files.
 /// * `documentation_builder `build`
-///   Builds the documentation files from template files 
+///   Builds the documentation files from template files
 ///   by starting `build_runner build`.
 Future<void> main(List<String> args) async {
   var result = Commands().find(args);

@@ -38,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/be210d37a92fda122401521291aceaa8dd4480d1/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -142,9 +142,9 @@ You can view the templates files and the generated output on https://github.com 
   dart pub add --dev documentation_builder
   ```
   [build_runner](https://pub.dev/packages/build_runner) is a tool to run file generators like [documentation_builder](https://pub.dev/packages/documentation_builder)
-* Configure the documentation_builder (optionally)  
-The following is only needed when your project already has a build.yaml file or when you want to override the options:  
-Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):  
+* Configure the documentation_builder (optionally)
+The following is only needed when your project already has a build.yaml file or when you want to override the options:
+Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
   ```
   targets:
     $default:
@@ -152,14 +152,14 @@ Add a build.yaml file to the root of your project with the following lines (or m
         documentation_builder|documentation_builder:
           enabled: True
           # options:
-            # input_path:  
+            # input_path:
               # An expression where to find template files
               # Defaults to 'doc/template/{{filePath}}.template'
-            # output_path:  
+            # output_path:
               # An expression where to store the result files
               # Defaults to '{{filePath}}'
-            # file_headers:  
-              # A map of file output suffixes and the file header template to be added (which can be null), 
+            # file_headers:
+              # A map of file output suffixes and the file header template to be added (which can be null),
               # Defaults to:
               #   {
               #    'LICENSE': null,
