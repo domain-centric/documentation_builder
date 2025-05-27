@@ -38,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/49c6e3aefd42ed4b5c3dfd7b3bb06de5b8cc064f/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/49c6e3aefd42ed4b5c3dfd7b3bb06de5b8cc064f/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/c21f03eb18c8c810d2197380ff090a70c01df74f/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/49c6e3aefd42ed4b5c3dfd7b3bb06de5b8cc064f/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -170,6 +170,6 @@ Add a build.yaml file to the root of your project with the following lines (or m
   ```
   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 * Create 'doc/template' folders in the root of your project
-* Create template files in the "doc/template" folder. See [examples](https://pub.dev/packages/documentation_builder/example)
-* [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki08-Generating.md)
-* [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki09-Publishing.md)
+* Create template files in the "doc/template" folder. See [examples](https://github.com/domain-centric/documentation_builder/wiki/10-Examples)
+* [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki/08-Generating)
+* [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing)

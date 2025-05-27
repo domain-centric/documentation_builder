@@ -35,6 +35,6 @@ Add a build.yaml file to the root of your project with the following lines (or m
   ```
   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 * Create 'doc/template' folders in the root of your project
-* Create template files in the "doc/template" folder. See [examples](https://pub.dev/packages/documentation_builder/example)
-* [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki08-Generating.md)
-* [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki09-Publishing.md)
+* Create template files in the "doc/template" folder. See [examples](https://github.com/domain-centric/documentation_builder/wiki/10-Examples)
+* [Generate the documentation files](https://github.com/domain-centric/documentation_builder/wiki/08-Generating)
+* [Publish the documentation files](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing)

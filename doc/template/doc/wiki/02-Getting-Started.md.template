@@ -1,5 +1,5 @@
 ## Step by step
-* Read the [Wiki documentation]({{gitHubWikiUri()}})
+* Read the {{gitHubWikiLink(text='Wiki documentation')}}
 * Install {{referenceLink('documentation_builder')}} developer dependencies in  in your project:
   ```
   dart pub add --dev build_runner
@@ -8,6 +8,6 @@
   {{referenceLink('build_runner')}} is a tool to run file generators like {{referenceLink('documentation_builder')}}
 * {{importDartDoc('lib/src/builder/build_config.dart#DocumentationBuilderBuildConfig')}}
 * Create 'doc/template' folders in the root of your project
-* Create template files in the "doc/template" folder. See [examples]({{pubDevExampleUri()}})
-* [Generate the documentation files]({{gitHubWikiUri('08-Generating.md')}})
-* [Publish the documentation files]({{gitHubWikiUri('09-Publishing.md')}})
+* Create template files in the "doc/template" folder. See {{gitHubWikiLink(text='examples', suffix='/10-Examples' )}}
+* {{gitHubWikiLink(text='Generate the documentation files', suffix='/08-Generating' )}}
+* {{gitHubWikiLink(text='Publish the documentation files', suffix='/09-Publishing' )}}
