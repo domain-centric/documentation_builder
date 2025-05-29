@@ -19,7 +19,7 @@ import 'package:process_run/shell.dart';
 /// * `documentation_builder setup`
 ///   Sets up a project to use the documentation_builder package
 ///   by adding dependencies, template files, and GitHub workflow files.
-/// * `documentation_builder `build`
+/// * `documentation_builder build`
 ///   Builds the documentation files from template files
 ///   by starting `build_runner build`.
 Future<void> main(List<String> args) async {

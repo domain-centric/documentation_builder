@@ -1,5 +1,21 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/02-Getting-Started.md.template using the documentation_builder package)
-## Step by step  
+## The easy way
+The simplest way to use the [documentation_builder](https://pub.dev/packages/documentation_builder) package
+is to use it as a command line tool.
+
+To install it, run `dart pub global activate documentation_builder` from the command line.
+
+After installation you can use the following commands:
+* `documentation_builder help`
+  Shows available commands.
+* `documentation_builder setup`
+  Sets up a project to use the documentation_builder package
+  by adding dependencies, template files, and GitHub workflow files.
+* `documentation_builder build`
+  Builds the documentation files from template files
+  by starting `build_runner build`.
+
+## The hard way: step by step  
 * Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
 * Install [documentation_builder](https://pub.dev/packages/documentation_builder) developer dependencies in  in your project:
   ```
@@ -7,12 +23,18 @@
   dart pub add --dev documentation_builder
   ```
   [build_runner](https://pub.dev/packages/build_runner) is a tool to run file generators like [documentation_builder](https://pub.dev/packages/documentation_builder)
-* Configure the documentation_builder (optionally)
-The following is only needed when your project already has a build.yaml file or when you want to override the options:
+* Configure the documentation_builder
 Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
   ```
   targets:
     $default:
+      sources:
+      - doc/**
+      - lib/**
+      - bin/**
+      - test/**
+      - pubspec.*
+      - $package$
       builders:
         documentation_builder|documentation_builder:
           enabled: True

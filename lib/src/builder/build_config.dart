@@ -2,12 +2,18 @@ import 'package:build/build.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:collection/collection.dart';
 
-/// Configure the documentation_builder (optionally)
-/// The following is only needed when your project already has a build.yaml file or when you want to override the options:
+/// Configure the documentation_builder
 /// Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
 ///   ```
 ///   targets:
 ///     $default:
+///       sources:
+///       - doc/**
+///       - lib/**
+///       - bin/**
+///       - test/**
+///       - pubspec.*
+///       - $package$
 ///       builders:
 ///         documentation_builder|documentation_builder:
 ///           enabled: True

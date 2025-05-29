@@ -38,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5d487869dc0170e1a402fbd93af06eabf66500a4/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5d487869dc0170e1a402fbd93af06eabf66500a4/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/5d487869dc0170e1a402fbd93af06eabf66500a4/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -134,7 +134,23 @@ You can view the templates files and the generated output on https://github.com 
 * [Rendered examples](https://github.com/domain-centric/documentation_builder/wiki)
 
 # Getting Started
-## Step by step  
+## The easy way
+The simplest way to use the [documentation_builder](https://pub.dev/packages/documentation_builder) package
+is to use it as a command line tool.
+
+To install it, run `dart pub global activate documentation_builder` from the command line.
+
+After installation you can use the following commands:
+* `documentation_builder help`
+  Shows available commands.
+* `documentation_builder setup`
+  Sets up a project to use the documentation_builder package
+  by adding dependencies, template files, and GitHub workflow files.
+* `documentation_builder build`
+  Builds the documentation files from template files
+  by starting `build_runner build`.
+
+## The hard way: step by step  
 * Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
 * Install [documentation_builder](https://pub.dev/packages/documentation_builder) developer dependencies in  in your project:
   ```
@@ -142,12 +158,18 @@ You can view the templates files and the generated output on https://github.com 
   dart pub add --dev documentation_builder
   ```
   [build_runner](https://pub.dev/packages/build_runner) is a tool to run file generators like [documentation_builder](https://pub.dev/packages/documentation_builder)
-* Configure the documentation_builder (optionally)
-The following is only needed when your project already has a build.yaml file or when you want to override the options:
+* Configure the documentation_builder
 Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
   ```
   targets:
     $default:
+      sources:
+      - doc/**
+      - lib/**
+      - bin/**
+      - test/**
+      - pubspec.*
+      - $package$
       builders:
         documentation_builder|documentation_builder:
           enabled: True

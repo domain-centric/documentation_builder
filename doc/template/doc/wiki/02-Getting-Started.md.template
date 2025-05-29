@@ -1,4 +1,7 @@
-## Step by step  
+## The easy way
+{{importDartDoc('bin/documentation_builder.dart#main')}}
+
+## The hard way: step by step  
 * Read the {{gitHubWikiLink(text='Wiki documentation')}}
 * Install {{referenceLink('documentation_builder')}} developer dependencies in  in your project:
   ```
