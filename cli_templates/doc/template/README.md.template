@@ -3,7 +3,7 @@
 ![]({{gitHubWikiUri('/package.jpeg')}})
 
 # Features
-{{importDartDoc('doc/template/doc/wiki/1-Features.md.template')}}
+{{importTemplate('doc/template/doc/wiki/1-Features.md.template')}}
 
 # Examples
 {{importTemplate('doc/template/example/example.md.template')}}

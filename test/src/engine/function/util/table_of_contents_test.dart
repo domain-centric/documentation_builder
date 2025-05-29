@@ -74,7 +74,7 @@ void main() {
   ''';
       final titles = factory.findTitles(
         outputFileName: 'file.md',
-        markDown: markdown,
+        markdown: markdown,
         removeMdExtension: false,
       );
       titles.length.should.be(4);

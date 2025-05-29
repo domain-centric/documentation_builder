@@ -39,7 +39,7 @@ class TableOfContentsFactory {
       String markDown = await parseAndRender(file, renderContext);
       var newTitleLinks = findTitles(
         outputFileName: outputFileName,
-        markDown: markDown,
+        markdown: markDown,
         removeMdExtension: gitHubWiki,
       );
       newTitleLinks = toListWithoutLevelGabs(newTitleLinks);
@@ -99,13 +99,13 @@ class TableOfContentsFactory {
 
   List<TitleLink> findTitles({
     required String outputFileName,
-    required String markDown,
+    required String markdown,
     required bool removeMdExtension,
   }) {
+    // \n\r\n are added to ensure the parser also matched the first line
+    var input = '\n\r\n${removeTextInsideCodeBlocks(markdown)}';
     var parser = markdownTitleParser();
-    var matches = parser.allMatches(
-      '\n\r\n$markDown',
-    ); // \n\r\n are added to ensure the parser also matched the first line
+    var matches = parser.allMatches(input);
     var titleLinks = <TitleLink>[];
     for (var match in matches) {
       var titleLink = TitleLink(
@@ -118,6 +118,12 @@ class TableOfContentsFactory {
       titleLinks.add(titleLink);
     }
     return titleLinks;
+  }
+
+  /// Removes all text inside Markdown code blocks (``` ... ```) from the input.
+  String removeTextInsideCodeBlocks(String markdown) {
+    final codeBlockRegExp = RegExp(r'```[\s\S]*?```', multiLine: true);
+    return markdown.replaceAll(codeBlockRegExp, '');
   }
 
   static DocumentationTemplateEngine _createEngine() {
@@ -188,8 +194,8 @@ class TableOfContentsFactory {
       return 1;
     }
     if (currentOldLevel < perviousOldLevel) {
-      // reduce the level, but not below 2
-      return max(perviousNewLevel - 1, 2);
+      // reduce the level, but not below 1
+      return max(perviousNewLevel - 1, 1);
     }
     if (currentOldLevel == perviousOldLevel) {
       // keep the level

@@ -1,5 +1,5 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/02-Getting-Started.md.template using the documentation_builder package)
-## Step by step
+## Step by step  
 * Read the [Wiki documentation](https://github.com/domain-centric/documentation_builder/wiki)
 * Install [documentation_builder](https://pub.dev/packages/documentation_builder) developer dependencies in  in your project:
   ```
