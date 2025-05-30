@@ -493,10 +493,10 @@ packages:
     dependency: "direct main"
     description:
       name: template_engine
-      sha256: a3196e7367e5c821e20aecde0e0289f5e191eff892f87502de59cadc8a5e9273
+      sha256: bd2876df4c726fbe5a5b305988166f846763f788d51187fc1fbaaf07af90448a
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
+    version: "1.5.2"
   term_glyph:
     dependency: transitive
     description:

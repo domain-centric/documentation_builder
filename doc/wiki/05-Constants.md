@@ -1,4 +1,14 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/05-Constants.md.template using the documentation_builder package)
+A [Constant](https://en.wikipedia.org/wiki/Constant_(computer_programming)) is a value that does not change value over time.
+
+The [template_engine](https://pub.dev/packages/template_engine) comes with several mathematical constants.
+
+# Custom Constants  
+You can create and add your own Constants by
+manipulating the TemplateEngine.constants field.  
+See [Example](https://github.com/domain-centric/template_engine/blob/main/test/src/parser/tag/expression/constant/custom_constant_test.dart)
+
+# Available Constants  
 ## e Constant
 <table>
 <tr><td>description:</td><td>Base of the natural logarithms.</td></tr>

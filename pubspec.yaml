@@ -16,7 +16,7 @@ dependencies:
   http: ^1.2.0
   analyzer: ^7.4.4
   logging: ^1.0.2
-  template_engine: ^1.5.1
+  template_engine: ^1.5.2
   petitparser: ^6.1.0
   process_run: ^1.2.4
   yaml: ^3.1.3

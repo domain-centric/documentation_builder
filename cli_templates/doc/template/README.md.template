@@ -1,8 +1,5 @@
 {{allPubGitHubBadges()}}
  
-![]({{gitHubWikiUri('/package.jpeg')}})
-
-# Features
 {{importTemplate('doc/template/doc/wiki/1-Features.md.template')}}
 
 # Examples

@@ -9,10 +9,14 @@ After installation you can use the following commands:
 * `documentation_builder help`
   Shows available commands.
 * `documentation_builder setup`
-  Sets up a project to use the documentation_builder package
-  by adding dependencies, template files, and GitHub workflow files.
+  Sets up a project to use the documentation_builder:  
+  * Adds build_runner as dev dependency if needed\n'
+  * Adds documentation_builder as dev dependency if needed\n'
+  * Adds or updates build.yaml'
+  * Adds template files if needed\n'
+  * Adds github publish-wiki workflow if needed';.
 * `documentation_builder build`
-  Builds the documentation files from template files
+  Generates documentation files from template files
   by starting `build_runner build`.
 
 ## The hard way: step by step  
@@ -32,6 +36,7 @@ Add a build.yaml file to the root of your project with the following lines (or m
       - doc/**
       - lib/**
       - bin/**
+      - web/**
       - test/**
       - pubspec.*
       - $package$
@@ -46,14 +51,11 @@ Add a build.yaml file to the root of your project with the following lines (or m
               # An expression where to store the result files
               # Defaults to '{{filePath}}'
             # file_headers:
-              # A map of file output suffixes and the file header template to be added (which can be null),
-              # Defaults to:
-              #   {
-              #    'LICENSE': null,
-              #    'LICENSE.md': null,
-              #    '.md': '[//](https://pub.dev/packages///): # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
-              #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
-              #   }
+              # A map of file output suffixes and the file header template to be added (which can be null), defaults to:
+           # LICENSE: null
+           # LICENSE.md: null
+           # .md: '[//](https://pub.dev/packages///): "# (This file was generated from: {{inputPath()}} using the documentation_builder package)"
+           # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
   ```
   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 * Create 'doc/template' folders in the root of your project

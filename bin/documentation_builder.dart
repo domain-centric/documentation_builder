@@ -18,10 +18,14 @@ import 'package:yaml_writer/yaml_writer.dart';
 /// * `documentation_builder help`
 ///   Shows available commands.
 /// * `documentation_builder setup`
-///   Sets up a project to use the documentation_builder package
-///   by adding dependencies, template files, and GitHub workflow files.
+///   Sets up a project to use the documentation_builder:
+///   * Adds build_runner as dev dependency if needed\n'
+///   * Adds documentation_builder as dev dependency if needed\n'
+///   * Adds or updates build.yaml'
+///   * Adds template files if needed\n'
+///   * Adds github publish-wiki workflow if needed';.
 /// * `documentation_builder build`
-///   Builds the documentation files from template files
+///   Generates documentation files from template files
 ///   by starting `build_runner build`.
 Future<void> main(List<String> args) async {
   var result = Commands().find(args);
@@ -143,6 +147,7 @@ class SetupCommand extends Command {
       'Sets up a project to use the documentation_builder:\n'
       '- Adds build_runner as dev dependency if needed\n'
       '- Adds documentation_builder as dev dependency if needed\n'
+      '- Adds or updates build.yaml'
       '- Adds template files if needed\n'
       '- Adds github publish-wiki workflow if needed';
 

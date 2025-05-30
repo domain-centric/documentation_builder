@@ -1,15 +1,57 @@
 [//]: # (This file was generated from: doc/template/doc/wiki/06-Functions.md.template using the documentation_builder package)
-# Import Functions
-## importTemplate Function
+A [function](https://en.wikipedia.org/wiki/Function_(computer_programming)) is a piece of dart code that performs a specific task.
+So a function can basically do anything that dart code can do.
+
+A function can be used anywhere in an tag expression. Wherever that particular task should be performed.
+
+An example of a function call: cos(pi)
+Should result in: -1
+
+# Parameters and Arguments  
+**Function & Parameter & argument names:**
+* are [case sensitive](https://en.wikipedia.org/wiki/Case_sensitivity)
+* must start with a lower case letter, optionally followed by (lower or upper case) letters and or digits.
+* conventions: use [lowerCamelCase](https://en.wikipedia.org/wiki/Camel_case)
+* must be unique and does not match a other tag syntax
+
+**Parameters vs Arguments**
+* Parameters are the names used in the function definition.
+* Arguments are the actual values passed when calling the function.
+
+**Parameters:**
+* A function can have zero or more parameters
+* Parameters are defined as either mandatory or optional
+* Optional parameters can have a default value
+
+**Arguments:**
+* Multiple arguments are separated with a comma, e.g. single argument: `cos(pi)` multiple arguments: `volume(10,20,30)`
+* There are different types of arguments
+  * Positional Arguments: These are passed in the order the function defines them. e.g.: `volume(10, 20, 30)`
+  * Named Arguments: You can specify which parameter you're assigning a value to, regardless of order. e.g.: `volume(l=30, h=10, w=20)`
+* Arguments can set a parameter only once
+* You can mix positional arguments and named arguments, but positional arguments must come first
+* Named arguments remove ambiguity: If you want to skip an optional argument or specify one out of order, you must name it explicitly
+
+**Argument values:**
+* must match the expected parameter type. e.g. `area(length='hello', width='world')` will result in a failure
+* may be a tag expression such as a variable, constant, operation, function, or combination. e.g. `cos(2*pi)`
+
+# Custom Functions  
+You can use prepackaged [template_engine] functions or add your own custom functions by manipulating the TemplateEngine.functionGroups field.  
+See [Example](https://github.com/domain-centric/template_engine/blob/main/test/src/parser/tag/expression/function/custom_function_test.dart).
+
+# Available Functions  
+## Import Functions
+### importTemplate Function
 <table>
 <tr><td>description:</td><td colspan="4">Imports, parses and renders a template file</td></tr>
 <tr><td>return type:</td><td colspan="4">IntermediateRenderResult</td></tr>
-<tr><td>expression example:</td><td colspan="4">{{importTemplate('doc/template/common/generated_comment.template')}}</td></tr>
+<tr><td>expression example:</td><td colspan="4">{{importTemplate('test/src/parser/tag/expression/function/import/to_import.md.template')}}</td></tr>
 <tr><td>code example:</td><td colspan="4"><a href="https://github.com/domain-centric/template_engine/blob/main/test/src/parser/tag/expression/function/import/import_template_test.dart">import_template_test.dart</a></td></tr>
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the template file</td></tr>
 </table>
 
-## importPure Function
+### importPure Function
 <table>
 <tr><td>description:</td><td colspan="4">Imports a file as is (without parsing and rendering)</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -18,7 +60,7 @@
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the file. This path can be a absolute or relative file path or URI.</td></tr>
 </table>
 
-## importCode Function
+### importCode Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown code block that imports a code file.</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -28,7 +70,7 @@
 <tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default=true)</td><td>Adds the source path as a header</td></tr>
 </table>
 
-## importDartCode Function
+### importDartCode Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown code block that imports a dart code file.</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -37,7 +79,7 @@
 <tr><td>parameter:</td><td>sourceHeader</td><td>boolean</td><td>optional (default=true)</td><td>Adds the source path as a header</td></tr>
 </table>
 
-## importDartDoc Function
+### importDartDoc Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown code block that imports dat documentation comments for a given library member from a dart code file.:
 * /// will be removed.* Text between [] in the Dart documentation could represent references.* These references will be replaced to links if possible or nessasary. This is done in the following order:  * hyper links, e.g. [Google](https://google.com)
@@ -77,7 +119,7 @@ Examples:
 </td></tr>
 </table>
 
-## importJson Function
+### importJson Function
 <table>
 <tr><td>description:</td><td colspan="4">Imports a JSON file and decode it to a Map<String, dynamic>, which could be assigned it to a variable.</td></tr>
 <tr><td>return type:</td><td colspan="4">Map<String, dynamic></td></tr>
@@ -86,7 +128,7 @@ Examples:
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the JSON file. This path can be a absolute or relative file path or URI.</td></tr>
 </table>
 
-## importXml Function
+### importXml Function
 <table>
 <tr><td>description:</td><td colspan="4">Imports a XML file and decode it to a Map<String, dynamic>, which could be assigned it to a variable.</td></tr>
 <tr><td>return type:</td><td colspan="4">Map<String, dynamic></td></tr>
@@ -95,7 +137,7 @@ Examples:
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the XML file. This path can be a absolute or relative file path or URI.</td></tr>
 </table>
 
-## importYaml Function
+### importYaml Function
 <table>
 <tr><td>description:</td><td colspan="4">Imports a YAML file and decode it to a Map<String, dynamic>, which could be assigned it to a variable.</td></tr>
 <tr><td>return type:</td><td colspan="4">Map<String, dynamic></td></tr>
@@ -104,8 +146,8 @@ Examples:
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>The project path of the YAML file. This path can be a absolute or relative file path or URI.</td></tr>
 </table>
 
-# Generator Functions
-## license Function
+## Generator Functions
+### license Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates a license text for the given type, year and copyright holder</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -115,7 +157,7 @@ Examples:
 <tr><td>parameter:</td><td>year</td><td>int</td><td>optional</td><td>Year of the copyright. It wil use the current year if not defined</td></tr>
 </table>
 
-## tableOfContents Function
+### tableOfContents Function
 <table>
 <tr><td>description:</td><td colspan="4">Markdown table of content with links to all markdown chapters (e.g. # chapter, ## paragraph, ## sub paragraph) of a template file or all template files in a folder.</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -125,7 +167,7 @@ Examples:
 <tr><td>parameter:</td><td>gitHubWiki</td><td>boolean</td><td>optional (default=false)</td><td>Will remove the .md extension from the links so that they work correctly inside gitHub wiki pages</td></tr>
 </table>
 
-## gitHubMileStones Function
+### gitHubMileStones Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown text of milestones on GitHub. You could use this for the CHANGELOG.md file.</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -133,8 +175,8 @@ Examples:
 <tr><td>parameter:</td><td>state</td><td>String</td><td>optional (default="all")</td><td>The state of the milestones, either: open, closed, all</td></tr>
 </table>
 
-# Path Functions
-## templateSource Function
+## Path Functions
+### templateSource Function
 <table>
 <tr><td>description:</td><td colspan="4">Gives the relative path of the current template</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -142,7 +184,7 @@ Examples:
 <tr><td>code example:</td><td colspan="4"><a href="https://github.com/domain-centric/template_engine/blob/main/test/src/parser/tag/expression/function/template/template_test.dart">template_test.dart</a></td></tr>
 </table>
 
-## inputPath Function
+### inputPath Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the path of the template file being used.
 Prefer to use this function over the 'templateSource' because 'inputPath' always resolves to a path</td></tr>
@@ -150,14 +192,14 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>expression example:</td><td colspan="4">{{inputPath()}} should render: doc/example.md</td></tr>
 </table>
 
-## outputPath Function
+### outputPath Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the path of the file being created from the template</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{outputPath()}} should render: doc/example.md</td></tr>
 </table>
 
-## referenceUri Function
+### referenceUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of Creates a uri from an address.</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -169,7 +211,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 * a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'</td></tr>
 </table>
 
-## gitHubUri Function
+### gitHubUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a web page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -177,7 +219,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubWikiUri Function
+### gitHubWikiUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a wiki page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -185,7 +227,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubStarsUri Function
+### gitHubStarsUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a stars page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -193,7 +235,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubIssuesUri Function
+### gitHubIssuesUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of an issue page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -201,7 +243,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubMilestonesUri Function
+### gitHubMilestonesUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a milestone page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -209,7 +251,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubReleasesUri Function
+### gitHubReleasesUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a releases page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -217,7 +259,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubPullRequestsUri Function
+### gitHubPullRequestsUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a pull request page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -225,7 +267,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## gitHubRawUri Function
+### gitHubRawUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of a raw code page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -233,7 +275,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>mandatory</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevUri Function
+### pubDevUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the home page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -241,7 +283,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevChangeLogUri Function
+### pubDevChangeLogUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the change log page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -249,7 +291,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevVersionsUri Function
+### pubDevVersionsUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the version page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -257,7 +299,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevExampleUri Function
+### pubDevExampleUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the example page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -265,7 +307,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevInstallUri Function
+### pubDevInstallUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the install page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -273,7 +315,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevScoreUri Function
+### pubDevScoreUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the score page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -281,7 +323,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-## pubDevLicenseUri Function
+### pubDevLicenseUri Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a URI of the license page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
@@ -289,8 +331,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>suffix</td><td>String</td><td>optional</td><td>A suffix to append to the URI (e.g. path, query, fragment, etc)</td></tr>
 </table>
 
-# Link Functions
-## referenceLink Function
+## Link Functions
+### referenceLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of Creates a uri from an address.</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -303,7 +345,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubLink Function
+### gitHubLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a web page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -312,7 +354,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubWikiLink Function
+### gitHubWikiLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a wiki page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -321,7 +363,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubStarsLink Function
+### gitHubStarsLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a stars page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -330,7 +372,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubIssuesLink Function
+### gitHubIssuesLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of an issue page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -339,7 +381,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubMilestonesLink Function
+### gitHubMilestonesLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a milestone page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -348,7 +390,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubReleasesLink Function
+### gitHubReleasesLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a releases page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -357,7 +399,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubPullRequestsLink Function
+### gitHubPullRequestsLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a pull request page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -366,7 +408,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## gitHubRawLink Function
+### gitHubRawLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of a raw code page of your project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -375,7 +417,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevLink Function
+### pubDevLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the home page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -384,7 +426,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevChangeLogLink Function
+### pubDevChangeLogLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the change log page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -393,7 +435,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevVersionsLink Function
+### pubDevVersionsLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the version page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -402,7 +444,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevExampleLink Function
+### pubDevExampleLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the example page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -411,7 +453,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevInstallLink Function
+### pubDevInstallLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the install page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -420,7 +462,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevScoreLink Function
+### pubDevScoreLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the score page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -429,7 +471,7 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-## pubDevLicenseLink Function
+### pubDevLicenseLink Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns a markdown hyperlink of the license page of your project on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
@@ -438,8 +480,8 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
-# Badge Functions
-## customBadge Function
+## Badge Functions
+### customBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a customizable badge image</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -472,7 +514,7 @@ As code:
 <tr><td>parameter:</td><td>link</td><td>String</td><td>mandatory</td><td>A Uri that points to a web site page.</td></tr>
 </table>
 
-## pubPackageBadge Function
+### pubPackageBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge of an existing Dart or Flutter package on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -480,7 +522,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Pub Package")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## pubScoresBadge Function
+### pubScoresBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge of the scores on pub.dev</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -488,14 +530,14 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Pub Scores")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## allPubBadges Function
+### allPubBadges Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for all pub.dev badges</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ allPubBadges() }}</td></tr>
 </table>
 
-## gitHubBadge Function
+### gitHubBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge of a project on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -503,7 +545,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Project on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## gitHubWikiBadge Function
+### gitHubWikiBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge of the Wiki pages of a project on GitHub.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -511,7 +553,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Project Wiki pages on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## gitHubStarsBadge Function
+### gitHubStarsBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge with the amount of stars on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -519,7 +561,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Stars ranking on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## gitHubIssuesBadge Function
+### gitHubIssuesBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge with the amount of open issues on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -527,7 +569,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Open issues on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## gitHubPullRequestsBadge Function
+### gitHubPullRequestsBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge with the amount of open pull requests on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -535,7 +577,7 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Open pull requests on github.com")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## gitHubLicenseBadge Function
+### gitHubLicenseBadge Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for a badge with the amount of open pull requests on github.com</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
@@ -543,22 +585,22 @@ As code:
 <tr><td>parameter:</td><td>toolTip</td><td>String</td><td>optional (default="Project License")</td><td>This text becomes visible when hoovering over a badge</td></tr>
 </table>
 
-## allGitHubBadges Function
+### allGitHubBadges Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for all github.com badges</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ allGitHubBadges() }}</td></tr>
 </table>
 
-## allPubGitHubBadges Function
+### allPubGitHubBadges Function
 <table>
 <tr><td>description:</td><td colspan="4">Creates markdown for all pub.dev and github.com badges</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ allPubGitHubBadges() }}</td></tr>
 </table>
 
-# Math Functions
-## exp Function
+## Math Functions
+### exp Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the natural exponent e, to the power of the value</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -567,7 +609,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## log Function
+### log Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the natural logarithm of the value</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -576,7 +618,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## sin Function
+### sin Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the sine of the radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -585,7 +627,7 @@ As code:
 <tr><td>parameter:</td><td>radians</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## asin Function
+### asin Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the values arc sine in radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -594,7 +636,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## cos Function
+### cos Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the cosine of the radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -603,7 +645,7 @@ As code:
 <tr><td>parameter:</td><td>radians</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## acos Function
+### acos Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the values arc cosine in radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -612,7 +654,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## tan Function
+### tan Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the the tangent of the radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -621,7 +663,7 @@ As code:
 <tr><td>parameter:</td><td>radians</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## atan Function
+### atan Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the values arc tangent in radians</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -630,7 +672,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## sqrt Function
+### sqrt Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the positive square root of the value.</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -639,7 +681,7 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-## round Function
+### round Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the a rounded number.</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -648,8 +690,8 @@ As code:
 <tr><td>parameter:</td><td>value</td><td>number</td><td colspan="2">mandatory</td></tr>
 </table>
 
-# String Functions
-## length Function
+## String Functions
+### length Function
 <table>
 <tr><td>description:</td><td colspan="4">Returns the length of a string</td></tr>
 <tr><td>return type:</td><td colspan="4">number</td></tr>
@@ -658,8 +700,8 @@ As code:
 <tr><td>parameter:</td><td>string</td><td>String</td><td colspan="2">mandatory</td></tr>
 </table>
 
-# Documentation Functions
-## tagDocumentation Function
+## Documentation Functions
+### tagDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the tags within a TemplateEngine</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -667,7 +709,7 @@ As code:
 <tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
 </table>
 
-## dataTypeDocumentation Function
+### dataTypeDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the data types that can be used within a ExpressionTag of a TemplateEngine</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -675,7 +717,7 @@ As code:
 <tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
 </table>
 
-## constantDocumentation Function
+### constantDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the constants that can be used within a ExpressionTag of a TemplateEngine</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -683,7 +725,15 @@ As code:
 <tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
 </table>
 
-## functionDocumentation Function
+### variableDocumentation Function
+<table>
+<tr><td>description:</td><td colspan="4">Generates markdown documentation of variables that can be used within a ExpressionTag of a TemplateEngine</td></tr>
+<tr><td>return type:</td><td colspan="4">String</td></tr>
+<tr><td>expression example:</td><td colspan="4">{{ variableDocumentation() }}</td></tr>
+<tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
+</table>
+
+### functionDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the functions that can be used within a ExpressionTag of a TemplateEngine</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -691,7 +741,7 @@ As code:
 <tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
 </table>
 
-## operatorDocumentation Function
+### operatorDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the operators that can be used within a ExpressionTag of a TemplateEngine</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>
@@ -699,7 +749,7 @@ As code:
 <tr><td>parameter:</td><td>titleLevel</td><td>number</td><td>optional (default=1)</td><td>The level of the tag title</td></tr>
 </table>
 
-## exampleDocumentation Function
+### exampleDocumentation Function
 <table>
 <tr><td>description:</td><td colspan="4">Generates markdown documentation of all the examples. This could be used to generate example.md file.</td></tr>
 <tr><td>return type:</td><td colspan="4">String</td></tr>

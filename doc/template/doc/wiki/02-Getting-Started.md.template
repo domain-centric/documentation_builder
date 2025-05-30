@@ -9,7 +9,7 @@
   dart pub add --dev documentation_builder
   ```
   {{referenceLink('build_runner')}} is a tool to run file generators like {{referenceLink('documentation_builder')}}
-* {{importDartDoc('lib/src/builder/build_config.dart#DocumentationBuilderBuildConfig')}}
+* {{importDartDoc('lib/src/builder/build_config.dart#mergeDocumentationBuilderBuildYaml')}}
 * Create 'doc/template' folders in the root of your project
 * Create template files in the "doc/template" folder. See {{gitHubWikiLink(text='examples', suffix='/10-Examples' )}}
 * {{gitHubWikiLink(text='Generate the documentation files', suffix='/08-Generating' )}}
