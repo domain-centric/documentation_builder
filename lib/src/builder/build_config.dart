@@ -1,6 +1,7 @@
 import 'package:build/build.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:collection/collection.dart';
+import 'package:yaml/yaml.dart';
 
 /// Configure the documentation_builder
 /// Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
@@ -11,6 +12,7 @@ import 'package:collection/collection.dart';
 ///       - doc/**
 ///       - lib/**
 ///       - bin/**
+///       - web/**
 ///       - test/**
 ///       - pubspec.*
 ///       - $package$
@@ -25,18 +27,62 @@ import 'package:collection/collection.dart';
 ///               # An expression where to store the result files
 ///               # Defaults to '{{filePath}}'
 ///             # file_headers:
-///               # A map of file output suffixes and the file header template to be added (which can be null),
-///               # Defaults to:
-///               #   {
-///               #    'LICENSE': null,
-///               #    'LICENSE.md': null,
-///               #    '.md': '[//]: # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
-///               #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
-///               #   }
+///               # A map of file output suffixes and the file header template to be added (which can be null), defaults to:
+///            # LICENSE: null
+///            # LICENSE.md: null
+///            # .md: '[//]: "# (This file was generated from: {{inputPath()}} using the documentation_builder package)"
+///            # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
 ///   ```
 ///   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
-class DocumentationBuilderBuildConfig {
-  // For documentation only.
+YamlMap mergeDocumentationBuilderBuildYaml(YamlMap yaml) {
+  // This function should merge the provided yaml with the default configuration.
+  // Define the default configuration as a YamlMap.
+  final defaultConfig =
+      loadYaml('''
+targets:
+  \$default:
+    sources:
+      - doc/**
+      - lib/**
+      - bin/**
+      - web/**
+      - test/**
+      - pubspec.*
+      - \$package\$
+    builders:
+      documentation_builder|documentation_builder:
+        enabled: True
+        # options:
+          # input_path:
+            # An expression where to find template files
+            # Defaults to 'doc/template/{{filePath}}.template'
+          # output_path:
+            # An expression where to store the result files
+            # Defaults to '{{filePath}}'
+          # file_headers:
+            # A map of file output suffixes and the file header template to be added (which can be null), defaults to:
+            # LICENSE: null
+            # LICENSE.md: null
+            # .md: '[//]: "# (This file was generated from: {{inputPath()}} using the documentation_builder package)"
+            # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
+''')
+          as YamlMap;
+
+  // Merge the provided yaml with the defaultConfig.
+  // Deep merge: user config takes precedence.
+  YamlMap deepMerge(YamlMap base, YamlMap update) {
+    final result = Map.of(base);
+    update.forEach((key, value) {
+      if (value is YamlMap && base[key] is YamlMap) {
+        result[key] = deepMerge(base[key], value);
+      } else {
+        result[key] = value;
+      }
+    });
+    return YamlMap.wrap(result);
+  }
+
+  return deepMerge(defaultConfig, yaml);
 }
 
 abstract class BuildOptionParameter<T> {

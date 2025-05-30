@@ -7,6 +7,7 @@ import 'package:yaml/yaml.dart';
 
 import 'package:collection/collection.dart';
 import 'package:process_run/shell.dart';
+import 'package:yaml_writer/yaml_writer.dart';
 
 /// The simplest way to use the [documentation_builder] package
 /// is to use it as a command line tool.
@@ -154,6 +155,8 @@ class SetupCommand extends Command {
     await addBuildRunnerDependencyIfNeeded(yamlMap);
 
     await addDocumentationBuilderDependencyIfNeeded(yamlMap);
+
+    await addOrUpdateBuildYaml();
 
     await addDocumentationTemplateFilesIfNeeded(variables);
 
@@ -345,6 +348,24 @@ class SetupCommand extends Command {
       );
     }
     return response.bodyBytes;
+  }
+
+  Future<void> addOrUpdateBuildYaml() async {
+    if (packageIsDocumentationBuilder()) {
+      print('$documentationBuilder build.yaml will not be overridden.');
+      return;
+    }
+    final buildYamlFile = File('build.yaml');
+    if (!await buildYamlFile.exists()) {
+      print('creating build.yaml file ...');
+      await buildYamlFile.create();
+    } else {
+      print('updating build.yaml file ...');
+    }
+    var yaml = loadYaml(await buildYamlFile.readAsString());
+    var mergedYaml = mergeDocumentationBuilderBuildYaml(yaml);
+    final yamlString = YamlWriter().write(mergedYaml);
+    await buildYamlFile.writeAsString(yamlString);
   }
 }
 

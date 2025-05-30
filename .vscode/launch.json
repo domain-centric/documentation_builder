@@ -1,23 +1,10 @@
 {
     "configurations": [
         {
-            "name": "Dart (tool\\documentation_builder.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "tool\\documentation_builder.dart"
-        },
-        {
-            "name": "Dart (test\\src\\engine\\path\\temp_test.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "test\\src\\engine\\path\\temp_test.dart"
-        },
-        
-        {
             "name": "cli documentation_builder help",
             "type": "dart",
             "request": "launch",
-            "program": "lib\\src\\cli\\documentation_builder.dart",
+            "program": "bin/documentation_builder.dart",
             "args": [
                 "help"
             ]
@@ -26,7 +13,7 @@
             "name": "cli documentation_builder build",
             "type": "dart",
             "request": "launch",
-            "program": "lib\\src\\cli\\documentation_builder.dart",
+            "program": "bin/documentation_builder.dart",
             "args": [
                 "build"
             ]   
@@ -35,7 +22,7 @@
             "name": "cli documentation_builder setup",
             "type": "dart",
             "request": "launch",
-            "program": "lib\\src\\cli\\documentation_builder.dart",
+            "program": "bin/documentation_builder.dart",
             "args": [
                 "setup"
             ]   
