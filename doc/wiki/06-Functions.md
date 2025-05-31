@@ -82,15 +82,22 @@ See [Example](https://github.com/domain-centric/template_engine/blob/main/test/s
 ### importDartDoc Function
 <table>
 <tr><td>description:</td><td colspan="4">A markdown code block that imports dat documentation comments for a given library member from a dart code file.:
-* /// will be removed.* Text between [] in the Dart documentation could represent references.* These references will be replaced to links if possible or nessasary. This is done in the following order:  * hyper links, e.g. [Google](https://google.com)
+
+* /// will be removed.
+* Text between [] in the Dart documentation could represent references.
+* These references will be replaced to links if possible or nessasary. This is done in the following order:
+  * hyper links, e.g. [Google](https://google.com)
   * links to pub.dev packages, e.g. [documentation_builder]
   * links to dart members, e.g. [MyClass] or [myField] or [MyClass.myField]
-* Note that tags have no place in dart documentation comments and will therefore not be resolved. Use references or links instead (see above)</td></tr>
+* Note that tags have no place in dart documentation comments and will therefore not be resolved. Use references or links instead (see above)
+</td></tr>
 <tr><td>return type:</td><td colspan="4">Object</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ImportDartDoc('test/src/template_engine_template_example_test.dart')}}</td></tr>
 <tr><td>parameter:</td><td>source</td><td>String</td><td>mandatory</td><td>A reference to a piece of your Dart source code.
 This could be anything from a whole dart file to one of its members.
-Format: <DartFilePath>|<DartMemberPath>
+
+Format: &lt;DartFilePath>#&lt;DartMemberPath>
+
 * <DartFilePath> (required) is a DartFilePath to a Dart file without dart extension, e.g. lib/my_library.dart
 * #: the <DartFilePath> and <DartMemberPath> are separated with a hash
 * <DartMemberPath> (optional) is a dot separated path to the member inside the Dart file, e.g.:
@@ -102,20 +109,20 @@ Format: <DartFilePath>|<DartMemberPath>
 
 Examples:
 * lib/my_library.dart
-* lib/my_library.dart|myConstant
-* lib/my_library.dart|myFunction
-* lib/my_library.dart|MyEnum
-* lib/my_library.dart|MyEnum.myValue
-* lib/my_library.dart|MyClass
-* lib/my_library.dart|MyClass.myFieldName
-* lib/my_library.dart|MyClass.myFieldName.get
-* lib/my_library.dart|MyClass.myFieldName.set
-* lib/my_library.dart|MyClass.myMethod
-* lib/my_library.dart|MyExtension
-* lib/my_library.dart|MyExtension.myFieldName
-* lib/my_library.dart|MyExtension.myFieldName.get
-* lib/my_library.dart|MyExtension.myFieldName.set
-* lib/my_library.dart|MyExtension.myMethod
+* lib/my_library.dart#myConstant
+* lib/my_library.dart#myFunction
+* lib/my_library.dart#MyEnum
+* lib/my_library.dart#MyEnum.myValue
+* lib/my_library.dart#MyClass
+* lib/my_library.dart#MyClass.myFieldName
+* lib/my_library.dart#MyClass.myFieldName.get
+* lib/my_library.dart#MyClass.myFieldName.set
+* lib/my_library.dart#MyClass.myMethod
+* lib/my_library.dart#MyExtension
+* lib/my_library.dart#MyExtension.myFieldName
+* lib/my_library.dart#MyExtension.myFieldName.get
+* lib/my_library.dart#MyExtension.myFieldName.set
+* lib/my_library.dart#MyExtension.myMethod
 </td></tr>
 </table>
 
@@ -205,10 +212,12 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>return type:</td><td colspan="4">Uri</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ referenceUri(???) }}</td></tr>
 <tr><td>parameter:</td><td>ref</td><td>dynamic</td><td>mandatory</td><td>The ref (reference) can be:
+
 * a Uri to something on the internet, e.g,: 'https://www.google.com' 
 * a package name on pub.dev, e.g.: 'documentation_builder'
 * reference to a source file, e.g.: 'example/example.md' or 'lib/src/my_library.dart'
-* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'</td></tr>
+* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'
+</td></tr>
 </table>
 
 ### gitHubUri Function
@@ -338,10 +347,12 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>return type:</td><td colspan="4">MarkDownLink</td></tr>
 <tr><td>expression example:</td><td colspan="4">{{ referenceLink(???) }}</td></tr>
 <tr><td>parameter:</td><td>ref</td><td>dynamic</td><td>mandatory</td><td>The ref (reference) can be:
+
 * a Uri to something on the internet, e.g,: 'https://www.google.com' 
 * a package name on pub.dev, e.g.: 'documentation_builder'
 * reference to a source file, e.g.: 'example/example.md' or 'lib/src/my_library.dart'
-* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'</td></tr>
+* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'
+</td></tr>
 <tr><td>parameter:</td><td>text</td><td>String</td><td>optional</td><td>The text of the hyperlink. An appropriate text will be provided if no text is defined</td></tr>
 </table>
 
@@ -491,7 +502,9 @@ Prefer to use this function over the 'templateSource' because 'inputPath' always
 <tr><td>parameter:</td><td>message</td><td>String</td><td>mandatory</td><td>The label is the left message is the right text of the badge and can have a fill color</td></tr>
 <tr><td>parameter:</td><td>color</td><td>String</td><td>optional (default="informational")</td><td>The message is the right text of the [Badge] and can have fill color.
 The color can be defined in different ways:
+
 As color name:
+
 - brightgreen
 - green
 - yellowgreen

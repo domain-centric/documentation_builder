@@ -107,8 +107,8 @@ class ColorParameter extends Parameter<String> {
         name: id,
         description:
             'The message is the right text of the [Badge] and can have fill color.$newLine'
-            'The color can be defined in different ways:$newLine'
-            'As color name:$newLine'
+            'The color can be defined in different ways:$newLine$newLine'
+            'As color name:$newLine$newLine'
             '- brightgreen$newLine'
             '- green$newLine'
             '- yellowgreen$newLine'

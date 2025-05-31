@@ -137,8 +137,8 @@ class DartCodePathParameter extends Parameter<String> {
         presence: Presence.mandatory(),
         description:
             'A reference to a piece of your Dart source code.$newLine'
-            'This could be anything from a whole dart file to one of its members.$newLine'
-            'Format: <DartFilePath>|<DartMemberPath>$newLine'
+            'This could be anything from a whole dart file to one of its members.$newLine$newLine'
+            'Format: &lt;DartFilePath>#&lt;DartMemberPath>$newLine$newLine'
             '* <DartFilePath> (required) is a DartFilePath to a Dart file without dart extension, e.g. lib/my_library.dart$newLine'
             '* #: the <DartFilePath> and <DartMemberPath> are separated with a hash$newLine'
             '* <DartMemberPath> (optional) is a dot separated path to the member inside the Dart file, e.g.:$newLine'
@@ -150,20 +150,20 @@ class DartCodePathParameter extends Parameter<String> {
             '$newLine'
             'Examples:$newLine'
             '* lib/my_library.dart$newLine'
-            '* lib/my_library.dart|myConstant$newLine'
-            '* lib/my_library.dart|myFunction$newLine'
-            '* lib/my_library.dart|MyEnum$newLine'
-            '* lib/my_library.dart|MyEnum.myValue$newLine'
-            '* lib/my_library.dart|MyClass$newLine'
-            '* lib/my_library.dart|MyClass.myFieldName$newLine'
-            '* lib/my_library.dart|MyClass.myFieldName.get$newLine'
-            '* lib/my_library.dart|MyClass.myFieldName.set$newLine'
-            '* lib/my_library.dart|MyClass.myMethod$newLine'
-            '* lib/my_library.dart|MyExtension$newLine'
-            '* lib/my_library.dart|MyExtension.myFieldName$newLine'
-            '* lib/my_library.dart|MyExtension.myFieldName.get$newLine'
-            '* lib/my_library.dart|MyExtension.myFieldName.set$newLine'
-            '* lib/my_library.dart|MyExtension.myMethod$newLine',
+            '* lib/my_library.dart#myConstant$newLine'
+            '* lib/my_library.dart#myFunction$newLine'
+            '* lib/my_library.dart#MyEnum$newLine'
+            '* lib/my_library.dart#MyEnum.myValue$newLine'
+            '* lib/my_library.dart#MyClass$newLine'
+            '* lib/my_library.dart#MyClass.myFieldName$newLine'
+            '* lib/my_library.dart#MyClass.myFieldName.get$newLine'
+            '* lib/my_library.dart#MyClass.myFieldName.set$newLine'
+            '* lib/my_library.dart#MyClass.myMethod$newLine'
+            '* lib/my_library.dart#MyExtension$newLine'
+            '* lib/my_library.dart#MyExtension.myFieldName$newLine'
+            '* lib/my_library.dart#MyExtension.myFieldName.get$newLine'
+            '* lib/my_library.dart#MyExtension.myFieldName.set$newLine'
+            '* lib/my_library.dart#MyExtension.myMethod$newLine',
       );
 }
 
@@ -178,14 +178,14 @@ class ImportDartDoc extends ExpressionFunction {
     : super(
         name: 'importDartDoc',
         description:
-            'A markdown code block that imports dat documentation comments for a given library member from a dart code file.:$newLine'
-            '* /// will be removed.'
-            '* Text between [] in the Dart documentation could represent references.'
-            '* These references will be replaced to links if possible or nessasary. This is done in the following order:'
+            'A markdown code block that imports dat documentation comments for a given library member from a dart code file.:$newLine$newLine'
+            '* /// will be removed.$newLine'
+            '* Text between [] in the Dart documentation could represent references.$newLine'
+            '* These references will be replaced to links if possible or nessasary. This is done in the following order:$newLine'
             '  * hyper links, e.g. [Google](https://google.com)$newLine'
             '  * links to pub.dev packages, e.g. [documentation_builder]$newLine'
             '  * links to dart members, e.g. [MyClass] or [myField] or [MyClass.myField]$newLine'
-            '* Note that tags have no place in dart documentation comments and will therefore not be resolved. Use references or links instead (see above)',
+            '* Note that tags have no place in dart documentation comments and will therefore not be resolved. Use references or links instead (see above)$newLine',
         exampleExpression:
             "{{ImportDartDoc('test/src/template_engine_template_example_test.dart')}}",
         parameters: [DartCodePathParameter(sourceName)],

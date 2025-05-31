@@ -84,11 +84,11 @@ class ReferenceLink extends LinkFunction {
           Parameter(
             name: refId,
             description:
-                'The ref (reference) can be:$newLine'
+                'The ref (reference) can be:$newLine$newLine'
                 "* a Uri to something on the internet, e.g,: 'https://www.google.com' $newLine"
                 "* a package name on pub.dev, e.g.: 'documentation_builder'$newLine"
                 "* reference to a source file, e.g.: 'example/example.md' or 'lib/src/my_library.dart'$newLine"
-                "* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'",
+                "* a reference to dart library member, e.g.: 'lib/src/my_library.dart#MyClass.myField'$newLine",
             presence: Presence.mandatory(),
           ),
           TextParameter(),
