@@ -9,7 +9,7 @@ After installation you can use the following commands:
 * `documentation_builder help`
   Shows available commands.
 * `documentation_builder setup`
-  Sets up a project to use the documentation_builder:  
+  Sets up a project to use the documentation_builder:
   * Adds build_runner as dev dependency if needed\n'
   * Adds documentation_builder as dev dependency if needed\n'
   * Adds or updates build.yaml'

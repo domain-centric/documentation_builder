@@ -29,7 +29,9 @@ class TableOfContentsFactory {
         continue;
       }
       var outputFileName = outputs.first.pathSegments.last;
-      if (includeFileLink) {
+      if (includeFileLink &&
+          hasMdExtension(outputFileName) &&
+          !isHomeMd(outputFileName)) {
         var titleLink = TitleLink.fromFileName(
           relativePath: outputFileName,
           removeMdExtension: gitHubWiki,
@@ -205,6 +207,12 @@ class TableOfContentsFactory {
     // increase the level
     return perviousNewLevel + 1;
   }
+
+  bool hasMdExtension(String outputFileName) =>
+      outputFileName.toLowerCase().endsWith('.md');
+
+  bool isHomeMd(String outputFileName) =>
+      outputFileName.toLowerCase().endsWith('home.md');
 }
 
 /// dummy function to prevent round trips.

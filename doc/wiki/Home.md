@@ -162,5 +162,3 @@
   * [CHANGELOG.md](10-Examples#changelogmd)
   * [example.md](10-Examples#examplemd)
   * [Wiki pages](10-Examples#wiki-pages)
-* [**documentation builder**](documentation_builder.jpeg)
-* [**Home**](Home)

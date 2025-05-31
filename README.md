@@ -38,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f5f58951a0645ce375f2e6fa6500c9ed85cba680/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f5f58951a0645ce375f2e6fa6500c9ed85cba680/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/43a1607d8c95b9828b3eae5ba7ae4b4e59028cb5/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/f5f58951a0645ce375f2e6fa6500c9ed85cba680/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -144,10 +144,14 @@ After installation you can use the following commands:
 * `documentation_builder help`
   Shows available commands.
 * `documentation_builder setup`
-  Sets up a project to use the documentation_builder package
-  by adding dependencies, template files, and GitHub workflow files.
+  Sets up a project to use the documentation_builder:
+  * Adds build_runner as dev dependency if needed\n'
+  * Adds documentation_builder as dev dependency if needed\n'
+  * Adds or updates build.yaml'
+  * Adds template files if needed\n'
+  * Adds github publish-wiki workflow if needed';.
 * `documentation_builder build`
-  Builds the documentation files from template files
+  Generates documentation files from template files
   by starting `build_runner build`.
 
 ## The hard way: step by step  
@@ -167,6 +171,7 @@ Add a build.yaml file to the root of your project with the following lines (or m
       - doc/**
       - lib/**
       - bin/**
+      - web/**
       - test/**
       - pubspec.*
       - $package$
@@ -181,14 +186,11 @@ Add a build.yaml file to the root of your project with the following lines (or m
               # An expression where to store the result files
               # Defaults to '{{filePath}}'
             # file_headers:
-              # A map of file output suffixes and the file header template to be added (which can be null),
-              # Defaults to:
-              #   {
-              #    'LICENSE': null,
-              #    'LICENSE.md': null,
-              #    '.md': '[//](https://pub.dev/packages///): # (This file was generated from: {{inputPath()}} using the documentation_builder package)',
-              #    '.dart': '// This file was generated from: {{inputPath()}} using the documentation_builder package'
-              #   }
+              # A map of file output suffixes and the file header template to be added (which can be null), defaults to:
+           # LICENSE: null
+           # LICENSE.md: null
+           # .md: '[//](https://pub.dev/packages///): "# (This file was generated from: {{inputPath()}} using the documentation_builder package)"
+           # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
   ```
   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
 * Create 'doc/template' folders in the root of your project
