@@ -2,6 +2,7 @@ import 'package:build/build.dart';
 import 'package:documentation_builder/src/builder/build_config.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
+import 'package:yaml_magic/yaml_magic.dart';
 
 void main() {
   group('InputPath', () {
@@ -151,6 +152,98 @@ void main() {
       final assetId = AssetId('test_package', 'lib/test_file.unknown');
       final template = fileHeaderMap.findFor(assetId);
       template.should.beNull();
+    });
+  });
+
+  group('mergeDocumentationBuilderBuildYaml', () {
+    test('should merge empty source with defaults', () {
+      final source = YamlMagic.fromString(content: '', path: 'build.yaml');
+      final merged = mergeDocumentationBuilderBuildYaml(source).map as Map;
+      var targets = (merged['targets'] as Map);
+      var defaults = (targets['\$default'] as Map);
+      var sources = (defaults['sources'] as List);
+      var builders = defaults['builders'] as Map;
+      Should.satisfyAllConditions([
+        () => targets.should.not.beNull(),
+        () => defaults.should.not.beNull(),
+        () => sources.should.contain('doc/**'),
+        () => builders.should.containKey(
+          'documentation_builder|documentation_builder',
+        ),
+      ]);
+    });
+
+    test('should preserve existing keys in source', () {
+      final source = YamlMagic.fromString(
+        content: '''
+custom_key: custom_value
+targets:
+  \$default:
+    sources:
+      - lib/**
+''',
+        path: 'build.yaml',
+      );
+      final merged = mergeDocumentationBuilderBuildYaml(source).map;
+      var customValue = (merged['custom_key'] as String);
+      var sources = (merged['targets']['\$default']['sources'] as List);
+      var builders = (merged['targets']['\$default']['builders'] as Map);
+      Should.satisfyAllConditions([
+        () => customValue.should.be('custom_value'),
+        () => sources.should.contain('lib/**'),
+        () => builders.should.containKey(
+          'documentation_builder|documentation_builder',
+        ),
+      ]);
+    });
+
+    test('should not overwrite user-defined builder options', () {
+      final source = YamlMagic.fromString(
+        content: '''
+targets:
+  \$default:
+    builders:
+      documentation_builder|documentation_builder:
+        enabled: false
+        options:
+          input_path: 'custom/path'
+''',
+        path: 'build.yaml',
+      );
+      final merged = mergeDocumentationBuilderBuildYaml(source).map;
+      var documentationBuilder =
+          (merged['targets']['\$default']['builders']['documentation_builder|documentation_builder']
+              as Map);
+      Should.satisfyAllConditions([
+        () {
+          var enabled = (documentationBuilder['enabled'] as bool);
+          enabled.should.beTrue();
+        },
+        () {
+          var inputPath =
+              documentationBuilder['options']['input_path'] as String;
+          inputPath.should.be('custom/path');
+        },
+      ]);
+    });
+
+    test('should merge sources arrays', () {
+      final source = YamlMagic.fromString(
+        content: '''
+targets:
+  \$default:
+    sources:
+      - custom/**
+''',
+        path: 'build.yaml',
+      );
+      final merged = mergeDocumentationBuilderBuildYaml(source).map;
+
+      var sources = (merged['targets']['\$default']['sources'] as List);
+      Should.satisfyAllConditions([
+        () => sources.should.contain('test/**'),
+        () => sources.should.contain('doc/**'),
+      ]);
     });
   });
 }

@@ -1,7 +1,8 @@
 import 'package:build/build.dart';
+import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:collection/collection.dart';
-import 'package:yaml/yaml.dart';
+import 'package:yaml_magic/yaml_magic.dart';
 
 /// Configure the documentation_builder
 /// Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):
@@ -34,11 +35,11 @@ import 'package:yaml/yaml.dart';
 ///            # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
 ///   ```
 ///   For more information on the build.yaml file see [build_config](https://pub.dev/documentation/build_config/latest/)
-YamlMap mergeDocumentationBuilderBuildYaml(YamlMap yaml) {
+YamlMagic mergeDocumentationBuilderBuildYaml(YamlMagic source) {
   // This function should merge the provided yaml with the default configuration.
   // Define the default configuration as a YamlMap.
-  final defaultConfig =
-      loadYaml('''
+  final toAdd = YamlMagic.fromString(
+    content: '''
 targets:
   \$default:
     sources:
@@ -65,24 +66,11 @@ targets:
             # LICENSE.md: null
             # .md: '[//]: "# (This file was generated from: {{inputPath()}} using the documentation_builder package)"
             # .dart: "// This file was generated from: {{inputPath()}} using the documentation_builder package"
-''')
-          as YamlMap;
+''',
+    path: 'build.yaml',
+  );
 
-  // Merge the provided yaml with the defaultConfig.
-  // Deep merge: user config takes precedence.
-  YamlMap deepMerge(YamlMap base, YamlMap update) {
-    final result = Map.of(base);
-    update.forEach((key, value) {
-      if (value is YamlMap && base[key] is YamlMap) {
-        result[key] = deepMerge(base[key], value);
-      } else {
-        result[key] = value;
-      }
-    });
-    return YamlMap.wrap(result);
-  }
-
-  return deepMerge(defaultConfig, yaml);
+  return yamlDeepMerge(source, toAdd);
 }
 
 abstract class BuildOptionParameter<T> {

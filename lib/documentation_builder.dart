@@ -1,8 +1,10 @@
 export 'src/builder/build_config.dart';
 export 'src/builder/documentation_builder.dart';
 export 'src/builder/new_line.dart';
-export 'src/cli/template_engine.dart';
+export 'src/cli/command.dart';
 export 'src/cli/setup_template.dart';
+export 'src/cli/template_engine.dart';
+export 'src/cli/yaml.dart';
 export 'src/engine/function/badge.dart';
 export 'src/engine/function/generator.dart';
 export 'src/engine/function/import.dart';

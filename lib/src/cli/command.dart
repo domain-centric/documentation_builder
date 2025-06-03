@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
-import 'package:yaml/yaml.dart';
-
 import 'package:collection/collection.dart';
 import 'package:process_run/shell.dart';
-import 'package:yaml_writer/yaml_writer.dart';
+import 'package:yaml_magic/yaml_magic.dart';
 
 abstract class Command {
   String get name;
@@ -113,7 +111,7 @@ class SetupCommand extends Command {
       'Sets up a project to use the documentation_builder:\n'
       '- Adds build_runner as dev dependency if needed\n'
       '- Adds documentation_builder as dev dependency if needed\n'
-      '- Adds or updates build.yaml'
+      '- Adds or updates build.yaml\n'
       '- Adds template files if needed\n'
       '- Adds github publish-wiki workflow if needed';
 
@@ -134,10 +132,8 @@ class SetupCommand extends Command {
     await addGitHubWorkflowFilesIfNeeded(variables);
   }
 
-  Future<void> addDocumentationBuilderDependencyIfNeeded(
-    dynamic yamlMap,
-  ) async {
-    if (hasDependency(yamlMap, documentationBuilder)) {
+  Future<void> addDocumentationBuilderDependencyIfNeeded(YamlMagic yaml) async {
+    if (hasDependency(yaml, documentationBuilder)) {
       print('$documentationBuilder is already a dev dependency.');
       return;
     }
@@ -154,8 +150,8 @@ class SetupCommand extends Command {
   bool packageIsDocumentationBuilder() =>
       LocalProject.name == 'documentation_builder';
 
-  Future<void> addBuildRunnerDependencyIfNeeded(dynamic yamlMap) async {
-    if (hasDependency(yamlMap, buildRunner)) {
+  Future<void> addBuildRunnerDependencyIfNeeded(YamlMagic yaml) async {
+    if (hasDependency(yaml, buildRunner)) {
       print('$buildRunner is already a dev dependency.');
     } else {
       print('Adding $buildRunner as dev dependency...');
@@ -163,17 +159,17 @@ class SetupCommand extends Command {
     }
   }
 
-  Future<dynamic> readPubSpecYaml() async {
-    final pubspec = File('pubspec.yaml');
-    if (!await pubspec.exists()) {
+  Future<YamlMagic> readPubSpecYaml() async {
+    final pubspecFile = File('pubspec.yaml');
+    if (!await pubspecFile.exists()) {
       print(
         'pubspec.yaml not found. Run this command in the root of your project.',
       );
       exit(65);
     }
-    final content = await pubspec.readAsString();
-    final yamlMap = loadYaml(content);
-    return yamlMap;
+    final yaml = await pubspecFile.readAsString();
+    final yamlMagic = parseYaml(yamlString: yaml, sourcePath: pubspecFile.path);
+    return yamlMagic;
   }
 
   static const String buildRunner = 'build_runner';
@@ -333,26 +329,29 @@ class SetupCommand extends Command {
     } else {
       print('updating build.yaml file ...');
     }
-    var yaml = loadYaml(await buildYamlFile.readAsString());
+    var yamlString = await buildYamlFile.readAsString();
+    var yaml = parseYaml(
+      yamlString: yamlString,
+      sourcePath: buildYamlFile.path,
+    );
     var mergedYaml = mergeDocumentationBuilderBuildYaml(yaml);
-    final yamlString = YamlWriter().write(mergedYaml);
-    await buildYamlFile.writeAsString(yamlString);
+    await buildYamlFile.writeAsString(mergedYaml.toString());
   }
 }
 
 typedef CliTemplateFile = ({File input, File output});
 
-bool hasDependency(YamlMap yamlMap, String package) {
-  if (yamlMap.containsKey('dependencies')) {
-    final dependencies = yamlMap['dependencies'];
-    if (dependencies is YamlMap && dependencies.containsKey(package)) {
+bool hasDependency(YamlMagic yaml, String package) {
+  if (yaml.map.containsKey('dependencies')) {
+    final dependencies = yaml['dependencies'];
+    if (dependencies is Map && dependencies.containsKey(package)) {
       return true;
     }
   }
 
-  if (yamlMap.containsKey('dev_dependencies')) {
-    final devDeps = yamlMap['dev_dependencies'];
-    if (devDeps is YamlMap && devDeps.containsKey(package)) {
+  if (yaml.map.containsKey('dev_dependencies')) {
+    final devDeps = yaml['dev_dependencies'];
+    if (devDeps is Map && devDeps.containsKey(package)) {
       return true;
     }
   }

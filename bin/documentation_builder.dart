@@ -1,14 +1,5 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:documentation_builder/src/cli/command.dart';
-import 'package:http/http.dart' as http;
-import 'package:documentation_builder/documentation_builder.dart';
-import 'package:template_engine/template_engine.dart';
-import 'package:yaml/yaml.dart';
-
-import 'package:collection/collection.dart';
-import 'package:process_run/shell.dart';
-import 'package:yaml_writer/yaml_writer.dart';
 
 /// The simplest way to use the [documentation_builder] package
 /// is to use it as a command line tool.
