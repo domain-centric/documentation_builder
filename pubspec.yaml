@@ -1,6 +1,6 @@
 name: documentation_builder
 description: Generates documentation files that can import other files or Dart documentation comments.
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/domain-centric/documentation_builder
 issue_tracker: https://github.com/domain-centric/documentation_builder/pulls
 documentation: https://github.com/domain-centric/documentation_builder/wiki
