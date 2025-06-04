@@ -10,11 +10,11 @@ After installation you can use the following commands:
   Shows available commands.
 * `documentation_builder setup`
   Sets up a project to use the documentation_builder:
-  * Adds build_runner as dev dependency if needed\n'
-  * Adds documentation_builder as dev dependency if needed\n'
-  * Adds or updates build.yaml'
-  * Adds template files if needed\n'
-  * Adds github publish-wiki workflow if needed';.
+  * Adds build_runner as dev dependency if needed
+  * Adds documentation_builder as dev dependency if needed
+  * Adds or updates build.yaml
+  * Adds template files if needed
+  * Adds github publish-wiki workflow if needed
 * `documentation_builder build`
   Generates documentation files from template files
   by starting `build_runner build`.

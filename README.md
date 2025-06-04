@@ -38,11 +38,11 @@ The most commonly used functions for documentation are:
 
 # Breaking Changes
 [documentation_builder](https://pub.dev/packages/documentation_builder) 1.0.0 has had major improvements over earlier versions:
-* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/41bc3707316c0d4d979a9575b02e194100dfb05c/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/41bc3707316c0d4d979a9575b02e194100dfb05c/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
+* It uses the [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/917344efca01dadb2cf7fd177373156edee95f7b/lib/src/builder/documentation_builder.dart#L42) which is an extended version of the [TemplateEngine](https://github.com/domain-centric/documentation_builder/blob/917344efca01dadb2cf7fd177373156edee95f7b/lib/src/builder/documentation_builder.dart#L42) from the [template_engine](https://pub.dev/packages/template_engine) package
   * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
   * Better error messages with the position within a template file.
   * Expressions in template file tags can be nested
-  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/41bc3707316c0d4d979a9575b02e194100dfb05c/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
+  * More features: The [DocumentationTemplateEngine](https://github.com/domain-centric/documentation_builder/blob/917344efca01dadb2cf7fd177373156edee95f7b/lib/src/builder/documentation_builder.dart#L42) can be extended with custom:
     * dataTypes
     * constants
     * functionGroups
@@ -145,11 +145,11 @@ After installation you can use the following commands:
   Shows available commands.
 * `documentation_builder setup`
   Sets up a project to use the documentation_builder:
-  * Adds build_runner as dev dependency if needed\n'
-  * Adds documentation_builder as dev dependency if needed\n'
-  * Adds or updates build.yaml'
-  * Adds template files if needed\n'
-  * Adds github publish-wiki workflow if needed';.
+  * Adds build_runner as dev dependency if needed
+  * Adds documentation_builder as dev dependency if needed
+  * Adds or updates build.yaml
+  * Adds template files if needed
+  * Adds github publish-wiki workflow if needed
 * `documentation_builder build`
   Generates documentation files from template files
   by starting `build_runner build`.
