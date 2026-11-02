@@ -13,8 +13,8 @@ final pathFunctions = FunctionGroup('Path Functions', [
   ),
 ]);
 
-/// This class is used to create a [ExpressionFunction]s
-/// that return a [Uri] by copying [LinkFunction]s.
+/// This class is used to create [FunctionDefinition]s
+/// that return a [Uri] by copying [LinkFunctionDefinition]s.
 class UriFunction extends FunctionDefinition<Uri> {
   UriFunction({
     required super.name,

@@ -133,7 +133,7 @@ final importDartCodeFunction = FunctionDefinition<String>(
   },
 );
 
-/// An [ExpressionFunction]-[Parameter] for a Dart code path.
+/// An [FunctionDefinition]-[Parameter] for a Dart code path.
 class DartCodePathParameter extends Parameter<String> {
   DartCodePathParameter(String name)
     : super(

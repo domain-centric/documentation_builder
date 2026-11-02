@@ -32,8 +32,8 @@ class LinkFunctionArgumentName {
   static const ref = 'ref';
 }
 
-/// An [ExpressionFunction] that creates a markdown hyperlink
-/// This class ensures a convention is followed so that implementations can be reused in [PathFunctions]
+/// An [FunctionDefinition] that creates a markdown hyperlink
+/// Base for [linkFunctions] and [pathFunctions].
 class LinkFunctionDefinition extends FunctionDefinition<MarkDownLink> {
   static const nameSuffix = 'Link';
   static const descriptionPreFix = 'Returns a markdown hyperlink of ';

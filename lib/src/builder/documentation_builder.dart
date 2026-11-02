@@ -192,12 +192,13 @@ class BuilderVariable {
 class LibraryCacheVariable {
   static const String id = 'libraryCache';
 
-  /// gets a [Map] where key = [ProjectFilePath] and value = a [LibraryElement] from the analyzer project.
+  /// gets a [Map] where key = [ProjectFilePath2]
+  /// and value = a [LibraryElement] from the analyzer project.
   /// We cache these because creating them (parsing) takes time.
   static LibraryCache of(RenderContext context) => context.variables[id];
 }
 
-/// gets a [Map] where key = [ProjectFilePath]
+/// gets a [Map] where key = [ProjectFilePath2]
 /// and value = a [LibraryElement] which is parser tree from the dart source code file.
 /// We cache these because creating them (parsing) takes time.
 typedef LibraryCache = Map<ProjectFilePath2, LibraryElement>;

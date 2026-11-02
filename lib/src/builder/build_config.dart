@@ -1,8 +1,8 @@
 import 'package:build/build.dart';
 import 'package:documentation_builder/documentation_builder.dart';
-import 'package:template_engine/template_engine.dart';
 import 'package:collection/collection.dart';
 import 'package:yaml_magic/yaml_magic.dart';
+import 'package:template_engine/template_engine.dart';
 
 /// Configure the documentation_builder
 /// Add a build.yaml file to the root of your project with the following lines (or merge lines if build.yaml file already exists):

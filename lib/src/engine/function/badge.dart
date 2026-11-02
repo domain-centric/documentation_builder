@@ -1,8 +1,4 @@
 import 'package:documentation_builder/documentation_builder.dart';
-import 'package:documentation_builder/src/builder/new_line.dart';
-import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
-import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
-import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
 import 'package:template_engine/template_engine.dart';
 
 final badgeFunctions = FunctionGroup('Badge Functions', [
@@ -27,10 +23,10 @@ final badgeFunctions = FunctionGroup('Badge Functions', [
 /// - application stores
 /// - ect...
 ///
-/// There are different types of badges. [Badge]s in [TemplateFile]s :
+/// There are different types of badges. [Badge]s in [Template]s :
 /// - are surrounded by square brackets: []
 /// - start with a ! and a name: e.g.  [!CustomBadge &rsqb;
-/// - may have [Attribute]s after the name
+/// - may have attribute's after the name
 ///
 /// e.g.: [!CustomBadge label='license' message='MIT' color='informational' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE' &rsqb;
 /// [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)

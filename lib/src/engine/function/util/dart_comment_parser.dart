@@ -14,9 +14,9 @@ import 'package:petitparser/petitparser.dart';
 import 'package:template_engine/template_engine.dart';
 
 /// [DartDocCommentParser] parses dart documentation comments:
-/// * It removes leading comment headers: [whitespace]///[space]
+/// * It removes leading comment headers: [whitespace]///[whitespace]
 /// * It will validate links with a uri, e.g. [Google](https://google.com)
-/// * It tries to resolve links without a uri to links with a uri, e.g. [my_package] or [MyClass] or [MyClass.member]
+/// * It tries to resolve links without a uri to links with a uri, e.g. my_package or MyClass or MyClass.member
 ///
 class DartDocCommentParser {
   final Parser _parser;
@@ -110,7 +110,7 @@ abstract class RenderFunction {
 ///
 /// [reference] can be:
 /// * a named element related to the [docCommentsOwner]
-/// * a named element related to the [docCommentsOwner.library]
+/// * a named element related to the [docCommentsOwner] library
 /// * a [DartType]
 class ReferenceConverter extends RenderFunction {
   String linkText;
