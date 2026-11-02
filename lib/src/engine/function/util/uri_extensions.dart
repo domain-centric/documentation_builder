@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
 
+final Map<Uri, Future<bool>> _httpGetResults = {};
+
 //// Extension methods for [Uri] to append path, query parameters, and fragment.
 /// This allows for more flexible URI manipulation without creating a new Uri object each time.
 extension UriExtension on Uri {
@@ -46,9 +48,33 @@ extension UriExtension on Uri {
   }
 
   /// Checks if the URI can be accessed via HTTP GET request.
-  Future<bool> canGetWithHttp() async {
-    var response = await http.get(this);
-    var success = response.statusCode >= 200 && response.statusCode < 400;
-    return success;
+  ///
+  /// The request is bounded so an unresponsive server cannot stall a build.
+  Future<bool> canGetWithHttp({
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    final existingResult = _httpGetResults[this];
+    if (existingResult != null) {
+      return existingResult;
+    }
+
+    final result = _canGetWithHttp(timeout);
+    _httpGetResults[this] = result;
+    try {
+      return await result;
+    } catch (_) {
+      _httpGetResults.remove(this);
+      rethrow;
+    }
+  }
+
+  Future<bool> _canGetWithHttp(Duration timeout) async {
+    final client = http.Client();
+    try {
+      final response = await client.get(this).timeout(timeout);
+      return response.statusCode >= 200 && response.statusCode < 400;
+    } finally {
+      client.close();
+    }
   }
 }

@@ -1,4 +1,6 @@
+import 'package:documentation_builder/src/engine/function/generator.dart';
 import 'package:documentation_builder/src/engine/function/util/table_of_contents.dart';
+import 'package:documentation_builder/src/engine/template_engine.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
@@ -6,33 +8,25 @@ import 'package:test/test.dart';
 void main() {
   group('TitleLink', () {
     test('createFragmentFromTitle generates correct fragment', () {
-      TitleLink.createFragmentFromTitle(
-        'My Awesome Title!',
-      ).should.be('my-awesome-title');
-      TitleLink.createFragmentFromTitle(
-        'Title   With   Spaces',
-      ).should.be('title-with-spaces');
-      TitleLink.createFragmentFromTitle(
-        'Title_with_underscores',
-      ).should.be('title_with_underscores');
-      TitleLink.createFragmentFromTitle(
-        'Title-with-dashes',
-      ).should.be('title-with-dashes');
-      TitleLink.createFragmentFromTitle(
-        'Title: Special #Chars!',
-      ).should.be('title-special-chars');
+      TitleLink.createFragmentFromTitle('My Awesome Title!').should
+          .be('my-awesome-title');
+      TitleLink.createFragmentFromTitle('Title   With   Spaces').should
+          .be('title-with-spaces');
+      TitleLink.createFragmentFromTitle('Title_with_underscores').should
+          .be('title_with_underscores');
+      TitleLink.createFragmentFromTitle('Title-with-dashes').should
+          .be('title-with-dashes');
+      TitleLink.createFragmentFromTitle('Title: Special #Chars!').should
+          .be('title-special-chars');
     });
 
     test('createTitleFromRelativePath removes extension and formats', () {
-      TitleLink.createTitleFromRelativePath(
-        'my-file_name.md',
-      ).should.be('my file name');
-      TitleLink.createTitleFromRelativePath(
-        'another-file.txt',
-      ).should.be('another file');
-      TitleLink.createTitleFromRelativePath(
-        'complex-file_name.test.md',
-      ).should.be('complex file name');
+      TitleLink.createTitleFromRelativePath('my-file_name.md').should
+          .be('my file name');
+      TitleLink.createTitleFromRelativePath('another-file.txt').should
+          .be('another file');
+      TitleLink.createTitleFromRelativePath('complex-file_name.test.md').should
+          .be('complex file name');
     });
 
     test('toBold wraps text in bold markdown', () {
@@ -60,6 +54,17 @@ void main() {
 
     setUp(() {
       factory = TableOfContentsFactory();
+    });
+
+    test('TOC rendering uses a dummy function to prevent recursion', () {
+      TableOfContentsFactory.engine.grammar
+          .findFunction('tableofcontents')
+          .should
+          .be(tableOfContentsDummyFunction);
+      documentationBuilderGrammar
+          .findFunction('tableofcontents')
+          .should
+          .be(tableOfContentsFunction);
     });
 
     test('findTitles finds all headings in markdown', () {

@@ -5,10 +5,10 @@ The {{referenceLink('build_runner')}} can be started from the command line in th
 * CTRL/CMD+ALT+t if you are using [Visual Studio Code](https://code.visualstudio.com/)
 
 To run once:
-```dart run build_runner build --delete-conflicting-outputs```
+```dart run build_runner build```
 
 To automatically run when files are updated:
-```dart run build_runner watch --delete-conflicting-outputs```
+```dart run build_runner watch```
 
 Add the `--verbose` attribute if you want to see more details.
 

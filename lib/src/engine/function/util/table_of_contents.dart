@@ -56,7 +56,7 @@ class TableOfContentsFactory {
       var parseResult = await engine.parseTemplate(template);
       var renderResult = await engine.render(
         parseResult,
-        renderContext.variables,
+        variables: renderContext.variables,
       );
       var markDown = renderResult.text;
       return markDown;
@@ -129,22 +129,21 @@ class TableOfContentsFactory {
   }
 
   static DocumentationTemplateEngine _createEngine() {
-    var engine = DocumentationTemplateEngine();
-    replaceTocFunctionToPreventRoundTrips(engine);
-    return engine;
-  }
-
-  static void replaceTocFunctionToPreventRoundTrips(
-    DocumentationTemplateEngine engine,
-  ) {
-    for (var functionGroup in engine.functionGroups) {
-      for (var function in functionGroup) {
-        if (function is TableOfContents) {
-          functionGroup.remove(function);
-          functionGroup.add(TableOfContentsDummy());
-        }
+    final functionGroups = documentationBuilderGrammar.functionGroups.map((
+      group,
+    ) {
+      final functions = group.toList();
+      final tableOfContentsIndex = functions.indexOf(tableOfContentsFunction);
+      if (tableOfContentsIndex != -1) {
+        functions[tableOfContentsIndex] = tableOfContentsDummyFunction;
       }
-    }
+      return FunctionGroup(group.name, functions);
+    }).toList();
+
+    final grammar = documentationBuilderGrammar.copyWith(
+      functionGroups: functionGroups,
+    );
+    return DocumentationTemplateEngine(grammar);
   }
 
   String createRelativePath(File file) {
@@ -216,13 +215,14 @@ class TableOfContentsFactory {
 }
 
 /// dummy function to prevent round trips.
-class TableOfContentsDummy extends ExpressionFunction {
-  TableOfContentsDummy()
-    : super(
-        name: TableOfContents.nameId,
-        function: (position, renderContext, parameters) async => '',
-      );
-}
+final tableOfContentsDummyFunction = FunctionDefinition(
+  name: tableOfContentsFunction.name,
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Dummy function to prevent round trips.',
+    examples: [],
+  ),
+  function: (context) async => '',
+);
 
 /// Represents a Markdown hyperlink to a title in some Markdown file.
 class TitleLink {
@@ -288,12 +288,12 @@ Parser<({String hashes, String title})> markdownTitleParser() {
   final Parser<String> newLine = (string('\n\r') | char('\n')).flatten();
   final Parser<String> hash = char('#');
   final Parser<String> hashes = hash.plus().flatten(); // One or more #
-  final Parser<String> optionalWhiteSpace = anyOf(
-    " \t",
-  ).star().flatten(); // Zero or more non-newline whitespaces
-  final Parser<String> whitespace = anyOf(
-    " \t",
-  ).plus().flatten(); // One or more none newline whitespace
+  final Parser<String> optionalWhiteSpace = anyOf(" \t")
+      .star()
+      .flatten(); // Zero or more non-newline whitespaces
+  final Parser<String> whitespace = anyOf(" \t")
+      .plus()
+      .flatten(); // One or more none newline whitespace
   final Parser<String> titleText = any().starLazy(newline()).flatten();
   return SequenceParser([
     newLine,

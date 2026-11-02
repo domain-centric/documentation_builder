@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:collection/collection.dart';
 import 'package:documentation_builder/src/engine/function/util/analyzer.dart';
@@ -141,7 +139,7 @@ class SourceLinkFactory implements MarkDownLinkFactory {
   ) async {
     try {
       final library = element.library;
-      final sourceUri = library?.source.uri;
+      final sourceUri = library?.uri;
       if (sourceUri == null) {
         return null;
       }
@@ -180,25 +178,14 @@ class SourceLinkFactory implements MarkDownLinkFactory {
   }
 
   int? getLineNr(Element docCommentsOwner) {
-    final session = docCommentsOwner.session;
-    if (session == null) {
+    final firstFragment = docCommentsOwner.firstFragment;
+    final libraryFragment = firstFragment.libraryFragment;
+    if (libraryFragment == null) {
       return null;
     }
-    var library = docCommentsOwner.library;
-    if (library == null) {
-      return null;
-    }
-    final parsedLibrary =
-        session.getParsedLibraryByElement(library) as ParsedLibraryResult;
-    final declaration = parsedLibrary.getElementDeclaration(docCommentsOwner);
-    if (declaration == null) {
-      return null;
-    }
-    final node = declaration.node;
-    final elementOffset = node.offset;
-    var compilationUnit = declaration.node.root as CompilationUnit;
-    var lineInfo = compilationUnit.lineInfo;
 
-    return lineInfo.getLocation(elementOffset).lineNumber;
+    final source = libraryFragment.source.contents.data;
+    final elementOffset = firstFragment.nameOffset ?? firstFragment.offset;
+    return source.substring(0, elementOffset).split('\n').length;
   }
 }

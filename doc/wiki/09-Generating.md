@@ -1,4 +1,4 @@
-[//]: # (This file was generated from: doc/template/doc/wiki/08-Generating.md.template using the documentation_builder package)
+[//]: # (This file was generated from: doc/template/doc/wiki/09-Generating.md.template using the documentation_builder package)
 The [documentation_builder](https://pub.dev/packages/documentation_builder) is a builder that is run with the [build_runner](https://pub.dev/packages/build_runner) package.
 
 The [build_runner](https://pub.dev/packages/build_runner) can be started from the command line in the root of the project:
@@ -6,10 +6,10 @@ The [build_runner](https://pub.dev/packages/build_runner) can be started from th
 * CTRL/CMD+ALT+t if you are using [Visual Studio Code](https://code.visualstudio.com/)
 
 To run once:
-```dart run build_runner build --delete-conflicting-outputs```
+```dart run build_runner build```
 
 To automatically run when files are updated:
-```dart run build_runner watch --delete-conflicting-outputs```
+```dart run build_runner watch```
 
 Add the `--verbose` attribute if you want to see more details.
 

@@ -10,10 +10,9 @@ void main() {
       final inputPath = InputPath();
       final builderOptions = BuilderOptions({});
       Should.throwException<BuildOptionParameterException>(
-        () => inputPath.getValue(builderOptions),
-      )?.message.should.be(
-        'build.yaml: Builder option input_path is not defined',
-      );
+            () => inputPath.getValue(builderOptions),
+          )?.message.should
+          .be('build.yaml: Builder option input_path is not defined');
     });
 
     test('should return configured value when provided', () {
@@ -41,10 +40,9 @@ void main() {
       final outputPath = OutputPath();
       final builderOptions = BuilderOptions({});
       Should.throwException<BuildOptionParameterException>(
-        () => outputPath.getValue(builderOptions),
-      )?.message.should.be(
-        'build.yaml: Builder option output_path is not defined',
-      );
+            () => outputPath.getValue(builderOptions),
+          )?.message.should
+          .be('build.yaml: Builder option output_path is not defined');
     });
 
     test('should return configured value when provided', () {
@@ -72,20 +70,18 @@ void main() {
       final fileHeaders = FileHeaders();
       final builderOptions = BuilderOptions({});
       Should.throwException<BuildOptionParameterException>(
-        () => fileHeaders.getValue(builderOptions),
-      )?.message.should.be(
-        'build.yaml: Builder option file_headers is not defined',
-      );
+            () => fileHeaders.getValue(builderOptions),
+          )?.message.should
+          .be('build.yaml: Builder option file_headers is not defined');
     });
 
     test('should throw an exception when not a map', () {
       final fileHeaders = FileHeaders();
       final builderOptions = BuilderOptions({'file_headers': 'string'});
       Should.throwException<BuildOptionParameterException>(
-        () => fileHeaders.getValue(builderOptions),
-      )?.message.should.be(
-        'build.yaml: Builder option file_headers is not of type: Map',
-      );
+            () => fileHeaders.getValue(builderOptions),
+          )?.message.should
+          .be('build.yaml: Builder option file_headers is not of type: Map');
     });
 
     test(
@@ -103,20 +99,17 @@ void main() {
       },
     );
 
-    test(
-      'should throw an exception when map contains a value that is not a String or null',
-      () {
-        final fileHeaders = FileHeaders();
-        final builderOptions = BuilderOptions({
-          'file_headers': {'key1': 'string', 'key2': null, 'key3': 123},
-        });
-        Should.throwException<BuildOptionParameterException>(
-          () => fileHeaders.getValue(builderOptions),
-        )?.message.should.be(
-          'build.yaml: Builder option file_headers contains values that are not of type: String or null',
-        );
-      },
-    );
+    test('should throw an exception when map contains a value that is not a String or null', () {
+      final fileHeaders = FileHeaders();
+      final builderOptions = BuilderOptions({
+        'file_headers': {'key1': 'string', 'key2': null, 'key3': 123},
+      });
+      Should.throwException<BuildOptionParameterException>(
+        () => fileHeaders.getValue(builderOptions),
+      )?.message.should.be(
+        'build.yaml: Builder option file_headers contains values that are not of type: String or null',
+      );
+    });
 
     test('should return configured value when provided', () {
       final fileHeaders = FileHeaders();

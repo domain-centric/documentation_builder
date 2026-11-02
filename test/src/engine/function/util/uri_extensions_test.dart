@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
@@ -35,6 +39,43 @@ void main() {
       encoded.should.be('hello%20world!');
       final decoded = Uri.decodeComponent(encoded);
       decoded.should.be(original);
+    });
+
+    test('should time out and close unresponsive HTTP requests', () async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((_) {});
+      addTearDown(() => server.close(force: true));
+
+      final uri = Uri(
+        scheme: 'http',
+        host: InternetAddress.loopbackIPv4.address,
+        port: server.port,
+      );
+
+      await expectLater(
+        uri.canGetWithHttp(timeout: const Duration(milliseconds: 50)),
+        throwsA(isA<TimeoutException>()),
+      );
+    });
+
+    test('should only check the same URI once', () async {
+      var requestCount = 0;
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((request) {
+        requestCount++;
+        request.response.close();
+      });
+      addTearDown(() => server.close(force: true));
+
+      final uri = Uri(
+        scheme: 'http',
+        host: InternetAddress.loopbackIPv4.address,
+        port: server.port,
+      );
+
+      (await uri.canGetWithHttp()).should.beTrue();
+      (await uri.canGetWithHttp()).should.beTrue();
+      requestCount.should.be(1);
     });
   });
 }

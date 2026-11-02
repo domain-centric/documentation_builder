@@ -14,9 +14,14 @@ void main() {
     setUp(() {
       parser = DartDocCommentParser();
       renderContext = RenderContext(
-        engine: DocumentationTemplateEngine(),
-        parsedTemplates: [],
-        templateBeingRendered: TextTemplate('dummy'),
+        grammar: documentationBuilderGrammar,
+        parseResult: ParseResult(
+          document: TemplateDocument(
+            template: TextTemplate('dummy'),
+            nodes: [],
+          ),
+          errors: [],
+        ),
       );
     });
 
@@ -94,9 +99,14 @@ void main() {
     late RenderContext renderContext;
     setUp(() {
       renderContext = RenderContext(
-        engine: DocumentationTemplateEngine(),
-        parsedTemplates: [],
-        templateBeingRendered: TextTemplate('dummy'),
+        grammar: documentationBuilderGrammar,
+        parseResult: ParseResult(
+          document: TemplateDocument(
+            template: TextTemplate('dummy'),
+            nodes: [],
+          ),
+          errors: [],
+        ),
       );
     });
     test('should resolve valid pub.dev links', () async {
@@ -120,9 +130,14 @@ void main() {
     late RenderContext renderContext;
     setUp(() {
       renderContext = RenderContext(
-        engine: DocumentationTemplateEngine(),
-        parsedTemplates: [],
-        templateBeingRendered: TextTemplate('dummy'),
+        grammar: documentationBuilderGrammar,
+        parseResult: ParseResult(
+          document: TemplateDocument(
+            template: TextTemplate('dummy'),
+            nodes: [],
+          ),
+          errors: [],
+        ),
       );
     });
     test('should validate and render valid links', () async {

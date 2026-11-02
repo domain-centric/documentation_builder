@@ -1,7 +1,9 @@
 import 'package:documentation_builder/src/engine/function/project/local_project.dart';
 import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
 import 'package:template_engine/template_engine.dart';
+
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 /// Provides project information on a project on https://github.com

@@ -1,0 +1,65 @@
+[//]: # (This file was generated from: doc/template/doc/wiki/11-Breaking-Changes.md.template using the documentation_builder package)
+# Breaking Changes to version 1.0.0
+[documentation_builder] 1.0.0 has had major improvements over earlier versions:
+* It uses the [DocumentationTemplateEngine] which is an extended version of the [TemplateEngine] from the [template_engine] package
+  * Less error prone: The builder will keep running even if one of the templates fails to parse or render.
+  * Better error messages with the position within a template file.
+  * Expressions in template file tags can be nested
+  * More features: The [DocumentationTemplateEngine] can be extended with custom:
+    * dataTypes
+    * constants
+    * functionGroups
+    * operatorGroups
+  * More consistent template syntax: now all functions
+* The [input and output file is determined by parameters in the build.yaml file](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-inputpath), which is:
+  * Easier to understand than the old DocumentationBuilder conventions
+  * More flexible: It can now be configured in the build.yaml file
+* Each generated file can have an optional [header text which can be configured in the build.yaml per output file suffix](https://github.com/domain-centric/documentation_builder/wiki/02-Getting-Started#build-option-parameter-fileheaders).
+This resulted in the following breaking changes:
+* Tags
+  | $lt; version 1.0.0                                                                      | $gt;= version 1.0.0 |
+  |---------------------------------------------------------------------------------|------------|
+  | &#123;ImportFile file:'OtherTemplateFile.md.template' title='# Other Template File'&#125; | # Other Template File<br>&#123;&#123;importTemplate('OtherTemplateFile.md.template')&#125;&#125; |
+  | &#123;ImportCode file:'file_to_import.txt' title='# Code example'&#125;                   | # Code example<br>&#123;&#123;importCode('file_to_import.txt')&#125;&#125; |
+  | &#123;ImportDartCode file:'file_to_import.dart' title='# Dart code example'&#125;         | # Dart code example<br>&#123;&#123;importDartCode('file_to_import.dart')&#125;&#125; |
+  | &#123;ImportDartDoc path='lib\my_lib.dart&#124;MyClass' title='# My Class'&#125;          | # My Class<br>&#123;&#123;importDartDoc('lib\my_lib.dart&#124;MyClass')&#125;&#125; |
+  | &#123;TableOfContents title='# Table of contents example'&#125;                           | # Table of contents<br>&#123;&#123;tableOfContents(path='doc/template/doc/wiki')&#125;&#125; |
+  | &#123;MitLicense name='John Doe'&#125;                                                    | &#123;&#123;license(type='MIT', name='John Doe')&#125;&#125; |
+  See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#import-functions) for more details on these and new functions
+* Links
+  | $lt; version 1.0.0       | $gt;= version 1.0.0 |
+  |--------------------------|------------|
+  | &#91;GitHub]             | &#123;&#123;gitHubLink()&#125;&#125; |
+  | &#91;GitHubWiki]         | &#123;&#123;gitHubWikiLink()&#125;&#125; |
+  | &#91;GitHubStars]        | &#123;&#123;gitHubStarsLink()&#125;&#125; |
+  | &#91;GitHubIssues]       | &#123;&#123;gitHubIssuesLink()&#125;&#125; |
+  | &#91;GitHubMilestones]   | &#123;&#123;gitHubMilestonesLink()&#125;&#125; |
+  | &#91;GitHubReleases]     | &#123;&#123;gitHubReleasesLink()&#125;&#125; |
+  | &#91;GitHubPullRequests] | &#123;&#123;gitHubPullRequestsLink()&#125;&#125; |
+  | &#91;GitHubRaw]          | &#123;&#123;referenceLink('ref')&#125;&#125; or&#123;&#123;gitHubRawLink()&#125;&#125; |
+  | &#91;PubDev]             | &#123;&#123;pubDevLink()&#125;&#125; |
+  | &#91;PubDevChangeLog]    | &#123;&#123;pubDevChangeLogLink()&#125;&#125; |
+  | &#91;PubDevVersions]     | &#123;&#123;pubDevVersionsLink()&#125;&#125; |
+  | &#91;PubDevExample]      | &#123;&#123;pubDevExampleLink()&#125;&#125; |
+  | &#91;PubDevInstall]      | &#123;&#123;pubDevInstallLink()&#125;&#125; |
+  | &#91;PubDevScore]        | &#123;&#123;pubDevScoreLink()&#125;&#125; |
+  | &#91;PubDevLicense]      | &#123;&#123;pubDevLicenseLink()&#125;&#125; |
+  | PubDev package links     | &#123;&#123;referenceLink()&#125;&#125; |
+  | Dart code links          | &#123;&#123;referenceLink('ref')&#125;&#125; |
+  | Markdown file links      | &#91;title](URI) |
+  See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#link-functions) for more details on these and new functions
+* Badges
+  | $lt; version 1.0.0                          | $gt;= version 1.0.0 |
+  |---------------------------------------------|-------------------------------|
+  | &#91;CustomBadge title='title' ...]         | &#91;title](&#123;&#123;customBadge()&#125;&#125;)             |
+  | &#91;PubPackageBadge title='title']         | &#91;title](&#123;&#123;pubPackageBadge()&#125;&#125;)         |
+  | &#91;GitHubBadge title='title']             | &#91;title](&#123;&#123;gitHubBadge()&#125;&#125;)             |
+  | &#91;GitHubWikiBadge title='title']         | &#91;title](&#123;&#123;gitHubWikiBadge()&#125;&#125;)         |
+  | &#91;GitHubStarsBadge title='title']        | &#91;title](&#123;&#123;gitHubStarsBadge()&#125;&#125;)        |
+  | &#91;GitHubIssuesBadge title='title']       | &#91;title](&#123;&#123;gitHubIssuesBadge()&#125;&#125;)       |
+  | &#91;GitHubPullRequestsBadge title='title'] | &#91;title](&#123;&#123;gitHubPullRequestsBadge()&#125;&#125;) |
+  | &#91;GitHubLicenseBadge title='title']      | &#91;title](&#123;&#123;gitHubLicenseBadge()&#125;&#125;)      |
+  See the [function documentation](https://github.com/domain-centric/documentation_builder/wiki/06-Functions.md#badge-functions) for more details on these and new functions
+* Github-Wiki pages are now generated somewhere in the project folder (e.g. doc\wiki) and need to be copied to GitHub.
+  This could be done using GitHub actions (e.g. after each commit).
+  For more information see [Automatically Publishing Wiki pages](https://github.com/domain-centric/documentation_builder/wiki/09-Publishing#automatically-publishing-wiki-pages)

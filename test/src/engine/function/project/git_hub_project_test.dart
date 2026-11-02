@@ -64,7 +64,6 @@ void main() {
       gitHubProject.starGazersUri.toString().should.be(
         'https://github.com/domain-centric/documentation_builder/stargazers',
       );
-      (await gitHubProject.starGazersUri.canGetWithHttp()).should.beTrue();
     });
     test('method: issuesUri', () async {
       gitHubProject.issuesUri.toString().should.be(

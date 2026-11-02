@@ -1,5 +1,4 @@
 import 'package:shouldly/shouldly.dart';
-import 'package:template_engine/template_engine.dart';
 import 'package:test/test.dart';
 import 'package:documentation_builder/src/engine/function/generator.dart';
 
@@ -7,28 +6,28 @@ import 'util/reference_test.dart';
 
 void main() {
   group('License', () {
-    final licenseFunc = License();
+    final licenseFunc = licenseFunction;
 
     test('returns MIT license text', () async {
-      final result = await licenseFunc.function(
-        '',
-        FakeRenderContext(VariableMap()),
-        {'type': 'MIT', 'name': 'John Doe', 'year': 2022},
+      var argumentValues = {'type': 'MIT', 'name': 'John Doe', 'year': 2022};
+      var fakeFunctionCallContext = FakeFunctionCallContext(
+        FakeRenderContext({}),
+        argumentValues: argumentValues,
       );
+      final result = await licenseFunc.function(fakeFunctionCallContext);
       Should.satisfyAllConditions([
         () => result.toString().should.contain('John Doe'),
         () => result.toString().should.contain('2022'),
       ]);
-      result.toString().should.contain('John Doe');
-      result.toString().should.contain('2022');
     });
 
     test('returns BSD3 license text', () async {
-      final result = await licenseFunc.function(
-        '',
-        FakeRenderContext(VariableMap()),
-        {'type': 'BSD3', 'name': 'Jane Doe', 'year': 2021},
+      var argumentValues = {'type': 'BSD3', 'name': 'Jane Doe', 'year': 2021};
+      var fakeFunctionCallContext = FakeFunctionCallContext(
+        FakeRenderContext({}),
+        argumentValues: argumentValues,
       );
+      final result = await licenseFunc.function(fakeFunctionCallContext);
       Should.satisfyAllConditions([
         () => result.toString().should.contain('Jane Doe'),
         () => result.toString().should.contain('2021'),
@@ -37,11 +36,16 @@ void main() {
 
     test('throws on unsupported license type', () async {
       try {
-        await licenseFunc.function('', FakeRenderContext(VariableMap()), {
+        var argumentValues = {
           'type': 'Unsupported',
           'name': 'Unknown',
           'year': 2023,
-        });
+        };
+        var fakeFunctionCallContext = FakeFunctionCallContext(
+          FakeRenderContext({}),
+          argumentValues: argumentValues,
+        );
+        await licenseFunc.function(fakeFunctionCallContext);
         throw ShouldlyTestFailureError('should throw an error');
       } catch (e) {
         e.should.beOfType<ArgumentError>().toString().should.be(
@@ -53,11 +57,12 @@ void main() {
 
     test('uses current year if year is not provided', () async {
       final now = DateTime.now().year;
-      final result = await licenseFunc.function(
-        '',
-        FakeRenderContext(VariableMap()),
-        {'type': 'MIT', 'name': 'NoYear'},
+      var argumentValues = {'type': 'MIT', 'name': 'NoYear'};
+      var fakeFunctionCallContext = FakeFunctionCallContext(
+        FakeRenderContext({}),
+        argumentValues: argumentValues,
       );
+      final result = await licenseFunc.function(fakeFunctionCallContext);
       result.toString().should.contain('$now');
     });
   });

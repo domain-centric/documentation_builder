@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:http/http.dart' as http;
 import 'package:documentation_builder/documentation_builder.dart';
 import 'package:template_engine/template_engine.dart';
@@ -19,9 +20,8 @@ class Commands extends UnmodifiableListView<Command> {
   /// Returns a string with all available commands and their descriptions.
   String get availableCommandsText {
     var buffer = StringBuffer('Available commands:\n');
-    int firstColumnWidth = map(
-      (command) => command.name.length,
-    ).reduce((a, b) => max(a, b));
+    int firstColumnWidth = map((command) => command.name.length)
+        .reduce((a, b) => max(a, b));
     for (var command in this) {
       var name = command.name.toLowerCase();
       for (var descriptionLine in command.description.trim().split('\n')) {
@@ -94,9 +94,7 @@ class BuildCommand extends Command {
   @override
   Future<void> run() async {
     var shell = Shell();
-    await shell.run(
-      "dart run build_runner build --delete-conflicting-outputs --verbose",
-    );
+    await shell.run("dart run build_runner build --verbose");
   }
 }
 
@@ -270,9 +268,9 @@ class SetupCommand extends Command {
     VariableMap variables,
   ) async {
     var parseResult = await engine.parseTemplate(template);
-    var renderResult = await engine.render(parseResult, variables);
-    if (renderResult.errorMessage.isNotEmpty) {
-      print('  Error: ${renderResult.errorMessage}');
+    var renderResult = await engine.render(parseResult, variables: variables);
+    if (renderResult.aggregatedErrorMessage.isNotEmpty) {
+      print('  Error: ${renderResult.aggregatedErrorMessage}');
       return;
     }
     if (packageIsDocumentationBuilder()) {

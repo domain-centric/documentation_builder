@@ -35,7 +35,7 @@ void main() {
     ) async {
       final parseResult = await engine.parseText(templateExpression);
       final vars = await buildVariables();
-      final renderResult = await engine.render(parseResult, vars);
+      final renderResult = await engine.render(parseResult, variables: vars);
       renderResult.text.should.be(expectedResult);
     }
 
@@ -49,7 +49,7 @@ void main() {
       });
 
       test('templateSource', () async {
-        await testTemplate('{{templateSource()}}', "'{{templateSource()}}'");
+        await testTemplate('{{templateSource()}}', "{{templateSource()}}");
       });
     });
 
@@ -243,4 +243,8 @@ class FakeBuildStep extends BuildStep {
   Future<void> writeAsBytes(AssetId id, FutureOr<List<int>> bytes) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<LibrarySourceSink?> get librarySourceSink =>
+      throw UnimplementedError();
 }

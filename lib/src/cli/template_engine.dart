@@ -7,8 +7,9 @@ import 'package:template_engine/template_engine.dart';
 class CliTemplateEngine extends TemplateEngine {
   CliTemplateEngine()
     : super(
-        tagStart: '[[',
-        tagEnd: ']]',
-        functionGroups: createDocumentationFunctionGroups(),
+        Grammar.standard().copyWith(
+          codeBlockDelimiter: CodeBlockDelimiter(start: '[[', end: ']]'),
+          functionGroups: documentationBuilderFunctionGroups,
+        ),
       );
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:test/test.dart';
@@ -21,21 +23,19 @@ void main() {
   group('UrlMarkDownLinkFactory', () {
     late UrlMarkDownLinkFactory factory;
     late RenderContext context;
-    setUp(() async {
+    setUp(() {
       factory = UrlMarkDownLinkFactory();
-      var variables = <String, Object>{
-        GitHubProject.id: await GitHubProject.createForThisProject(),
-      };
-      context = FakeRenderContext(variables);
+      context = FakeRenderContext({});
     });
     test('should create MarkDownLink for valid http url', () async {
+      final uri = await startTestServer();
       final link = await factory.create(
         context: context,
-        reference: 'https://example.com',
+        reference: uri.toString(),
       );
       link.should.not.beNull();
-      link!.text.should.be('example.com');
-      link.uri.should.be(Uri.parse('https://example.com'));
+      link!.text.should.be(uri.host);
+      link.uri.should.be(uri);
     });
 
     test('should return null for invalid url', () async {
@@ -50,20 +50,18 @@ void main() {
   group('MarkDownLinkFactories', () {
     late MarkDownLinkFactories factories;
     late RenderContext context;
-    setUp(() async {
+    setUp(() {
       factories = MarkDownLinkFactories();
-      var variables = <String, Object>{
-        GitHubProject.id: await GitHubProject.createForThisProject(),
-      };
-      context = FakeRenderContext(variables);
+      context = FakeRenderContext({});
     });
     test('should return first non-null MarkDownLink', () async {
+      final uri = await startTestServer();
       final link = await factories.create(
         context: context,
-        reference: 'https://example.com',
+        reference: uri.toString(),
       );
       link.should.not.beNull();
-      link!.uri.should.be(Uri.parse('https://example.com'));
+      link!.uri.should.be(uri);
     });
 
     test('should an invalid reference should throw an exception ', () async {
@@ -106,6 +104,17 @@ void main() {
   });
 }
 
+Future<Uri> startTestServer() async {
+  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+  server.listen((request) => request.response.close());
+  addTearDown(() => server.close(force: true));
+  return Uri(
+    scheme: 'http',
+    host: InternetAddress.loopbackIPv4.address,
+    port: server.port,
+  );
+}
+
 /// Fake RenderContext for testing purposes
 class FakeRenderContext implements RenderContext {
   @override
@@ -114,14 +123,37 @@ class FakeRenderContext implements RenderContext {
   FakeRenderContext(this.variables);
 
   @override
-  TemplateEngine get engine => throw UnimplementedError();
+  String get errorPlaceholder => throw UnimplementedError();
 
   @override
-  List<TemplateParseResult> get parsedTemplates => throw UnimplementedError();
+  List<TemplateEngineException> get errors => throw UnimplementedError();
 
   @override
-  String get renderedError => throw UnimplementedError();
+  Grammar get grammar => throw UnimplementedError();
 
   @override
-  Template get templateBeingRendered => throw UnimplementedError();
+  ParseResult get parseResult => throw UnimplementedError();
+
+  @override
+  Set<ParseResult> get parsedImportedTemplates => throw UnimplementedError();
+}
+
+class FakeFunctionCallContext implements FunctionCallContext {
+  @override
+  void addWarning(String message, TemplateLocation location) {}
+
+  @override
+  Map<String, TemplateLocation> get argumentLocations =>
+      throw UnimplementedError();
+
+  @override
+  final Map<String, dynamic> argumentValues;
+
+  @override
+  TemplateLocation get functionLocation => throw UnimplementedError();
+
+  @override
+  final RenderContext renderContext;
+
+  FakeFunctionCallContext(this.renderContext, {this.argumentValues = const {}});
 }

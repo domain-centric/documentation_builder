@@ -1,27 +1,24 @@
+import 'package:documentation_builder/documentation_builder.dart';
 import 'package:documentation_builder/src/builder/new_line.dart';
 import 'package:documentation_builder/src/engine/function/util/uri_extensions.dart';
 import 'package:documentation_builder/src/engine/function/project/git_hub_project.dart';
-import 'package:documentation_builder/src/engine/function/project/local_project.dart';
 import 'package:documentation_builder/src/engine/function/project/pub_dev_project.dart';
 import 'package:template_engine/template_engine.dart';
 
-class BadgeFunctions extends FunctionGroup {
-  BadgeFunctions()
-    : super('Badge Functions', [
-        CustomBadge(),
-        PubPackageBadge(),
-        PubScoreBadge(),
-        AllPubBadges(),
-        GitHubBadge(),
-        GitHubWikiBadge(),
-        GitHubStarsBadge(),
-        GitHubIssuesBadge(),
-        GitHubPullRequestsBadge(),
-        GitHubLicenseBadge(),
-        AllGitHubBadges(),
-        AllPubGitHubBadges(),
-      ]);
-}
+final badgeFunctions = FunctionGroup('Badge Functions', [
+  customBadgeFunction,
+  pubPackageBadgeFunction,
+  pubScoreBadgeFunction,
+  allPubBadgesFunction,
+  gitHubBadgeFunction,
+  gitHubWikiBadgeFunction,
+  gitHubStarsBadgeFunction,
+  gitHubIssuesBadgeFunction,
+  gitHubPullRequestsBadgeFunction,
+  gitHubLicenseBadgeFunction,
+  allGitHubBadgesFunction,
+  allPubGitHubBadgesFunction,
+]);
 
 /// [Badge]s are images with text that inform the user on the technology used in a project and other relevant information such as links to
 /// - code repository
@@ -37,7 +34,6 @@ class BadgeFunctions extends FunctionGroup {
 ///
 /// e.g.: [!CustomBadge label='license' message='MIT' color='informational' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE' &rsqb;
 /// [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)
-
 class Badge {
   final String? toolTip;
   final Uri image;
@@ -62,9 +58,10 @@ class Badge {
   }
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] toolTip.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] toolTip.
 class ToolTipParameter extends Parameter<String> {
   static const id = 'toolTip';
+
   ToolTipParameter(Presence presence)
     : super(
         name: id,
@@ -73,9 +70,10 @@ class ToolTipParameter extends Parameter<String> {
       );
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] label.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] label.
 class LabelParameter extends Parameter<String> {
   static const id = 'label';
+
   LabelParameter(Presence presence)
     : super(
         name: id,
@@ -86,9 +84,10 @@ class LabelParameter extends Parameter<String> {
       );
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] message.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] message.
 class MessageParameter extends Parameter<String> {
   static const id = 'message';
+
   MessageParameter(Presence presence)
     : super(
         name: id,
@@ -99,41 +98,43 @@ class MessageParameter extends Parameter<String> {
       );
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] color.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] color.
 class ColorParameter extends Parameter<String> {
   static const id = 'color';
+
   ColorParameter(Presence presence)
     : super(
         name: id,
         description:
-            'The message is the right text of the [Badge] and can have fill color.$newLine'
-            'The color can be defined in different ways:$newLine$newLine'
-            'As color name:$newLine$newLine'
-            '- brightgreen$newLine'
-            '- green$newLine'
-            '- yellowgreen$newLine'
-            '- yellow$newLine'
-            '- orange$newLine'
-            '- red$newLine'
-            '- blue$newLine'
-            '- lightgrey$newLine'
-            '- blueviolet$newLine'
-            'As name$newLine'
-            '- success$newLine'
-            '- important$newLine'
-            '- critical$newLine'
-            '- informational (=default)$newLine'
-            '- inactive$newLine'
-            'As code:$newLine'
-            '- ff69b4$newLine'
-            '- 9cf$newLine',
+            'The message is the right text of the [Badge] and can have fill color.'
+            'The color can be defined in different ways:'
+            'As color name:'
+            '- brightgreen'
+            '- green'
+            '- yellowgreen'
+            '- yellow'
+            '- orange'
+            '- red'
+            '- blue'
+            '- lightgrey'
+            '- blueviolet'
+            'As name'
+            '- success'
+            '- important'
+            '- critical'
+            '- informational (=default)'
+            '- inactive'
+            'As code:'
+            '- ff69b4'
+            '- 9cf',
         presence: presence,
       );
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] link.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] link.
 class LinkParameter extends Parameter<String> {
   static const id = 'link';
+
   LinkParameter(Presence presence)
     : super(
         name: id,
@@ -142,9 +143,10 @@ class LinkParameter extends Parameter<String> {
       );
 }
 
-/// A [ExpressionFunction]-[Parameter] for the [Badge] license type.
+/// A [FunctionDefinition]-[Parameter] for the [Badge] license type.
 class LicenseTypeParameter extends Parameter<String> {
   static const id = 'licenseType';
+
   LicenseTypeParameter(Presence presence)
     : super(
         name: id,
@@ -154,368 +156,329 @@ class LicenseTypeParameter extends Parameter<String> {
       );
 }
 
-/// A [ExpressionFunction] that creates a customizable badge image in markdown format.
-class CustomBadge extends ExpressionFunction<String> {
-  CustomBadge()
-    : super(
-        name: 'customBadge',
-        description: 'Creates markdown for a customizable badge image',
-        parameters: [
-          ToolTipParameter(Presence.optional()),
-          LabelParameter(Presence.mandatory()),
-          MessageParameter(Presence.mandatory()),
-          ColorParameter(Presence.optionalWithDefaultValue('informational')),
-          LinkParameter(Presence.mandatory()),
-        ],
-        exampleExpression:
-            "{{customBadge(tooltip='GitHub License' label='license' message='MIT' link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE')}}",
-        exampleResult:
-            "[![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => Badge.custom(
-              toolTip: parameterValues[ToolTipParameter.id] as String?,
-              label: parameterValues[LabelParameter.id] as String,
-              message: parameterValues[MessageParameter.id] as String,
-              color: parameterValues[MessageParameter.id] as String,
-              link: Uri.parse((parameterValues[LinkParameter.id] as String)),
-            ).toString(),
-      );
-}
+/// A [FunctionDefinition] that creates a customizable badge image in markdown format.
+final customBadgeFunction = FunctionDefinition<String>(
+  name: 'customBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a customizable badge image',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) =>
+            "${delimiter.start}customBadge(toolTip='GitHub License', label='license', message='MIT', link='https://github.com/domain-centric/documentation_builder/blob/main/LICENSE')${delimiter.end}",
+        shouldRender: "[![GitHub License](https://img.shields.io/badge/license-MIT-informational)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(PresenceOptional()),
+    LabelParameter(PresenceMandatory()),
+    MessageParameter(PresenceMandatory()),
+    ColorParameter(PresenceOptionalWithDefaultValue('informational')),
+    LinkParameter(PresenceMandatory()),
+  ],
+  function: (context) async => Badge.custom(
+    toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+    label: context.argumentValues[LabelParameter.id] as String,
+    message: context.argumentValues[MessageParameter.id] as String,
+    color: context.argumentValues[ColorParameter.id] as String,
+    link: Uri.parse(context.argumentValues[LinkParameter.id] as String),
+  ).toString(),
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge of an existing Dart or Flutter package on pub.dev.
-class PubPackageBadge extends ExpressionFunction<String> {
-  PubPackageBadge()
-    : super(
-        name: 'pubPackageBadge',
-        parameters: [
-          ToolTipParameter(Presence.optionalWithDefaultValue('Pub Package')),
-        ],
-        description:
-            'Creates markdown for a badge of an existing Dart or Flutter package on pub.dev',
-        exampleResult:
-            "[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async {
-              var uri = PubDevProject.of(renderContext).uri;
-              return Badge(
-                toolTip: parameterValues[ToolTipParameter.id] as String,
-                image: Badge.imgShieldIoUri.append(
-                  path: 'pub/v/${LocalProject.name}',
-                ),
-                link: uri,
-              ).toString();
-            },
-      );
-}
+final pubPackageBadgeFunction = FunctionDefinition<String>(
+  name: 'pubPackageBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge of an existing Dart or Flutter package on pub.dev',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}pubPackageBadge()${delimiter.end}",
+        shouldRender: "[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(PresenceOptionalWithDefaultValue('Pub Package')),
+  ],
+  function: (context) async {
+    final uri = PubDevProject.of(context.renderContext).uri;
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(path: 'pub/v/${LocalProject.name}'),
+      link: uri,
+    ).toString();
+  },
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge of the scores on pub.dev.
-class PubScoreBadge extends ExpressionFunction<String> {
-  PubScoreBadge()
-    : super(
-        name: 'pubScoresBadge',
-        parameters: [
-          ToolTipParameter(Presence.optionalWithDefaultValue('Pub Scores')),
-        ],
-        description: 'Creates markdown for a badge of the scores on pub.dev',
-        exampleResult:
-            "[![Pub Scores](https://img.shields.io/pub/likes/documentation_builder)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => Badge(
-              toolTip: parameterValues[ToolTipParameter.id] as String,
-              image: Badge.imgShieldIoUri.append(
-                path: 'pub/likes/${LocalProject.name}',
-              ),
-              link: PubDevProject.of(renderContext).scoreUri,
-            ).toString(),
-      );
-}
+final pubScoreBadgeFunction = FunctionDefinition<String>(
+  name: 'pubScoreBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge of the scores on pub.dev',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}pubScoreBadge()${delimiter.end}",
+        shouldRender: "[![Pub Scores](https://img.shields.io/pub/likes/documentation_builder)](https://pub.dev/packages/documentation_builder/score)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(PresenceOptionalWithDefaultValue('Pub Scores')),
+  ],
+  function: (context) async {
+    final pubDevProject = PubDevProject.of(context.renderContext);
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(
+        path: 'pub/likes/${pubDevProject.packageName}',
+      ),
+      link: pubDevProject.scoreUri,
+    ).toString();
+  },
+);
 
-/// A [ExpressionFunction] that creates markdown for all pub.dev badges.
-class AllPubBadges extends ExpressionFunction {
-  AllPubBadges()
-    : super(
-        name: 'allPubBadges',
-        description: 'Creates markdown for all pub.dev badges',
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => await _createStringForBadges(position, renderContext, [
-              PubPackageBadge(),
-              PubScoreBadge(),
-            ]),
-      );
-}
+final allPubBadgesFunction = FunctionDefinition<String>(
+  name: 'allPubBadges',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for all pub.dev badges',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}allPubBadges()${delimiter.end}",
+        shouldRender: "[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)\n[![Pub Scores](https://img.shields.io/pub/likes/documentation_builder)](https://pub.dev/packages/documentation_builder/score)",
+      ),
+    ],
+  ),
+  parameters: const [],
+  function: (context) async => _createStringForBadges(context, [
+    pubPackageBadgeFunction,
+    pubScoreBadgeFunction,
+  ]),
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge of a project on github.com.
-class GitHubBadge extends ExpressionFunction {
-  GitHubBadge()
-    : super(
-        name: 'gitHubBadge',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue('Project on github.com'),
-          ),
-        ],
-        description: 'Creates markdown for a badge of a project on github.com',
-        exampleResult:
-            "[![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => Badge(
-              toolTip: parameterValues[ToolTipParameter.id] as String,
-              image: Badge.imgShieldIoUri.append(
-                path: 'badge/repository-git%20hub-informational',
-              ),
-              link: GitHubProject.of(renderContext).uri,
-            ).toString(),
-      );
-}
+final gitHubBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge of a project on github.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}gitHubBadge()${delimiter.end}",
+        shouldRender: "[![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(PresenceOptionalWithDefaultValue('Project on github.com')),
+  ],
+  function: (context) async => Badge(
+    toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+    image: Badge.imgShieldIoUri.append(
+      path: 'badge/repository-git%20hub-informational',
+    ),
+    link: GitHubProject.of(context.renderContext).uri,
+  ).toString(),
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge of the Wiki pages of a project on github.com.
-class GitHubWikiBadge extends ExpressionFunction {
-  GitHubWikiBadge()
-    : super(
-        name: 'gitHubWikiBadge',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue(
-              'Project Wiki pages on github.com',
-            ),
-          ),
-        ],
-        description:
-            'Creates markdown for a badge of the Wiki pages of a project on GitHub.com',
-        exampleResult:
-            "[![Project Wiki pages on github.com](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => Badge(
-              toolTip: parameterValues[ToolTipParameter.id] as String,
-              image: Badge.imgShieldIoUri.replace(
-                path: 'badge/documentation-wiki-informational',
-              ),
-              link: GitHubProject.of(renderContext).wikiUri,
-            ).toString(),
-      );
-}
+final gitHubWikiBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubWikiBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge of the Wiki pages of a project on GitHub.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}gitHubWikiBadge()${delimiter.end}",
+        shouldRender: "[![Project Wiki pages on github.com](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(
+      PresenceOptionalWithDefaultValue('Project Wiki pages on github.com'),
+    ),
+  ],
+  function: (context) async => Badge(
+    toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+    image: Badge.imgShieldIoUri.append(
+      path: 'badge/documentation-wiki-informational',
+    ),
+    link: GitHubProject.of(context.renderContext).wikiUri,
+  ).toString(),
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge with the amount of stars on github.com.
-class GitHubStarsBadge extends ExpressionFunction {
-  GitHubStarsBadge()
-    : super(
-        name: 'gitHubStarsBadge',
-        description:
-            'Creates markdown for a badge with the amount of stars on github.com',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue('Stars ranking on github.com'),
-          ),
-        ],
-        exampleResult:
-            "[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async {
-              var gitHubProject = GitHubProject.of(renderContext);
-              return Badge(
-                toolTip: parameterValues[ToolTipParameter.id] as String,
-                image: Badge.imgShieldIoUri.append(
-                  path: 'github/stars${gitHubProject.uri.path}',
-                  query: {'style': 'flat'},
-                ),
-                link: gitHubProject.starGazersUri,
-              ).toString();
-            },
-      );
-}
+final gitHubStarsBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubStarsBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description:
+        'Creates markdown for a badge with the amount of stars on github.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}gitHubStarsBadge()${delimiter.end}",
+        shouldRender: "[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(
+      PresenceOptionalWithDefaultValue('Stars ranking on github.com'),
+    ),
+  ],
+  function: (context) async {
+    final gitHubProject = GitHubProject.of(context.renderContext);
+    final projectPath = gitHubProject.uri.pathSegments.join('/');
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(
+        path: 'github/stars/$projectPath',
+        query: {'style': 'flat'},
+      ),
+      link: gitHubProject.starGazersUri,
+    ).toString();
+  },
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge with the amount of open issues on github.com.
-class GitHubIssuesBadge extends ExpressionFunction {
-  GitHubIssuesBadge()
-    : super(
-        name: 'gitHubIssuesBadge',
-        description:
-            'Creates markdown for a badge with the amount of open issues on github.com',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue('Open issues on github.com'),
-          ),
-        ],
-        exampleResult:
-            "[![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async {
-              var gitHubProject = GitHubProject.of(renderContext);
-              return Badge(
-                toolTip: parameterValues[ToolTipParameter.id] as String,
-                image: Badge.imgShieldIoUri.append(
-                  path: 'github/issues${gitHubProject.uri.path}',
-                ),
-                link: gitHubProject.issuesUri,
-              ).toString();
-            },
-      );
-}
+final gitHubIssuesBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubIssuesBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge with the amount of open issues on github.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}gitHubIssuesBadge()${delimiter.end}",
+        shouldRender: "[![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(
+      PresenceOptionalWithDefaultValue('Open issues on github.com'),
+    ),
+  ],
+  function: (context) async {
+    final gitHubProject = GitHubProject.of(context.renderContext);
+    final projectPath = gitHubProject.uri.pathSegments.join('/');
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(path: 'github/issues/$projectPath'),
+      link: gitHubProject.issuesUri,
+    ).toString();
+  },
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge with the amount of open pull requests on github.com.
-class GitHubPullRequestsBadge extends ExpressionFunction {
-  GitHubPullRequestsBadge()
-    : super(
-        name: 'gitHubPullRequestsBadge',
-        description:
-            'Creates markdown for a badge with the amount of open pull requests on github.com',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue(
-              'Open pull requests on github.com',
-            ),
-          ),
-        ],
-        exampleResult:
-            "[![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pull)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async {
-              var gitHubProject = GitHubProject.of(renderContext);
-              return Badge(
-                toolTip: parameterValues[ToolTipParameter.id] as String,
-                image: Badge.imgShieldIoUri.append(
-                  path: 'github/issues-pr${gitHubProject.uri.path}',
-                ),
-                link: gitHubProject.pullRequestsUri,
-              ).toString();
-            },
-      );
-}
+final gitHubPullRequestsBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubPullRequestsBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for a badge with the amount of open pull requests on github.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) =>
+            "${delimiter.start}gitHubPullRequestsBadge()${delimiter.end}",
+        shouldRender: "[![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(
+      PresenceOptionalWithDefaultValue('Open pull requests on github.com'),
+    ),
+  ],
+  function: (context) async {
+    final gitHubProject = GitHubProject.of(context.renderContext);
+    final projectPath = gitHubProject.uri.pathSegments.join('/');
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(path: 'github/issues-pr/$projectPath'),
+      link: gitHubProject.pullRequestsUri,
+    ).toString();
+  },
+);
 
-/// A [ExpressionFunction] that creates markdown for a badge with the project license on github.com.
-class GitHubLicenseBadge extends ExpressionFunction {
-  GitHubLicenseBadge()
-    : super(
-        name: 'gitHubLicenseBadge',
-        description:
-            'Creates markdown for a badge with the amount of open pull requests on github.com',
-        parameters: [
-          ToolTipParameter(
-            Presence.optionalWithDefaultValue('Project License'),
-          ),
-        ],
-        exampleResult:
-            "[![Project License](https://img.shields.io/github/license/domain-centric/documentation_buider)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async {
-              var gitHubProject = GitHubProject.of(renderContext);
+final gitHubLicenseBadgeFunction = FunctionDefinition<String>(
+  name: 'gitHubLicenseBadge',
+  documentation: FunctionDefinitionDocumentation(
+    description:
+        'Creates markdown for a badge with the project license on github.com',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}gitHubLicenseBadge()${delimiter.end}",
+        shouldRender: "[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
+      ),
+    ],
+  ),
+  parameters: [
+    ToolTipParameter(PresenceOptionalWithDefaultValue('Project License')),
+  ],
+  function: (context) async {
+    final gitHubProject = GitHubProject.of(context.renderContext);
+    final projectPath = gitHubProject.uri.pathSegments.join('/');
+    return Badge(
+      toolTip: context.argumentValues[ToolTipParameter.id] as String?,
+      image: Badge.imgShieldIoUri.append(path: 'github/license/$projectPath'),
+      link: gitHubProject.licenseUri(),
+    ).toString();
+  },
+);
 
-              return Badge(
-                toolTip: parameterValues[ToolTipParameter.id] as String,
-                image: Badge.imgShieldIoUri.append(
-                  path: 'github/license${gitHubProject.uri.path}',
-                ),
-                link: gitHubProject.licenseUri(),
-              ).toString();
-            },
-      );
-}
+final allGitHubBadgesFunction = FunctionDefinition<String>(
+  name: 'allGitHubBadges',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for all github.com badges',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}allGitHubBadges()${delimiter.end}",
+        shouldRender: "[![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)\n[![Project Wiki pages on github.com](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)\n[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)\n[![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)\n[![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)\n[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
+      ),
+    ],
+  ),
+  parameters: const [],
+  function: (context) async => _createStringForBadges(context, [
+    gitHubBadgeFunction,
+    gitHubWikiBadgeFunction,
+    gitHubStarsBadgeFunction,
+    gitHubIssuesBadgeFunction,
+    gitHubPullRequestsBadgeFunction,
+    gitHubLicenseBadgeFunction,
+  ]),
+);
 
-/// A [ExpressionFunction] that creates markdown for all github.com badges.
-class AllGitHubBadges extends ExpressionFunction {
-  AllGitHubBadges()
-    : super(
-        name: 'allGitHubBadges',
-        description: 'Creates markdown for all github.com badges',
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => await _createStringForBadges(position, renderContext, [
-              GitHubBadge(),
-              GitHubWikiBadge(),
-              GitHubStarsBadge(),
-              GitHubIssuesBadge(),
-              GitHubPullRequestsBadge(),
-              GitHubLicenseBadge(),
-            ]),
-      );
-}
-
-/// A [ExpressionFunction] that creates markdown for all pub.dev and github.com badges.
-class AllPubGitHubBadges extends ExpressionFunction {
-  AllPubGitHubBadges()
-    : super(
-        name: 'allPubGitHubBadges',
-        description: 'Creates markdown for all pub.dev and github.com badges',
-        function:
-            (
-              String position,
-              RenderContext renderContext,
-              Map<String, Object> parameterValues,
-            ) async => await _createStringForBadges(position, renderContext, [
-              PubPackageBadge(),
-              GitHubBadge(),
-              GitHubWikiBadge(),
-              PubScoreBadge(),
-              GitHubStarsBadge(),
-              GitHubIssuesBadge(),
-              GitHubPullRequestsBadge(),
-              GitHubLicenseBadge(),
-            ]),
-      );
-}
+final allPubGitHubBadgesFunction = FunctionDefinition<String>(
+  name: 'allPubGitHubBadges',
+  documentation: FunctionDefinitionDocumentation(
+    description: 'Creates markdown for all pub.dev and github.com badges',
+    examples: [
+      ExpressionBlockExample(
+        (delimiter) => "${delimiter.start}allPubGitHubBadges()${delimiter.end}",
+        shouldRender: "[![Pub Package](https://img.shields.io/pub/v/documentation_builder)](https://pub.dev/packages/documentation_builder)\n[![Project on github.com](https://img.shields.io/badge/repository-git%20hub-informational)](https://github.com/domain-centric/documentation_builder)\n[![Project Wiki pages on github.com](https://img.shields.io/badge/documentation-wiki-informational)](https://github.com/domain-centric/documentation_builder/wiki)\n[![Pub Scores](https://img.shields.io/pub/likes/documentation_builder)](https://pub.dev/packages/documentation_builder/score)\n[![Stars ranking on github.com](https://img.shields.io/github/stars/domain-centric/documentation_builder?style=flat)](https://github.com/domain-centric/documentation_builder/stargazers)\n[![Open issues on github.com](https://img.shields.io/github/issues/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/issues)\n[![Open pull requests on github.com](https://img.shields.io/github/issues-pr/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/pulls)\n[![Project License](https://img.shields.io/github/license/domain-centric/documentation_builder)](https://github.com/domain-centric/documentation_builder/blob/main/LICENSE)",
+      ),
+    ],
+  ),
+  parameters: const [],
+  function: (context) async => _createStringForBadges(context, [
+    pubPackageBadgeFunction,
+    gitHubBadgeFunction,
+    gitHubWikiBadgeFunction,
+    pubScoreBadgeFunction,
+    gitHubStarsBadgeFunction,
+    gitHubIssuesBadgeFunction,
+    gitHubPullRequestsBadgeFunction,
+    gitHubLicenseBadgeFunction,
+  ]),
+);
 
 Future<String> _createStringForBadges(
-  String position,
-  RenderContext renderContext,
-  List<ExpressionFunction> badgeFunctions,
+  FunctionCallContext context,
+  List<FunctionDefinition<String>> badgeFunctions,
 ) async {
-  var badgeResults = await Future.wait(
-    badgeFunctions.map((b) async {
-      var parametersWithOptionalValues = b.parameters.where(
-        (p) => p.presence.optionalWithDefaultValue,
-      );
-      var parameterValues = <String, Object>{
-        for (var p in parametersWithOptionalValues)
-          p.name: p.presence.defaultValue as Object,
-      };
-      return (await b.function(
-        position,
-        renderContext,
+  final badgeResults = await Future.wait(
+    badgeFunctions.map((badgeFunction) async {
+      final parameterValues = <String, dynamic>{};
+      for (final parameter in badgeFunction.parameters) {
+        final presence = parameter.presence;
+        if (presence is PresenceOptionalWithDefaultValue) {
+          parameterValues[parameter.name] = presence.defaultValue;
+        }
+      }
+      final callContext = FunctionCallContext(
+        context.functionLocation,
+        context.renderContext,
+        const {},
         parameterValues,
-      )).toString();
+      );
+      return (await badgeFunction.function(callContext)).toString();
     }),
   );
   return badgeResults.join(newLine);

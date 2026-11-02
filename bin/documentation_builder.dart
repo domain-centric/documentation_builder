@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:documentation_builder/src/cli/command.dart';
 
 /// The simplest way to use the [documentation_builder] package

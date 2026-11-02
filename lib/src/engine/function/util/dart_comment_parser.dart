@@ -2,8 +2,6 @@
 
 import 'dart:io';
 
-import 'package:analyzer/dart/analysis/results.dart';
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -151,7 +149,7 @@ class ReferenceConverter extends RenderFunction {
   ) async {
     try {
       final library = docCommentsOwner.library;
-      final sourceUri = library?.source.uri;
+      final sourceUri = library?.uri;
       if (sourceUri == null) {
         return null;
       }
@@ -208,33 +206,21 @@ class ReferenceConverter extends RenderFunction {
     return yaml.substring(start + parameterName.length + 4, end);
   }
 
-  int? getLineNr(Element docCommentsOwner, String reference) {
-    final session = docCommentsOwner.session;
-    if (session == null) {
+  int? getLineNr(Element docCommentsOwner, String textToFind) {
+    final firstFragment = docCommentsOwner.firstFragment;
+    final libraryFragment = firstFragment.libraryFragment;
+    if (libraryFragment == null) {
       return null;
     }
-    var library = docCommentsOwner.library;
-    if (library == null) {
-      return null;
-    }
-    final parsedLibrary =
-        session.getParsedLibraryByElement(library) as ParsedLibraryResult;
-    final declaration = parsedLibrary.getElementDeclaration(docCommentsOwner);
-    if (declaration == null) {
-      return null;
-    }
-    final node = declaration.node;
-    final elementOffset = node.offset;
-    var compilationUnit = declaration.node.root as CompilationUnit;
-    var lineInfo = compilationUnit.lineInfo;
 
-    var source = library.source.contents.data;
-    var referenceOffset = source.indexOf('[$reference]', elementOffset);
+    final source = libraryFragment.source.contents.data;
+    final elementOffset = firstFragment.nameOffset ?? firstFragment.offset;
+
+    final referenceOffset = source.indexOf('[$textToFind]', elementOffset);
     if (referenceOffset == -1) {
-      return lineInfo.getLocation(elementOffset).lineNumber;
-    } else {
-      return lineInfo.getLocation(referenceOffset).lineNumber;
+      return source.substring(0, elementOffset).split('\n').length;
     }
+    return source.substring(0, referenceOffset).split('\n').length;
   }
 }
 
@@ -263,7 +249,7 @@ class ValidateLink extends RenderFunction {
         }
       }
     } catch (e) {
-      log.warning('Invalid URL: $linkUrl, Error: $e');
+      log.warning('URL validation failed: $linkUrl, Error: $e');
     }
   }
 }
